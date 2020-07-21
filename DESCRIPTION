@@ -1,0 +1,24 @@
+Package: rmdast
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Colin",
+           family = "Rundel",
+           role = c("aut", "cre"),
+           email = "rundel@gmail.com")
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+Imports: 
+    purrr,
+    Rcpp
+RoxygenNote: 7.1.1
+SystemRequirements: C++14
+LinkingTo: 
+    Rcpp,
+    BH
+Suggests: 
+    testthat (>= 2.1.0)
