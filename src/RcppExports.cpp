@@ -5,56 +5,31 @@
 
 using namespace Rcpp;
 
-// check_name_parser
-std::string check_name_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_name_parser(SEXP strSEXP) {
+// check_chunk_parser
+Rcpp::List check_chunk_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_chunk_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_name_parser(str));
+    rcpp_result_gen = Rcpp::wrap(check_chunk_parser(str));
     return rcpp_result_gen;
 END_RCPP
 }
-// check_option_parser
-Rcpp::CharacterVector check_option_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_option_parser(SEXP strSEXP) {
+// main
+int main();
+RcppExport SEXP _rmdast_main() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_option_parser(str));
-    return rcpp_result_gen;
-END_RCPP
-}
-// check_option_list_parser
-Rcpp::CharacterVector check_option_list_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_option_list_parser(SEXP strSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_option_list_parser(str));
-    return rcpp_result_gen;
-END_RCPP
-}
-// test
-bool test(std::string const& str);
-RcppExport SEXP _rmdast_test(SEXP strSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(test(str));
+    rcpp_result_gen = Rcpp::wrap(main());
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rmdast_check_name_parser", (DL_FUNC) &_rmdast_check_name_parser, 1},
-    {"_rmdast_check_option_parser", (DL_FUNC) &_rmdast_check_option_parser, 1},
-    {"_rmdast_check_option_list_parser", (DL_FUNC) &_rmdast_check_option_list_parser, 1},
-    {"_rmdast_test", (DL_FUNC) &_rmdast_test, 1},
+    {"_rmdast_check_chunk_parser", (DL_FUNC) &_rmdast_check_chunk_parser, 1},
+    {"_rmdast_main", (DL_FUNC) &_rmdast_main, 0},
     {NULL, NULL, 0}
 };
 

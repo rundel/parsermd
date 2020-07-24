@@ -1,6 +1,8 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+//#define BOOST_SPIRIT_X3_DEBUG
+
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
@@ -9,17 +11,25 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 
+
+#include "parse_expr.hpp"
+
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct option : x3::position_tagged {
+  struct option {
     std::string name, value;
   };
 
-  struct chunk : x3::position_tagged {
+  struct details {
+    std::string name;
+    std::vector<option> options;
+  };
+
+  struct chunk{
     std::string engine, name;
-    std::vector<option> opts;
-    std::string code;
+    std::vector<option> options;
+    //std::vector<std::string> code;
   };
 } }
 
@@ -28,10 +38,9 @@ BOOST_FUSION_ADAPT_STRUCT(
   name, value
 )
 
-
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::chunk,
-  engine, name, opts, code
+  engine, name, options//, code
 )
 
 
@@ -40,8 +49,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 #include <RcppCommon.h>
 
 namespace Rcpp {
-  template <> SEXP wrap(client::ast::chunk const& attr);
-  template <> SEXP wrap(std::vector<client::ast::chunk> const& attrs);
+  template <> SEXP wrap(client::ast::chunk const& chunk);
+  template <> SEXP wrap(std::vector<client::ast::chunk> const& chunks);
   template <> SEXP wrap(std::vector<client::ast::option> const& opts);
 }
 
@@ -50,10 +59,10 @@ namespace Rcpp {
 namespace Rcpp {
   template <> SEXP wrap(client::ast::chunk const& chunk) {
     return Rcpp::List::create(
-      Rcpp::Named("name") = chunk.name,
-      Rcpp::Named("engine") = chunk.engine,
-      Rcpp::Named("code") = chunk.code,
-      Rcpp::Named("options") = chunk.opts
+      Rcpp::Named("engine")  = chunk.engine,
+      Rcpp::Named("name")    = chunk.name,
+      Rcpp::Named("options") = Rcpp::wrap(chunk.options)
+      //Rcpp::Named("code") = chunk.code
     );
   };
 
@@ -61,16 +70,19 @@ namespace Rcpp {
     return Rcpp::List(chunks.begin(), chunks.end());
   };
 
-  template <> SEXP wrap(std::vector<client::ast::option> const& opts){
-    Rcpp::CharacterVector name, value;
-    for(auto const& opt : opts) {
-      name.push_back(opt.name);
-      value.push_back(opt.value);
-    }
-    value.attr("names") = name;
+  template <> SEXP wrap(std::vector<client::ast::option> const& opts) {
+    Rcpp::List values;
+    Rcpp::CharacterVector names;
 
-    return value;
-  };
+    for(auto opt : opts) {
+      values.push_back(opt.value);
+      names.push_back(opt.name);
+    }
+
+    values.attr("names") = names;
+
+    return values;
+  }
 }
 
 
@@ -79,44 +91,43 @@ namespace client { namespace parser {
 
   namespace x3 = boost::spirit::x3;
 
-  struct name_class;
-  struct option_class;
-  struct chunk_class;
+  auto const engine = x3::rule<struct _, std::string> {"engine"}
+    = x3::lexeme[ *x3::char_("A-Za-z0-9_") ];
 
-  x3::rule<name_class, std::string> const name = "name";
-  x3::rule<option_class, ast::option> const option = "option";
-  x3::rule<chunk_class, ast::chunk> const chunk = "chunk";
+  auto const option = x3::rule<struct _, client::ast::option>{"option"}
+    = name >> x3::lit("=") >> expr;
 
 
-  // A syntactically valid name consists of letters, numbers and the dot or underline
-  // characters and starts with a letter or the dot not followed by a number. Names such as
-  // ".2way" are not valid, and neither are the reserved words.
-  auto const name_def = x3::raw[ x3::lexeme[ (
-      ( x3::char_("A-Za-z") >> *x3::char_("._A-Za-z0-9") )                   // Starts with a letter
-    | ( x3::char_(".") >> !x3::char_("0-9") >> *x3::char_("._A-Za-z0-9") )   // Starts with a .
-    | ( '`' >> +(~x3::char_('`')) >> '`' )                                   // ` wrapped name
-    | ( '"' > *("\\\"" >> x3::attr('"') | ~x3::char_('"')) > '"' )           // " wrapped name
-    | ( '\'' > *("\\\'" >> x3::attr('\'') | ~x3::char_('\'')) > '\'' )       // ' wrapped name
-  ) ] ];
+  auto const chunk = x3::rule<struct _, client::ast::chunk>{"chunk"}
+    = x3::lit("```{") >>
+      (  (engine >> name >> ',' >> (option % ','))
+       | (engine >> x3::attr(std::string()) >> (option % ','))
+       | (engine >> name >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()))
+       | (engine >> x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()))
+      ) >>
+      x3::lit("}");
 
-  auto const option_def =  name >> x3::lit("=") >> x3::lexeme[+x3::char_];
+  //auto const chunk_def =
+  //  // Chunk start
+  //
+  //    engine >>
+  //    (name | x3::attr("")) >>
+  //   -x3::lit(',') >>
+  //    (option % ',')>>
+  //  x3::lit("}");
 
-  auto const chunk_def = x3::lit("```{}```");
-  //  x3::lit("```{") >>
-  //    ( name ) >>
-  //    ( -(x3::rule<struct _, std::string> {} = name) >> -x3::lit(",") ) >>
-  //    ( option % ',' ) >>
-  //  x3::lit("}") >>
-  //    ( x3::lexeme[ *x3::char_ ] ) >>
-  //  x3::lit("```");
 
-  //auto const selectors = +simple_selector;
 
-  BOOST_SPIRIT_DEFINE(name, option, chunk);
 
-  struct name_class {};
-  struct option_class {};
-  struct chunk_class {};
+
+  // >>
+  //  // Code
+  //  ( !x3::lit("```") >> x3::no_skip[ *x3::char_ ]) % x3::eol >>
+  //  // Chunk end
+  //  x3::lit("```") >>
+  //    x3::eol;
+
+  //BOOST_SPIRIT_DEFINE(chunk);
 } }
 
 #endif

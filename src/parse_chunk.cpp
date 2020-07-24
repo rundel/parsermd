@@ -3,69 +3,30 @@
 
 #include "parser.hpp"
 
+
 // [[Rcpp::export]]
-std::string check_name_parser(std::string const& str) {
+Rcpp::List check_chunk_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   auto first = str.begin();
   auto last = str.end();
 
-  std::string name;
+  client::ast::chunk expr;
 
   bool r = x3::phrase_parse(
     first, last,
-    client::parser::name,
-    x3::ascii::space,
-    name
-  );
-
-  if (first != last || !r) // fail if we did not get a full match
-    Rcpp::stop("Failed to parse.");
-
-  return name;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector check_option_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
-  auto first = str.begin();
-  auto last = str.end();
-
-  client::ast::option expr;
-
-  bool r = x3::phrase_parse(
-    first, last,
-    client::parser::option,
+    client::parser::chunk,
     x3::ascii::space,
     expr
   );
 
-  if (first != last || !r) // fail if we did not get a full match
-    Rcpp::stop("Failed to parse.");
+  Rcpp::Function f("Sys.sleep");
+  f(0.2);
 
-  Rcpp::CharacterVector res;
-  res.push_back(expr.value);
-  res.attr("names") = expr.name;
+  Rcpp::Rcout << "r: " << r << " first == last: " << (last - first) << "\n";
 
-  return res;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector check_option_list_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
-  auto first = str.begin();
-  auto last = str.end();
-
-  std::vector<client::ast::option> expr;
-
-  bool r = x3::phrase_parse(
-    first, last,
-    client::parser::option % ',',
-    x3::ascii::space,
-    expr
-  );
+  //if (first != last || !r) // fail if we did not get a full match
+  //  Rcpp::stop("Failed to parse.");
 
   return Rcpp::wrap(expr);
 }
