@@ -5,7 +5,7 @@ date: "7/21/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setu p, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -19,11 +19,15 @@ When you click the **Knit** button a document will be generated that includes bo
 summary(cars)
 ```
 
+```{r}
+knitr::knit_patterns$get()
+```
+
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo={FALSE}}
+```{r pressure, echo=FALSE}
 plot(pressure)
 ```
 

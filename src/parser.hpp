@@ -26,10 +26,12 @@ namespace client { namespace ast {
     std::vector<option> options;
   };
 
-  struct chunk{
-    std::string engine, name;
-    std::vector<option> options;
+  struct chunk {
+    std::string engine; //, name;
+    details d;
+    //std::vector<option> options;
     //std::vector<std::string> code;
+    std::string code;
   };
 } }
 
@@ -39,8 +41,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+  client::ast::details,
+  name, options
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
   client::ast::chunk,
-  engine, name, options//, code
+  engine, d, code
 )
 
 
@@ -60,9 +67,9 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::chunk const& chunk) {
     return Rcpp::List::create(
       Rcpp::Named("engine")  = chunk.engine,
-      Rcpp::Named("name")    = chunk.name,
-      Rcpp::Named("options") = Rcpp::wrap(chunk.options)
-      //Rcpp::Named("code") = chunk.code
+      Rcpp::Named("name")    = chunk.d.name,
+      Rcpp::Named("options") = Rcpp::wrap(chunk.d.options),
+      Rcpp::Named("code") = chunk.code
     );
   };
 
@@ -97,15 +104,22 @@ namespace client { namespace parser {
   auto const option = x3::rule<struct _, client::ast::option>{"option"}
     = name >> x3::lit("=") >> expr;
 
+  auto const details = x3::rule<struct _, client::ast::details>{"details"}
+    = (  (name >> ',' >> (option % ','))
+       | (x3::attr(std::string()) >> (option % ','))
+       | (name >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()))
+       | (x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()))
+      );
+
+  auto const code = x3::rule<struct _, std::string>{"code"}
+    =  x3::raw[ x3::lexeme[ *(!x3::lit("\n```") >> ~x3::char_('`')) ] ];
 
   auto const chunk = x3::rule<struct _, client::ast::chunk>{"chunk"}
-    = x3::lit("```{") >>
-      (  (engine >> name >> ',' >> (option % ','))
-       | (engine >> x3::attr(std::string()) >> (option % ','))
-       | (engine >> name >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()))
-       | (engine >> x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()))
-      ) >>
-      x3::lit("}");
+    = x3::lit("```{") >> engine >> details >> x3::lit("}") >> x3::eol >>
+      code >> x3::eol >>
+      x3::lit("```") >> x3::eol;
+
+
 
   //auto const chunk_def =
   //  // Chunk start

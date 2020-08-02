@@ -11,12 +11,12 @@ Rcpp::List check_chunk_parser(std::string const& str) {
   auto first = str.begin();
   auto last = str.end();
 
-  client::ast::chunk expr;
+  std::vector<client::ast::chunk> expr;
 
   bool r = x3::phrase_parse(
     first, last,
-    client::parser::chunk,
-    x3::ascii::space,
+    *x3::seek[ client::parser::chunk ],
+    x3::blank,
     expr
   );
 
