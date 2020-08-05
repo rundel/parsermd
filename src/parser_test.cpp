@@ -5,6 +5,7 @@
 
 #include "parse_yaml.hpp"
 #include "parse_chunk.hpp"
+#include "parse_rmd.hpp"
 
 #include <Rcpp.h>
 
@@ -57,10 +58,6 @@ Rcpp::List check_chunk_parser(std::string const& str) {
 
 
 
-#include "parse_rmd.hpp"
-
-
-
 // [[Rcpp::export]]
 Rcpp::List check_rmd_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
@@ -88,6 +85,7 @@ Rcpp::List check_rmd_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+
 // [[Rcpp::export]]
 Rcpp::List check_markdown_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
@@ -95,11 +93,11 @@ Rcpp::List check_markdown_parser(std::string const& str) {
   auto first = str.begin();
   auto last = str.end();
 
-  client::ast::markdown expr;
+  std::vector<client::ast::line> expr;
 
   bool r = x3::phrase_parse(
     first, last,
-    client::parser::markdown,
+    +(client::parser::entry),
     x3::blank,
     expr
   );
@@ -107,8 +105,12 @@ Rcpp::List check_markdown_parser(std::string const& str) {
   if (!r) // fail if we did not get a full match
     Rcpp::stop("Failed to parse.");
 
-  return Rcpp::wrap(expr);
+  Rcpp::List res(expr.begin(), expr.end());
+
+
+  return res;
 }
+
 
 
 // [[Rcpp::export]]

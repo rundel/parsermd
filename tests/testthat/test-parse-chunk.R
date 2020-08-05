@@ -3,8 +3,11 @@ make_chunk_obj = function(
   options = structure(list(), names = character()),
   code = character()
 ) {
-  list(
-    engine = engine, name = name, options = options, code = code
+  structure(
+    list(
+      engine = engine, name = name, options = options, code = code
+    ),
+    class = "rmd_chunk"
   )
 }
 
