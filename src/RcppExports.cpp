@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// check_yaml_parser
+Rcpp::CharacterVector check_yaml_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_yaml_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_yaml_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_chunk_parser
 Rcpp::List check_chunk_parser(std::string const& str);
 RcppExport SEXP _rmdast_check_chunk_parser(SEXP strSEXP) {
@@ -16,20 +27,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// main
-int main();
-RcppExport SEXP _rmdast_main() {
+// check_rmd_parser
+Rcpp::List check_rmd_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_rmd_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(main());
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_rmd_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_markdown_parser
+Rcpp::List check_markdown_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_markdown_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_markdown_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_markdown_heading_parser
+Rcpp::List check_markdown_heading_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_markdown_heading_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_markdown_heading_parser(str));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rmdast_check_yaml_parser", (DL_FUNC) &_rmdast_check_yaml_parser, 1},
     {"_rmdast_check_chunk_parser", (DL_FUNC) &_rmdast_check_chunk_parser, 1},
-    {"_rmdast_main", (DL_FUNC) &_rmdast_main, 0},
+    {"_rmdast_check_rmd_parser", (DL_FUNC) &_rmdast_check_rmd_parser, 1},
+    {"_rmdast_check_markdown_parser", (DL_FUNC) &_rmdast_check_markdown_parser, 1},
+    {"_rmdast_check_markdown_heading_parser", (DL_FUNC) &_rmdast_check_markdown_heading_parser, 1},
     {NULL, NULL, 0}
 };
 

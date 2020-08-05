@@ -14,9 +14,10 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports: 
     purrr,
-    Rcpp
+    Rcpp,
+    cli
 RoxygenNote: 7.1.1
-SystemRequirements: C++14
+SystemRequirements: C++17
 LinkingTo: 
     Rcpp,
     BH
