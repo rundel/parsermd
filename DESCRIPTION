@@ -16,7 +16,8 @@ Imports:
     purrr,
     Rcpp,
     cli,
-    checkmate
+    checkmate,
+    readr
 RoxygenNote: 7.1.1
 SystemRequirements: C++17
 LinkingTo: 

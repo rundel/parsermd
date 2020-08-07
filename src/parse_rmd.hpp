@@ -71,10 +71,10 @@ namespace client { namespace parser {
   = (headn(6) | headn(5) | headn(4) | headn(3) | headn(2) | headn(1)) >> x3::eol;
 
   auto const entry = x3::rule<struct _, client::ast::line>{"line"}
-  = chunk | heading | text;
+  = (chunk | heading | text) >> *x3::eol;
 
   auto const rmd = x3::rule<struct _, client::ast::rmd>{"rmd"}
-  = -yaml >> *entry;
+  = -(yaml >> *x3::eol) >> *entry;
 } }
 
 #endif

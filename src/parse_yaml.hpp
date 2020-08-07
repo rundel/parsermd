@@ -18,14 +18,14 @@ namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
   auto const content = x3::rule<struct _, std::string>{"content"}
-  = x3::raw[ x3::lexeme[
+  = x3::raw[
       !x3::lit("---") >>
       *(x3::char_ - x3::eol)
-    ] ] ;
+    ];
 
   auto const yaml = x3::rule<struct _, client::ast::yaml>{"yaml"}
   = x3::lit("---") >> x3::eol >>
-    *(content >> x3::eol) >>
+    x3::lexeme[ *(content >> x3::eol) ] >>
     x3::lit("---") >> x3::eol;
 } }
 

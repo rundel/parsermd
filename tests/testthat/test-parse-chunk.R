@@ -44,21 +44,6 @@ test_that("chunk parsing - name", {
     rmdast:::check_chunk_parser("```{r test}\n```\n"),
     make_chunk_obj(name = "test")
   )
-
-  expect_equal(
-    rmdast:::check_chunk_parser("```{r \"test\"}\n```\n"),
-    make_chunk_obj(name = "test")
-  )
-
-  expect_equal(
-    rmdast:::check_chunk_parser("```{r 'test'}\n```\n"),
-    make_chunk_obj(name = "test")
-  )
-
-  expect_equal(
-    rmdast:::check_chunk_parser("```{r `test`}\n```\n"),
-    make_chunk_obj(name = "test")
-  )
 })
 
 
@@ -133,5 +118,13 @@ test_that("chunk parsing - code", {
   expect_equal(
     rmdast:::check_chunk_parser("```{r}\n1\n\n3\n```\n"),
     make_chunk_obj(code = c("1", "", "3"))
+  )
+})
+
+
+test_that("chunk parsing - issues", {
+  expect_equal(
+    rmdast:::check_chunk_parser("```{r load-packages, message=FALSE}\n```\n"),
+    make_chunk_obj(name="load-packages", options = list(message="FALSE"))
   )
 })

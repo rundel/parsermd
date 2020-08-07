@@ -5,6 +5,10 @@ parse_rmd_cpp <- function(str) {
     .Call(`_rmdast_parse_rmd_cpp`, str)
 }
 
+parse_rmd_debug <- function(str) {
+    .Call(`_rmdast_parse_rmd_debug`, str)
+}
+
 check_yaml_parser <- function(str) {
     .Call(`_rmdast_check_yaml_parser`, str)
 }
