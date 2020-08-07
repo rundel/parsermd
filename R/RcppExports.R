@@ -2,30 +2,30 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 parse_rmd_cpp <- function(str) {
-    .Call(`_rmdast_parse_rmd_cpp`, str)
+    .Call(`_parsermd_parse_rmd_cpp`, str)
 }
 
 parse_rmd_debug <- function(str) {
-    .Call(`_rmdast_parse_rmd_debug`, str)
+    .Call(`_parsermd_parse_rmd_debug`, str)
 }
 
 check_yaml_parser <- function(str) {
-    .Call(`_rmdast_check_yaml_parser`, str)
+    .Call(`_parsermd_check_yaml_parser`, str)
 }
 
 check_chunk_parser <- function(str) {
-    .Call(`_rmdast_check_chunk_parser`, str)
+    .Call(`_parsermd_check_chunk_parser`, str)
 }
 
 check_markdown_parser <- function(str) {
-    .Call(`_rmdast_check_markdown_parser`, str)
+    .Call(`_parsermd_check_markdown_parser`, str)
 }
 
 check_markdown_heading_parser <- function(str) {
-    .Call(`_rmdast_check_markdown_heading_parser`, str)
+    .Call(`_parsermd_check_markdown_heading_parser`, str)
 }
 
 check_option_parser <- function(str) {
-    .Call(`_rmdast_check_option_parser`, str)
+    .Call(`_parsermd_check_option_parser`, str)
 }
 

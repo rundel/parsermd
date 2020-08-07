@@ -13,19 +13,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rmdast
+# parsermd
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rmdast is to ...
+The goal of parsermd is to ...
 
 ## Installation
 
-You can install the released version of rmdast from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of parsermd from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("rmdast")
+install.packages("parsermd")
 ```
 
 ## Example
@@ -33,7 +33,7 @@ install.packages("rmdast")
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(rmdast)
+library(parsermd)
 ## basic example code
 ```
 

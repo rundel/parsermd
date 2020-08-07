@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // parse_rmd_cpp
 Rcpp::List parse_rmd_cpp(std::string const& str);
-RcppExport SEXP _rmdast_parse_rmd_cpp(SEXP strSEXP) {
+RcppExport SEXP _parsermd_parse_rmd_cpp(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // parse_rmd_debug
 Rcpp::List parse_rmd_debug(std::string const& str);
-RcppExport SEXP _rmdast_parse_rmd_debug(SEXP strSEXP) {
+RcppExport SEXP _parsermd_parse_rmd_debug(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -29,7 +29,7 @@ END_RCPP
 }
 // check_yaml_parser
 Rcpp::CharacterVector check_yaml_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_yaml_parser(SEXP strSEXP) {
+RcppExport SEXP _parsermd_check_yaml_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -40,7 +40,7 @@ END_RCPP
 }
 // check_chunk_parser
 Rcpp::List check_chunk_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_chunk_parser(SEXP strSEXP) {
+RcppExport SEXP _parsermd_check_chunk_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,7 +51,7 @@ END_RCPP
 }
 // check_markdown_parser
 Rcpp::List check_markdown_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_markdown_parser(SEXP strSEXP) {
+RcppExport SEXP _parsermd_check_markdown_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -62,7 +62,7 @@ END_RCPP
 }
 // check_markdown_heading_parser
 Rcpp::List check_markdown_heading_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_markdown_heading_parser(SEXP strSEXP) {
+RcppExport SEXP _parsermd_check_markdown_heading_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,7 +73,7 @@ END_RCPP
 }
 // check_option_parser
 Rcpp::List check_option_parser(std::string const& str);
-RcppExport SEXP _rmdast_check_option_parser(SEXP strSEXP) {
+RcppExport SEXP _parsermd_check_option_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,17 +84,17 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rmdast_parse_rmd_cpp", (DL_FUNC) &_rmdast_parse_rmd_cpp, 1},
-    {"_rmdast_parse_rmd_debug", (DL_FUNC) &_rmdast_parse_rmd_debug, 1},
-    {"_rmdast_check_yaml_parser", (DL_FUNC) &_rmdast_check_yaml_parser, 1},
-    {"_rmdast_check_chunk_parser", (DL_FUNC) &_rmdast_check_chunk_parser, 1},
-    {"_rmdast_check_markdown_parser", (DL_FUNC) &_rmdast_check_markdown_parser, 1},
-    {"_rmdast_check_markdown_heading_parser", (DL_FUNC) &_rmdast_check_markdown_heading_parser, 1},
-    {"_rmdast_check_option_parser", (DL_FUNC) &_rmdast_check_option_parser, 1},
+    {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
+    {"_parsermd_parse_rmd_debug", (DL_FUNC) &_parsermd_parse_rmd_debug, 1},
+    {"_parsermd_check_yaml_parser", (DL_FUNC) &_parsermd_check_yaml_parser, 1},
+    {"_parsermd_check_chunk_parser", (DL_FUNC) &_parsermd_check_chunk_parser, 1},
+    {"_parsermd_check_markdown_parser", (DL_FUNC) &_parsermd_check_markdown_parser, 1},
+    {"_parsermd_check_markdown_heading_parser", (DL_FUNC) &_parsermd_check_markdown_heading_parser, 1},
+    {"_parsermd_check_option_parser", (DL_FUNC) &_parsermd_check_option_parser, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rmdast(DllInfo *dll) {
+RcppExport void R_init_parsermd(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

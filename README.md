@@ -1,28 +1,28 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-rmdast
+parsermd
 ======
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rmdast is to …
+The goal of parsermd is to …
 
 Installation
 ------------
 
-You can install the released version of rmdast from
+You can install the released version of parsermd from
 [CRAN](https://CRAN.R-project.org) with:
 
-    install.packages("rmdast")
+    install.packages("parsermd")
 
 Example
 -------
 
 This is a basic example which shows you how to solve a common problem:
 
-    library(rmdast)
+    library(parsermd)
     ## basic example code
 
 What is special about using `README.Rmd` instead of just `README.md`?

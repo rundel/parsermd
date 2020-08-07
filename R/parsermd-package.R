@@ -1,7 +1,7 @@
 #' Stuff
 #'
-#' @name rmdast-package
-#' @aliases rmdast
+#' @name parsermd-package
+#' @aliases parsermd
 #' @docType package
 #' @title Stuff
 #' @author Colin Rundel \email{rundel@gmail.com}
@@ -9,7 +9,7 @@
 NULL
 
 ## usethis namespace: start
-#' @useDynLib rmdast, .registration = TRUE
+#' @useDynLib parsermd, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 NULL
