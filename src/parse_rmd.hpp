@@ -57,7 +57,7 @@ namespace Rcpp {
       Rcpp::Named("name")  = h.name,
       Rcpp::Named("level") = h.level
     );
-    res.attr("class") = "rmd_md_heading";
+    res.attr("class") = "rmd_heading";
 
     return res;
   };

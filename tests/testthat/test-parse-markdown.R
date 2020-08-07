@@ -1,5 +1,5 @@
 make_md_heading_obj = function(name, level) {
-  structure(list(name = name, level = level), class = "rmd_md_heading")
+  structure(list(name = name, level = level), class = "rmd_heading")
 }
 
 

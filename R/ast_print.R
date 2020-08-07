@@ -7,49 +7,34 @@ trim_blank_lines = function(x) {
 #' @export
 print.rmd_ast = function(ast) {
   for(i in seq_along(ast)) {
-    print(ast[[i]])
+    if (class(ast[[i]]) == "character")
+      cat(ast[[i]], sep="\n")
+    else
+      print(ast[[i]])
   }
 }
 
 print.rmd_chunk = function(chunk) {
-  cli::cli_h1("Chunk")
-
-  txt = "{.strong Engine}: {.val {chunk$engine}}"
+  txt = "{.strong Chunk} [engine: {.val {chunk$engine}}"
   if (chunk$name != "")
-    txt = paste(txt, "{.strong Name}: {.val {chunk$name}}")
+    txt = paste(txt, "name: {.val {chunk$name}}")
 
   if (length(chunk$options) != 0) {
     opts = paste(names(chunk$options), chunk$options, sep=" = ")
-    txt = paste(txt, "{.strong Options}: {.code {opts}}")
+    txt = paste(txt, "options: {.code {opts}}")
   }
+  txt = paste0(txt, "]")
 
-  cli::cli_text(txt)
-
-  #cli::cli_text("{.strong Code}:")
+  cli::cli_rule(left = txt)
   print(cli::boxx(chunk$code, padding = 0))
 }
 
-print.rmd_md = function(md) {
-  cli::cli_h1("Markdown Text")
-  #for(line in md) {
-  #  cli::cli_text(
-  #    line
-  #  )
-  #}
-  md = trim_blank_lines(md)
-  md = strwrap(md)
+print.rmd_heading = function(h) {
 
-  if (length(md) == 0)
-    md = ""
+  cli::cli_rule("{.strong Heading} [h{h$level}] - {.emph {h$name}}")
 
-  print(cli::boxx(md, padding = 0))
 }
 
 print.rmd_yaml = function(yaml) {
-  cli::cli_h1("Front Matter")
-  for(line in yaml) {
-    cli::cli_text(
-      cli::col_silver(line)
-    )
-  }
+  cli::boxx(cli::col_silver(yaml), padding=0)
 }
