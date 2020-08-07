@@ -7,7 +7,7 @@
 
 namespace client { namespace parser {
 
-  int n_br_open;
+  static int n_br_open;
   struct _n_br_open{};
 
   auto init_paren = [](auto& ctx) {

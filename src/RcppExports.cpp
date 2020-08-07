@@ -5,14 +5,14 @@
 
 using namespace Rcpp;
 
-// parse_rmd
-Rcpp::List parse_rmd(std::string const& str);
-RcppExport SEXP _rmdast_parse_rmd(SEXP strSEXP) {
+// parse_rmd_cpp
+Rcpp::List parse_rmd_cpp(std::string const& str);
+RcppExport SEXP _rmdast_parse_rmd_cpp(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(parse_rmd(str));
+    rcpp_result_gen = Rcpp::wrap(parse_rmd_cpp(str));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -60,13 +60,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// check_option_parser
+Rcpp::List check_option_parser(std::string const& str);
+RcppExport SEXP _rmdast_check_option_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_option_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rmdast_parse_rmd", (DL_FUNC) &_rmdast_parse_rmd, 1},
+    {"_rmdast_parse_rmd_cpp", (DL_FUNC) &_rmdast_parse_rmd_cpp, 1},
     {"_rmdast_check_yaml_parser", (DL_FUNC) &_rmdast_check_yaml_parser, 1},
     {"_rmdast_check_chunk_parser", (DL_FUNC) &_rmdast_check_chunk_parser, 1},
     {"_rmdast_check_markdown_parser", (DL_FUNC) &_rmdast_check_markdown_parser, 1},
     {"_rmdast_check_markdown_heading_parser", (DL_FUNC) &_rmdast_check_markdown_heading_parser, 1},
+    {"_rmdast_check_option_parser", (DL_FUNC) &_rmdast_check_option_parser, 1},
     {NULL, NULL, 0}
 };
 

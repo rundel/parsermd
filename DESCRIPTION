@@ -15,7 +15,8 @@ Roxygen: list(markdown = TRUE)
 Imports: 
     purrr,
     Rcpp,
-    cli
+    cli,
+    checkmate
 RoxygenNote: 7.1.1
 SystemRequirements: C++17
 LinkingTo: 

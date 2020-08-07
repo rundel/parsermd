@@ -41,54 +41,6 @@ BOOST_FUSION_ADAPT_STRUCT(
   front_matter, lines
 )
 
-#include <RcppCommon.h>
-
-namespace Rcpp {
-  template <> SEXP wrap(client::ast::heading const& h);
-  template <> SEXP wrap(client::ast::line const& line);
-  template <> SEXP wrap(client::ast::rmd const& rmd);
-}
-
-#include <Rcpp.h>
-
-namespace Rcpp {
-  template <> SEXP wrap(client::ast::heading const& h) {
-    Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("name")  = h.name,
-      Rcpp::Named("level") = h.level
-    );
-    res.attr("class") = "rmd_heading";
-
-    return res;
-  };
-
-  template <> SEXP wrap(client::ast::line const& line) {
-    struct line_visitor {
-      SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
-      SEXP operator()(client::ast::heading const& h) { return Rcpp::wrap(h); }
-      SEXP operator()(std::vector<std::string> const& s) {return Rcpp::wrap(s); }
-    } v;
-
-    return boost::apply_visitor(v, line);
-  };
-
-  template <> SEXP wrap(client::ast::rmd const& rmd) {
-
-    Rcpp::CharacterVector yaml = Rcpp::wrap(rmd.front_matter);
-    yaml.attr("class") = "rmd_yaml";
-
-    Rcpp::List res;
-    res.push_back(yaml);
-    for(auto const& line : rmd.lines) {
-      res.push_back(Rcpp::wrap(line));
-    }
-    res.attr("class") = "rmd_ast";
-
-    return res;
-  };
-}
-
-
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;

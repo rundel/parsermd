@@ -43,53 +43,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 
-// Wraps for chunk object
-
-#include <RcppCommon.h>
-
-namespace Rcpp {
-  template <> SEXP wrap(client::ast::chunk const& chunk);
-  template <> SEXP wrap(std::vector<client::ast::chunk> const& chunks);
-  template <> SEXP wrap(std::vector<client::ast::option> const& opts);
-}
-
-#include <Rcpp.h>
-
-namespace Rcpp {
-  template <> SEXP wrap(client::ast::chunk const& chunk) {
-    Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("engine")  = chunk.engine,
-      Rcpp::Named("name")    = chunk.d.name,
-      Rcpp::Named("options") = Rcpp::wrap(chunk.d.options),
-      Rcpp::Named("code")    = chunk.code
-    );
-
-    res.attr("class") = "rmd_chunk";
-
-    return res;
-  };
-
-  template <> SEXP wrap(std::vector<client::ast::chunk> const& chunks){
-    return Rcpp::List(chunks.begin(), chunks.end());
-  };
-
-  template <> SEXP wrap(std::vector<client::ast::option> const& opts) {
-    Rcpp::List values;
-    Rcpp::CharacterVector names;
-
-    for(auto opt : opts) {
-      values.push_back(opt.value);
-      names.push_back(opt.name);
-    }
-
-    values.attr("names") = names;
-
-    return values;
-  }
-}
-
-
-
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 

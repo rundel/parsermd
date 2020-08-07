@@ -5,32 +5,32 @@ make_md_heading_obj = function(name, level) {
 
 test_that("markdown - headings", {
   expect_equal(
-    rmdast:::check_markdown_heading_parser("# h1"),
+    rmdast:::check_markdown_heading_parser("# h1\n"),
     make_md_heading_obj("h1", 1)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("## h2"),
+    rmdast:::check_markdown_heading_parser("## h2\n"),
     make_md_heading_obj("h2", 2)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("### h3"),
+    rmdast:::check_markdown_heading_parser("### h3\n"),
     make_md_heading_obj("h3", 3)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("#### h4"),
+    rmdast:::check_markdown_heading_parser("#### h4\n"),
     make_md_heading_obj("h4", 4)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("##### h5"),
+    rmdast:::check_markdown_heading_parser("##### h5\n"),
     make_md_heading_obj("h5", 5)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("###### h6"),
+    rmdast:::check_markdown_heading_parser("###### h6\n"),
     make_md_heading_obj("h6", 6)
   )
 })
@@ -38,22 +38,22 @@ test_that("markdown - headings", {
 test_that("markdown - headings - blank", {
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("# "),
+    rmdast:::check_markdown_heading_parser("# \n"),
     make_md_heading_obj("", 1)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("###### "),
+    rmdast:::check_markdown_heading_parser("###### \n"),
     make_md_heading_obj("", 6)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("#"),
+    rmdast:::check_markdown_heading_parser("#\n"),
     make_md_heading_obj("", 1)
   )
 
   expect_equal(
-    rmdast:::check_markdown_heading_parser("######"),
+    rmdast:::check_markdown_heading_parser("######\n"),
     make_md_heading_obj("", 6)
   )
 
@@ -63,7 +63,7 @@ test_that("markdown", {
 
   expect_equal(
     rmdast:::check_markdown_parser("test\ntest\n"),
-    list("test", "test")
+    list(c("test", "test"))
   )
 
   expect_equal(
