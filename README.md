@@ -26,6 +26,8 @@ This is a basic example which shows you the basic abstract syntax tree
 
     rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
 
+<img src="man/figures/README/example.svg" width="100%" />
+
     print(rmd)
 
 <img src="man/figures/README/tree.svg" width="100%" />

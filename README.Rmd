@@ -50,7 +50,7 @@ remotes::install_github("rundel/parsermd")
 
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
-```{r example}
+```{asciicast example}
 rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
 ```
 
