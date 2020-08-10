@@ -18,9 +18,10 @@ options(width = 80)
 # parsermd
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the code chunks and markdown contents.
+The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the code chunks and markdown content.
 
 ## Installation
 
@@ -34,7 +35,7 @@ remotes::install_github("rundel/parsermd")
 library(parsermd)
 ```
 
-## Example - Minimal
+## Example
 
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
@@ -74,7 +75,5 @@ cat(
   sep = "\n"
 )
 ```
-
-## Example - Student Work
 
 

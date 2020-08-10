@@ -5,11 +5,14 @@ parsermd
 ========
 
 <!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of parsermd is to extract the content of an Rmarkdown file to
 allow for programmatic interactions with the code chunks and markdown
-contents.
+content.
 
 Installation
 ------------
@@ -21,8 +24,8 @@ You can install the released version of parsermd from
 
     library(parsermd)
 
-Example - Minimal
------------------
+Example
+-------
 
 This is a basic example which shows you the basic abstract syntax tree
 (AST) that results from parsing a simple Rmd file,
@@ -149,6 +152,3 @@ Finally, we can also convert the AST back into an RMarkdown document via
     #> ```
     #> 
     #> Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-Example - Student Work
-----------------------
