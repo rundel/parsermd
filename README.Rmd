@@ -1,5 +1,9 @@
 ---
-output: github_document
+title: parsermd
+output:
+  md_document:
+    variant: gfm
+always_allow_html: yes
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -8,8 +12,22 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "man/figures/README",
   out.width = "100%"
+)
+
+options(
+  crayon.enabled = TRUE,
+  crayon.colors = 256
+)
+crayon::num_colors(forget = TRUE)
+asciicast::init_knitr_engine(
+  startup = quote({
+    library(cli)
+    set.seed(1) 
+  }),
+  echo = TRUE,
+  echo_input = FALSE
 )
 ```
 
@@ -24,7 +42,7 @@ The goal of parsermd is to extract the content of an Rmarkdown file to allow for
 
 You can install the released version of parsermd from [GitHub](https://github.com/rundel/parsermd) with:
 
-``` r
+```r
 remotes::install_github("rundel/parsermd")
 ```
 
@@ -33,8 +51,15 @@ remotes::install_github("rundel/parsermd")
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
 ```{r example}
-parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+```
 
+```{asciicast tree}
+print(rmd)
+```
+
+```{asciicast content}
+print(rmd, as_tree = FALSE)
 ```
 
 ## Example - Student Work
