@@ -3,6 +3,11 @@
 tibble::as_tibble
 
 #' @export
+as.data.frame.rmd_ast = function(ast, include_yaml = TRUE) {
+  as_tibble.rmd_ast(ast, include_yaml)
+}
+
+#' @export
 as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
 
   if (!include_yaml & inherits(ast[[1]], "rmd_yaml"))
