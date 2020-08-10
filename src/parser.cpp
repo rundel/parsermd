@@ -1,4 +1,4 @@
-// [[Rcpp::plugins(cpp17)]]
+// [[Rcpp::plugins(cpp14)]]
 // [[Rcpp::depends(BH)]]
 
 //#define BOOST_SPIRIT_X3_DEBUG
@@ -25,6 +25,9 @@ Rcpp::List parse_rmd_cpp(std::string const& str) {
 
   if (!r) // fail if we did not get a full match
     Rcpp::stop("Failed to parse.");
+
+  if (first != last)
+    Rcpp::warning("Incomplete parsing.");
 
   return Rcpp::wrap(expr);
 }
