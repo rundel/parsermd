@@ -52,7 +52,11 @@ namespace Rcpp {
     struct line_visitor {
       SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
       SEXP operator()(client::ast::heading const& h) { return Rcpp::wrap(h); }
-      SEXP operator()(std::vector<std::string> const& s) {return Rcpp::wrap(s); }
+      SEXP operator()(std::vector<std::string> const& s) {
+        Rcpp::CharacterVector res = Rcpp::wrap(s);
+        res.attr("class") = "rmd_markdown";
+        return res;
+      }
     } v;
 
     return boost::apply_visitor(v, line);

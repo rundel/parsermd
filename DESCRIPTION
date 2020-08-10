@@ -17,9 +17,11 @@ Imports:
     Rcpp,
     cli,
     checkmate,
-    readr
+    readr,
+    tidyr,
+    dplyr
 RoxygenNote: 7.1.1
-SystemRequirements: C++17
+SystemRequirements: C++14
 LinkingTo: 
     Rcpp,
     BH

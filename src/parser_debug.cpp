@@ -1,4 +1,4 @@
-// [[Rcpp::plugins(cpp17)]]
+// [[Rcpp::plugins(cpp14)]]
 // [[Rcpp::depends(BH)]]
 
 #define BOOST_SPIRIT_X3_DEBUG
