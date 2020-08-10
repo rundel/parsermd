@@ -2,47 +2,55 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 parsermd
-======
+========
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of parsermd is to …
+The goal of parsermd is to extract the content of an Rmarkdown file to
+allow for programmatic interactions with the code chunks and markdown
+contents.
 
 Installation
 ------------
 
 You can install the released version of parsermd from
-[CRAN](https://CRAN.R-project.org) with:
+[GitHub](https://github.com/rundel/parsermd) with:
 
-    install.packages("parsermd")
+    remotes::install_github("rundel/parsermd")
 
-Example
--------
+Example - Minimal
+-----------------
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you the basic abstract syntax tree
+(AST) that results from parsing a simple Rmd file,
 
-    library(parsermd)
-    ## basic example code
+    parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+    #> ── Heading [h1] - test ──────────────────────────────────────────────────────────────────────────────────────────
+    #> ── Chunk [engine: 'r' name: 'setup' options: `include = FALSE`] ─────────────────────────────────────────────────
+    #> ┌──────────────────────────────────┐
+    #> │knitr::opts_chunk$set(echo = TRUE)│
+    #> └──────────────────────────────────┘
+    #> ── Heading [h1] - hello ─────────────────────────────────────────────────────────────────────────────────────────
+    #> ── Heading [h2] - R Markdown ────────────────────────────────────────────────────────────────────────────────────
+    #> This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+    #> 
+    #> When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+    #> ── Chunk [engine: 'r' name: 'cars'] ─────────────────────────────────────────────────────────────────────────────
+    #> ┌─────────────┐
+    #> │summary(cars)│
+    #> └─────────────┘
+    #> ── Chunk [engine: 'r'] ──────────────────────────────────────────────────────────────────────────────────────────
+    #> ┌──────────────────────────┐
+    #> │knitr::knit_patterns$get()│
+    #> └──────────────────────────┘
+    #> ── Heading [h2] - Including Plots ───────────────────────────────────────────────────────────────────────────────
+    #> You can also embed plots, for example:
+    #> ── Chunk [engine: 'r' name: 'pressure' options: `echo = FALSE`] ─────────────────────────────────────────────────
+    #> ┌──────────────┐
+    #> │plot(pressure)│
+    #> └──────────────┘
+    #> Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-    summary(cars)
-    #>      speed           dist       
-    #>  Min.   : 4.0   Min.   :  2.00  
-    #>  1st Qu.:12.0   1st Qu.: 26.00  
-    #>  Median :15.0   Median : 36.00  
-    #>  Mean   :15.4   Mean   : 42.98  
-    #>  3rd Qu.:19.0   3rd Qu.: 56.00  
-    #>  Max.   :25.0   Max.   :120.00
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub!
+Example - Student Work
+----------------------
