@@ -24,7 +24,8 @@ crayon::num_colors(forget = TRUE)
 asciicast::init_knitr_engine(
   startup = quote({
     library(cli)
-    set.seed(1) 
+    set.seed(1)
+    rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
   }),
   echo = TRUE,
   echo_input = FALSE
@@ -50,15 +51,15 @@ remotes::install_github("rundel/parsermd")
 
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
-```{r example}
+```{example}
 rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
 ```
 
-```{r tree}
+```{asciicast tree}
 print(rmd)
 ```
 
-```{r content}
+```{asciicast content}
 print(rmd, as_tree = FALSE)
 ```
 
