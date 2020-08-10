@@ -1,9 +1,5 @@
 ---
-title: parsermd
-output:
-  md_document:
-    variant: gfm
-always_allow_html: yes
+output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,20 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
-options(
-  crayon.enabled = TRUE,
-  crayon.colors = 256
-)
-crayon::num_colors(forget = TRUE)
-asciicast::init_knitr_engine(
-  startup = quote({
-    library(cli)
-    set.seed(1)
-    rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
-  }),
-  echo = TRUE,
-  echo_input = FALSE
-)
+options(width = 80)
 ```
 
 # parsermd
@@ -47,20 +30,49 @@ You can install the released version of parsermd from [GitHub](https://github.co
 remotes::install_github("rundel/parsermd")
 ```
 
+```{r}
+library(parsermd)
+```
+
 ## Example - Minimal
 
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
-```{example}
+```{r example}
 rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
 ```
 
-```{asciicast tree}
+The RMarkdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a heirachical view of the document where chunks and markdown text are nested within headings, this is shown by the default print methods.
+
+```{r tree}
 print(rmd)
 ```
 
-```{asciicast content}
-print(rmd, as_tree = FALSE)
+If you would prefer to see the underlying flat structure, this can be seen by setting `use_headings = FALSE` with `print`.
+
+```{r no_headings}
+print(rmd, use_headings = FALSE)
+```
+
+Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with `as_tibble` or `as.data.frame` (both return a tibble).
+
+```{r tibble}
+as_tibble(rmd)
+```
+
+and as expected this data frame representation can also be converted back into an AST.
+
+```{r as_ast}
+as_ast( as_tibble(rmd) )
+```
+
+Finally, we can also convert the AST back into an RMarkdown document via `as_document`
+
+```{r as_doc}
+cat(
+  as_document(rmd),
+  sep = "\n"
+)
 ```
 
 ## Example - Student Work
