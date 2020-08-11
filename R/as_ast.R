@@ -10,7 +10,7 @@ as_ast.default = function(obj, ...) {
 
 #' @export
 as_ast.tbl_df = function(df) {
-  parsermd:::as_ast.data.frame(df)
+  as_ast.data.frame(df)
 }
 
 #' @export
