@@ -7,8 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "rundel@gmail.com")
 Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -19,7 +18,8 @@ Imports:
     checkmate,
     readr,
     tidyr,
-    dplyr
+    dplyr,
+    tibble
 RoxygenNote: 7.1.1
 SystemRequirements: C++14
 LinkingTo: 

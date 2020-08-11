@@ -1,3 +1,5 @@
-^listselector\.Rproj$
+^parsermd\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^\.devcontainer
+^LICENSE\.md$
