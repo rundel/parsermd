@@ -1,4 +1,4 @@
 library(testthat)
-library(listselector)
+library(parsermd)
 
-test_check("listselector")
+test_check("parsermd")

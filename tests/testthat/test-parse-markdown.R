@@ -59,21 +59,30 @@ test_that("markdown - headings - blank", {
 
 })
 
+
+make_md_obj = function(...) {
+  md = as.character(list(...))
+  class(md) = "rmd_markdown"
+
+  md
+}
+
+
 test_that("markdown", {
 
   expect_equal(
     parsermd:::check_markdown_parser("test\ntest\n"),
-    list(c("test", "test"))
+    list(make_md_obj("test", "test"))
   )
 
   expect_equal(
     parsermd:::check_markdown_parser("test\n# h1\n"),
-    list("test", make_md_heading_obj("h1", 1))
+    list(make_md_obj("test"), make_md_heading_obj("h1", 1))
   )
 
   expect_equal(
     parsermd:::check_markdown_parser("test\n# h1\ntest\n"),
-    list("test", make_md_heading_obj("h1", 1), "test")
+    list(make_md_obj("test"), make_md_heading_obj("h1", 1), make_md_obj("test"))
   )
 
   expect_equal(
@@ -81,9 +90,9 @@ test_that("markdown", {
     list(
       make_md_heading_obj("h1", 1),
       make_md_heading_obj("h2", 2),
-      "test",
+      make_md_obj("test"),
       make_md_heading_obj("h3", 3),
-      "hello"
+      make_md_obj("hello")
     )
   )
 })
