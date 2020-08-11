@@ -16,17 +16,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// parse_rmd_debug
-Rcpp::List parse_rmd_debug(std::string const& str);
-RcppExport SEXP _parsermd_parse_rmd_debug(SEXP strSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(parse_rmd_debug(str));
-    return rcpp_result_gen;
-END_RCPP
-}
 // check_yaml_parser
 Rcpp::CharacterVector check_yaml_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_yaml_parser(SEXP strSEXP) {
@@ -85,7 +74,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
-    {"_parsermd_parse_rmd_debug", (DL_FUNC) &_parsermd_parse_rmd_debug, 1},
     {"_parsermd_check_yaml_parser", (DL_FUNC) &_parsermd_check_yaml_parser, 1},
     {"_parsermd_check_chunk_parser", (DL_FUNC) &_parsermd_check_chunk_parser, 1},
     {"_parsermd_check_markdown_parser", (DL_FUNC) &_parsermd_check_markdown_parser, 1},
