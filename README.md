@@ -12,7 +12,11 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 The goal of parsermd is to extract the content of an Rmarkdown file to
 allow for programmatic interactions with the code chunks and markdown
-content.
+content. The goal is to capture the fundamental structure of the
+document and as such we do not attempt to parse every detail of the Rmd.
+Specifically, the yaml front matter, markdown text, and R code are read
+as text lines allowing them to be processed latter with sepecific tools
+like `yaml::read_yaml` or `base::parse`.
 
 Installation
 ------------
@@ -35,7 +39,8 @@ This is a basic example which shows you the basic abstract syntax tree
 The RMarkdown document is parsed and stored in a flat, ordered list
 object containing tagged elements. By default the package will present a
 heirachical view of the document where chunks and markdown text are
-nested within headings, this is shown by the default print methods.
+nested within headings, which is shown by the default print method for
+`rmd_ast` objects.
 
     print(rmd)
     #> Rmd AST
@@ -53,7 +58,7 @@ nested within headings, this is shown by the default print methods.
     #>     └─Markdown [1 lines]
 
 If you would prefer to see the underlying flat structure, this can be
-seen by setting `use_headings = FALSE` with `print`.
+printed by setting `use_headings = FALSE` with `print`.
 
     print(rmd, use_headings = FALSE)
     #> Rmd AST
@@ -87,8 +92,8 @@ the transformation of the object into a tidy tibble with `as_tibble` or
     #> 7 hello  Including Plots rmd_chunk    <rmd_chnk>    
     #> 8 hello  Including Plots rmd_markdown <rmd_mrkd [1]>
 
-and as expected this data frame representation can also be converted
-back into an AST.
+and it is possible to convert from these data frames back into an
+`rmd_ast`.
 
     as_ast( as_tibble(rmd) )
     #> Rmd AST
@@ -105,8 +110,8 @@ back into an AST.
     #>     ├─Chunk [r, 1 opt, 1 lines] - pressure
     #>     └─Markdown [1 lines]
 
-Finally, we can also convert the AST back into an RMarkdown document via
-`as_document`
+Finally, we can also convert the `rmd_ast` back into an RMarkdown
+document via `as_document`
 
     cat(
       as_document(rmd),
