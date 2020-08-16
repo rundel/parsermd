@@ -45,11 +45,14 @@ as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
 
   section = lapply(section, function(s) s[min_sec_level:max_sec_level])
 
-  tidyr::unnest_wider(
+  res = tidyr::unnest_wider(
     tibble::as_tibble(
       list(section=section, type=type, data=data)
     ),
     section
   )
+  class(res) = c("rmd_tibble", class(res))
+
+  res
 }
 
