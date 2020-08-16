@@ -1,3 +1,5 @@
+## Based in part on https://github.com/r-lib/fs/tree/master/R
+
 pc = function(...) {
   paste(..., collapse="", sep="")
 }
@@ -90,7 +92,7 @@ has_sibling = function(level, remaining) {
 }
 
 #' @export
-print.rmd_ast = function(ast, as_tree = TRUE, use_headings = TRUE) {
+print.rmd_ast = function(ast, use_headings = TRUE) {
   print_tree(ast, use_headings)
 }
 
