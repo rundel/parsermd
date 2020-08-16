@@ -1,0 +1,75 @@
+# A Knitr "Polyglot" Example for Markdown
+
+This is a minimal example of using "polyglot"" **knitr** to produce an _HTML_ page from _Markdown_.
+
+```{r setup}
+knitr::opts_chunk$set(engine.opts = list(
+  perl = "-Mstrict -Mwarnings -Mfeature=say",
+  bash = "-o errexit -o nounset"
+))
+toTest <- c("R", "python", "scala", "bash", "perl")
+where <- Sys.which(toTest)
+```
+
+## Engine runtime paths
+
+```{r list-engines, message=FALSE}
+for(n in names(where)) {
+  path <- where[n]
+  if(nchar(path) <= 0) {
+    path <- "<not found>"
+  }
+  message("* __", n, "__: `", path, "`\n")
+}
+```
+
+## Input Data
+
+Pass the string to transform to engine subprocess via environment variable.
+
+```{r, echo=TRUE}
+Sys.setenv(SOMETHING = "something")
+```
+
+## Compute Something in R
+
+```{r something-in-R, engine='R', comment='R>'}
+something <- Sys.getenv("SOMETHING")
+somethingelse <- paste(something, "+ R")
+cat(paste("'", something, "' is now '", somethingelse, "'", sep=""))
+```
+
+## Compute Something in Scala
+
+Running small fragments without caching can take some time, as the Scala compiler has to launch and compile the script to JVM bytecode. The `-savecompiled` option (passed via `engine.opts`) will result in Scala caching the compiled script outside of _knitr_.
+
+```{r something-in-Scala, engine='scala', comment='Scala>', engine.opts='-savecompiled', cache=TRUE}
+val something = System.getenv("SOMETHING")
+val somethingelse = something + " + Scala"
+println("'" + something + "' is now '" + somethingelse + "'")
+```
+
+## Compute Something in Python
+
+```{r something-in-Python, engine='python', comment='Python>'}
+import os
+something = os.getenv("SOMETHING")
+somethingelse = something + " + Python"
+print("'" + something + "' is now '" + somethingelse + "'")
+```
+
+## Compute Something in Bash
+
+```{r something-in-Bash, engine='bash', comment='Bash>'}
+something=$SOMETHING
+somethingelse="$something + Bash"
+echo "'$something' is now '$somethingelse'"
+```
+
+## Compute Something in Perl
+
+```{r something-in-Perl, engine='perl', comment='Perl>'}
+my $something = $ENV{SOMETHING};
+$something .= ' + Perl';
+say join ' ', qw{something is now}, "'$something'";
+```
