@@ -123,8 +123,19 @@ test_that("chunk parsing - code", {
 
 
 test_that("chunk parsing - issues", {
+  # allow dashes
   expect_equal(
     parsermd:::check_chunk_parser("```{r load-packages, message=FALSE}\n```\n"),
     make_chunk_obj(name="load-packages", options = list(message="FALSE"))
   )
+
+  # allow engine, opt1=val for a chunk
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r, include=FALSE}\n```\n"),
+    make_chunk_obj(options = list(include="FALSE"))
+  )
+
+
+
 })
+

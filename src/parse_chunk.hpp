@@ -63,7 +63,7 @@ namespace client { namespace parser {
 
   auto const details = x3::rule<struct _, client::ast::details>{"details"}
     = (  (label >> ','            >> (option % ','))
-       | (x3::attr(std::string()) >> (option % ','))
+       | (x3::attr(std::string()) >> -x3::lit(',') >> (option % ','))
        | (label >> -x3::lit(',')  >> x3::attr(std::vector<ast::option>()))
        | (x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()))
       );
