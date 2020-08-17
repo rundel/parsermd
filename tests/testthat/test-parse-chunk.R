@@ -1,11 +1,12 @@
 make_chunk_obj = function(
   engine = "r", name = "",
   options = structure(list(), names = character()),
-  code = character()
+  code = character(),
+  indent = ""
 ) {
   structure(
     list(
-      engine = engine, name = name, options = options, code = code
+      engine = engine, name = name, options = options, code = code, indent = indent
     ),
     class = "rmd_chunk"
   )
@@ -134,8 +135,37 @@ test_that("chunk parsing - issues", {
     parsermd:::check_chunk_parser("```{r, include=FALSE}\n```\n"),
     make_chunk_obj(options = list(include="FALSE"))
   )
+})
 
 
+test_that("chunk parsing - indented", {
 
+  expect_equal(
+    parsermd:::check_chunk_parser("  ```{r test, include=FALSE}\n  1+1\n  ```\n"),
+    make_chunk_obj(name = "test", options = list(include = "FALSE"), code = "1+1", indent = "  ")
+  )
+
+  # FIXME should handle indent on the code
+  expect_equal(
+    parsermd:::check_chunk_parser("\t```{r}\n\tprint('hello indented world')\n\t```\n"),
+    make_chunk_obj(code = "print('hello indented world')", indent = "\t")
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("> ```{r}\n> print('hello indented world')\n> ```\n"),
+    make_chunk_obj(code = "print('hello indented world')", indent = "> ")
+  )
+
+  expect_error(
+    parsermd:::check_chunk_parser("> ```{r}\n  ```\n"),
+  )
+
+  expect_error(
+    parsermd:::check_chunk_parser("```{r}\n ```\n"),
+  )
+
+  expect_error(
+    parsermd:::check_chunk_parser(" ```{r}\n```\n"),
+  )
 })
 

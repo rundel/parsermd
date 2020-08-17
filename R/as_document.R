@@ -40,10 +40,15 @@ as_document.rmd_chunk = function(chunk) {
       paste(names(chunk$options), "=", chunk$options, collapse=", ")
     )
 
-  c(
+  lines = c(
     paste0("```{", chunk$engine, details, "}"),
     chunk$code,
     "```"
+  )
+
+  paste0(
+    chunk$indent,
+    lines
   )
 }
 

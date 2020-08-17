@@ -19,10 +19,10 @@ Rcpp::CharacterVector check_yaml_parser(std::string const& str) {
 
   client::ast::yaml expr;
 
-  bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
     client::parser::yaml,
-    x3::blank,
+    //x3::blank,
     expr
   );
 
@@ -43,10 +43,11 @@ Rcpp::List check_chunk_parser(std::string const& str) {
 
   client::ast::chunk expr;
 
-  bool r = x3::phrase_parse(
+  //bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
     client::parser::chunk,
-    x3::blank,
+    //x3::blank,
     expr
   );
 
@@ -66,10 +67,10 @@ Rcpp::List check_markdown_parser(std::string const& str) {
 
   std::vector<client::ast::line> expr;
 
-  bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
     +(client::parser::entry),
-    x3::blank,
+    //x3::blank,
     expr
   );
 
@@ -93,10 +94,10 @@ Rcpp::List check_markdown_heading_parser(std::string const& str) {
 
   client::ast::heading expr;
 
-  bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
     client::parser::heading,
-    x3::blank,
+    //x3::blank,
     expr
   );
 
@@ -116,10 +117,10 @@ Rcpp::List check_option_parser(std::string const& str) {
 
   std::vector<client::ast::option> expr;
 
-  bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
-    client::parser::option % ",",
-    x3::blank,
+    x3::skip(x3::blank)[ client::parser::option % "," ],
+    //x3::blank,
     expr
   );
 

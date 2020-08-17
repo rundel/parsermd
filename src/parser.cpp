@@ -18,10 +18,11 @@ Rcpp::List parse_rmd_cpp(std::string const& str, bool allow_incomplete = false) 
 
   client::ast::rmd expr;
 
-  bool r = x3::phrase_parse(
+  //bool r = x3::phrase_parse(
+  bool r = x3::parse(
     first, last,
     client::parser::rmd,
-    x3::blank,
+    //x3::blank,
     expr
   );
 

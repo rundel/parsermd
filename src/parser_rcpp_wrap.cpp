@@ -9,7 +9,8 @@ namespace Rcpp {
       Rcpp::Named("engine")  = chunk.engine,
       Rcpp::Named("name")    = chunk.d.name,
       Rcpp::Named("options") = Rcpp::wrap(chunk.d.options),
-      Rcpp::Named("code")    = chunk.code
+      Rcpp::Named("code")    = chunk.code,
+      Rcpp::Named("indent")  = chunk.indent
     );
 
     res.attr("class") = "rmd_chunk";
