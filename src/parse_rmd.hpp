@@ -16,8 +16,8 @@ namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
   struct heading {
-    std::string name;
     int level;
+    std::string name;
   };
 
   struct line : x3::variant<chunk, heading, std::vector<std::string>> {
@@ -33,7 +33,7 @@ namespace client { namespace ast {
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::heading,
-  name, level
+  level, name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -54,24 +54,34 @@ namespace client { namespace parser {
   auto const text = x3::rule<struct _, std::vector<std::string>>{"text"}
   = +(text_line >> x3::eol);
 
-  static auto headn = [](int n) {
-    return (
-      x3::lexeme[
-        x3::repeat(n)["#"] >>
-        -x3::lit(" ") >>
-        x3::raw[ *(x3::char_ - x3::eol) ]
-      ] >>
-      x3::attr(n)
-    );
-  };
 
-  auto const heading = x3::rule<struct _, client::ast::heading>{"heading"}
-  = (headn(6) | headn(5) | headn(4) | headn(3) | headn(2) | headn(1)) >> x3::eol;
+  //static auto headn = [](int n) {
+  //  return (
+  //    x3::lexeme[
+  //      x3::repeat(n)["#"] >>
+  //      -x3::lit(" ") >>
+  //      x3::raw[ *(x3::char_ - x3::eol) ]
+  //    ] >>
+  //    x3::attr(n)
+  //  );
+  //};
+  //
+  //auto const heading = x3::rule<struct _, client::ast::heading>{"heading"}
+  //= (headn(6) | headn(5) | headn(4) | headn(3) | headn(2) | headn(1)) >> x3::eol;
 
-  auto const entry = x3::rule<struct _, client::ast::line>{"line"}
+  auto heading_level = ([](auto& ctx) { _val(ctx).level =  _attr(ctx).size(); });
+  auto heading_name = ([](auto& ctx) { _val(ctx).name = _attr(ctx); });
+
+  auto const heading = x3::rule<struct _, client::ast::heading> {"heading"}
+  = (x3::repeat(1,6)[x3::char_("#")])[ heading_level ] >>
+    -x3::lit(" ") >>
+    ( *(x3::char_ - x3::eol) )[ heading_name ] >>
+    x3::eol;
+
+  auto const entry = x3::rule<struct _, client::ast::line> {"line"}
   = (chunk | heading | text) >> *x3::eol;
 
-  auto const rmd = x3::rule<struct _, client::ast::rmd>{"rmd"}
+  auto const rmd = x3::rule<struct _, client::ast::rmd> {"rmd"}
   = -(yaml >> *x3::eol) >> *entry;
 } }
 
