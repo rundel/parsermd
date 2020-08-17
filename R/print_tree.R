@@ -19,6 +19,10 @@ tree_node.rmd_yaml = function(x) {
   )
 }
 
+tree_node.rmd_yaml_list = function(x) {
+  tree_node.rmd_yaml(unlist(x))
+}
+
 
 tree_node.rmd_heading = function(x) {
   list(

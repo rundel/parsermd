@@ -20,7 +20,8 @@ Imports:
     readr,
     tidyr,
     dplyr,
-    tibble
+    tibble,
+    yaml
 RoxygenNote: 7.1.1
 SystemRequirements: C++14
 LinkingTo: 

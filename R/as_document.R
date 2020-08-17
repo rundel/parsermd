@@ -69,4 +69,11 @@ as_document.rmd_yaml = function(yaml) {
   )
 }
 
+#' @export
+as_document.rmd_yaml_list = function(yaml) {
+  as_document.rmd_yaml(
+    strsplit(yaml::as.yaml(yaml), "\n")[[1]]
+  )
+}
+
 
