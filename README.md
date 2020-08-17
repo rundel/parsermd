@@ -43,37 +43,35 @@ nested within headings, which is shown by the default print method for
 `rmd_ast` objects.
 
     print(rmd)
-    #> Rmd AST
-    #> ├─YAML [4 lines]
-    #> ├─Heading [h1] - test
-    #> │ └─Chunk [r, 1 opt, 1 lines] - setup
-    #> └─Heading [h1] - hello
-    #>   ├─Heading [h2] - R Markdown
-    #>   │ ├─Markdown [4 lines]
-    #>   │ ├─Chunk [r, 1 lines] - cars
-    #>   │ └─Chunk [r, 1 lines] - <unnamed>
-    #>   └─Heading [h2] - Including Plots
-    #>     ├─Markdown [2 lines]
-    #>     ├─Chunk [r, 1 opt, 1 lines] - pressure
-    #>     └─Markdown [1 lines]
+    #> ├── YAML [4 lines]
+    #> ├── Heading [h1] - test
+    #> │   └── Chunk [r, 1 opt, 1 lines] - setup
+    #> └── Heading [h1] - hello
+    #>     ├── Heading [h2] - R Markdown
+    #>     │   ├── Markdown [4 lines]
+    #>     │   ├── Chunk [r, 1 lines] - cars
+    #>     │   └── Chunk [r, 1 lines] - <unnamed>
+    #>     └── Heading [h2] - Including Plots
+    #>         ├── Markdown [2 lines]
+    #>         ├── Chunk [r, 1 opt, 1 lines] - pressure
+    #>         └── Markdown [1 lines]
 
 If you would prefer to see the underlying flat structure, this can be
 printed by setting `use_headings = FALSE` with `print`.
 
     print(rmd, use_headings = FALSE)
-    #> Rmd AST
-    #> ├─YAML [4 lines]
-    #> ├─Heading [h1] - test
-    #> ├─Chunk [r, 1 opt, 1 lines] - setup
-    #> ├─Heading [h1] - hello
-    #> ├─Heading [h2] - R Markdown
-    #> ├─Markdown [4 lines]
-    #> ├─Chunk [r, 1 lines] - cars
-    #> ├─Chunk [r, 1 lines] - <unnamed>
-    #> ├─Heading [h2] - Including Plots
-    #> ├─Markdown [2 lines]
-    #> ├─Chunk [r, 1 opt, 1 lines] - pressure
-    #> └─Markdown [1 lines]
+    #> ├── YAML [4 lines]
+    #> ├── Heading [h1] - test
+    #> ├── Chunk [r, 1 opt, 1 lines] - setup
+    #> ├── Heading [h1] - hello
+    #> ├── Heading [h2] - R Markdown
+    #> ├── Markdown [4 lines]
+    #> ├── Chunk [r, 1 lines] - cars
+    #> ├── Chunk [r, 1 lines] - <unnamed>
+    #> ├── Heading [h2] - Including Plots
+    #> ├── Markdown [2 lines]
+    #> ├── Chunk [r, 1 opt, 1 lines] - pressure
+    #> └── Markdown [1 lines]
 
 Additionally, to ease the manipulation of the AST the package supports
 the transformation of the object into a tidy tibble with `as_tibble` or
@@ -81,34 +79,33 @@ the transformation of the object into a tidy tibble with `as_tibble` or
 
     as_tibble(rmd)
     #> # A tibble: 8 x 4
-    #>   sec_h1 sec_h2          type         data          
-    #>   <chr>  <chr>           <chr>        <list>        
-    #> 1 <NA>   <NA>            rmd_yaml     <rmd_yaml [4]>
-    #> 2 test   <NA>            rmd_chunk    <rmd_chnk>    
-    #> 3 hello  R Markdown      rmd_markdown <rmd_mrkd [4]>
-    #> 4 hello  R Markdown      rmd_chunk    <rmd_chnk>    
-    #> 5 hello  R Markdown      rmd_chunk    <rmd_chnk>    
-    #> 6 hello  Including Plots rmd_markdown <rmd_mrkd [2]>
-    #> 7 hello  Including Plots rmd_chunk    <rmd_chnk>    
-    #> 8 hello  Including Plots rmd_markdown <rmd_mrkd [1]>
+    #>   sec_h1 sec_h2          type          data          
+    #>   <chr>  <chr>           <chr>         <list>        
+    #> 1 <NA>   <NA>            rmd_yaml_list <rmd_yml_>    
+    #> 2 test   <NA>            rmd_chunk     <rmd_chnk>    
+    #> 3 hello  R Markdown      rmd_markdown  <rmd_mrkd [4]>
+    #> 4 hello  R Markdown      rmd_chunk     <rmd_chnk>    
+    #> 5 hello  R Markdown      rmd_chunk     <rmd_chnk>    
+    #> 6 hello  Including Plots rmd_markdown  <rmd_mrkd [2]>
+    #> 7 hello  Including Plots rmd_chunk     <rmd_chnk>    
+    #> 8 hello  Including Plots rmd_markdown  <rmd_mrkd [1]>
 
 and it is possible to convert from these data frames back into an
 `rmd_ast`.
 
     as_ast( as_tibble(rmd) )
-    #> Rmd AST
-    #> ├─YAML [4 lines]
-    #> ├─Heading [h1] - test
-    #> │ └─Chunk [r, 1 opt, 1 lines] - setup
-    #> └─Heading [h1] - hello
-    #>   ├─Heading [h2] - R Markdown
-    #>   │ ├─Markdown [4 lines]
-    #>   │ ├─Chunk [r, 1 lines] - cars
-    #>   │ └─Chunk [r, 1 lines] - <unnamed>
-    #>   └─Heading [h2] - Including Plots
-    #>     ├─Markdown [2 lines]
-    #>     ├─Chunk [r, 1 opt, 1 lines] - pressure
-    #>     └─Markdown [1 lines]
+    #> ├── YAML [4 lines]
+    #> ├── Heading [h1] - test
+    #> │   └── Chunk [r, 1 opt, 1 lines] - setup
+    #> └── Heading [h1] - hello
+    #>     ├── Heading [h2] - R Markdown
+    #>     │   ├── Markdown [4 lines]
+    #>     │   ├── Chunk [r, 1 lines] - cars
+    #>     │   └── Chunk [r, 1 lines] - <unnamed>
+    #>     └── Heading [h2] - Including Plots
+    #>         ├── Markdown [2 lines]
+    #>         ├── Chunk [r, 1 opt, 1 lines] - pressure
+    #>         └── Markdown [1 lines]
 
 Finally, we can also convert the `rmd_ast` back into an RMarkdown
 document via `as_document`
@@ -118,9 +115,9 @@ document via `as_document`
       sep = "\n"
     )
     #> ---
-    #> title: "Minimal"
-    #> author: "Colin Rundel"
-    #> date: "7/21/2020"
+    #> title: Minimal
+    #> author: Colin Rundel
+    #> date: 7/21/2020
     #> output: html_document
     #> ---
     #> 
