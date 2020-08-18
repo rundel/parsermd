@@ -18,7 +18,11 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
 parse_yaml = function(yaml) {
   checkmate::check_class(yaml, "rmd_yaml")
 
-  yaml = yaml::read_yaml(text = paste(yaml, collapse="\n"))
+  if(length(yaml) == 0)
+    yaml = list()
+  else
+    yaml = yaml::read_yaml(text = paste(yaml, collapse="\n"))
+
   class(yaml) = "rmd_yaml_list"
 
   yaml
