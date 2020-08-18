@@ -45,11 +45,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
+  auto const chunk_start = (*indent_pat >> x3::lit("```{") >> x3::omit[ *(~x3::char_("}")) ] >> "}" >> x3::eol);
+  auto const heading_start = x3::lit("#");
+
   auto const text_line = x3::rule<struct _, std::string>{"text line"}
-  = x3::raw[ x3::lexeme[
-      !( (*indent_pat >> x3::lit("```{")) | x3::lit("---") | x3::lit("#")) >>
-      *(x3::char_ - x3::eol)
-    ] ];
+  = !(chunk_start | heading_start) >> x3::lexeme[ *(x3::char_ - x3::eol) ];
 
   auto const text = x3::rule<struct _, std::vector<std::string>>{"text"}
   = +(text_line >> x3::eol);
