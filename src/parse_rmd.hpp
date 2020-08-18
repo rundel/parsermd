@@ -54,21 +54,6 @@ namespace client { namespace parser {
   auto const text = x3::rule<struct _, std::vector<std::string>>{"text"}
   = +(text_line >> x3::eol);
 
-
-  //static auto headn = [](int n) {
-  //  return (
-  //    x3::lexeme[
-  //      x3::repeat(n)["#"] >>
-  //      -x3::lit(" ") >>
-  //      x3::raw[ *(x3::char_ - x3::eol) ]
-  //    ] >>
-  //    x3::attr(n)
-  //  );
-  //};
-  //
-  //auto const heading = x3::rule<struct _, client::ast::heading>{"heading"}
-  //= (headn(6) | headn(5) | headn(4) | headn(3) | headn(2) | headn(1)) >> x3::eol;
-
   auto heading_level = ([](auto& ctx) { _val(ctx).level =  _attr(ctx).size(); });
   auto heading_name = ([](auto& ctx) { _val(ctx).name = _attr(ctx); });
 
