@@ -171,23 +171,23 @@ test_that("chunk parsing - indented", {
 test_that("chunk parsing - sequential", {
 
   expect_equal(
-    parsermd:::check_chunk_parser("```{r}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
-    make_chunk_obj(code = "1 + 1")
+    parsermd:::check_multi_chunk_parser("```{r}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
+    parsermd:::check_multi_chunk_parser("```{r}\n1 + 1\n```\n```{r}\nrnorm(10)\n```\n")
   )
 
   expect_equal(
-    parsermd:::check_chunk_parser("```{r include = FALSE}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
-    make_chunk_obj(code = "1 + 1", options = list(include = "FALSE"))
+    parsermd:::check_multi_chunk_parser("```{r include = FALSE}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
+    parsermd:::check_multi_chunk_parser("```{r include = FALSE}\n1 + 1\n```\n```{r}\nrnorm(10)\n```\n")
   )
 
   expect_equal(
-    parsermd:::check_chunk_parser("```{r}\n1 + 1\n```{r include = FALSE}\nrnorm(10)\n```\n"),
-    make_chunk_obj(code = "1 + 1")
+    parsermd:::check_multi_chunk_parser("```{r}\n1 + 1\n```{r include = FALSE}\nrnorm(10)\n```\n"),
+    parsermd:::check_multi_chunk_parser("```{r}\n1 + 1\n```\n```{r include = FALSE}\nrnorm(10)\n```\n")
   )
 
   expect_equal(
-    parsermd:::check_chunk_parser("> ```{r}\n> 1 + 1\n> ```{r}\n> rnorm(10)\n> ```\n"),
-    make_chunk_obj(code = "1 + 1", indent = "> ")
+    parsermd:::check_multi_chunk_parser("> ```{r}\n> 1 + 1\n> ```{r}\n> rnorm(10)\n> ```\n"),
+    parsermd:::check_multi_chunk_parser("> ```{r}\n> 1 + 1\n> ```\n> ```{r}\n> rnorm(10)\n> ```\n")
   )
 
 })

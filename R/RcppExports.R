@@ -13,6 +13,10 @@ check_chunk_parser <- function(str) {
     .Call(`_parsermd_check_chunk_parser`, str)
 }
 
+check_multi_chunk_parser <- function(str, allow_incomplete = FALSE) {
+    .Call(`_parsermd_check_multi_chunk_parser`, str, allow_incomplete)
+}
+
 check_markdown_parser <- function(str) {
     .Call(`_parsermd_check_markdown_parser`, str)
 }
