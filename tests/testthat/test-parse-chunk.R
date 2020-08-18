@@ -145,7 +145,6 @@ test_that("chunk parsing - indented", {
     make_chunk_obj(name = "test", options = list(include = "FALSE"), code = "1+1", indent = "  ")
   )
 
-  # FIXME should handle indent on the code
   expect_equal(
     parsermd:::check_chunk_parser("\t```{r}\n\tprint('hello indented world')\n\t```\n"),
     make_chunk_obj(code = "print('hello indented world')", indent = "\t")
@@ -169,3 +168,43 @@ test_that("chunk parsing - indented", {
   )
 })
 
+test_that("chunk parsing - sequential", {
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
+    make_chunk_obj(code = "1 + 1")
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r include = FALSE}\n1 + 1\n```{r}\nrnorm(10)\n```\n"),
+    make_chunk_obj(code = "1 + 1", options = list(include = "FALSE"))
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r}\n1 + 1\n```{r include = FALSE}\nrnorm(10)\n```\n"),
+    make_chunk_obj(code = "1 + 1")
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("> ```{r}\n> 1 + 1\n> ```{r}\n> rnorm(10)\n> ```\n"),
+    make_chunk_obj(code = "1 + 1", indent = "> ")
+  )
+
+})
+
+test_that("chunk parsing - comma after engine", {
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r, bob}\n```\n"),
+    make_chunk_obj(name = "bob")
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r, include = FALSE}\n```\n"),
+    make_chunk_obj(option = list(include="FALSE"))
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r, bob, include = FALSE}\n```\n"),
+    make_chunk_obj(name = "bob", option = list(include="FALSE"))
+  )
+})
