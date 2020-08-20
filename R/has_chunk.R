@@ -1,15 +1,7 @@
-# These are early proof of concept implementations, they will
-# likely eventually live in the checklist package
-
-
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
-
-
+# These are early proof of concept implementations and are likely to change
 
 collapse_sections = function(df, drop_na = TRUE) {
-  df = select(df, dplyr::starts_with("sec"))
+  df = dplyr::select(df, dplyr::starts_with("sec"))
 
   secs = purrr::pmap(
     df,
@@ -23,11 +15,35 @@ collapse_sections = function(df, drop_na = TRUE) {
   secs
 }
 
+get_name = function(obj) {
+  UseMethod("get_name")
+}
+
+#' @export
+get_name.default = function(obj) {
+  NA_character_
+}
+
+#' @export
+get_name.rmd_chunk = function(obj) {
+  name = obj[["name"]]
+
+  if (is.null(name))
+    name = obj[["options"]][["label"]]
+
+  if (is.null(name))
+    name = NA_character_
+
+  name
+}
+
+
+
 gen_chunk_sec_df = function(df) {
   df = dplyr::filter(df, type == "rmd_chunk")
 
   tibble::tibble(
-    chunk = purrr::map_chr(df$data, "name", .default=NA),
+    chunk = purrr::map_chr(df$data, get_name),
     sec = collapse_sections(df)
   )
 }
@@ -45,7 +61,22 @@ list_equal = function(elem, list) {
 
 
 #' @export
-has_chunk = function(df, chunk_ref) {
+has_chunk = function(obj, chunk_ref) {
+  UseMethod("has_chunk")
+}
+
+#' @export
+has_chunk.default = function(obj, chunk_ref) {
+  stop("Unable to check for chunks in an object with class: ", class(obj))
+}
+
+#' @export
+has_chunk.rmd_ast = function(obj, chunk_ref) {
+  has_chunk(as_tibble(obj), chunk_ref)
+}
+
+#' @export
+has_chunk.rmd_tibble = function(df, chunk_ref) {
   chunk_sec_df = gen_chunk_sec_df(df)
 
   if (!is.list(chunk_ref))
