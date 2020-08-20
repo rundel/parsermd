@@ -28,4 +28,7 @@ LinkingTo:
     Rcpp,
     BH
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.99.0)
+Remotes: r-lib/testthat
+Config/testthat/edition: 3
+
