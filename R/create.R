@@ -1,8 +1,20 @@
 #' @export
-create_yaml = function(...) {
+create_ast = function(...) {
+  ast = list(...)
+  class(ast) = "rmd_ast"
+
+  ast
+}
+
+
+#' @export
+create_yaml = function(..., parse = TRUE) {
   yaml = c(...)
   yaml = as.character(yaml)
   class(yaml) = "rmd_yaml"
+
+  if (parse)
+    yaml = parse_yaml(yaml)
 
   yaml
 }
@@ -21,15 +33,16 @@ create_heading = function(name, level) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE)
   checkmate::assert_int(level, lower = 1, upper = 6, coerce = TRUE)
 
-  structure(list(name = name, level = level), class = "rmd_heading")
+  structure(list(name = name, level = as.integer(level)), class = "rmd_heading")
 }
 
 #' @export
-create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL) {
+create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL, indent="") {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
   checkmate::assert_list(options, any.missing = FALSE, names = "named")
   checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_character(indent, len = 1, any.missing = FALSE)
 
   if (is.null(name))
     name = ""
@@ -37,12 +50,16 @@ create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL
   if (is.null(code))
     code = ""
 
+  if (length(options) == 0)
+    names(options) = character()
+
   structure(
     list(
       engine = engine,
       name = name,
       options = options,
-      code = code
+      code = code,
+      indent = indent
     ),
     class = "rmd_chunk"
   )
