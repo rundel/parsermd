@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{as_tibble}
+\alias{type_sum}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{pillar}{\code{\link[pillar]{type_sum}}}
+
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 }}
 
