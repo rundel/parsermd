@@ -1,30 +1,4 @@
-#' @export
-get_name = function(obj) {
-  UseMethod("get_name")
-}
 
-#' @export
-get_name.list = function(l) {
-  purrr::map_chr(l, get_name)
-}
-
-#' @export
-get_name.default = function(obj) {
-  NA_character_
-}
-
-#' @export
-get_name.rmd_chunk = function(obj) {
-  name = obj[["name"]]
-
-  if (name == "" & !is.null(obj[["options"]][["label"]]))
-    name = obj[["options"]][["label"]]
-
-  if (is.null(name))
-    name = NA_character_
-
-  name
-}
 
 collapse_sections = function(df, drop_na = TRUE) {
   df = dplyr::select(df, dplyr::starts_with("sec"))
@@ -43,6 +17,19 @@ collapse_sections = function(df, drop_na = TRUE) {
   secs
 }
 
+match_sections = function(secs, regex) {
+  checkmate::check_character(regex, min.len = 1, any.missing = FALSE)
+
+  if (!is.list(secs))
+    secs = list(secs)
+
+  purrr::map_lgl(secs, is_section_match, regex = regex)
+}
+
+
+
+
+
 is_section_match = function(secs, regex) {
   if (length(secs) > length(regex)) {
     # Handle the case where we want to select a parent section
@@ -54,14 +41,7 @@ is_section_match = function(secs, regex) {
   all(purrr::map2_lgl(regex, secs, grepl))
 }
 
-match_sections = function(secs, regex) {
-  checkmate::check_character(regex, min.len = 1, any.missing = FALSE)
 
-  if (!is.list(secs))
-    secs = list(secs)
-
-  purrr::map_lgl(secs, is_section_match, regex = regex)
-}
 
 #' @export
 name_subset = function(names, ref) {
@@ -79,27 +59,41 @@ sec_subset = function(secs, ref) {
   purrr::map_lgl(secs, is_section_match, regex = utils::glob2rx(ref))
 }
 
+type_subset = function(types, ref) {
+  checkmate::check_character(ref, min.len = 1, any.missing = FALSE)
+  checkmate::check_character(types, min.len = 1, any.missing = FALSE)
+
+  types %in% ref
+}
+
+
 #' @export
-comb_subset = function(df, sec_refs = NULL, name_refs = NULL) {
+comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL, combine = NULL) {
+  checkmate::check_class(ast, "rmd_ast")
+  checkmate::check_function(combine, null.ok = TRUE)
 
   if (!is.list(sec_refs))
     sec_refs = list(sec_refs)
 
-  checkmate::check_list(sec_refs, types = "character", min.len = 1, null.ok = TRUE, any.missing = FALSE)
-  checkmate::check_character(name_refs, min.len = 1, any.missing = FALSE,  null.ok = TRUE)
+  if (is.null(type_refs)) # so the map2 below works correctly
+    type_refs = list(NULL)
 
   if (is.null(name_refs)) # so the map2 below works correctly
     name_refs = list(NULL)
 
-  secs = collapse_sections(df)
-  names = get_name(df$data)
+  secs = rmd_node_sections(ast)
+  names = rmd_node_name(ast)
+  types = rmd_node_type(ast)
 
-  purrr::map2(
-    sec_refs, name_refs,
-    function(sec_ref, name_ref) {
+  subset = purrr::pmap(
+    list(sec_refs, type_refs, name_refs),
+    function(sec_ref, type_ref, name_ref) {
       subset = TRUE
       if (!is.null(sec_ref))
         subset = subset & sec_subset(secs, sec_ref)
+
+      if (!is.null(type_ref))
+        subset = subset & sec_subset(types, type_ref)
 
       if (!is.null(name_ref))
         subset = subset & name_subset(names, name_ref)
@@ -107,6 +101,11 @@ comb_subset = function(df, sec_refs = NULL, name_refs = NULL) {
       subset
     }
   )
+
+  if (!is.null(combine))
+    subset = purrr::reduce(subset, combine)
+
+  subset
 }
 
 
