@@ -1,7 +1,7 @@
 #' @export
 create_ast = function(...) {
   ast = list(...)
-  class(ast) = "rmd_ast"
+  class(ast) = c("rmd_ast", "list")
 
   ast
 }

@@ -72,7 +72,7 @@ namespace Rcpp {
     for(auto const& line : rmd.lines) {
       res.push_back(Rcpp::wrap(line));
     }
-    res.attr("class") = "rmd_ast";
+    res.attr("class") = Rcpp::CharacterVector({"rmd_ast", "list"});
 
     return res;
   };

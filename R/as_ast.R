@@ -67,6 +67,6 @@ as_ast.data.frame = function(df) {
 
   structure(
     do.call(c, df$data),
-    class = "rmd_ast"
+    class = c("rmd_ast", "list")
   )
 }
