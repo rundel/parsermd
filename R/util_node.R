@@ -33,27 +33,22 @@ rmd_node_sections = function(ast, drop_na = FALSE) {
 }
 
 #' @export
-rmd_node_name = function(obj) {
-  UseMethod("rmd_node_name")
+rmd_node_label = function(obj) {
+  UseMethod("rmd_node_label")
 }
 
 #' @export
-rmd_node_name.rmd_ast = function(ast) {
-  purrr::map_chr(ast, rmd_node_name)
+rmd_node_label.rmd_ast = function(ast) {
+  purrr::map_chr(ast, rmd_node_label)
 }
 
 #' @export
-rmd_node_name.default = function(obj) {
+rmd_node_label.default = function(obj) {
   NA_character_
 }
 
 #' @export
-rmd_node_name.rmd_heading = function(obj) {
-  obj$name
-}
-
-#' @export
-rmd_node_name.rmd_chunk = function(obj) {
+rmd_node_label.rmd_chunk = function(obj) {
   name = obj[["name"]]
 
   if (name == "" & !is.null(obj[["options"]][["label"]]))

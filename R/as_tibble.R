@@ -16,7 +16,7 @@ as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
   df = tibble::as_tibble( list(
     sections = rmd_node_sections(ast, drop_na = FALSE),
     type = rmd_node_type(ast),
-    name = rmd_node_name(ast),
+    label = rmd_node_label(ast),
     ast = ast
   ) )
 
