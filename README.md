@@ -78,17 +78,21 @@ the transformation of the object into a tidy tibble with `as_tibble` or
 `as.data.frame` (both return a tibble).
 
     as_tibble(rmd)
-    #> # A tibble: 8 x 4
-    #>   sec_h1 sec_h2          type          data          
-    #>   <chr>  <chr>           <chr>         <list>        
-    #> 1 <NA>   <NA>            rmd_yaml_list <rmd_yml_>    
-    #> 2 test   <NA>            rmd_chunk     <rmd_chnk>    
-    #> 3 hello  R Markdown      rmd_markdown  <rmd_mrkd [4]>
-    #> 4 hello  R Markdown      rmd_chunk     <rmd_chnk>    
-    #> 5 hello  R Markdown      rmd_chunk     <rmd_chnk>    
-    #> 6 hello  Including Plots rmd_markdown  <rmd_mrkd [2]>
-    #> 7 hello  Including Plots rmd_chunk     <rmd_chnk>    
-    #> 8 hello  Including Plots rmd_markdown  <rmd_mrkd [1]>
+    #> # A tibble: 12 x 5
+    #>    sec_h1 sec_h2          type          name              ast           
+    #>    <chr>  <chr>           <chr>         <chr>             <rmd_ast>     
+    #>  1 <NA>   <NA>            rmd_yaml_list  <NA>             <yaml>        
+    #>  2 test   <NA>            rmd_heading   "test"            <heading [h1]>
+    #>  3 test   <NA>            rmd_chunk     "setup"           <chunk [r]>   
+    #>  4 hello  <NA>            rmd_heading   "hello"           <heading [h1]>
+    #>  5 hello  R Markdown      rmd_heading   "R Markdown"      <heading [h2]>
+    #>  6 hello  R Markdown      rmd_markdown   <NA>             <markdown [4]>
+    #>  7 hello  R Markdown      rmd_chunk     "cars"            <chunk [r]>   
+    #>  8 hello  R Markdown      rmd_chunk     ""                <chunk [r]>   
+    #>  9 hello  Including Plots rmd_heading   "Including Plots" <heading [h2]>
+    #> 10 hello  Including Plots rmd_markdown   <NA>             <markdown [2]>
+    #> 11 hello  Including Plots rmd_chunk     "pressure"        <chunk [r]>   
+    #> 12 hello  Including Plots rmd_markdown   <NA>             <markdown [1]>
 
 and it is possible to convert from these data frames back into an
 `rmd_ast`.
