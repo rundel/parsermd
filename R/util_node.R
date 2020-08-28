@@ -24,6 +24,10 @@ rmd_node_sections = function(ast, drop_na = FALSE) {
     sections[[length(sections)+1]] = labels
   }
 
+  # Handle the case where there are no headings
+  if (min_level == 6 & max_level == 1)
+    min_level = max_level = 0
+
   sections = purrr::map(sections, ~ .x[min_level:max_level])
 
   if (drop_na)
