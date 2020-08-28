@@ -118,6 +118,49 @@ rmd_node_length.default = function(obj) {
 }
 
 
+#' @export
+rmd_node_content = function(node) {
+  UseMethod("rmd_node_content")
+}
+
+#' @export
+rmd_node_content.default = function(node) {
+  NA_character_
+}
+
+#' @export
+rmd_node_content.rmd_ast = function(ast) {
+  purrr::map_chr(ast, rmd_node_content)
+}
+
+#' @export
+rmd_node_content.rmd_chunk = function(node) {
+  paste(node$code, collapse="\n")
+}
+
+#' @export
+rmd_node_content.rmd_markdown = function(node) {
+  paste(node, collapse="\n")
+}
+
+#' @export
+rmd_node_content.rmd_yaml = function(node) {
+  paste(node, collapse="\n")
+}
+
+#' @export
+rmd_node_content.rmd_yaml_list = function(node) {
+  stop("FIXME")
+}
+
+
+
+
+
+
+
+
+
 
 #' @export
 rmd_node_attr = function(node, attr) {
@@ -153,3 +196,6 @@ rmd_node_options = function(obj) {
 rmd_node_code = function(obj) {
   rmd_node_attr(obj, "code")
 }
+
+
+
