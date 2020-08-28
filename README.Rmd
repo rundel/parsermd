@@ -1,14 +1,12 @@
 ---
 output: github_document
-editor_options: 
-  chunk_output_type: inline
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = FALSE,
+  collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README",
   out.width = "100%"
@@ -198,6 +196,7 @@ One small note of caution is that when converting back to an ast, `as_ast`, or d
 dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk")
 ```
 
+<br/>
 
 ```{r}
 dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk") %>%
@@ -205,6 +204,7 @@ dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_ch
   cat(sep="\n")
 ```
 
+<br/>
 
 ```{r}
 rmd_subset(tbl, sec_refs = c("Exercise 2", "Solution"), type_refs = "rmd_chunk") %>%

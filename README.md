@@ -43,7 +43,6 @@ nested within headings, which is shown by the default print method for
 `rmd_ast` objects.
 
     print(rmd)
-
     #> ├── YAML [4 lines]
     #> ├── Heading [h1] - test
     #> │   └── Chunk [r, 1 opt, 1 lines] - setup
@@ -61,7 +60,6 @@ If you would prefer to see the underlying flat structure, this can be
 printed by setting `use_headings = FALSE` with `print`.
 
     print(rmd, use_headings = FALSE)
-
     #> ├── YAML [4 lines]
     #> ├── Heading [h1] - test
     #> ├── Chunk [r, 1 opt, 1 lines] - setup
@@ -80,7 +78,6 @@ the transformation of the object into a tidy tibble with `as_tibble` or
 `as.data.frame` (both return a tibble).
 
     as_tibble(rmd)
-
     #> # A tibble: 12 x 5
     #>    sec_h1 sec_h2          type          label      ast           
     #>    <chr>  <chr>           <chr>         <chr>      <rmd_ast>     
@@ -101,7 +98,6 @@ and it is possible to convert from these data frames back into an
 `rmd_ast`.
 
     as_ast( as_tibble(rmd) )
-
     #> ├── YAML [4 lines]
     #> ├── Heading [h1] - test
     #> │   └── Chunk [r, 1 opt, 1 lines] - setup
@@ -122,7 +118,6 @@ document via `as_document`
       as_document(rmd),
       sep = "\n"
     )
-
     #> ---
     #> title: Minimal
     #> author: Colin Rundel
@@ -174,7 +169,6 @@ manipulate and edit these objects as well as check their properties.
 
     rmd = parse_rmd(system.file("hw01-student.Rmd", package="parsermd"))
     rmd
-
     #> ├── YAML [2 lines]
     #> ├── Heading [h3] - Load packages
     #> │   └── Chunk [r, 1 opt, 2 lines] - load-packages
@@ -199,7 +193,6 @@ Saw we were interested in examining the solution a student entered for
 Exercise 1 - we can get acess to this using the `rmd_subset` function.
 
     rmd_subset(rmd, sec_refs = c("Exercise 1", "Solution"))
-
     #> └── Heading [h3] - Exercise 1
     #>     └── Heading [h4] - Solution
     #>         └── Markdown [5 lines]
@@ -211,7 +204,6 @@ further specify that we want just nodes with type `rmd_markdown` via the
 `type_refs` argument.
 
     rmd_get_node(rmd, sec_refs = c("Exercise 1", "Solution"), type_refs = "rmd_markdown")
-
     #> [1] "2 columns, 13 rows, 3 variables: "                  
     #> [2] "dataset: indicates which dataset the data are from "
     #> [3] "x: x-values "                                       
@@ -223,7 +215,6 @@ further specify that we want just nodes with type `rmd_markdown` via the
 We can use a similar approach to examine the solutions to Exercise 2.
 
     rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution"))
-
     #> └── Heading [h3] - Exercise 2
     #>     └── Heading [h4] - Solution
     #>         ├── Markdown [2 lines]
@@ -236,7 +227,6 @@ the following extracts just the code chunks from this set of solutions.
 
     rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
       rmd_subset(type_refs = "rmd_chunk")
-
     #> ├── Chunk [r, 2 opts, 5 lines] - plot-dino
     #> └── Chunk [r, 2 lines] - cor-dino
 
@@ -248,7 +238,6 @@ which of the headings to keep.
 
     rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
       rmd_subset(sec_refs = "Exercise 2", type_refs = "rmd_chunk")
-
     #> └── Heading [h3] - Exercise 2
     #>     ├── Chunk [r, 2 opts, 5 lines] - plot-dino
     #>     └── Chunk [r, 2 lines] - cor-dino
@@ -257,7 +246,6 @@ Since chunk labels are, supposed to be, unique we can also use these to
 reference chunks directly.
 
     rmd_get_node(rmd, name_refs = "plot-dino")
-
     #> $engine
     #> [1] "r"
     #> 
@@ -294,7 +282,6 @@ labels. As such we can do the following to extract all of the solutions
 from our document:
 
     rmd_subset(rmd, sec_refs = c("Exercise *", "Solution"))
-
     #> ├── Heading [h3] - Exercise 1
     #> │   └── Heading [h4] - Solution
     #> │       └── Markdown [5 lines]
@@ -313,7 +300,6 @@ Similarly, if we wanted to just extract the chunks that involve plotting
 we can match for chunk labels with a “plot” prefix,
 
     rmd_subset(rmd, name_refs = "plot*")
-
     #> ├── Chunk [r, 2 opts, 5 lines] - plot-dino
     #> └── Chunk [r, 2 opts, 5 lines] - plot-star
 
@@ -321,7 +307,6 @@ and as before if we want to keep track of the parent headings we need to
 specify an appropriate `sec_refs`,
 
     rmd_subset(rmd, sec_refs = "Exercise *", name_refs = "plot*")
-
     #> ├── Heading [h3] - Exercise 1
     #> ├── Heading [h3] - Exercise 2
     #> │   └── Chunk [r, 2 opts, 5 lines] - plot-dino
@@ -336,7 +321,6 @@ case we construct several columns using the properties of the ast
 
     tbl = as_tibble(rmd)
     tbl
-
     #> # A tibble: 19 x 5
     #>    sec_h3        sec_h4   type          label         ast           
     #>    <chr>         <chr>    <chr>         <chr>         <rmd_ast>     
@@ -364,7 +348,6 @@ All of the functions above also work with this tibble representation,
 and allow for the same manipulations of the underlying ast.
 
     rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"))
-
     #> # A tibble: 13 x 5
     #>    sec_h3     sec_h4   type         label     ast           
     #>    <chr>      <chr>    <chr>        <chr>     <rmd_ast>     
@@ -383,7 +366,6 @@ and allow for the same manipulations of the underlying ast.
     #> 13 Exercise 3 Solution rmd_chunk    cor-star  <chunk [r]>
 
     rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"), type = "rmd_chunk")
-
     #> # A tibble: 10 x 5
     #>    sec_h3     sec_h4   type        label     ast           
     #>    <chr>      <chr>    <chr>       <chr>     <rmd_ast>     
@@ -408,7 +390,6 @@ new length column to our tibble.
       dplyr::mutate(lines = rmd_node_length(ast))
 
     tbl_lines
-
     #> # A tibble: 19 x 6
     #>    sec_h3        sec_h4   type          label         ast            lines
     #>    <chr>         <chr>    <chr>         <chr>         <rmd_ast>      <int>
@@ -435,7 +416,6 @@ new length column to our tibble.
 Now we can apply a `rmd_subset` to this updated tibble
 
     rmd_subset(tbl_lines, sec_refs = c("Exercise 2", "Solution"))
-
     #> # A tibble: 6 x 6
     #>   sec_h3     sec_h4   type         label     ast            lines
     #>   <chr>      <chr>    <chr>        <chr>     <rmd_ast>      <int>
@@ -453,7 +433,6 @@ also accomplish the same task using `dplyr::filter` or any similar
 approach
 
     dplyr::filter(tbl_lines, sec_h3 == "Exercise 2", sec_h4 == "Solution")
-
     #> # A tibble: 5 x 6
     #>   sec_h3     sec_h4   type         label     ast            lines
     #>   <chr>      <chr>    <chr>        <chr>     <rmd_ast>      <int>
@@ -476,17 +455,17 @@ may still appear in the tibble while they are no longer in the ast - the
 part of the subset process.
 
     dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk")
-
     #> # A tibble: 2 x 5
     #>   sec_h3     sec_h4   type      label     ast        
     #>   <chr>      <chr>    <chr>     <chr>     <rmd_ast>  
     #> 1 Exercise 2 Solution rmd_chunk plot-dino <chunk [r]>
     #> 2 Exercise 2 Solution rmd_chunk cor-dino  <chunk [r]>
 
+<br/>
+
     dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk") %>%
       as_document() %>% 
       cat(sep="\n")
-
     #> ```{rplot-dino, fig.height = 3, fig.width = 6}
     #> dino_data <- datasaurus_dozen %>%
     #>   filter(dataset == "dino")
@@ -500,10 +479,11 @@ part of the subset process.
     #>   summarize(r = cor(x, y))
     #> ```
 
+<br/>
+
     rmd_subset(tbl, sec_refs = c("Exercise 2", "Solution"), type_refs = "rmd_chunk") %>%
       as_document() %>% 
       cat(sep="\n")
-
     #> ### Exercise 2
     #> 
     #> #### Solution
