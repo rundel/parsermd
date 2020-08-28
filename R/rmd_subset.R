@@ -1,5 +1,5 @@
 #' @export
-rmd_subset = function(obj, ...) {
+rmd_subset = function(obj, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE) {
   UseMethod("rmd_subset")
 }
 

@@ -54,9 +54,7 @@ parent_match = function(secs, regex) {
 }
 
 
-node_subset = function(secs, names, types, sec_ref, type_ref, name_ref) {
-  inc_parent = !is.null(sec_ref)
-
+node_subset = function(secs, names, types, sec_ref, type_ref, name_ref, inc_parents) {
   subset = TRUE
   parent_nodes = FALSE
 
@@ -64,7 +62,7 @@ node_subset = function(secs, names, types, sec_ref, type_ref, name_ref) {
     regex = utils::glob2rx(sec_ref)
     matching = purrr::map_lgl(secs, subset_match, regex = regex)
 
-    if (any(matching) & inc_parent)
+    if (any(matching) & inc_parents)
       parent_nodes = (parent_match(secs, regex) & types == "rmd_heading")
 
     subset = subset & matching
@@ -82,7 +80,9 @@ node_subset = function(secs, names, types, sec_ref, type_ref, name_ref) {
 
 
 #' @export
-comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL, combine = NULL) {
+comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL,
+                       inc_parents = !is.null(sec_refs), combine = NULL) {
+
   checkmate::check_class(ast, "rmd_ast")
   checkmate::check_function(combine, null.ok = TRUE)
 
@@ -100,7 +100,8 @@ comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL,
     node_subset,
     secs = rmd_node_sections(ast, drop_na = TRUE),
     types = rmd_node_type(ast),
-    names = rmd_node_label(ast)
+    names = rmd_node_label(ast),
+    inc_parents = inc_parents
   )
 
   if (!is.null(combine))
