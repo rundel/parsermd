@@ -76,7 +76,8 @@ test_that("node_subset - sections", {
 
   node_subset_wrap = function(secs, sec_ref) {
     node_subset(secs = secs, names = names, types = types,
-                sec_ref = sec_ref, type_ref = NULL, name_ref = NULL)
+                sec_ref = sec_ref, type_ref = NULL, name_ref = NULL,
+                inc_parent = TRUE)
   }
 
   expect_equal(
