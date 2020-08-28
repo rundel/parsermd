@@ -19,6 +19,12 @@ as_document.rmd_ast = function(ast, padding = "") {
 }
 
 #' @export
+as_document.rmd_tibble = function(tbl, padding = "") {
+  as_document(tbl$ast, padding)
+}
+
+
+#' @export
 as_document.rmd_markdown = function(md) {
   as.character(md)
 }

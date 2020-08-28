@@ -33,10 +33,14 @@ rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_ref
 
   df = df[subset,]
 
-  dplyr:: bind_cols(
+  df = dplyr:: bind_cols(
     dplyr::bind_rows(rmd_node_sections(df$ast)),  # add new sec_h* columns
     dplyr::select(df, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
+  class(df) = c("rmd_tibble", class(df))
+
+  df
+
 }
 
 
