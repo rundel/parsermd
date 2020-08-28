@@ -1,70 +1,84 @@
-
-
-collapse_sections = function(df, drop_na = TRUE) {
-  df = dplyr::select(df, dplyr::starts_with("sec"))
-
-  cols = grepl("sec_h[1-6]", names(df))
-  if (!all(cols))
-    stop("Unexpected column(s): ", names(df)[!cols], call. = FALSE)
-
-  stopifnot(all())
-
-  secs = purrr::pmap(df, function(...) as.character(list(...)))
-
-  if (drop_na)
-    secs = purrr::map(secs, ~ .x[!is.na(.x)])
-
-  secs
+# Vectorized grepl
+vec_grepl = function(patterns, x) {
+  purrr::map2_lgl(patterns, x, grepl)
 }
 
-match_sections = function(secs, regex) {
-  checkmate::check_character(regex, min.len = 1, any.missing = FALSE)
-
-  if (!is.list(secs))
-    secs = list(secs)
-
-  purrr::map_lgl(secs, is_section_match, regex = regex)
-}
-
-
-
-
-
-is_section_match = function(secs, regex) {
-  if (length(secs) > length(regex)) {
-    # Handle the case where we want to select a parent section
-    secs = secs[seq_along(regex)]
-  } else if (length(secs) < length(regex)) {
+# Find matching subsets of length(regex) in x
+subset_match = function(x, regex, func = any) {
+  if (length(x) < length(regex))
     return(FALSE)
+
+  width = length(regex)
+  subsets = purrr::map(seq_len(length(x)-width+1),  ~x[.x:(.x+width-1)])
+  matches = purrr::map_lgl(subsets, ~ all(vec_grepl(regex, .x)))
+
+  if (!is.null(func))
+    func(matches)
+  else
+    matches
+}
+
+
+# If section is [A, B ,C] then [C] or [B, C] should match
+right_side_match = function(x, regex) {
+  # When matching parents we only match the right side
+  n = length(x)
+  m = length(regex)
+
+  if (m > n)
+    return(FALSE)
+
+  if (m < n)
+    x = x[-seq_len(n-m)]
+
+  all(vec_grepl(patterns = regex, x = x))
+}
+
+parent_match = function(secs, regex) {
+  if (length(regex) == 0)
+    return(FALSE)
+
+  # Generate parent patterns
+  # [A, B, C] has possible parents [A,B,C], [A,B], [A]
+  subsets = purrr::map(seq_len(length(regex)), ~ regex[1:.x])
+
+  # For each section check if one of the parent patterns match
+  purrr::map_lgl(
+    secs,
+    function(sec) {
+      any(
+        purrr::map_lgl(subsets, right_side_match, x = sec)
+      )
+    }
+  )
+}
+
+
+node_subset = function(secs, names, types, sec_ref, type_ref, name_ref) {
+  inc_parent = !is.null(sec_ref)
+
+  subset = TRUE
+  parent_nodes = FALSE
+
+  if (!is.null(sec_ref)) {
+    regex = utils::glob2rx(sec_ref)
+    matching = purrr::map_lgl(secs, subset_match, regex = regex)
+
+    if (any(matching) & inc_parent)
+      parent_nodes = (parent_match(secs, regex) & types == "rmd_heading")
+
+    subset = subset & matching
   }
 
-  all(purrr::map2_lgl(regex, secs, grepl))
+  if (!is.null(type_ref))
+    subset = subset & (types %in% type_ref)
+
+  if (!is.null(name_ref))
+    subset = subset & grepl(utils::glob2rx(name_ref), names)
+
+  subset | parent_nodes
 }
 
-
-
-#' @export
-name_subset = function(names, ref) {
-  checkmate::check_character(names, min.len = 1, any.missing = FALSE)
-  checkmate::check_character(ref, len = 1, any.missing = FALSE)
-
-  grepl(utils::glob2rx(ref), names)
-}
-
-#' @export
-sec_subset = function(secs, ref) {
-  checkmate::check_character(ref, len = 1, any.missing = FALSE)
-  checkmate::check_list(secs, types = "character", min.len = 1)
-
-  purrr::map_lgl(secs, is_section_match, regex = utils::glob2rx(ref))
-}
-
-type_subset = function(types, ref) {
-  checkmate::check_character(ref, min.len = 1, any.missing = FALSE)
-  checkmate::check_character(types, min.len = 1, any.missing = FALSE)
-
-  types %in% ref
-}
 
 
 #' @export
@@ -81,25 +95,12 @@ comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL,
   if (is.null(name_refs)) # so the map2 below works correctly
     name_refs = list(NULL)
 
-  secs = rmd_node_sections(ast)
-  names = rmd_node_name(ast)
-  types = rmd_node_type(ast)
-
   subset = purrr::pmap(
     list(sec_refs, type_refs, name_refs),
-    function(sec_ref, type_ref, name_ref) {
-      subset = TRUE
-      if (!is.null(sec_ref))
-        subset = subset & sec_subset(secs, sec_ref)
-
-      if (!is.null(type_ref))
-        subset = subset & sec_subset(types, type_ref)
-
-      if (!is.null(name_ref))
-        subset = subset & name_subset(names, name_ref)
-
-      subset
-    }
+    node_subset,
+    secs = rmd_node_sections(ast, drop_na = TRUE),
+    types = rmd_node_type(ast),
+    names = rmd_node_label(ast)
   )
 
   if (!is.null(combine))
