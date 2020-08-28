@@ -4,3 +4,4 @@
 .DS_Store
 inst/*.html
 src/test.cpp
+docs
