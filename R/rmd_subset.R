@@ -15,7 +15,10 @@ rmd_subset.rmd_ast = function(ast, sec_refs = NULL, type_refs = NULL, name_refs 
   if (exclude)
     subset = !subset
 
-  do.call(create_ast, ast[subset])
+  ast = ast[subset]
+  class(ast) = c("rmd_ast", "list")
+
+  ast
 }
 
 #' @export
@@ -40,7 +43,6 @@ rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_ref
   class(df) = c("rmd_tibble", class(df))
 
   df
-
 }
 
 
