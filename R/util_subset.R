@@ -109,8 +109,3 @@ comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL,
 
   subset
 }
-
-
-
-
-
