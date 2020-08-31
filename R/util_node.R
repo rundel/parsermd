@@ -134,6 +134,11 @@ rmd_node_content.rmd_ast = function(ast) {
 }
 
 #' @export
+rmd_node_content.rmd_tibble = function(tbl) {
+  purrr::map_chr(tbl$ast, rmd_node_content)
+}
+
+#' @export
 rmd_node_content.rmd_chunk = function(node) {
   paste(node$code, collapse="\n")
 }
@@ -142,17 +147,6 @@ rmd_node_content.rmd_chunk = function(node) {
 rmd_node_content.rmd_markdown = function(node) {
   paste(node, collapse="\n")
 }
-
-#' @export
-rmd_node_content.rmd_yaml = function(node) {
-  paste(node, collapse="\n")
-}
-
-#' @export
-rmd_node_content.rmd_yaml_list = function(node) {
-  stop("FIXME")
-}
-
 
 
 
