@@ -104,7 +104,9 @@ check_unmodified = function(rmd_tbl, template) {
 
 li_missing = function(secs, type, label = NA) {
   sec = cli::style_italic( paste(
-    cli::col_silver(secs),
+    cli::col_silver(
+      paste0('"', secs, '"')
+    ),
     collapse = " > "
   ) )
 
@@ -128,7 +130,9 @@ li_missing = function(secs, type, label = NA) {
 
 li_unmodified = function(secs, type, label = NA, content = NA) {
   sec = cli::style_italic( paste(
-    cli::col_silver(secs),
+    cli::col_silver(
+      paste0('"', secs, '"')
+    ),
     collapse = " > "
   ) )
 
