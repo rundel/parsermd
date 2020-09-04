@@ -8,6 +8,11 @@ rmd_check_template.default = function(rmd, template) {
   stop("Unable to check an Rmd template for an object with class: ", class(rmd))
 }
 
+#' @export
+rmd_check_template.character = function(rmd, template) {
+  rmd = as_tibble(parse_rmd(rmd))
+  rmd_check_template( rmd = rmd, template = template )
+}
 
 #' @export
 rmd_check_template.rmd_ast = function(rmd, template) {
