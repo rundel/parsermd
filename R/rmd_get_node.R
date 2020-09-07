@@ -1,5 +1,5 @@
 #' @export
-rmd_get_node = function(obj, ...) {
+rmd_get_node = function(obj, sec_refs = NULL, type_refs = NULL, name_refs = NULL) {
   UseMethod("rmd_get_node")
 }
 
@@ -27,3 +27,13 @@ rmd_get_node.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_r
 }
 
 
+#' @export
+rmd_get_chunk = function(obj, sec_refs = NULL, name_refs = NULL) {
+  rmd_get_node(obj, sec_refs = sec_refs, type_refs = "rmd_chunk", name_refs = name_refs)
+}
+
+
+#' @export
+rmd_get_markdown = function(obj, sec_refs = NULL) {
+  rmd_get_node(obj, sec_refs = sec_refs, type_refs = "rmd_markdown")
+}
