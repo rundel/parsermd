@@ -23,13 +23,13 @@ rmd_check_template.rmd_ast = function(rmd, template) {
 
 #' @export
 rmd_check_template.rmd_tibble = function(rmd, template, check_headings = FALSE) {
-  inc_content = ("content" %in% names(template))
+  keep_content = ("content" %in% names(template))
 
   if (!check_headings) {
     template = dplyr::filter(template, type != "rmd_heading")
   }
 
-  rmd_tbl = rmd_template(rmd, inc_content = inc_content)
+  rmd_tbl = rmd_template(rmd, keep_content = keep_content)
 
   missing_nodes = check_missing(rmd_tbl, template)
   unmodified_nodes = check_unmodified(rmd_tbl, template)

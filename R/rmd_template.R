@@ -1,5 +1,5 @@
 #' @export
-rmd_template = function(rmd, inc_content, inc_labels) {
+rmd_template = function(rmd, keep_content, keep_labels, keep_headings) {
   UseMethod("rmd_template")
 }
 
@@ -10,20 +10,22 @@ rmd_template.default = function(rmd, ...) {
 
 
 #' @export
-rmd_template.rmd_ast = function(rmd, inc_content = FALSE, inc_labels = TRUE) {
-  rmd_template( as_tibble(rmd), inc_content = inc_content, inc_labels = inc_labels )
+rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE) {
+  rmd_template( as_tibble(rmd), keep_content = keep_content, keep_labels = keep_labels )
 }
 
 
 #' @export
-rmd_template.rmd_tibble = function(rmd, inc_content = FALSE, inc_labels = TRUE) {
-  if (!inc_labels) {
+rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE) {
+  if (!keep_labels)
     rmd = dplyr::select(tmpl, -label)
-  }
 
-  if (inc_content) {
+  if (keep_content)
     rmd$content = rmd_node_content(rmd)
-  }
+
+  if (!keep_headings)
+    rmd = dplyr::filter(rmd, type != "rmd_heading")
+
 
   rmd = dplyr::select(rmd, -ast)
   class(rmd) = c("rmd_template", "tbl_df", "tbl", "data.frame")

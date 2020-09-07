@@ -1,7 +1,7 @@
 test_that("check output - with content", {
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
   ans = rmd_subset(ast, c("Exercise *", "Answer"))
-  template = rmd_template(ans, inc_content = TRUE)
+  template = rmd_template(ans, keep_content = TRUE)
 
   expect_snapshot( rmd_check_template(ast, template) )
   expect_snapshot( rmd_check_template(as_tibble(ast)[1,], template) ) # Just the YAML
@@ -12,7 +12,7 @@ test_that("check output - with content", {
 test_that("check output - without content", {
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
   ans = rmd_subset(ast, c("Exercise *", "Answer"))
-  template = rmd_template(ans, inc_content = FALSE)
+  template = rmd_template(ans, keep_content = FALSE)
 
   expect_snapshot( rmd_check_template(ast, template) )
   expect_snapshot( rmd_check_template(as_tibble(ast)[1,], template) ) # Just the YAML
