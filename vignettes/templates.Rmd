@@ -1,0 +1,89 @@
+---
+title: "Rmd Templates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rmd Templates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(parsermd)
+library(magrittr)
+```
+
+
+In the getting started vignette we introduced a variety of predicate functions for interrogating the contents of a parsed R Markdown document. The family of `rmd_has_*` functions give a convenient way of checking explicitly for elements of an Rmd, however often we want to check for multiple elements at the same time and provide consistent output for any detected discrepancies. 
+
+To support this type of workflow, `parsermd` implements the concept of an Rmd template. These are tibble based representations of Rmd elements which can be easily be compared with a parsed document.
+
+
+
+## Example - `hw01`
+
+Imagine that a homework assignment has been distributed to students in the form of an Rmd document named `hw01.Rmd`. This document describes all of the necessary tasks for the student to complete and also includes scaffolding in the form of Rmd chunks and markdown that indicates where the students are expected to include their solutions.
+
+```{r}
+(rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd")))
+```
+
+We can see examples of this templating by extracting the contents of the markdown in the Exercsie 1 > Solution section.
+
+```{r}
+rmd_get_markdown(rmd, c("Exercise 1", "Solution"))
+```
+
+When a student completes this assignment we want to be able to check that they have included solutions in the appropriate sections. At a minimum this means that we need to check that these sections still exist, and secondarily we might also want to check that the provided content in the solution differs from the provided scaffolding.
+
+### Constructing a template
+
+We will begin by constructing subsetting the original parsed document to select only the elements that will contoain the student's answers - this assumes the other sections and elements are extraneous and contain things like background, instructions, and question text. Below we use `rmd_subset` to select all of the elements of the original document contained withing a section matching "Exercise *" and "Solution" which should cover the answers for all three exercises.
+
+```{r}
+(rmd_sols = rmd_subset(rmd, sec_refs = c("Exercise *", "Solution")))
+```
+
+One we have this more limited set of elements we use the `rmd_template` function to generate our template. Here we have included `keep_content  = TRUE` in order to keep the scaffolded content for each answer which will then be compared to the student's answers.
+
+```{r}
+(rmd_tmpl = rmd_template(rmd_sols, keep_content = TRUE))
+```
+
+### Using a template
+
+One the template is constructed we can then compare it with a new Rmd document via the `rmd_check_template` function. Note that we can pass in an `rmd_ast` or `rmd_tibble` object directly, or the path to an Rmd which will then be parsed and compared.
+
+```{r}
+rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), rmd_tmpl)
+```
+
+From the output we can see that there are several issues with the document submitted by the student, they are missing the two expected markdown text entries for Exercise 3 and it appears that they have not entered any thing new for the chunks or markdown in Exercise 2.
+
+### Revising a template
+
+Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students. 
+
+If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggetsed workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_subset` with `exlcude = TRUE` to remove these specific markdown elements.
+
+```{r}
+rmd_sols %>%
+  rmd_subset(sec_refs = c("Exercise 3", "Solution"), type_refs = "rmd_markdown", exclude = TRUE)
+```
+
+This new AST can then be used with `rmd_template` and `rmd_check_template` to provide the new feedback,
+
+```{r}
+rmd_sols %>%
+  rmd_subset(sec_refs = c("Exercise 3", "Solution"), type_refs = "rmd_markdown", exclude = TRUE) %>%
+  rmd_template(keep_content = TRUE) %>%
+  rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), .)
+ ```
+
+
+
+Let change things such that we no longer require any markdown for Exercise 3 and al
