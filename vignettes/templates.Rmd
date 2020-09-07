@@ -82,8 +82,5 @@ rmd_sols %>%
   rmd_subset(sec_refs = c("Exercise 3", "Solution"), type_refs = "rmd_markdown", exclude = TRUE) %>%
   rmd_template(keep_content = TRUE) %>%
   rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), .)
- ```
+```
 
-
-
-Let change things such that we no longer require any markdown for Exercise 3 and al
