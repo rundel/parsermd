@@ -39,15 +39,30 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="parsermd.html">Getting Started</a>
 </li>
 <li>
-  <a href="news/index.html">Changelog</a>
+  <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/templates.html">Rmd Templates</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -67,396 +82,84 @@
 <a href="#parsermd" class="anchor"></a>parsermd</h1></div>
 <!-- badges: start -->
 
-<p>The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the code chunks and markdown content. The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed latter with sepecific tools like <code><a href="https://rdrr.io/pkg/yaml/man/read_yaml.html">yaml::read_yaml</a></code> or <code><a href="https://rdrr.io/r/base/parse.html">base::parse</a></code>.</p>
+<p>The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the document’s cotents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of parsermd from <a href="https://github.com/rundel/parsermd">GitHub</a> with:</p>
+<p>You can install the development version of parsermd from <a href="https://github.com/rundel/parsermd">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"rundel/parsermd"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(parsermd)</span></code></pre></div>
 </div>
-<div id="parsing-rmds" class="section level2">
+<div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#parsing-rmds" class="anchor"></a>Parsing Rmds</h2>
-<p>This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>rmd =<span class="st"> </span>parsermd<span class="op">::</span><span class="kw">parse_rmd</span>(<span class="kw">system.file</span>(<span class="st">"minimal.Rmd"</span>, <span class="dt">package =</span> <span class="st">"parsermd"</span>))</span></code></pre></div>
-<p>The RMarkdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a heirachical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for <code>rmd_ast</code> objects.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">print</span>(rmd)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; ├── YAML [4 lines]</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; ├── Heading [h1] - test</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; └── Heading [h1] - hello</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt;     │   ├── Markdown [4 lines]</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;         └── Markdown [1 lines]</span></span></code></pre></div>
-<p>If you would prefer to see the underlying flat structure, this can be printed by setting <code>use_headings = FALSE</code> with <code>print</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">print</span>(rmd, <span class="dt">use_headings =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; ├── YAML [4 lines]</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; ├── Heading [h1] - test</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; ├── Chunk [r, 1 opt, 1 lines] - setup</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; ├── Heading [h1] - hello</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; ├── Heading [h2] - R Markdown</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; ├── Markdown [4 lines]</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; ├── Chunk [r, 1 lines] - cars</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; ├── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; ├── Heading [h2] - Including Plots</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; ├── Markdown [2 lines]</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; └── Markdown [1 lines]</span></span></code></pre></div>
-<p>Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with <code>as_tibble</code> or <code>as.data.frame</code> (both return a tibble).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">as_tibble</span>(rmd)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; # A tibble: 12 x 5</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;    sec_h1 sec_h2          type          label      ast           </span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;      &lt;rmd_ast&gt;     </span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;  1 &lt;NA&gt;   &lt;NA&gt;            rmd_yaml_list  &lt;NA&gt;      &lt;yaml&gt;        </span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;  2 test   &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;  3 test   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;  4 hello  &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt;  5 hello  R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt;  6 hello  R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [4]&gt;</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt;  7 hello  R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt;  8 hello  R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt;  9 hello  Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; 10 hello  Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; 11 hello  Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; 12 hello  Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [1]&gt;</span></span></code></pre></div>
-<p>and it is possible to convert from these data frames back into an <code>rmd_ast</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">as_ast</span>( <span class="kw">as_tibble</span>(rmd) )</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; ├── YAML [4 lines]</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; ├── Heading [h1] - test</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; └── Heading [h1] - hello</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;     │   ├── Markdown [4 lines]</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt;         └── Markdown [1 lines]</span></span></code></pre></div>
-<p>Finally, we can also convert the <code>rmd_ast</code> back into an RMarkdown document via <code>as_document</code></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">cat</span>(</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="kw">as_document</span>(rmd),</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">sep =</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; ---</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; title: Minimal</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; author: Colin Rundel</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; date: 7/21/2020</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; output: html_document</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; ---</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; </span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; # test</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; </span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; ```{rsetup, include = FALSE}</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; knitr::opts_chunk$set(echo = TRUE)</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt; ```</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt; </span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt; # hello</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="co">#&gt; </span></span>
-<span id="cb7-20"><a href="#cb7-20"></a><span class="co">#&gt; ## R Markdown</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#&gt; </span></span>
-<span id="cb7-22"><a href="#cb7-22"></a><span class="co">#&gt; This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;http://rmarkdown.rstudio.com&gt;.</span></span>
-<span id="cb7-23"><a href="#cb7-23"></a><span class="co">#&gt; </span></span>
-<span id="cb7-24"><a href="#cb7-24"></a><span class="co">#&gt; When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</span></span>
-<span id="cb7-25"><a href="#cb7-25"></a><span class="co">#&gt; </span></span>
-<span id="cb7-26"><a href="#cb7-26"></a><span class="co">#&gt; </span></span>
-<span id="cb7-27"><a href="#cb7-27"></a><span class="co">#&gt; ```{rcars}</span></span>
-<span id="cb7-28"><a href="#cb7-28"></a><span class="co">#&gt; summary(cars)</span></span>
-<span id="cb7-29"><a href="#cb7-29"></a><span class="co">#&gt; ```</span></span>
-<span id="cb7-30"><a href="#cb7-30"></a><span class="co">#&gt; </span></span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="co">#&gt; ```{r}</span></span>
-<span id="cb7-32"><a href="#cb7-32"></a><span class="co">#&gt; knitr::knit_patterns$get()</span></span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="co">#&gt; ```</span></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="co">#&gt; </span></span>
-<span id="cb7-35"><a href="#cb7-35"></a><span class="co">#&gt; ## Including Plots</span></span>
-<span id="cb7-36"><a href="#cb7-36"></a><span class="co">#&gt; </span></span>
-<span id="cb7-37"><a href="#cb7-37"></a><span class="co">#&gt; You can also embed plots, for example:</span></span>
-<span id="cb7-38"><a href="#cb7-38"></a><span class="co">#&gt; </span></span>
-<span id="cb7-39"><a href="#cb7-39"></a><span class="co">#&gt; </span></span>
-<span id="cb7-40"><a href="#cb7-40"></a><span class="co">#&gt; ```{rpressure, echo = FALSE}</span></span>
-<span id="cb7-41"><a href="#cb7-41"></a><span class="co">#&gt; plot(pressure)</span></span>
-<span id="cb7-42"><a href="#cb7-42"></a><span class="co">#&gt; ```</span></span>
-<span id="cb7-43"><a href="#cb7-43"></a><span class="co">#&gt; </span></span>
-<span id="cb7-44"><a href="#cb7-44"></a><span class="co">#&gt; Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.</span></span></code></pre></div>
-</div>
-<div id="working-with-the-ast" class="section level2">
-<h2 class="hasAnchor">
-<a href="#working-with-the-ast" class="anchor"></a>Working with the AST</h2>
-<p>Once we have parsed an R Markdown document, there are a variety of things that we can do with our new abstract syntax tree (ast). Below we will demonstate some of the basic functionality within <code>parsermd</code> to manipulate and edit these objects as well as check their properties.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>rmd =<span class="st"> </span><span class="kw">parse_rmd</span>(<span class="kw">system.file</span>(<span class="st">"hw01-student.Rmd"</span>, <span class="dt">package=</span><span class="st">"parsermd"</span>))</span>
-<span id="cb8-2"><a href="#cb8-2"></a>rmd</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; ├── YAML [2 lines]</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; ├── Heading [h3] - Load packages</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; │   └── Chunk [r, 1 opt, 2 lines] - load-packages</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; │   ├── Markdown [2 lines]</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; │       └── Markdown [5 lines]</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; │   ├── Markdown [2 lines]</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; │       ├── Markdown [2 lines]</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; │       ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; │       ├── Markdown [2 lines]</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; │       └── Chunk [r, 2 lines] - cor-dino</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
-<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt;     ├── Markdown [2 lines]</span></span>
-<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
-<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt;         ├── Chunk [r, 2 opts, 5 lines] - plot-star</span></span>
-<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt;         └── Chunk [r, 2 lines] - cor-star</span></span></code></pre></div>
-<p>Saw we were interested in examining the solution a student entered for Exercise 1 - we can get acess to this using the <code>rmd_subset</code> function.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; └── Heading [h3] - Exercise 1</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;         └── Markdown [5 lines]</span></span></code></pre></div>
-<p>Note that this gives me the <em>Exercise 1</em> and <em>Solution</em> headings and the contained markdown text, if we want to examine the actual text then we can extact that specific node of the ast usign <code>rmd_get_node</code>. Here we further specify that we want just nodes with type <code>rmd_markdown</code> via the <code>type_refs</code> argument.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">rmd_get_node</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span>), <span class="dt">type_refs =</span> <span class="st">"rmd_markdown"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; [1] "2 columns, 13 rows, 3 variables: "                  </span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; [2] "dataset: indicates which dataset the data are from "</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; [3] "x: x-values "                                       </span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; [4] "y: y-values "                                       </span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; [5] ""                                                   </span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; [1] "rmd_markdown"</span></span></code></pre></div>
-<p>We can use a similar approach to examine the solutions to Exercise 2.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span>))</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; └── Heading [h3] - Exercise 2</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;         ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt;         └── Chunk [r, 2 lines] - cor-dino</span></span></code></pre></div>
-<p>and also note that test functions can be strung together using pipes, so the following extracts just the code chunks from this set of solutions.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">rmd_subset</span>(<span class="dt">type_refs =</span> <span class="st">"rmd_chunk"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; └── Chunk [r, 2 lines] - cor-dino</span></span></code></pre></div>
-<p>in this case since our second call to <code>rmd_subset</code> did not include a <code>sec_refs</code> argument the assumption is that we no longer care about the section structure and these are therefore dropped. Had we wanted to keep these headings we would have used the <code>sec_refs</code> argument to specify which of the headings to keep.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span><span class="kw">rmd_subset</span>(<span class="dt">sec_refs =</span> <span class="st">"Exercise 2"</span>, <span class="dt">type_refs =</span> <span class="st">"rmd_chunk"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt; └── Heading [h3] - Exercise 2</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt;     ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt;     └── Chunk [r, 2 lines] - cor-dino</span></span></code></pre></div>
-<p>Since chunk labels are, supposed to be, unique we can also use these to reference chunks directly.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">rmd_get_node</span>(rmd, <span class="dt">name_refs =</span> <span class="st">"plot-dino"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; $engine</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; [1] "r"</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; </span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; $name</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; [1] "plot-dino"</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; </span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; $options</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; $options$fig.height</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; [1] "3"</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; </span></span>
-<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; $options$fig.width</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt; [1] "6"</span></span>
-<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; </span></span>
-<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt; </span></span>
-<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt; $code</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt; [1] "dino_data &lt;- datasaurus_dozen %&gt;%"                      </span></span>
-<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt; [2] "  filter(dataset == \"dino\")"                          </span></span>
-<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt; [3] ""                                                       </span></span>
-<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt; [4] "ggplot(data = dino_data, mapping = aes(x = x, y = y)) +"</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt; [5] "  geom_point()"                                         </span></span>
-<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt; </span></span>
-<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt; $indent</span></span>
-<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt; [1] ""</span></span>
-<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt; </span></span>
-<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt; [1] "rmd_chunk"</span></span></code></pre></div>
-<div id="wildcards" class="section level3">
-<h3 class="hasAnchor">
-<a href="#wildcards" class="anchor"></a>Wildcards</h3>
-<p>One useful feature of these subsetting functions is that they support <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob</a> style pattern matching for determining matches within section headings and in chunk labels. As such we can do the following to extract all of the solutions from our document:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise *"</span>, <span class="st">"Solution"</span>))</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; │       └── Markdown [5 lines]</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; │       ├── Markdown [2 lines]</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; │       ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt; │       ├── Markdown [2 lines]</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt; │       └── Chunk [r, 2 lines] - cor-dino</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt;         ├── Chunk [r, 2 opts, 5 lines] - plot-star</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt;         └── Chunk [r, 2 lines] - cor-star</span></span></code></pre></div>
-<p>Similarly, if we wanted to just extract the chunks that involve plotting we can match for chunk labels with a “plot” prefix,</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">name_refs =</span> <span class="st">"plot*"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt; ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt; └── Chunk [r, 2 opts, 5 lines] - plot-star</span></span></code></pre></div>
-<p>and as before if we want to keep track of the parent headings we need to specify an appropriate <code>sec_refs</code>,</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="st">"Exercise *"</span>, <span class="dt">name_refs =</span> <span class="st">"plot*"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co">#&gt; │   └── Chunk [r, 2 opts, 5 lines] - plot-dino</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a><span class="co">#&gt;     └── Chunk [r, 2 opts, 5 lines] - plot-star</span></span></code></pre></div>
-</div>
-<div id="ast-as-a-tibble" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ast-as-a-tibble" class="anchor"></a>ast as a tibble</h3>
-<p>As mentioned earlier, the ast can be represented as a tibble, in which case we construct several columns using the properties of the ast (sections, type, and chunk label).</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>tbl =<span class="st"> </span><span class="kw">as_tibble</span>(rmd)</span>
-<span id="cb18-2"><a href="#cb18-2"></a>tbl</span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; # A tibble: 19 x 5</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt;    sec_h3        sec_h4   type          label         ast           </span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;         &lt;rmd_ast&gt;     </span></span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt;  1 &lt;NA&gt;          &lt;NA&gt;     rmd_yaml_list &lt;NA&gt;          &lt;yaml&gt;        </span></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt;  2 Load packages &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt;  3 Load packages &lt;NA&gt;     rmd_chunk     load-packages &lt;chunk [r]&gt;   </span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt;  4 Exercise 1    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt;  6 Exercise 1    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span></span>
-<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [5]&gt;</span></span>
-<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt;  8 Exercise 2    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span></span>
-<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span></span>
-<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt; 10 Exercise 2    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span></span>
-<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span></span>
-<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#&gt; 12 Exercise 2    Solution rmd_chunk     plot-dino     &lt;chunk [r]&gt;   </span></span>
-<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span></span>
-<span id="cb18-19"><a href="#cb18-19"></a><span class="co">#&gt; 14 Exercise 2    Solution rmd_chunk     cor-dino      &lt;chunk [r]&gt;   </span></span>
-<span id="cb18-20"><a href="#cb18-20"></a><span class="co">#&gt; 15 Exercise 3    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span></span>
-<span id="cb18-21"><a href="#cb18-21"></a><span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span></span>
-<span id="cb18-22"><a href="#cb18-22"></a><span class="co">#&gt; 17 Exercise 3    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span></span>
-<span id="cb18-23"><a href="#cb18-23"></a><span class="co">#&gt; 18 Exercise 3    Solution rmd_chunk     plot-star     &lt;chunk [r]&gt;   </span></span>
-<span id="cb18-24"><a href="#cb18-24"></a><span class="co">#&gt; 19 Exercise 3    Solution rmd_chunk     cor-star      &lt;chunk [r]&gt;</span></span></code></pre></div>
-<p>All of the functions above also work with this tibble representation, and allow for the same manipulations of the underlying ast.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">rmd_subset</span>(tbl, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise *"</span>, <span class="st">"Solution"</span>))</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; # A tibble: 13 x 5</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt;    sec_h3     sec_h4   type         label     ast           </span></span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;     </span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#&gt;  1 Exercise 1 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#&gt;  2 Exercise 1 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#&gt;  3 Exercise 1 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [5]&gt;</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#&gt;  4 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#&gt;  5 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="co">#&gt;  6 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span></span>
-<span id="cb19-11"><a href="#cb19-11"></a><span class="co">#&gt;  7 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-12"><a href="#cb19-12"></a><span class="co">#&gt;  8 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span></span>
-<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#&gt;  9 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#&gt; 10 Exercise 3 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#&gt; 11 Exercise 3 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#&gt; 12 Exercise 3 Solution rmd_chunk    plot-star &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-17"><a href="#cb19-17"></a><span class="co">#&gt; 13 Exercise 3 Solution rmd_chunk    cor-star  &lt;chunk [r]&gt;</span></span>
-<span id="cb19-18"><a href="#cb19-18"></a></span>
-<span id="cb19-19"><a href="#cb19-19"></a><span class="kw">rmd_subset</span>(tbl, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise *"</span>, <span class="st">"Solution"</span>), <span class="dt">type =</span> <span class="st">"rmd_chunk"</span>)</span>
-<span id="cb19-20"><a href="#cb19-20"></a><span class="co">#&gt; # A tibble: 10 x 5</span></span>
-<span id="cb19-21"><a href="#cb19-21"></a><span class="co">#&gt;    sec_h3     sec_h4   type        label     ast           </span></span>
-<span id="cb19-22"><a href="#cb19-22"></a><span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     &lt;rmd_ast&gt;     </span></span>
-<span id="cb19-23"><a href="#cb19-23"></a><span class="co">#&gt;  1 Exercise 1 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-24"><a href="#cb19-24"></a><span class="co">#&gt;  2 Exercise 1 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-25"><a href="#cb19-25"></a><span class="co">#&gt;  3 Exercise 2 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-26"><a href="#cb19-26"></a><span class="co">#&gt;  4 Exercise 2 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-27"><a href="#cb19-27"></a><span class="co">#&gt;  5 Exercise 2 Solution rmd_chunk   plot-dino &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-28"><a href="#cb19-28"></a><span class="co">#&gt;  6 Exercise 2 Solution rmd_chunk   cor-dino  &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-29"><a href="#cb19-29"></a><span class="co">#&gt;  7 Exercise 3 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span></span>
-<span id="cb19-30"><a href="#cb19-30"></a><span class="co">#&gt;  8 Exercise 3 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span></span>
-<span id="cb19-31"><a href="#cb19-31"></a><span class="co">#&gt;  9 Exercise 3 Solution rmd_chunk   plot-star &lt;chunk [r]&gt;   </span></span>
-<span id="cb19-32"><a href="#cb19-32"></a><span class="co">#&gt; 10 Exercise 3 Solution rmd_chunk   cor-star  &lt;chunk [r]&gt;</span></span></code></pre></div>
-<p>As the complete ast is store directly in the <code>ast</code> column, we can also manipulate this tibble using dplyr or similar packages and have these changes persist. For example we can use the <code>rmd_node_length</code> function to return the number of lines in the various nodes of the ast and add a new length column to our tibble.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>tbl_lines =<span class="st"> </span>tbl <span class="op">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">lines =</span> <span class="kw">rmd_node_length</span>(ast))</span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a>tbl_lines</span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#&gt; # A tibble: 19 x 6</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#&gt;    sec_h3        sec_h4   type          label         ast            lines</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;         &lt;rmd_ast&gt;      &lt;int&gt;</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt;  1 &lt;NA&gt;          &lt;NA&gt;     rmd_yaml_list &lt;NA&gt;          &lt;yaml&gt;             2</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt;  2 Load packages &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt;  3 Load packages &lt;NA&gt;     rmd_chunk     load-packages &lt;chunk [r]&gt;        2</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt;  4 Exercise 1    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt;  6 Exercise 1    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span></span>
-<span id="cb20-14"><a href="#cb20-14"></a><span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [5]&gt;     5</span></span>
-<span id="cb20-15"><a href="#cb20-15"></a><span class="co">#&gt;  8 Exercise 2    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span></span>
-<span id="cb20-16"><a href="#cb20-16"></a><span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span></span>
-<span id="cb20-17"><a href="#cb20-17"></a><span class="co">#&gt; 10 Exercise 2    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span></span>
-<span id="cb20-18"><a href="#cb20-18"></a><span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span></span>
-<span id="cb20-19"><a href="#cb20-19"></a><span class="co">#&gt; 12 Exercise 2    Solution rmd_chunk     plot-dino     &lt;chunk [r]&gt;        5</span></span>
-<span id="cb20-20"><a href="#cb20-20"></a><span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span></span>
-<span id="cb20-21"><a href="#cb20-21"></a><span class="co">#&gt; 14 Exercise 2    Solution rmd_chunk     cor-dino      &lt;chunk [r]&gt;        2</span></span>
-<span id="cb20-22"><a href="#cb20-22"></a><span class="co">#&gt; 15 Exercise 3    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span></span>
-<span id="cb20-23"><a href="#cb20-23"></a><span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span></span>
-<span id="cb20-24"><a href="#cb20-24"></a><span class="co">#&gt; 17 Exercise 3    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span></span>
-<span id="cb20-25"><a href="#cb20-25"></a><span class="co">#&gt; 18 Exercise 3    Solution rmd_chunk     plot-star     &lt;chunk [r]&gt;        5</span></span>
-<span id="cb20-26"><a href="#cb20-26"></a><span class="co">#&gt; 19 Exercise 3    Solution rmd_chunk     cor-star      &lt;chunk [r]&gt;        2</span></span></code></pre></div>
-<p>Now we can apply a <code>rmd_subset</code> to this updated tibble</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">rmd_subset</span>(tbl_lines, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span>))</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; # A tibble: 6 x 6</span></span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt;   sec_h3     sec_h4   type         label     ast            lines</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#&gt; 1 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;    NA</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="co">#&gt; 2 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#&gt; 3 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span></span>
-<span id="cb21-8"><a href="#cb21-8"></a><span class="co">#&gt; 4 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;        5</span></span>
-<span id="cb21-9"><a href="#cb21-9"></a><span class="co">#&gt; 5 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span></span>
-<span id="cb21-10"><a href="#cb21-10"></a><span class="co">#&gt; 6 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;        2</span></span></code></pre></div>
-<p>and see that our new <code>lines</code> column is maintained.</p>
-<p>Note that using the <code>rmd_subset</code> function is optional here and we can also accomplish the same task using <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> or any similar approach</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>dplyr<span class="op">::</span><span class="kw">filter</span>(tbl_lines, sec_h3 <span class="op">==</span><span class="st"> "Exercise 2"</span>, sec_h4 <span class="op">==</span><span class="st"> "Solution"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#&gt; # A tibble: 5 x 6</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="co">#&gt;   sec_h3     sec_h4   type         label     ast            lines</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#&gt; 1 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a><span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;        5</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a><span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span></span>
-<span id="cb22-9"><a href="#cb22-9"></a><span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;        2</span></span></code></pre></div>
-<p>As such, it is possible to mix and match between <code>parsermd</code>’s built-in functions and any of your other prefered data manipulation packages.</p>
-<p>One small note of caution is that when converting back to an ast, <code>as_ast</code>, or document, <code>as_document</code>, only the structure of the <code>ast</code> column matters so changes made to the section columns, <code>type</code> column, or the <code>label</code> column will not affect the output in any way. This is particularly important when headings are filtered out, as their columns may still appear in the tibble while they are no longer in the ast - the <code>rmd_subset</code> circumvents this by recalclating these specific columns as part of the subset process.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>dplyr<span class="op">::</span><span class="kw">filter</span>(tbl, sec_h3 <span class="op">==</span><span class="st"> "Exercise 2"</span>, sec_h4 <span class="op">==</span><span class="st"> "Solution"</span>, type <span class="op">==</span><span class="st"> "rmd_chunk"</span>)</span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#&gt; # A tibble: 2 x 5</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#&gt;   sec_h3     sec_h4   type      label     ast        </span></span>
-<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;rmd_ast&gt;  </span></span>
-<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; 1 Exercise 2 Solution rmd_chunk plot-dino &lt;chunk [r]&gt;</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a><span class="co">#&gt; 2 Exercise 2 Solution rmd_chunk cor-dino  &lt;chunk [r]&gt;</span></span></code></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>dplyr<span class="op">::</span><span class="kw">filter</span>(tbl, sec_h3 <span class="op">==</span><span class="st"> "Exercise 2"</span>, sec_h4 <span class="op">==</span><span class="st"> "Solution"</span>, type <span class="op">==</span><span class="st"> "rmd_chunk"</span>) <span class="op">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="st">  </span><span class="kw">as_document</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="st">  </span><span class="kw">cat</span>(<span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt; ```{rplot-dino, fig.height = 3, fig.width = 6}</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt; dino_data &lt;- datasaurus_dozen %&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a><span class="co">#&gt;   filter(dataset == "dino")</span></span>
-<span id="cb24-7"><a href="#cb24-7"></a><span class="co">#&gt; </span></span>
-<span id="cb24-8"><a href="#cb24-8"></a><span class="co">#&gt; ggplot(data = dino_data, mapping = aes(x = x, y = y)) +</span></span>
-<span id="cb24-9"><a href="#cb24-9"></a><span class="co">#&gt;   geom_point()</span></span>
-<span id="cb24-10"><a href="#cb24-10"></a><span class="co">#&gt; ```</span></span>
-<span id="cb24-11"><a href="#cb24-11"></a><span class="co">#&gt; </span></span>
-<span id="cb24-12"><a href="#cb24-12"></a><span class="co">#&gt; ```{rcor-dino}</span></span>
-<span id="cb24-13"><a href="#cb24-13"></a><span class="co">#&gt; dino_data %&gt;%</span></span>
-<span id="cb24-14"><a href="#cb24-14"></a><span class="co">#&gt;   summarize(r = cor(x, y))</span></span>
-<span id="cb24-15"><a href="#cb24-15"></a><span class="co">#&gt; ```</span></span></code></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">rmd_subset</span>(tbl, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span>), <span class="dt">type_refs =</span> <span class="st">"rmd_chunk"</span>) <span class="op">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="st">  </span><span class="kw">as_document</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-3"><a href="#cb25-3"></a><span class="st">  </span><span class="kw">cat</span>(<span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb25-4"><a href="#cb25-4"></a><span class="co">#&gt; </span><span class="al">###</span><span class="co"> Exercise 2</span></span>
-<span id="cb25-5"><a href="#cb25-5"></a><span class="co">#&gt; </span></span>
-<span id="cb25-6"><a href="#cb25-6"></a><span class="co">#&gt; #### Solution</span></span>
-<span id="cb25-7"><a href="#cb25-7"></a><span class="co">#&gt; </span></span>
-<span id="cb25-8"><a href="#cb25-8"></a><span class="co">#&gt; ```{rplot-dino, fig.height = 3, fig.width = 6}</span></span>
-<span id="cb25-9"><a href="#cb25-9"></a><span class="co">#&gt; dino_data &lt;- datasaurus_dozen %&gt;%</span></span>
-<span id="cb25-10"><a href="#cb25-10"></a><span class="co">#&gt;   filter(dataset == "dino")</span></span>
-<span id="cb25-11"><a href="#cb25-11"></a><span class="co">#&gt; </span></span>
-<span id="cb25-12"><a href="#cb25-12"></a><span class="co">#&gt; ggplot(data = dino_data, mapping = aes(x = x, y = y)) +</span></span>
-<span id="cb25-13"><a href="#cb25-13"></a><span class="co">#&gt;   geom_point()</span></span>
-<span id="cb25-14"><a href="#cb25-14"></a><span class="co">#&gt; ```</span></span>
-<span id="cb25-15"><a href="#cb25-15"></a><span class="co">#&gt; </span></span>
-<span id="cb25-16"><a href="#cb25-16"></a><span class="co">#&gt; ```{rcor-dino}</span></span>
-<span id="cb25-17"><a href="#cb25-17"></a><span class="co">#&gt; dino_data %&gt;%</span></span>
-<span id="cb25-18"><a href="#cb25-18"></a><span class="co">#&gt;   summarize(r = cor(x, y))</span></span>
-<span id="cb25-19"><a href="#cb25-19"></a><span class="co">#&gt; ```</span></span></code></pre></div>
-</div>
+<a href="#basic-usage" class="anchor"></a>Basic Usage</h2>
+<p>For more details see the getting started vignette or any of the topic specific articles.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>(<span class="dt">rmd =</span> parsermd<span class="op">::</span><span class="kw">parse_rmd</span>(<span class="kw">system.file</span>(<span class="st">"minimal.Rmd"</span>, <span class="dt">package =</span> <span class="st">"parsermd"</span>)))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; ├── YAML [4 lines]</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; ├── Heading [h1] - test</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; └── Heading [h1] - hello</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;     │   ├── Markdown [4 lines]</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt;         └── Markdown [1 lines]</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">as_tibble</span>(rmd)</span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; # A tibble: 12 x 5</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt;    sec_h1 sec_h2          type          label      ast           </span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;      &lt;rmd_ast&gt;     </span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt;  1 &lt;NA&gt;   &lt;NA&gt;            rmd_yaml_list  &lt;NA&gt;      &lt;yaml&gt;        </span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt;  2 test   &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt;  3 test   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt;  4 hello  &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt;  5 hello  R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt;  6 hello  R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [4]&gt;</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt;  7 hello  R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt;  8 hello  R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt;  9 hello  Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; 10 hello  Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="co">#&gt; 11 hello  Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt; 12 hello  Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [1]&gt;</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="st">"hello"</span>, <span class="dt">type_refs =</span> <span class="st">"rmd_chunk"</span>)</span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="co">#&gt; └── Heading [h1] - hello</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#&gt;     ├── Chunk [r, 1 lines] - cars</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="co">#&gt;     ├── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt;     └── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="kw">rmd_subset</span>(rmd, <span class="dt">sec_refs =</span> <span class="kw">c</span>(<span class="st">"hello"</span>, <span class="st">"*"</span>), <span class="dt">type_refs =</span> <span class="st">"rmd_chunk"</span>)</span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="co">#&gt; └── Heading [h1] - hello</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a><span class="co">#&gt;         └── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="kw">rmd_get_node</span>(rmd, <span class="dt">name_refs =</span> <span class="st">"pressure"</span>)</span>
+<span id="cb2-47"><a href="#cb2-47"></a><span class="co">#&gt; $engine</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a><span class="co">#&gt; [1] "r"</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a><span class="co">#&gt; </span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="co">#&gt; $name</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="co">#&gt; [1] "pressure"</span></span>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="co">#&gt; </span></span>
+<span id="cb2-53"><a href="#cb2-53"></a><span class="co">#&gt; $options</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="co">#&gt; $options$echo</span></span>
+<span id="cb2-55"><a href="#cb2-55"></a><span class="co">#&gt; [1] "FALSE"</span></span>
+<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#&gt; </span></span>
+<span id="cb2-57"><a href="#cb2-57"></a><span class="co">#&gt; </span></span>
+<span id="cb2-58"><a href="#cb2-58"></a><span class="co">#&gt; $code</span></span>
+<span id="cb2-59"><a href="#cb2-59"></a><span class="co">#&gt; [1] "plot(pressure)"</span></span>
+<span id="cb2-60"><a href="#cb2-60"></a><span class="co">#&gt; </span></span>
+<span id="cb2-61"><a href="#cb2-61"></a><span class="co">#&gt; $indent</span></span>
+<span id="cb2-62"><a href="#cb2-62"></a><span class="co">#&gt; [1] ""</span></span>
+<span id="cb2-63"><a href="#cb2-63"></a><span class="co">#&gt; </span></span>
+<span id="cb2-64"><a href="#cb2-64"></a><span class="co">#&gt; attr(,"class")</span></span>
+<span id="cb2-65"><a href="#cb2-65"></a><span class="co">#&gt; [1] "rmd_chunk"</span></span></code></pre></div>
 </div>
 </div>
   </div>
