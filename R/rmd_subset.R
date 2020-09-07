@@ -10,7 +10,7 @@ rmd_subset.default = function(obj, ...) {
 
 #' @export
 rmd_subset.rmd_ast = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE) {
-  subset = comb_subset(ast, sec_refs, type_refs, name_refs, combine = `|`)
+  subset = comb_subset(ast, sec_refs, type_refs, name_refs, combine = `|`, inc_parents = !exclude)
 
   if (exclude)
     subset = !subset
@@ -29,7 +29,7 @@ rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_ref
   if (length(bad_cols) != 0)
       stop("The following columns must be renamed: ", bad_cols, call. = FALSE)
 
-  subset = comb_subset(df$ast, sec_refs, type_refs, name_refs, combine = `|`)
+  subset = comb_subset(df$ast, sec_refs, type_refs, name_refs, combine = `|`, inc_parents = !exclude)
 
   if (exclude)
     subset = !subset
