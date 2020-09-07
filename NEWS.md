@@ -1,4 +1,4 @@
-# parsermd 0.0.1.9000
+# parsermd 0.0.0.9000
 
 * Added a `NEWS.md` file to track changes to the package.
 
@@ -8,4 +8,5 @@
 
 * Starting to add helper functions: `rmd_subset`, `rmd_has_node`, `rmd_get_node`, etc.
 
+* Initial implementation of Rmd templates
 
