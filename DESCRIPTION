@@ -28,7 +28,9 @@ LinkingTo:
     Rcpp,
     BH
 Suggests: 
-    testthat (>= 2.99.0)
+    testthat (>= 2.99.0),
+    knitr,
+    rmarkdown
 Remotes: r-lib/testthat
 Config/testthat/edition: 3
-
+VignetteBuilder: knitr

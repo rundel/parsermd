@@ -5,3 +5,4 @@
 inst/*.html
 src/test.cpp
 docs
+inst/doc

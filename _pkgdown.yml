@@ -1,5 +1,21 @@
 url: https://rundel.github.io/parsermd
 
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Getting Started
+    href: parsermd.html
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    menu:
+    - text: Rmd Templates
+      href: articles/templates.html
+  - text: "News"
+    href: news/index.html
+
 reference:
 - title: Functions
   contents:

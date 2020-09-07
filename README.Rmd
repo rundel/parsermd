@@ -23,11 +23,11 @@ library(magrittr)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the code chunks and markdown content. The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed latter with sepecific tools like `yaml::read_yaml` or `base::parse`.
+The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the document's cotents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
 
 ## Installation
 
-You can install the released version of parsermd from [GitHub](https://github.com/rundel/parsermd) with:
+You can install the development version of parsermd from [GitHub](https://github.com/rundel/parsermd) with:
 
 ```r
 remotes::install_github("rundel/parsermd")
@@ -37,177 +37,18 @@ remotes::install_github("rundel/parsermd")
 library(parsermd)
 ```
 
-## Parsing Rmds
+## Basic Usage
 
-This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
+For more details see the getting started vignette or any of the topic specific articles.
 
 ```{r example}
-rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
-```
+(rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))
 
-The RMarkdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a heirachical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for `rmd_ast` objects.
-
-```{r tree}
-print(rmd)
-```
-
-If you would prefer to see the underlying flat structure, this can be printed by setting `use_headings = FALSE` with `print`.
-
-```{r no_headings}
-print(rmd, use_headings = FALSE)
-```
-
-Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with `as_tibble` or `as.data.frame` (both return a tibble).
-
-```{r tibble}
 as_tibble(rmd)
-```
 
-and it is possible to convert from these data frames back into an `rmd_ast`.
+rmd_subset(rmd, sec_refs = "hello", type_refs = "rmd_chunk")
 
-```{r as_ast}
-as_ast( as_tibble(rmd) )
-```
+rmd_subset(rmd, sec_refs = c("hello", "*"), type_refs = "rmd_chunk")
 
-Finally, we can also convert the `rmd_ast` back into an RMarkdown document via `as_document`
-
-```{r as_doc}
-cat(
-  as_document(rmd),
-  sep = "\n"
-)
-```
-
-## Working with the AST
-
-Once we have parsed an R Markdown document, there are a variety of things that we can do with our new abstract syntax tree (ast). Below we will demonstate some of the basic functionality within `parsermd` to manipulate and edit these objects as well as check their properties.
-
-```{r}
-rmd = parse_rmd(system.file("hw01-student.Rmd", package="parsermd"))
-rmd
-```
-
-Saw we were interested in examining the solution a student entered for Exercise 1 - we can get acess to this using the `rmd_subset` function.
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 1", "Solution"))
-```
-
-Note that this gives me the *Exercise 1* and *Solution* headings and the contained markdown text, if we want to examine the actual text then we can extact that specific node of the ast usign `rmd_get_node`. Here we further specify that we want just nodes with type `rmd_markdown` via the `type_refs` argument.
-
-```{r}
-rmd_get_node(rmd, sec_refs = c("Exercise 1", "Solution"), type_refs = "rmd_markdown")
-```
-
-We can use a similar approach to examine the solutions to Exercise 2.
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution"))
-```
-
-and also note that test functions can be strung together using pipes, so the following extracts just the code chunks from this set of solutions.
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
-  rmd_subset(type_refs = "rmd_chunk")
-```
-
-in this case since our second call to `rmd_subset` did not include a `sec_refs` argument the assumption is that we no longer care about the section structure and these are therefore dropped. Had we wanted to keep these headings we would have used the `sec_refs` argument to specify which of the headings to keep.
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
-  rmd_subset(sec_refs = "Exercise 2", type_refs = "rmd_chunk")
-```
-
-Since chunk labels are, supposed to be, unique we can also use these to reference chunks directly.
-
-```{r}
-rmd_get_node(rmd, name_refs = "plot-dino")
-```
-
-### Wildcards
-
-One useful feature of these subsetting functions is that they support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) style pattern matching for determining matches within section headings and in chunk labels. As such we can do the following to extract all of the solutions from our document:
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise *", "Solution"))
-```
-
-Similarly, if we wanted to just extract the chunks that involve plotting we can match for chunk labels with a "plot" prefix,
-
-```{r}
-rmd_subset(rmd, name_refs = "plot*")
-```
-
-and as before if we want to keep track of the parent headings we need to specify an appropriate `sec_refs`,
-
-```{r}
-rmd_subset(rmd, sec_refs = "Exercise *", name_refs = "plot*")
-```
-
-
-### ast as a tibble
-
-As mentioned earlier, the ast can be represented as a tibble, in which case we construct several columns using the properties of the ast (sections, type, and chunk label).
-
-```{r}
-tbl = as_tibble(rmd)
-tbl
-```
-
-All of the functions above also work with this tibble representation, and allow for the same manipulations of the underlying ast.
-
-```{r}
-rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"))
-```
-
-```{r}
-rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"), type = "rmd_chunk")
-```
-
-As the complete ast is store directly in the `ast` column, we can also manipulate this tibble using dplyr or similar packages and have these changes persist. For example we can use the `rmd_node_length` function to return the number of lines in the various nodes of the ast and add a new length column to our tibble.
-
-```{r}
-tbl_lines = tbl %>%
-  dplyr::mutate(lines = rmd_node_length(ast))
-
-tbl_lines
-```
-
-Now we can apply a `rmd_subset` to this updated tibble
-
-```{r}
-rmd_subset(tbl_lines, sec_refs = c("Exercise 2", "Solution"))
-```
-
-and see that our new `lines` column is maintained.
-
-Note that using the `rmd_subset` function is optional here and we can also accomplish the same task using `dplyr::filter` or any similar approach
-
-```{r}
-dplyr::filter(tbl_lines, sec_h3 == "Exercise 2", sec_h4 == "Solution")
-```
-
-As such, it is possible to mix and match between `parsermd`'s built-in functions and any of your other prefered data manipulation packages. 
-
-One small note of caution is that when converting back to an ast, `as_ast`, or document, `as_document`, only the structure of the `ast` column matters so changes made to the section columns, `type` column, or the `label` column will not affect the output in any way. This is particularly important when headings are filtered out, as their columns may still appear in the tibble while they are no longer in the ast - the `rmd_subset` circumvents this by recalclating these specific columns as part of the subset process.
-
-```{r}
-dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk")
-```
-
-<br/>
-
-```{r}
-dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk") %>%
-  as_document() %>% 
-  cat(sep="\n")
-```
-
-<br/>
-
-```{r}
-rmd_subset(tbl, sec_refs = c("Exercise 2", "Solution"), type_refs = "rmd_chunk") %>%
-  as_document() %>% 
-  cat(sep="\n")
+rmd_get_node(rmd, name_refs = "pressure")
 ```
