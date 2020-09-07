@@ -13,7 +13,7 @@ test_that("ast -> document", {
 
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("hw01-template.Rmd", package = "parsermd"))
+      parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 

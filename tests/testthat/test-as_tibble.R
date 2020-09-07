@@ -29,8 +29,8 @@ test_that("as_tibble - minimal.Rmd", {
 })
 
 
-test_that("as_tibble - hw01-template.Rmd", {
-  ast = parse_rmd(system.file("hw01-template.Rmd", package = "parsermd"))
+test_that("as_tibble - hw01.Rmd", {
+  ast = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)

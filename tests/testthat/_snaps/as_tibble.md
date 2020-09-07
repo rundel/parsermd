@@ -16,7 +16,7 @@
     11 hello  Including Plots rmd_chunk     "pressure" <chunk [r]>   
     12 hello  Including Plots rmd_markdown   <NA>      <markdown [1]>
 
-# as_tibble - hw01-template.Rmd
+# as_tibble - hw01.Rmd
 
     # A tibble: 21 x 5
        sec_h3        sec_h4   type          label         ast           

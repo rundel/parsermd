@@ -8,7 +8,7 @@ test_that("tree printing", {
   )
 
   expect_snapshot_output(
-    parse_rmd(system.file("hw01-template.Rmd", package = "parsermd"))
+    parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
   )
 
   expect_snapshot_output(
