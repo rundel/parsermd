@@ -8,6 +8,10 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
     rmd = readr::read_file(rmd)
   }
 
+  # Make sure file ends with trailing \n
+  if (!grepl("\n$", rmd))
+    rmd = paste0(rmd, "\n")
+
   ast = parse_rmd_cpp(rmd, allow_incomplete)
 
   if (parse_yaml && inherits(ast[[1]], "rmd_yaml")) {

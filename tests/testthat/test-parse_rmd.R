@@ -40,3 +40,12 @@ test_that("minimal.Rmd", {
 
   expect_identical(ast, expected_ast)
 })
+
+test_that("Problems", {
+
+  # No newline at the end
+  expect_equal(
+    parse_rmd("```{r}\n1+1\n```"),
+    create_ast(create_yaml(), create_chunk(code = "1+1"))
+  )
+})
