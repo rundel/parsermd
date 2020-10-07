@@ -135,6 +135,25 @@ test_that("chunk parsing - issues", {
     parsermd:::check_chunk_parser("```{r, include=FALSE}\n```\n"),
     make_chunk_obj(options = list(include="FALSE"))
   )
+
+  # trailing white spaces causes an issue
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r} \n```\n"),
+    make_chunk_obj()
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r}\n``` \n"),
+    make_chunk_obj()
+  )
+
+  expect_equal(
+    parsermd:::check_chunk_parser("```{r} \n``` \n"),
+    make_chunk_obj()
+  )
+
+
+
 })
 
 

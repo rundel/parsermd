@@ -106,11 +106,11 @@ namespace client { namespace parser {
         x3::lexeme[ start_indent >> x3::lit("```{") ] >>
           x3::skip(x3::blank)[
             engine >> -x3::lit(",") >> details >> x3::lit("}")
-          ] >> x3::eol >>
+          ] >> *x3::lit(" ") >> x3::eol >>
         // Chunk code
         x3::lexeme[ *(code >> x3::eol) ] >>
         // Chunk end
-        (    x3::lexeme[ x3::omit[ end_indent ] >> x3::lit("```") ] >> x3::eol
+        (    x3::lexeme[ x3::omit[ end_indent ] >> x3::lit("```") ] >> *x3::lit(" ") >> x3::eol
           | &x3::lexeme[ x3::omit[ end_indent ] >> x3::lit("```{") ] )
             // Chunk can be ended by a new chunk starting see Yihui's book Sec 5.1.4
             // need to match but not consume this new chunk
