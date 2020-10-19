@@ -3,25 +3,29 @@
 
 //#define BOOST_SPIRIT_X3_DEBUG
 #include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
+
 
 #include <Rcpp.h>
 
 #include "parse_expr.hpp"
+#include "parser_error_handler.hpp"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct option {
+  struct option : x3::position_tagged {
     std::string name, value;
   };
 
-  struct details {
+  struct details : x3::position_tagged {
     std::string name;
     std::vector<option> options;
   };
 
-  struct chunk {
+  struct chunk : x3::position_tagged{
     std::string indent;
     std::string engine;
     details d;
@@ -57,7 +61,7 @@ namespace client { namespace parser {
       | ( client::parser::any_q_string );
 
   auto const option = x3::rule<struct _, client::ast::option>{"option"}
-    = r_name >> x3::lit("=") >> expr;
+    = (r_name >> x3::lit("=")) > expr;
 
   // This spec is based on Sec 3.2 of the Sweave manual
   auto const label = x3::rule<struct _, std::string>{"chunk label"}
@@ -100,21 +104,30 @@ namespace client { namespace parser {
       })];
   ;
 
-  auto const chunk = x3::rule<struct _, client::ast::chunk, true>{"chunk"}
+  struct chunk_class : error_handler, x3::annotate_on_success {};
+
+  x3::rule<chunk_class, client::ast::chunk> const chunk = "chunk";
+
+  auto const chunk_def //= x3::rule<struct _, client::ast::chunk, true>{"chunk"}
     = x3::with<indent>(std::string()) [
         // Chunk start
-        x3::lexeme[ start_indent >> x3::lit("```{") ] >>
-          x3::skip(x3::blank)[
-            engine >> -x3::lit(",") >> details >> x3::lit("}")
-          ] >> *x3::lit(" ") >> x3::eol >>
+        x3::lexeme[ start_indent >> (x3::lit("```") > x3::lit("{")) ] >
+        x3::skip(x3::blank)[
+          engine >> -x3::lit(",") >> details
+        ] >
+        (x3::lit("}") >> x3::skip(x3::blank)[x3::eol]) >>
         // Chunk code
-        x3::lexeme[ *(code >> x3::eol) ] >>
+        x3::lexeme[ *(code >> x3::eol) ] >
         // Chunk end
         (    x3::lexeme[ x3::omit[ end_indent ] >> x3::lit("```") ] >> *x3::lit(" ") >> x3::eol
           | &x3::lexeme[ x3::omit[ end_indent ] >> x3::lit("```{") ] )
             // Chunk can be ended by a new chunk starting see Yihui's book Sec 5.1.4
-            // need to match but not consume this new chunk
+            // nasdasdasdeed to match but not consume this new chunk
       ];
+  BOOST_SPIRIT_DEFINE(chunk);
+
+
+
 } }
 
 #endif

@@ -45,7 +45,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
-  auto const chunk_start = (*indent_pat >> x3::lit("```{") >> x3::omit[ *(~x3::char_("}")) ] >> "}" >> x3::eol);
+  auto const chunk_start = (*indent_pat >> x3::lit("```{"));// >> x3::omit[ *(~x3::char_("}")) ] >> "}" >> x3::eol);
   auto const heading_start = x3::lit("#");
 
   auto const text_line = x3::rule<struct _, std::string>{"text line"}

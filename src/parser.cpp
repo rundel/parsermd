@@ -5,29 +5,40 @@
 
 #include "parse_rmd.hpp"
 #include "parser_rcpp_wrap.hpp"
+#include "parser_error_handler.hpp"
 #include <Rcpp.h>
 #include <boost/format.hpp>
+
+#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+
+
 
 template <typename Parser, typename Attribute>
 inline void parse_str(
     std::string const& str,
     bool allow_incomplete,
     Parser const& p,
-    Attribute& attr
+    Attribute& attr,
+    bool use_expect = false
 ) {
   namespace x3 = boost::spirit::x3;
 
-  auto first = str.begin();
-  auto last = str.end();
+  auto iter = str.begin();
+  auto const end = str.end();
 
-  bool r = x3::parse(first, last, p, attr);
+  using error_handler_type = x3::error_handler<std::string::const_iterator>;
+  error_handler_type error_handler(iter, end, Rcpp::Rcout);
+
+  auto const parser = x3::with<x3::error_handler_tag>(std::ref(error_handler))[ p ];
+
+  bool r = x3::parse(iter, end, parser, attr);
 
   if (!r) // fail if we did not get a full match
     Rcpp::stop("Failed to parse.");
 
-  if (first != last) {
-    int parsed_lines = std::count(str.begin(), first, '\n');
-    int total_lines = std::count(str.begin(), last, '\n');
+  if (iter != end) {
+    int parsed_lines = std::count(str.begin(), iter, '\n');
+    int total_lines = std::count(str.begin(), end, '\n');
 
     std::string msg = (
       boost::format("Incomplete parsing. Parsed %1% of %2% lines.")
