@@ -1,8 +1,10 @@
 #ifndef PARSER_RCPP_WRAP_HPP
 #define PARSER_RCPP_WRAP_HPP
 
-#include "parse_chunk.hpp"
-#include "parse_rmd.hpp"
+#include "parse_option_ast.hpp"
+#include "parse_chunk_ast.hpp"
+#include "parse_rmd_ast.hpp"
+
 
 #include <RcppCommon.h>
 
