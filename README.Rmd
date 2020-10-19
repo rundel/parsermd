@@ -39,7 +39,7 @@ library(parsermd)
 
 ## Basic Usage
 
-For more details see the getting started vignette or any of the topic specific articles.
+For more details see the getting started [vignette](https://rundel.github.io/parsermd/articles/parsermd.html) or any of the topic specific articles.
 
 ```{r example}
 (rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))

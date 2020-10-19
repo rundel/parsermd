@@ -6,7 +6,7 @@ navbar:
   - icon: fa-home fa-lg
     href: index.html
   - text: Getting Started
-    href: parsermd.html
+    href: articles/parsermd.html
   - text: Reference
     href: reference/index.html
   - text: Articles

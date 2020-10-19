@@ -31,8 +31,9 @@ You can install the development version of parsermd from
 Basic Usage
 -----------
 
-For more details see the getting started vignette or any of the topic
-specific articles.
+For more details see the getting started
+[vignette](https://rundel.github.io/parsermd/articles/parsermd.html) or
+any of the topic specific articles.
 
     (rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))
     #> ├── YAML [4 lines]
