@@ -63,9 +63,16 @@ namespace Rcpp {
     return boost::apply_visitor(v, line);
   };
 
+  template <> SEXP wrap(client::ast::yaml const& yaml) {
+    Rcpp::CharacterVector res = Rcpp::wrap(yaml.lines);
+    res.attr("class") = "rmd_yaml";
+
+    return res;
+  }
+
+
   template <> SEXP wrap(client::ast::rmd const& rmd) {
     Rcpp::CharacterVector yaml = Rcpp::wrap(rmd.front_matter);
-    yaml.attr("class") = "rmd_yaml";
 
     Rcpp::List res;
     res.push_back(yaml);
