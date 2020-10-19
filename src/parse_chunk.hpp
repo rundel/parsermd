@@ -11,14 +11,12 @@
 #include <Rcpp.h>
 
 #include "parse_expr.hpp"
+#include "parse_option.hpp"
 #include "parser_error_handler.hpp"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct option : x3::position_tagged {
-    std::string name, value;
-  };
 
   struct details : x3::position_tagged {
     std::string name;
@@ -54,14 +52,6 @@ namespace client { namespace parser {
 
   auto const engine = x3::rule<struct _, std::string> {"engine"}
     = x3::lexeme[ +x3::char_("A-Za-z0-9_") ];
-
-  auto const r_name = x3::rule<struct _, std::string>{"name"}
-    =   ( x3::lexeme[ x3::char_("A-Za-z") >> *x3::char_("._A-Za-z0-9") ] )
-      | ( x3::lexeme[ x3::char_(".") >> !x3::char_("0-9") >> *x3::char_("._A-Za-z0-9") ] )
-      | ( client::parser::any_q_string );
-
-  auto const option = x3::rule<struct _, client::ast::option>{"option"}
-    = (r_name >> x3::lit("=")) > expr;
 
   // This spec is based on Sec 3.2 of the Sweave manual
   auto const label = x3::rule<struct _, std::string>{"chunk label"}
