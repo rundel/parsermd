@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   parsermd: parsermd.html
   templates: templates.html
-last_built: 2020-10-07T13:59Z
+last_built: 2020-10-19T09:20Z
 urls:
   reference: https://rundel.github.io/parsermd/reference
   article: https://rundel.github.io/parsermd/articles
