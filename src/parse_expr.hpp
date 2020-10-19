@@ -48,12 +48,12 @@ namespace client { namespace parser {
       ] ]
     ) ];
 
-  auto const expr = x3::rule<struct _, std::string>{"expr"}
+  auto const expr = x3::rule<struct _, std::string>{"R expression"}
     = x3::raw[
-        *(   client::parser::q_string
+        +(   client::parser::q_string
           |  client::parser::paren_expr
           | ~x3::char_("()=,}")
-        )
+         )
       ];
 } }
 
