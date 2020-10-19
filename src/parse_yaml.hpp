@@ -26,27 +26,24 @@ namespace client { namespace parser {
 
   namespace x3 = boost::spirit::x3;
 
-  struct content_class {};
-  struct yaml_class : error_handler, x3::annotate_on_success {};
-
-  x3::rule<content_class, std::string> const content = "content";
-  x3::rule<yaml_class, client::ast::yaml> const yaml = "yaml";
-
-  auto const content_def
+  auto const yaml_line = x3::rule<struct _, std::string>{"yaml line"}
   = x3::raw[
-      !x3::lit("---") >>
-      *(x3::char_ - x3::eol)
+      !(+x3::lit("-")) >> *(x3::char_ - x3::eol)
     ];
 
-  auto const line = x3::rule<struct _, std::vector<std::string>>{"yaml line"}
-  = *(content >> x3::eol);
+  auto const yaml_lines = x3::rule<struct _, std::vector<std::string>>{"yaml lines"}
+  = *(yaml_line >> x3::eol);
+
+  struct yaml_class : error_handler, x3::annotate_on_success {};
+
+  x3::rule<yaml_class, client::ast::yaml> const yaml = "yaml";
 
   auto const yaml_def
   = x3::lit("---") > x3::eol >>
-    x3::lexeme[ line ] >
+    x3::lexeme[ yaml_lines ] >
     x3::lit("---") > x3::eol;
 
-  BOOST_SPIRIT_DEFINE(content, yaml);
+  BOOST_SPIRIT_DEFINE(yaml);
 } }
 
 #endif
