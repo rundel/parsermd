@@ -13,7 +13,7 @@ test_that("as_tibble - minimal.Rmd", {
     "hello",      "R Markdown",   "rmd_heading",                NA,
     "hello",      "R Markdown",  "rmd_markdown",                NA,
     "hello",      "R Markdown",     "rmd_chunk",            "cars",
-    "hello",      "R Markdown",     "rmd_chunk",                "",
+    "hello",      "R Markdown",     "rmd_chunk", "unnamed-chunk-1",
     "hello", "Including Plots",   "rmd_heading",                NA,
     "hello", "Including Plots",  "rmd_markdown",                NA,
     "hello", "Including Plots",     "rmd_chunk",        "pressure",

@@ -25,7 +25,7 @@ test_that("minimal.Rmd", {
       name = "cars", code = "summary(cars)"
     ),
     create_chunk(
-      code = "knitr::knit_patterns$get()"
+      name = "unnamed-chunk-1", code = "knitr::knit_patterns$get()"
     ),
     create_heading("Including Plots", 2),
     create_markdown("You can also embed plots, for example:", ""),
@@ -46,6 +46,6 @@ test_that("Problems", {
   # No newline at the end
   expect_equal(
     parse_rmd("```{r}\n1+1\n```"),
-    create_ast(create_yaml(), create_chunk(code = "1+1"))
+    create_ast(create_yaml(), create_chunk(name = "unnamed-chunk-1", code = "1+1"))
   )
 })

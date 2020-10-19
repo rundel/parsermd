@@ -5,11 +5,11 @@ test_that("rmd_has_chunk", {
   expect_true(rmd_has_chunk(ast, sec_refs = "test", name_refs = "setup"))
 
   expect_true(rmd_has_chunk(ast, name_refs = "cars"))
-  expect_true(rmd_has_chunk(ast, name_refs = ""))
+  expect_true(rmd_has_chunk(ast, name_refs = "unnamed-chunk-1"))
   expect_true(rmd_has_chunk(ast, name_refs = "pressure"))
 
   expect_true(rmd_has_chunk(ast, sec_refs = c("hello", "R Markdown"), name_refs = "cars"))
-  expect_true(rmd_has_chunk(ast, sec_refs = c("hello", "R Markdown"), name_refs = ""))
+  expect_true(rmd_has_chunk(ast, sec_refs = c("hello", "R Markdown"), name_refs = "unnamed-chunk-1"))
   expect_true(rmd_has_chunk(ast, sec_refs = c("hello", "Including Plots"), name_refs = "pressure"))
 
   expect_true(rmd_has_chunk(ast, sec_refs = "R Markdown", name_refs = "cars"))

@@ -7,7 +7,7 @@
         +-- Heading [h2] - R Markdown
         |   +-- Markdown [4 lines]
         |   +-- Chunk [r, 1 lines] - cars
-        |   \-- Chunk [r, 1 lines] - <unnamed>
+        |   \-- Chunk [r, 1 lines] - unnamed-chunk-1
         \-- Heading [h2] - Including Plots
             +-- Markdown [2 lines]
             +-- Chunk [r, 1 opt, 1 lines] - pressure

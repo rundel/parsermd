@@ -26,7 +26,7 @@
     summary(cars)
     ```
     
-    ```{r}
+    ```{runnamed-chunk-1}
     knitr::knit_patterns$get()
     ```
     
