@@ -79,11 +79,16 @@ namespace client { namespace parser {
   // Chunk stuff
 
   auto const chunk_template = x3::rule<struct _> {"chunk template"}
-  = x3::skip(indent_pat)[ x3::lit("```{") ] >> *(~x3::char_("}\n")) > x3::lit('}') > x3::eol >> // Start
+  = (x3::skip(indent_pat)[ x3::lit("```{") ] >>
+    *(
+        &(x3::skip(x3::blank)[!(x3::lit('}') >> x3::eol)]) >> // Look ahead to find end of chunk def
+        x3::char_
+    ))
+    > x3::lit('}') > x3::eol >>
     *(
         x3::skip(indent_pat)[ !x3::lit("```") ] >> *(x3::char_ - x3::eol) >> x3::eol
-    ) >              // code
-    x3::skip(indent_pat)[ x3::lit("```") ];                                                       // end
+    ) >
+    x3::skip(indent_pat)[ x3::lit("```") ];
 
 
   auto chunk_start_wrap = [](auto p) {
