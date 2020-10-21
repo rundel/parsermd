@@ -30,10 +30,11 @@ namespace client { namespace parser {
         //            << "val    : " << std::quoted(_val(ctx)) << "\n"
         //            << "indent : " << std::quoted(x3::get<indent>(ctx)) << "\n";
 
-        if (x3::get<indent>(ctx) == "")
-          x3::get<indent>(ctx) = _attr(ctx);
-
-        _val(ctx) = x3::get<indent>(ctx); // Needed to avoid weird concat behavior
+        //if (x3::get<indent>(ctx) == "")
+        //  x3::get<indent>(ctx) = _attr(ctx);
+        //
+        //_val(ctx) = x3::get<indent>(ctx); // Needed to avoid weird concat behavior
+        x3::get<indent>(ctx) = _attr(ctx);
       })];
 
   auto end_indent = x3::rule<struct _, std::string, true> {"end indent"}
@@ -67,13 +68,14 @@ namespace client { namespace parser {
   // Chunk arg stuff
 
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
-  = (x3::lexeme[ +x3::char_("A-Za-z0-9_") ]) [
-    ([](auto& ctx){ _val(ctx) = _attr(ctx); }) //Override the default concat behavior
-  ];
+  = (x3::lexeme[ +x3::char_("A-Za-z0-9_") ]);
+  //[
+  //  ([](auto& ctx){ _val(ctx) = _attr(ctx); }) //Override the default concat behavior
+  //];
 
   auto const label = x3::rule<struct _, std::string> {"chunk label"}
-  = x3::lexeme[ +x3::char_("A-Za-z0-9#+_-") ]; // Based on Sec 3.2 of the Sweave manual
-
+  = x3::lexeme[ +x3::char_("A-Za-z0-9#+_-") ] >> // Based on Sec 3.2 of the Sweave manual
+    x3::skip(x3::blank)[ &(!x3::char_("=")) ]; // Help disambiguate between labels and bad args
 
 
   // Chunk stuff
@@ -107,12 +109,28 @@ namespace client { namespace parser {
     );
   };
 
+  // This is needed otherwise backtracking not cleaning breaks things
+  auto const label_chunk = x3::rule<struct _, std::string> {"label chunk"}
+  = ( label >>
+      ( (-x3::lit(',') >> &(!option))  // no option, comma optional
+      | (x3::expect[x3::lit(',')] ) ) // yes option, comma required
+  )[([](auto& ctx) {_val(ctx) = _attr(ctx);})];
+
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
-  =   (  chunk_start_wrap( x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()) )
-       | chunk_start_wrap( label >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()) )
-       | chunk_start_wrap( x3::attr(std::string()) >> (option % ',') )
-       | chunk_start_wrap( label > x3::lit(",") > (option % ',') )
-      );
+  = x3::lexeme[ start_indent >> x3::lit("```{") ] >>
+    x3::skip(x3::blank)[
+      x3::expect[engine] >> -x3::lit(",") >>
+      -(label_chunk) >>
+      ((option % ',') | x3::attr(std::vector<ast::option>())) >
+      x3::lit("}") >
+      x3::eol
+    ];
+
+  //=   (  chunk_start_wrap( x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()) )
+  //     | chunk_start_wrap( label >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()) )
+  //     | chunk_start_wrap( x3::attr(std::string()) >> (option % ',') )
+  //     | chunk_start_wrap( label > x3::lit(",") > (option % ',') )
+  //    );
 
 
   auto const chunk_end = x3::rule<struct _> {"chunk end"}
@@ -126,6 +144,9 @@ namespace client { namespace parser {
 
   auto const chunk_def
     = x3::with<indent>(std::string()) [
+        //x3::eps[ ([](auto& ctx) {
+        //  Rcpp::Rcout << "init :" << x3::get<indent>(ctx)  << "\n";
+        //}) ] >>
         &chunk_template >> // look ahead check of chunk structure
         chunk_start >>
         chunk_code >>
