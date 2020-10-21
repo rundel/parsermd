@@ -60,6 +60,68 @@ namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
   namespace ascii = boost::spirit::x3::ascii;
 
+  template <typename iter>
+  std::string gen_error_msg(
+      iter error_pos,
+      iter doc_start, iter doc_end,
+      iter expr_start, iter expr_end,
+      std::string expected = ""
+  ) {
+    //int k = std::distance(doc_start, error_pos);
+    //int j = std::distance(error_pos, doc_end);
+    //
+    //Rcpp::Rcout << "doc      : " << std::quoted( escape_nl(std::string(doc_start, doc_end)) ) << "\n";
+    //Rcpp::Rcout << "         :  " << std::setfill('~') << std::setw(k) << "";
+    //Rcpp::Rcout << "^\n";
+    //Rcpp::Rcout << "k = " << k << "; j = " << j << "\n";
+    //Rcpp::Rcout << "where    : " << (int) *(error_pos) << "\n";
+    //Rcpp::Rcout << "\n";
+
+    if (error_pos == doc_end)
+      error_pos = std::prev(error_pos);
+
+    iter line_start = std::find(
+      std::make_reverse_iterator(error_pos),
+      std::make_reverse_iterator(doc_start),
+      '\n'
+    ).base();
+
+    iter line_end = std::find(error_pos, doc_end, '\n');
+
+    int line_num = std::count(doc_start, error_pos, '\n') +1;
+
+    bool debug = false;
+    if (debug) {
+      Rcpp::Rcout << "line_start: " << line_start - line_start << "\n";
+      Rcpp::Rcout << "expr_start: " << expr_start - line_start << "\n";
+      Rcpp::Rcout << "error_pos : " << error_pos  - line_start << "\n";
+      Rcpp::Rcout << "expr_end  : " << expr_end   - line_start << "\n";
+      Rcpp::Rcout << "line_end  : " << line_end   - line_start << "\n";
+    }
+
+
+    std::stringstream ss;
+    ss << "Failed to parse line " << line_num;
+    if (expected != "")
+      ss << ", expected " << expected;
+    ss << "\n";
+
+    ss << std::string(line_start, line_end) << "\n";
+    char cur = ' ';
+    for(iter i = line_start; i != line_end; ++i) {
+      if      (i == error_pos)            cur = '^';
+      else if (i == expr_start)           cur = '~';
+      else if (std::prev(i) == error_pos) cur = '~';
+      else if (std::prev(i) == expr_end)  cur = ' ';
+
+      ss << cur;
+    }
+    ss << "\n";
+
+    return ss.str();
+  }
+
+
   struct error_handler {
     template <typename Iterator, typename Exception, typename Context>
     x3::error_handler_result on_error(
@@ -78,6 +140,11 @@ namespace client { namespace parser {
       Iterator f = error_handler.get_position_cache().first();
       Iterator l = error_handler.get_position_cache().last();
 
+      throw Rcpp::exception(
+        gen_error_msg(x.where(), f, l, first, last, x.which()).c_str(), false
+      );
+
+      /*
       int k = std::distance(first, x.where());
       int j = std::distance(x.where(), last);
 
@@ -129,8 +196,9 @@ namespace client { namespace parser {
       //Rcpp::Rcout << "3: " << std::string( cur_line_start.base(), last) << "\n";
 
       //Rcpp::Rcout << "test: " << first == f << " & " << last == l << "\n";
+      */
 
-      return x3::error_handler_result::fail;
+      return x3::error_handler_result::rethrow;
     }
   };
 
