@@ -21,4 +21,11 @@ test_that("yaml parsing - bad yaml", {
   expect_error(parsermd:::check_yaml_parser("----\n---\n"))
   expect_error(parsermd:::check_yaml_parser("---\n----\n"))
   expect_error(parsermd:::check_yaml_parser("---\n"))
+
+  expect_snapshot_error(parsermd:::check_yaml_parser("--\n---\n"))
+  expect_snapshot_error(parsermd:::check_yaml_parser("---\n--\n"))
+  expect_snapshot_error(parsermd:::check_yaml_parser("----\n---\n"))
+  expect_snapshot_error(parsermd:::check_yaml_parser("---\n----\n"))
+  expect_snapshot_error(parsermd:::check_yaml_parser("---\n"))
 })
+
