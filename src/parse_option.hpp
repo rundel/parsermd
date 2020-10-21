@@ -23,8 +23,7 @@ namespace client { namespace parser {
   struct option_class : error_handler, x3::annotate_on_success {};
   x3::rule<option_class, client::ast::option> const option = "chunk option";
 
-  auto const option_def
-  = x3::expect[r_name] > x3::lit("=") > expr;
+  auto const option_def = (r_name >> x3::lit("=")) > expr;
 
   BOOST_SPIRIT_DEFINE(option);
 } }
