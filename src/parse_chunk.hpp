@@ -24,17 +24,31 @@ namespace client { namespace parser {
   struct indent{};
   auto start_indent = x3::rule<struct _, std::string, true> {"start indent"}
     = (*indent_pat)
-      [([](auto& ctx) { x3::get<indent>(ctx) = _attr(ctx); })];
+      [([](auto& ctx) {
+        //Rcpp::Rcout << "start_indent:\n"
+        //            << "attr   : " << std::quoted(_attr(ctx)) << "\n"
+        //            << "val    : " << std::quoted(_val(ctx)) << "\n"
+        //            << "indent : " << std::quoted(x3::get<indent>(ctx)) << "\n";
+
+        if (x3::get<indent>(ctx) == "")
+          x3::get<indent>(ctx) = _attr(ctx);
+
+        _val(ctx) = x3::get<indent>(ctx); // Needed to avoid weird concat behavior
+      })];
 
   auto end_indent = x3::rule<struct _, std::string, true> {"end indent"}
     = (*indent_pat)
-      [([](auto& ctx) { _pass(ctx) = (x3::get<indent>(ctx) == _attr(ctx)); })];
+      [([](auto& ctx) {
+        //Rcpp::Rcout << "end_indent " << std::quoted(_attr(ctx)) << "\n";
+        _pass(ctx) = (x3::get<indent>(ctx) == _attr(ctx));
+      })];
 
   auto check_indent = [](auto& ctx) {
+    //Rcpp::Rcout << "check_indent " << x3::get<indent>(ctx).length() << "\n";
     size_t n = x3::get<indent>(ctx).length();
     _pass(ctx) = (x3::get<indent>(ctx) ==  _attr(ctx).substr(0, n)); // Compare the indents
     _attr(ctx).erase(0, n);                                          // erase the first n chars
-    // so code line wont have indent
+                                                                     // so code line wont have indent
     _val(ctx) = _attr(ctx);
   };
 
@@ -65,9 +79,11 @@ namespace client { namespace parser {
   // Chunk stuff
 
   auto const chunk_template = x3::rule<struct _> {"chunk template"}
-  = (x3::lit("```{") >> *(~x3::char_("}\n"))) > x3::lit('}') > x3::eol >> // Start
-    *(!x3::lit("```") >> *(x3::char_- x3::eol) >> x3::eol) >              // code
-    x3::lit("```");                                                       // end
+  = x3::skip(indent_pat)[ x3::lit("```{") ] >> *(~x3::char_("}\n")) > x3::lit('}') > x3::eol >> // Start
+    *(
+        x3::skip(indent_pat)[ !x3::lit("```") ] >> *(x3::char_ - x3::eol) >> x3::eol
+    ) >              // code
+    x3::skip(indent_pat)[ x3::lit("```") ];                                                       // end
 
 
   auto chunk_start_wrap = [](auto p) {
@@ -84,11 +100,11 @@ namespace client { namespace parser {
   };
 
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
-  = (  chunk_start_wrap( x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()) )
-     | chunk_start_wrap( label >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()) )
-     | chunk_start_wrap( x3::attr(std::string()) >> (option % ',') )
-     | chunk_start_wrap( label > x3::lit(",") > (option % ',') )
-    );
+  =   (  chunk_start_wrap( x3::attr(std::string()) >> x3::attr(std::vector<ast::option>()) )
+       | chunk_start_wrap( label >> -x3::lit(',') >> x3::attr(std::vector<ast::option>()) )
+       | chunk_start_wrap( x3::attr(std::string()) >> (option % ',') )
+       | chunk_start_wrap( label > x3::lit(",") > (option % ',') )
+      );
 
 
   auto const chunk_end = x3::rule<struct _> {"chunk end"}
