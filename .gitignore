@@ -6,3 +6,5 @@ inst/*.html
 src/test.cpp
 docs
 inst/doc
+src/*.o
+src/*.o.tmp
