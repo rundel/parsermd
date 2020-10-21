@@ -37,25 +37,9 @@ inline void parse_str(
     Rcpp::stop("Failed to parse.");
 
   if (iter != end) {
-    //int parsed_lines = std::count(str.begin(), iter, '\n');
-    //int total_lines = std::count(str.begin(), end, '\n');
-    //
-    //std::string msg = (
-    //  boost::format("Incomplete parsing. Parsed %1% of %2% lines.")
-    //  % parsed_lines % total_lines
-    //).str();
-    //
-
-    //std::string msg {"Oops!"};
-
-    Rcpp::stop(
-      client::parser::gen_error_msg(iter, str.begin(), str.end(), str.begin(), str.end())
+    client::parser::throw_parser_error(
+      iter, str.begin(), str.end(), str.begin(), str.end()
     );
-
-    //if (allow_incomplete)
-    //  Rcpp::warning(msg);
-    //else
-    //  Rcpp::stop(msg);
   }
 }
 
