@@ -6,11 +6,11 @@ namespace Rcpp {
   // chunk wrappers
   template <> SEXP wrap(client::ast::chunk const& chunk) {
     Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("engine")  = chunk.engine,
-      Rcpp::Named("name")    = chunk.d.name,
-      Rcpp::Named("options") = Rcpp::wrap(chunk.d.options),
+      Rcpp::Named("engine")  = chunk.args.engine,
+      Rcpp::Named("name")    = chunk.args.name,
+      Rcpp::Named("options") = Rcpp::wrap(chunk.args.options),
       Rcpp::Named("code")    = chunk.code,
-      Rcpp::Named("indent")  = chunk.indent
+      Rcpp::Named("indent")  = chunk.args.indent
     );
 
     res.attr("class") = "rmd_chunk";
@@ -49,7 +49,7 @@ namespace Rcpp {
     return res;
   };
 
-  template <> SEXP wrap(client::ast::line const& line) {
+  template <> SEXP wrap(client::ast::element const& element) {
     struct line_visitor {
       SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
       SEXP operator()(client::ast::heading const& h) { return Rcpp::wrap(h); }
@@ -60,7 +60,7 @@ namespace Rcpp {
       }
     } v;
 
-    return boost::apply_visitor(v, line);
+    return boost::apply_visitor(v, element);
   };
 
   template <> SEXP wrap(client::ast::yaml const& yaml) {
@@ -76,8 +76,8 @@ namespace Rcpp {
 
     Rcpp::List res;
     res.push_back(yaml);
-    for(auto const& line : rmd.lines) {
-      res.push_back(Rcpp::wrap(line));
+    for(auto const& element : rmd.elements) {
+      res.push_back(Rcpp::wrap(element));
     }
     res.attr("class") = Rcpp::CharacterVector({"rmd_ast", "list"});
 

@@ -16,7 +16,7 @@ namespace Rcpp {
 
   // rmd
   template <> SEXP wrap(client::ast::heading const& h);
-  template <> SEXP wrap(client::ast::line const& line);
+  template <> SEXP wrap(client::ast::element const& element);
   template <> SEXP wrap(client::ast::rmd const& rmd);
   template <> SEXP wrap(client::ast::yaml const& yaml);
 }

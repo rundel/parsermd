@@ -33,10 +33,10 @@ inline void parse_str(
 
   bool r = x3::parse(iter, end, parser, attr);
 
-  if (!r) // fail if we did not get a full match
-    Rcpp::stop("Failed to parse.");
+  //if () // fail if we did not get a full match
+  //  Rcpp::stop("Failed to parse.");
 
-  if (iter != end) {
+  if (!r || iter != end) {
     client::parser::throw_parser_error(
       iter, str.begin(), str.end(), str.begin(), str.end()
     );
@@ -82,8 +82,8 @@ Rcpp::List check_multi_chunk_parser(std::string const& str, bool allow_incomplet
 
 // [[Rcpp::export]]
 Rcpp::List check_markdown_parser(std::string const& str) {
-  std::vector<client::ast::line> expr;
-  parse_str(str, false, +(client::parser::entry), expr);
+  std::vector<client::ast::element> expr;
+  parse_str(str, false, +(client::parser::element), expr);
 
   return Rcpp::wrap(expr);
 }
