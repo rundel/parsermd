@@ -58,12 +58,17 @@ namespace client { namespace parser {
     }
   } op_equal;
 
+  auto disallowed_char = x3::rule<struct _, char> {"disallowed_char"}
+  = ~x3::char_("()=,}");
+
+  // TODO - handle case of {} in an expression
+
   auto const expr = x3::rule<struct _, std::string>{"R expression"}
     = x3::raw[
-        +(   client::parser::q_string
-          |  client::parser::paren_expr
-          |  op_equal
-          | ~x3::char_("()=,}")
+        +(  client::parser::q_string
+          | client::parser::paren_expr
+          | op_equal
+          | disallowed_char
          )
     ];
 } }
