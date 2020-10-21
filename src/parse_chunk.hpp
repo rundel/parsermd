@@ -75,7 +75,7 @@ namespace client { namespace parser {
 
   auto const label = x3::rule<struct _, std::string> {"chunk label"}
   = x3::lexeme[ +x3::char_("A-Za-z0-9#+_-") ] >> // Based on Sec 3.2 of the Sweave manual
-    x3::skip(x3::blank)[ &(!x3::char_("=")) ]; // Help disambiguate between labels and bad args
+    x3::skip(x3::blank)[ &(!x3::char_("=.")) ]; // Help disambiguate between labels and bad args
 
 
   // Chunk stuff
