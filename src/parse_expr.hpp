@@ -48,13 +48,24 @@ namespace client { namespace parser {
       ] ]
     ) ];
 
+  // Handle possible operators with ='s in them
+  struct op_equal_ : x3::symbols<std::string> {
+    op_equal_() {
+      add("==", "==")
+         ("!=", "!=")
+         ("<=", "<=")
+         (">=", ">=");
+    }
+  } op_equal;
+
   auto const expr = x3::rule<struct _, std::string>{"R expression"}
     = x3::raw[
         +(   client::parser::q_string
           |  client::parser::paren_expr
+          |  op_equal
           | ~x3::char_("()=,}")
          )
-      ];
+    ];
 } }
 
 #endif
