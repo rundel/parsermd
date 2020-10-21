@@ -32,19 +32,40 @@ namespace client { namespace parser {
 
     int line_num = std::count(doc_start, error_pos, '\n') +1;
 
+    if (expr_start < line_start)
+      expr_start = line_start;
+
+    if (expr_end > line_end)
+      expr_end = line_end;
+
+    //debug = true;
+
     if (debug) {
       Rcpp::Rcout << "line_start: " << line_start - line_start << "\n";
       Rcpp::Rcout << "expr_start: " << expr_start - line_start << "\n";
       Rcpp::Rcout << "error_pos : " << error_pos  - line_start << "\n";
       Rcpp::Rcout << "expr_end  : " << expr_end   - line_start << "\n";
       Rcpp::Rcout << "line_end  : " << line_end   - line_start << "\n";
+      //Rcpp::Rcout << "expr      : " << std::quoted( std::string(expr_start, expr_end) ) << "\n";
+      //Rcpp::Rcout << "doc       : " << std::quoted( std::string(doc_start, doc_end) ) << "\n";
+      //Rcpp::Rcout << "error ctx : " << std::quoted( std::string(
+      //  std::prev(error_pos, 5), std::next(error_pos, 5)
+      //) ) << "\n";
     }
 
 
     std::stringstream ss;
     ss << "Failed to parse line " << line_num;
-    if (expected != "")
-      ss << ", expected " << expected;
+    if (expected != "") {
+      if (expected.substr(0, 14) == "N5boost6spirit") {
+        if (debug) {
+          ss << ", expected " << "<unlabeled parser>";
+        }
+      } else {
+        ss << ", expected " << expected;
+      }
+    }
+
     ss << "\n";
 
     ss << std::string(line_start, line_end) << "\n";
@@ -57,6 +78,10 @@ namespace client { namespace parser {
 
       ss << cur;
     }
+
+    if (error_pos == line_end)
+      ss << '^';
+
     ss << "\n";
 
     throw Rcpp::exception(ss.str().c_str(), false);
