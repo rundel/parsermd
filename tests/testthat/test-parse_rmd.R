@@ -41,7 +41,22 @@ test_that("minimal.Rmd", {
   expect_identical(ast, expected_ast)
 })
 
-test_that("Problems", {
+test_that("knitr examples", {
+
+  files = fs::dir_ls(
+    system.file("tests/testthat/knitr-examples/", package = "parsermd"),
+    glob="*.Rmd"
+  )
+
+  for(file in files) {
+    label = paste("Parsing", fs::path_file(file))
+    expect_error(parse_rmd(!!file, allow_incomplete = FALSE), regexp = NA, label = label)
+  }
+})
+
+
+
+test_that("Found issues", {
 
   # No newline at the end
   expect_equal(
@@ -49,3 +64,5 @@ test_that("Problems", {
     create_ast(create_yaml(), create_chunk(code = "1+1"))
   )
 })
+
+
