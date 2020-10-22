@@ -113,14 +113,14 @@ li_missing = function(secs, type, label = NA) {
   text = if (type == "rmd_yaml" | type == "rmd_yaml_list") {
     "{.val YAML} is missing"
   } else if (type == "rmd_heading") {
-    "Section {sec} is missing"
+    "Section {.val {sec}} is missing"
   } else if (type == "rmd_markdown") {
-    "Section {sec} is missing required {.val markdown text}"
+    "Section {.val {sec}} is missing required {.val markdown text}"
   } else if (type == "rmd_chunk") {
     if (!is.na(label) & label != "") {
-      "Section {sec} is missing a required {.val code chunk} named {.val {label}}"
+      "Section {.val {sec}} is missing a required {.val code chunk} named {.val {label}}"
     } else {
-      "Section {sec} is missing a required {.val code chunk}"
+      "Section {.val {sec}} is missing a required {.val code chunk}"
     }
   } else {
     stop("Unexpected (unsupported) type.")
@@ -137,12 +137,12 @@ li_unmodified = function(secs, type, label = NA, content = NA) {
   ) )
 
   text = if (type == "rmd_markdown") {
-    "Section {sec} has {.val markdown text} which has not been modified."
+    "Section {.val {sec}} has {.val markdown text} which has not been modified."
   } else if (type == "rmd_chunk") {
     if (!is.na(label) & label != "") {
-      "Section {sec} has a {.val code chunk} named {.val {label}} which has not been modified."
+      "Section {.val {sec}} has a {.val code chunk} named {.val {label}} which has not been modified."
     } else {
-      "Section {sec} has {.val code chunk} which has not been modified."
+      "Section {.val {sec}} has {.val code chunk} which has not been modified."
     }
   }
   cli::cli_li(text)
