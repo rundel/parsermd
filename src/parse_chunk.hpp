@@ -121,7 +121,7 @@ namespace client { namespace parser {
     x3::skip(x3::blank)[
       x3::expect[engine] >> -x3::lit(",") >>
       -(label_chunk) >>
-      ((option % ',') | x3::attr(std::vector<ast::option>())) >
+      ((option % ',') | x3::attr(std::vector<ast::option>())) >> -x3::lit(",") >>
       x3::lit("}") >
       x3::eol
     ];
