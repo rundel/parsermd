@@ -1,4 +1,10 @@
-# parsermd 0.0.0.9000
+# parsermd 0.0.1
+
+* Added new parser error reporting system
+
+* Added new vignette to demonstrate this tooling
+
+# parsermd 0.0.0
 
 * Added a `NEWS.md` file to track changes to the package.
 
