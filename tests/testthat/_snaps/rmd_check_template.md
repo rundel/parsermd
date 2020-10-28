@@ -27,17 +27,17 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 1" > "Answer" is missing required markdown text
+        * Section "Exercise 1" > "Answer" is missing required markdown text.
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
-    Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'ex2-plot'
-    Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'cor-dino'
+          'ex2-plot'.
+    Message <cliMessage>
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
+    Message <cliMessage>
+        * Section "Exercise 2" > "Answer" is missing a required code chunk named
+          'cor-dino'.
 
 ---
 
@@ -46,15 +46,15 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'ex2-plot'
+          'ex2-plot'.
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'cor-dino'
+          'cor-dino'.
     Output
       
     Message <cliMessage>
@@ -70,7 +70,7 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 1" > "Answer" is missing required markdown text
+        * Section "Exercise 1" > "Answer" is missing required markdown text.
     Output
       
     Message <cliMessage>
@@ -102,17 +102,17 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 1" > "Answer" is missing required markdown text
+        * Section "Exercise 1" > "Answer" is missing required markdown text.
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
-    Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'ex2-plot'
-    Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'cor-dino'
+          'ex2-plot'.
+    Message <cliMessage>
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
+    Message <cliMessage>
+        * Section "Exercise 2" > "Answer" is missing a required code chunk named
+          'cor-dino'.
 
 ---
 
@@ -121,15 +121,15 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'ex2-plot'
+          'ex2-plot'.
     Message <cliMessage>
-        * Section "Exercise 2" > "Answer" is missing required markdown text
+        * Section "Exercise 2" > "Answer" is missing required markdown text.
     Message <cliMessage>
         * Section "Exercise 2" > "Answer" is missing a required code chunk named
-          'cor-dino'
+          'cor-dino'.
 
 ---
 
@@ -138,5 +138,5 @@
     Message <cliMessage>
       x The following required elements were missing in the document:
     Message <cliMessage>
-        * Section "Exercise 1" > "Answer" is missing required markdown text
+        * Section "Exercise 1" > "Answer" is missing required markdown text.
 

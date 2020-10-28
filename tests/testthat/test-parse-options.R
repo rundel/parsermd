@@ -36,12 +36,16 @@ test_that("option parsing - bad input", {
   # Matching parens
   expect_snapshot_error(parsermd:::check_option_parser("x = log(y"))
   expect_snapshot_error(parsermd:::check_option_parser("x = log(y))"))
-  expect_snapshot_error(parsermd:::check_option_parser("x = log(y"))
-  expect_snapshot_error(parsermd:::check_option_parser("x = log(y))"))
+  expect_snapshot_error(parsermd:::check_option_parser("x = log((y)"))
 
   # Matching quotes
-  # TODO - fix these cases
-  #expect_snapshot_error(parsermd:::check_option_parser("x = 'y"))
-  #expect_snapshot_error(parsermd:::check_option_parser("x = 'y''"))
-  #expect_snapshot_error(parsermd:::check_option_parser("x = ''y'"))
+  expect_snapshot_error(parsermd:::check_option_parser("'x = y"))
+  expect_snapshot_error(parsermd:::check_option_parser('"x = y'))
+  expect_snapshot_error(parsermd:::check_option_parser("x' = y"))
+  expect_snapshot_error(parsermd:::check_option_parser('x" = y'))
+  expect_snapshot_error(parsermd:::check_option_parser("x = 'y"))
+  expect_snapshot_error(parsermd:::check_option_parser("x = 'y''"))
+  expect_snapshot_error(parsermd:::check_option_parser("x = ''y'"))
+  expect_snapshot_error(parsermd:::check_option_parser('x = "y""'))
+  expect_snapshot_error(parsermd:::check_option_parser('x = ""y"'))
 })
