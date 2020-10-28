@@ -85,14 +85,70 @@
 ---
 
     Failed to parse line 1
-    x = log(y
-    ~~~~~~~^~
+    x = log((y)
+    ~~~~~~~^~~~
     
 
 ---
 
-    Failed to parse line 1
-    x = log(y))
-    ~~~~~~~~~~^
+    Failed to parse line 1, expected '''
+    'x = y
+    ~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected '"'
+    "x = y
+    ~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected "="
+    x' = y
+    ~^~~~~
+    
+
+---
+
+    Failed to parse line 1, expected "="
+    x" = y
+    ~^~~~~
+    
+
+---
+
+    Failed to parse line 1, expected '''
+    x = 'y
+    ~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected '''
+    x = 'y''
+    ~~~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected '''
+    x = ''y'
+    ~~~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected '"'
+    x = "y""
+    ~~~~~~~^
+    
+
+---
+
+    Failed to parse line 1, expected '"'
+    x = ""y"
+    ~~~~~~~^
     
 
