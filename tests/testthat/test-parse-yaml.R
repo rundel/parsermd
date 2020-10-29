@@ -15,6 +15,22 @@ test_that("yaml parsing - good yaml", {
                as_yaml("value: \"---\""))
 })
 
+test_that("yaml parsing - authors", {
+
+  yaml = '---
+    title: "Homework 2 - Untidy data"
+    author:
+    - John Doe
+    - Jane Doe
+  ---
+  '
+
+  yaml_res = strsplit(yaml, "\n")[[1]]
+  yaml_res = as_yaml( yaml_res[-c(1, length(yaml_res))] )
+
+  expect_equal(parsermd:::check_yaml_parser(yaml), yaml_res)
+})
+
 test_that("yaml parsing - bad yaml", {
   expect_error(parsermd:::check_yaml_parser("--\n---\n"))
   expect_error(parsermd:::check_yaml_parser("---\n--\n"))

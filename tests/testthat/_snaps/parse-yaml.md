@@ -9,7 +9,7 @@
 
     Failed to parse line 2, expected "---"
     --
-    ^~
+    ~~^
     
 
 ---

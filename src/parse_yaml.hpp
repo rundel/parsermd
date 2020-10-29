@@ -27,8 +27,9 @@ namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
   auto const yaml_line = x3::rule<struct _, std::string>{"yaml line"}
-  = x3::raw[
-      !(+x3::lit("-")) >> *(x3::char_ - x3::eol)
+  = !x3::lit("---") >>
+    x3::raw[
+      *(x3::char_ - x3::eol)
     ];
 
   auto const yaml_lines = x3::rule<struct _, std::vector<std::string>>{"yaml lines"}
