@@ -18,7 +18,7 @@ test_that("yaml parsing - good yaml", {
 test_that("yaml parsing - authors", {
 
   yaml = '---
-    title: "Homework 2 - Untidy data"
+    title: "Title"
     author:
     - John Doe
     - Jane Doe
