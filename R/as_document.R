@@ -45,6 +45,9 @@ as_document.rmd_chunk = function(chunk) {
       details,
       paste(names(chunk$options), "=", chunk$options, collapse=", ")
     )
+  
+  if (details != "")
+    details = paste0(" ", details)
 
   lines = c(
     paste0("```{", chunk$engine, details, "}"),
