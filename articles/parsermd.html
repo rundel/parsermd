@@ -188,7 +188,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; # test</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rsetup, include = FALSE}</span>
+<span class="co">#&gt; ```{r setup, include = FALSE}</span>
 <span class="co">#&gt; knitr::opts_chunk$set(echo = TRUE)</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
@@ -201,7 +201,7 @@
 <span class="co">#&gt; When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rcars}</span>
+<span class="co">#&gt; ```{r cars}</span>
 <span class="co">#&gt; summary(cars)</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
@@ -214,7 +214,7 @@
 <span class="co">#&gt; You can also embed plots, for example:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rpressure, echo = FALSE}</span>
+<span class="co">#&gt; ```{r pressure, echo = FALSE}</span>
 <span class="co">#&gt; plot(pressure)</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
@@ -475,7 +475,7 @@
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="va">sec_h3</span> <span class="op">==</span> <span class="st">"Exercise 2"</span>, <span class="va">sec_h4</span> <span class="op">==</span> <span class="st">"Solution"</span>, <span class="va">type</span> <span class="op">==</span> <span class="st">"rmd_chunk"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">as_document</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span>sep<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
-<span class="co">#&gt; ```{rplot-dino, fig.height = 3, fig.width = 6}</span>
+<span class="co">#&gt; ```{r plot-dino, fig.height = 3, fig.width = 6}</span>
 <span class="co">#&gt; dino_data &lt;- datasaurus_dozen %&gt;%</span>
 <span class="co">#&gt;   filter(dataset == "dino")</span>
 <span class="co">#&gt; </span>
@@ -483,7 +483,7 @@
 <span class="co">#&gt;   geom_point()</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rcor-dino}</span>
+<span class="co">#&gt; ```{r cor-dino}</span>
 <span class="co">#&gt; dino_data %&gt;%</span>
 <span class="co">#&gt;   summarize(r = cor(x, y))</span>
 <span class="co">#&gt; ```</span></pre></div>
@@ -496,7 +496,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; #### Solution</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rplot-dino, fig.height = 3, fig.width = 6}</span>
+<span class="co">#&gt; ```{r plot-dino, fig.height = 3, fig.width = 6}</span>
 <span class="co">#&gt; dino_data &lt;- datasaurus_dozen %&gt;%</span>
 <span class="co">#&gt;   filter(dataset == "dino")</span>
 <span class="co">#&gt; </span>
@@ -504,7 +504,7 @@
 <span class="co">#&gt;   geom_point()</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{rcor-dino}</span>
+<span class="co">#&gt; ```{r cor-dino}</span>
 <span class="co">#&gt; dino_data %&gt;%</span>
 <span class="co">#&gt;   summarize(r = cor(x, y))</span>
 <span class="co">#&gt; ```</span></pre></div>
