@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of parsermd is to extract the content of an Rmarkdown file to
-allow for programmatic interactions with the document’s cotents
+allow for programmatic interactions with the document’s contents
 (i.e. code chunks and markdown text). The goal is to capture the
 fundamental structure of the document and as such we do not attempt to
 parse every detail of the Rmd. Specifically, the yaml front matter,
