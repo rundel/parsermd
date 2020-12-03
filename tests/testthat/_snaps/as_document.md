@@ -9,7 +9,7 @@
     
     # test
     
-    ```{rsetup, include = FALSE}
+    ```{r setup, include = FALSE}
     knitr::opts_chunk$set(echo = TRUE)
     ```
     
@@ -22,7 +22,7 @@
     When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
     
     
-    ```{rcars}
+    ```{r cars}
     summary(cars)
     ```
     
@@ -35,7 +35,7 @@
     You can also embed plots, for example:
     
     
-    ```{rpressure, echo = FALSE}
+    ```{r pressure, echo = FALSE}
     plot(pressure)
     ```
     
@@ -51,7 +51,7 @@
     
     ### Load packages
     
-    ```{rload-packages, message = FALSE}
+    ```{r load-packages, message = FALSE}
     library(tidyverse) 
     library(datasauRus)
     ```
@@ -79,7 +79,7 @@
     First let's plot the data in the dino dataset:
     
     
-    ```{rplot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino, fig.height = 3, fig.width = 6}
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -90,7 +90,7 @@
     And next calculate the correlation between `x` and `y` in this dataset:
     
     
-    ```{rcor-dino}
+    ```{r cor-dino}
     dino_data %>%
       summarize(r = cor(x, y))
     ```
@@ -102,7 +102,7 @@
     
     #### Solution
     
-    ```{rplot-star, fig.height = 3, fig.width = 6}
+    ```{r plot-star, fig.height = 3, fig.width = 6}
     star_data <- datasaurus_dozen %>%
       filter(dataset == "star")
     
@@ -110,7 +110,7 @@
       geom_point()
     ```
     
-    ```{rcor-star}
+    ```{r cor-star}
     star_data %>%
       summarize(r = cor(x, y))
     ```
@@ -125,7 +125,7 @@
     
     ### Load packages
     
-    ```{rload-packages, message = FALSE}
+    ```{r load-packages, message = FALSE}
     library(tidyverse) 
     library(datasauRus)
     ```
@@ -152,7 +152,7 @@
     First let's plot the data in the dino dataset:
     
     
-    ```{rplot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino, fig.height = 3, fig.width = 6}
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -163,7 +163,7 @@
     And next calculate the correlation between `x` and `y` in this dataset:
     
     
-    ```{rcor-dino}
+    ```{r cor-dino}
     dino_data %>%
       summarize(r = cor(x, y))
     ```
@@ -180,14 +180,14 @@
     Blah blah blah...
     
     
-    ```{rplot-star}
+    ```{r plot-star}
     
     ```
     
     I'm some text, you should replace me with more meaningful text...
     
     
-    ```{rcor-star}
+    ```{r cor-star}
     
     ```
     
