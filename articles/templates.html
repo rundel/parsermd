@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">parsermd</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.9000</span>
       </span>
     </div>
 
@@ -96,8 +96,8 @@
 <a href="#example---hw01" class="anchor"></a>Example - <code>hw01</code>
 </h2>
 <p>Imagine that a homework assignment has been distributed to students in the form of an Rmd document named <code>hw01.Rmd</code>. This document describes all of the necessary tasks for the student to complete and also includes scaffolding in the form of Rmd chunks and markdown that indicates where the students are expected to include their solutions.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="op">(</span><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parse_rmd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parse_rmd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Heading [h3] - Load packages</span>
 <span class="co">#&gt; │   └── Chunk [r, 1 opt, 2 lines] - load-packages</span>
@@ -118,21 +118,21 @@
 <span class="co">#&gt;         ├── Markdown [4 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 lines] - plot-star</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
-<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></pre></div>
+<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></code></pre></div>
 <p>We can see examples of this templating by extracting the contents of the markdown in the Exercsie 1 &gt; Solution section.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu">rmd_get_markdown</span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rmd_get_markdown</span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "(Type your answer to Exercise 1 here. This exercise does not require any R code.)"</span>
 <span class="co">#&gt; [2] ""                                                                                 </span>
 <span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "rmd_markdown"</span></pre></div>
+<span class="co">#&gt; [1] "rmd_markdown"</span></code></pre></div>
 <p>When a student completes this assignment we want to be able to check that they have included solutions in the appropriate sections. At a minimum this means that we need to check that these sections still exist, and secondarily we might also want to check that the provided content in the solution differs from the provided scaffolding.</p>
 <div id="constructing-a-template" class="section level3">
 <h3 class="hasAnchor">
 <a href="#constructing-a-template" class="anchor"></a>Constructing a template</h3>
 <p>We will begin by constructing subsetting the original parsed document to select only the elements that will contoain the student’s answers - this assumes the other sections and elements are extraneous and contain things like background, instructions, and question text. Below we use <code>rmd_subset</code> to select all of the elements of the original document contained withing a section matching "Exercise *" and “Solution” which should cover the answers for all three exercises.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="op">(</span><span class="va">rmd_sols</span> <span class="op">=</span> <span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">rmd_sols</span> <span class="op">=</span> <span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ├── Heading [h3] - Exercise 1</span>
 <span class="co">#&gt; │   └── Heading [h4] - Solution</span>
 <span class="co">#&gt; │       └── Markdown [2 lines]</span>
@@ -147,10 +147,10 @@
 <span class="co">#&gt;         ├── Markdown [4 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 lines] - plot-star</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
-<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></pre></div>
+<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></code></pre></div>
 <p>One we have this more limited set of elements we use the <code>rmd_template</code> function to generate our template. Here we have included <code>keep_content  = TRUE</code> in order to keep the scaffolded content for each answer which will then be compared to the student’s answers.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu">rmd_template</span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu">rmd_template</span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 9 x 5</span>
 <span class="co">#&gt;   sec_h3    sec_h4  type     label   content                                    </span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;                                      </span>
@@ -162,24 +162,24 @@
 <span class="co">#&gt; 6 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "(Add code and narrative as needed. Note t…</span>
 <span class="co">#&gt; 7 Exercise… Soluti… rmd_chu… plot-s… ""                                         </span>
 <span class="co">#&gt; 8 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "I'm some text, you should replace me with…</span>
-<span class="co">#&gt; 9 Exercise… Soluti… rmd_chu… cor-st… ""</span></pre></div>
+<span class="co">#&gt; 9 Exercise… Soluti… rmd_chu… cor-st… ""</span></code></pre></div>
 </div>
 <div id="using-a-template" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-a-template" class="anchor"></a>Using a template</h3>
 <p>One the template is constructed we can then compare it with a new Rmd document via the <code>rmd_check_template</code> function. Note that we can pass in an <code>rmd_ast</code> or <code>rmd_tibble</code> object directly, or the path to an Rmd which will then be parsed and compared.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu">rmd_check_template</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01-student.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span>, <span class="va">rmd_tmpl</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rmd_check_template</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01-student.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span>, <span class="va">rmd_tmpl</span><span class="op">)</span>
 <span class="co">#&gt; ✖ The following required elements were missing in the document:</span>
-<span class="co">#&gt;   ● Section "Exercise 3" &gt; "Solution" is missing required markdown text</span>
-<span class="co">#&gt;   ● Section "Exercise 3" &gt; "Solution" is missing required markdown text</span>
+<span class="co">#&gt;   ● Section "Exercise 3" &gt; "Solution" is missing required markdown text.</span>
+<span class="co">#&gt;   ● Section "Exercise 3" &gt; "Solution" is missing required markdown text.</span>
 <span class="co">#&gt; ✖ The following document elements were unmodified from the template:</span>
 <span class="co">#&gt;   ● Section "Exercise 2" &gt; "Solution" has a code chunk named 'plot-dino'</span>
 <span class="co">#&gt;     which has not been modified.</span>
 <span class="co">#&gt;   ● Section "Exercise 2" &gt; "Solution" has markdown text which has not been</span>
 <span class="co">#&gt;     modified.</span>
 <span class="co">#&gt;   ● Section "Exercise 2" &gt; "Solution" has a code chunk named 'cor-dino' which</span>
-<span class="co">#&gt;     has not been modified.</span></pre></div>
+<span class="co">#&gt;     has not been modified.</span></code></pre></div>
 <p>From the output we can see that there are several issues with the document submitted by the student, they are missing the two expected markdown text entries for Exercise 3 and it appears that they have not entered any thing new for the chunks or markdown in Exercise 2.</p>
 </div>
 <div id="revising-a-template" class="section level3">
@@ -187,8 +187,8 @@
 <a href="#revising-a-template" class="anchor"></a>Revising a template</h3>
 <p>Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students.</p>
 <p>If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from <code>rmd_sols</code> or from <code>rmd_tmpl</code>. (Generally, the former is the suggetsed workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use <code>rmd_subset</code> with <code>exlcude = TRUE</code> to remove these specific markdown elements.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">rmd_sols</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rmd_sols</span> <span class="op">%&gt;%</span>
   <span class="fu">rmd_subset</span><span class="op">(</span>sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 3"</span>, <span class="st">"Solution"</span><span class="op">)</span>, type_refs <span class="op">=</span> <span class="st">"rmd_markdown"</span>, exclude <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; ├── Heading [h3] - Exercise 1</span>
 <span class="co">#&gt; │   └── Heading [h4] - Solution</span>
@@ -202,10 +202,10 @@
 <span class="co">#&gt; └── Heading [h3] - Exercise 3</span>
 <span class="co">#&gt;     └── Heading [h4] - Solution</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 lines] - plot-star</span>
-<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></pre></div>
+<span class="co">#&gt;         └── Chunk [r, 1 lines] - cor-star</span></code></pre></div>
 <p>This new AST can then be used with <code>rmd_template</code> and <code>rmd_check_template</code> to provide the new feedback,</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">rmd_sols</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rmd_sols</span> <span class="op">%&gt;%</span>
   <span class="fu">rmd_subset</span><span class="op">(</span>sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 3"</span>, <span class="st">"Solution"</span><span class="op">)</span>, type_refs <span class="op">=</span> <span class="st">"rmd_markdown"</span>, exclude <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmd_template</span><span class="op">(</span>keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmd_check_template</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01-student.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span>, <span class="va">.</span><span class="op">)</span>
@@ -215,7 +215,7 @@
 <span class="co">#&gt;   ● Section "Exercise 2" &gt; "Solution" has markdown text which has not been</span>
 <span class="co">#&gt;     modified.</span>
 <span class="co">#&gt;   ● Section "Exercise 2" &gt; "Solution" has a code chunk named 'cor-dino' which</span>
-<span class="co">#&gt;     has not been modified.</span></pre></div>
+<span class="co">#&gt;     has not been modified.</span></code></pre></div>
 </div>
 </div>
   </div>
