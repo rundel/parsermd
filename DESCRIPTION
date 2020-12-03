@@ -1,12 +1,12 @@
 Package: parsermd
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Parse Rmd files and manipulate their contents programmatically.
+Version: 0.0.1.9000
 Authors@R: 
     person(given = "Colin",
            family = "Rundel",
            role = c("aut", "cre"),
            email = "rundel@gmail.com")
-Description: What the package does (one paragraph).
+Description: Stuff
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -28,7 +28,7 @@ LinkingTo:
     Rcpp,
     BH
 Suggests: 
-    testthat (>= 2.99.0),
+    testthat (>= 3.0.0),
     knitr,
     rmarkdown
 Remotes: r-lib/testthat

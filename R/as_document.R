@@ -49,6 +49,10 @@ as_document.rmd_chunk = function(chunk) {
   if (details != "")
     details = paste0(" ", details)
 
+  if (details != "")
+    details = paste0(" ", details)
+
+
   lines = c(
     paste0("```{", chunk$engine, details, "}"),
     chunk$code,

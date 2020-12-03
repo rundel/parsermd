@@ -1,6 +1,8 @@
 #' @export
-rmd_node_sections = function(ast, drop_na = FALSE) {
-  checkmate::check_class(ast, "rmd_ast")
+rmd_node_sections = function(ast, levels = 1:6, drop_na = FALSE) {
+  checkmate::assert_class(ast, "rmd_ast")
+  checkmate::assert_integer(levels, lower = 1, upper = 6, sorted = TRUE,
+                            min.len = 1, max.len = 6, unique = TRUE)
 
   sections = list()
   labels = rep(NA_character_, 6)
@@ -12,8 +14,6 @@ rmd_node_sections = function(ast, drop_na = FALSE) {
   for(j in seq_along(ast)) {
     x = ast[[j]]
     if (inherits(x, "rmd_heading")) {
-      stopifnot(x$level %in% 1:6)
-
       labels[x$level:6] = NA_character_
       labels[x$level] = x$name
 
@@ -25,10 +25,12 @@ rmd_node_sections = function(ast, drop_na = FALSE) {
   }
 
   # Handle the case where there are no headings
-  if (min_level == 6 & max_level == 1)
+  if (min_level == max(levels) & max_level == min(levels))
     min_level = max_level = 0
 
-  sections = purrr::map(sections, ~ .x[min_level:max_level])
+  levels = levels[levels %in% (min_level:max_level)]
+
+  sections = purrr::map(sections, ~ .x[levels])
 
   if (drop_na)
     sections = purrr::map(sections, ~ .x[!is.na(.x)])

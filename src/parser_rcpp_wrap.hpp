@@ -1,8 +1,10 @@
 #ifndef PARSER_RCPP_WRAP_HPP
 #define PARSER_RCPP_WRAP_HPP
 
-#include "parse_chunk.hpp"
-#include "parse_rmd.hpp"
+#include "parse_option_ast.hpp"
+#include "parse_chunk_ast.hpp"
+#include "parse_rmd_ast.hpp"
+
 
 #include <RcppCommon.h>
 
@@ -14,8 +16,9 @@ namespace Rcpp {
 
   // rmd
   template <> SEXP wrap(client::ast::heading const& h);
-  template <> SEXP wrap(client::ast::line const& line);
+  template <> SEXP wrap(client::ast::element const& element);
   template <> SEXP wrap(client::ast::rmd const& rmd);
+  template <> SEXP wrap(client::ast::yaml const& yaml);
 }
 
 

@@ -22,14 +22,15 @@ rmd_check_template.rmd_ast = function(rmd, template) {
 
 
 #' @export
-rmd_check_template.rmd_tibble = function(rmd, template, check_headings = FALSE) {
+rmd_check_template.rmd_tibble = function(rmd, template) {
+  keep_headings = any("rmd_heading" %in% template[["type"]])
   keep_content = ("content" %in% names(template))
 
-  if (!check_headings) {
-    template = dplyr::filter(template, type != "rmd_heading")
-  }
+  #if (!keep_headings) {
+  #  template = dplyr::filter(template, type != "rmd_heading")
+  #}
 
-  rmd_tbl = rmd_template(rmd, keep_content = keep_content)
+  rmd_tbl = rmd_template(rmd, keep_content = keep_content, keep_headings = keep_headings)
 
   missing_nodes = check_missing(rmd_tbl, template)
   unmodified_nodes = check_unmodified(rmd_tbl, template)
@@ -111,16 +112,16 @@ li_missing = function(secs, type, label = NA) {
   ) )
 
   text = if (type == "rmd_yaml" | type == "rmd_yaml_list") {
-    "{.val YAML} is missing"
+    "{.val YAML} cannot be located."
   } else if (type == "rmd_heading") {
-    "Section {sec} is missing"
+    "Section {sec} cannot be located."
   } else if (type == "rmd_markdown") {
-    "Section {sec} is missing required {.val markdown text}"
+    "Section {sec} is missing required {.val markdown text}."
   } else if (type == "rmd_chunk") {
     if (!is.na(label) & label != "") {
-      "Section {sec} is missing a required {.val code chunk} named {.val {label}}"
+      "Section {sec} is missing a required {.val code chunk} named {.val {label}}."
     } else {
-      "Section {sec} is missing a required {.val code chunk}"
+      "Section {sec} is missing a required {.val code chunk}."
     }
   } else {
     stop("Unexpected (unsupported) type.")

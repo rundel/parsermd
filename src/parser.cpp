@@ -5,39 +5,41 @@
 
 #include "parse_rmd.hpp"
 #include "parser_rcpp_wrap.hpp"
+#include "parser_error_handler.hpp"
 #include <Rcpp.h>
 #include <boost/format.hpp>
+
+#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+
+
 
 template <typename Parser, typename Attribute>
 inline void parse_str(
     std::string const& str,
     bool allow_incomplete,
     Parser const& p,
-    Attribute& attr
+    Attribute& attr,
+    bool use_expect = false
 ) {
   namespace x3 = boost::spirit::x3;
 
-  auto first = str.begin();
-  auto last = str.end();
+  auto iter = str.begin();
+  auto const end = str.end();
 
-  bool r = x3::parse(first, last, p, attr);
+  using error_handler_type = x3::error_handler<std::string::const_iterator>;
+  error_handler_type error_handler(iter, end, Rcpp::Rcout);
 
-  if (!r) // fail if we did not get a full match
-    Rcpp::stop("Failed to parse.");
+  auto const parser = x3::with<x3::error_handler_tag>(std::ref(error_handler))[ p ];
 
-  if (first != last) {
-    int parsed_lines = std::count(str.begin(), first, '\n');
-    int total_lines = std::count(str.begin(), last, '\n');
+  bool r = x3::parse(iter, end, parser, attr);
 
-    std::string msg = (
-      boost::format("Incomplete parsing. Parsed %1% of %2% lines.")
-      % parsed_lines % total_lines
-    ).str();
+  //if () // fail if we did not get a full match
+  //  Rcpp::stop("Failed to parse.");
 
-    if (allow_incomplete)
-      Rcpp::warning(msg);
-    else
-      Rcpp::stop(msg);
+  if (!r || iter != end) {
+    client::parser::throw_parser_error(
+      iter, str.begin(), str.end(), str.begin(), str.end()
+    );
   }
 }
 
@@ -80,8 +82,8 @@ Rcpp::List check_multi_chunk_parser(std::string const& str, bool allow_incomplet
 
 // [[Rcpp::export]]
 Rcpp::List check_markdown_parser(std::string const& str) {
-  std::vector<client::ast::line> expr;
-  parse_str(str, false, +(client::parser::entry), expr);
+  std::vector<client::ast::element> expr;
+  parse_str(str, false, +(client::parser::element), expr);
 
   return Rcpp::wrap(expr);
 }
