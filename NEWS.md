@@ -1,10 +1,12 @@
-# parsermd 0.0.1
+# parsermd 0.0.2
 
 * Added new parser error reporting system
 
 * Added new vignette to demonstrate this tooling
 
-# parsermd 0.0.0
+* Suggests testthat 3.0.0
+
+# parsermd 0.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
 
