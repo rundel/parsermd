@@ -21,7 +21,9 @@ Imports:
     tidyr,
     dplyr,
     tibble,
-    yaml
+    yaml,
+    withr,
+    rmarkdown
 RoxygenNote: 7.1.1
 SystemRequirements: C++14
 LinkingTo: 
@@ -29,8 +31,7 @@ LinkingTo:
     BH
 Suggests: 
     testthat (>= 3.0.0),
-    knitr,
-    rmarkdown
+    knitr
 Remotes: r-lib/testthat
 Config/testthat/edition: 3
 VignetteBuilder: knitr

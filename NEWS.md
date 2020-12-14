@@ -2,9 +2,9 @@
 
 * Added new parser error reporting system
 
-* Added new vignette to demonstrate this tooling
+* Adopt testthat 3.0.0 for testing
 
-* Suggests testthat 3.0.0
+* Added new `render` function to support rendering `rmd_ast` related objects
 
 # parsermd 0.0.1
 
