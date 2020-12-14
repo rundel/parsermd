@@ -29,10 +29,12 @@ render = function(obj, name = NULL, ...) {
     UseMethod("render")
 }
 
+#' @exportS3Method
 render.default = function(obj, name, ...) {
   stop("This function does not support class:", class(obj))
 }
 
+#' @exportS3Method
 render.character = function(txt, name, ...) {
   # Check if txt is a path
   if (length(txt) == 1 && !grepl("\n", txt) && file.exists(txt)) {
@@ -61,6 +63,7 @@ render.character = function(txt, name, ...) {
   do.call(rmarkdown::render, args)
 }
 
+#' @exportS3Method
 render.rmd_tibble = function(tbl, name, ...) {
   render.character(as_document(tbl), name, ...)
 }
