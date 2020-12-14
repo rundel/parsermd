@@ -6,6 +6,8 @@
 
 * Added new `render` function to support rendering `rmd_ast` related objects
 
+* Added `rmd_get_options` and `rmd_set_options`
+
 # parsermd 0.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
