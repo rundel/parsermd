@@ -6,7 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • parsermd</title>
+<title>Render parsermd objects using rmarkdown::render()
+
+Object contents are converted to a character vector and written to a
+temporary directory before rendering.
+
+Note that this function has the potential to overwrite existing output
+files (e.g. .html, .pdf, etc). — render • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,7 +45,18 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Render parsermd objects using rmarkdown::render()
+
+Object contents are converted to a character vector and written to a
+temporary directory before rendering.
+
+Note that this function has the potential to overwrite existing output
+files (e.g. .html, .pdf, etc). — render" />
+<meta property="og:description" content="Render parsermd objects using rmarkdown::render()
+Object contents are converted to a character vector and written to a
+temporary directory before rendering.
+Note that this function has the potential to overwrite existing output
+files (e.g. .html, .pdf, etc)." />
 
 
 
@@ -58,7 +75,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,39 +137,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      
+    <h1>Render <code>parsermd</code> objects using <code><a href='https://rdrr.io/pkg/rmarkdown/man/render.html'>rmarkdown::render()</a></code>
+
+Object contents are converted to a character vector and written to a
+temporary directory before rendering.
+
+Note that this function has the potential to overwrite existing output
+files (e.g. <code>.html</code>, <code>.pdf</code>, etc).</h1>
+    
+    <div class="hidden name"><code>render.Rd</code></div>
     </div>
 
-    <div id="parsermd-002" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.2">
-<a href="#parsermd-002" class="anchor"></a>parsermd 0.0.2</h1>
-<ul>
-<li><p>Added new parser error reporting system</p></li>
-<li><p>Adopt testthat 3.0.0 for testing</p></li>
-<li><p>Added new <code>render</code> function to support rendering <code>rmd_ast</code> related objects</p></li>
-<li><p>Added <code>rmd_get_options</code> and <code>rmd_set_options</code></p></li>
-</ul>
-</div>
-    <div id="parsermd-001" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.1">
-<a href="#parsermd-001" class="anchor"></a>parsermd 0.0.1</h1>
-<ul>
-<li><p>Added a <code>NEWS.md</code> file to track changes to the package.</p></li>
-<li><p>Incremented the version number.</p></li>
-<li><p>Overhauled the ast and tibble representations to make them as compatible as possible.</p></li>
-<li><p>Starting to add helper functions: <code>rmd_subset</code>, <code>rmd_has_node</code>, <code>rmd_get_node</code>, etc.</p></li>
-<li><p>Initial implementation of Rmd templates</p></li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Render <code>parsermd</code> objects using <code><a href='https://rdrr.io/pkg/rmarkdown/man/render.html'>rmarkdown::render()</a></code></p>
+<p>Object contents are converted to a character vector and written to a
+temporary directory before rendering.</p>
+<p>Note that this function has the potential to overwrite existing output
+files (e.g. <code>.html</code>, <code>.pdf</code>, etc).</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>render</span><span class='op'>(</span><span class='va'>obj</span>, name <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>obj</th>
+      <td><p>Object to render, e.g. a <code>rmd_ast</code>, <code>rmd_tibble</code>, <code>character</code> vector, etc.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Name of the output file, if not given it will be infered from the
+name of <code>obj</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Any additional arguments to be passed to <code><a href='https://rdrr.io/pkg/rmarkdown/man/render.html'>rmarkdown::render()</a></code></p></td>
+    </tr>
+    </table>
+
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
