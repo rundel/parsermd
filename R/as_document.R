@@ -1,14 +1,19 @@
+#' @title Convert an parsermd `rmd_ast` or related object into a text document
+#'
+#' @param obj `rmd_ast`, `rmd_tibble`, or parsermd node object
+#' @param padding Padding to add between nodes when assembling the document.
+#'
 #' @export
-as_document = function(obj, ...) {
+as_document = function(obj, padding = "") {
   UseMethod("as_document")
 }
 
-#' @export
-as_document.default = function(obj, ...) {
+#' @exportS3Method
+as_document.default = function(obj) {
   stop("This function does not support class:", class(obj))
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_ast = function(ast, padding = "") {
   unlist(
     purrr::map(
@@ -18,18 +23,18 @@ as_document.rmd_ast = function(ast, padding = "") {
   )
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_tibble = function(tbl, padding = "") {
   as_document(tbl$ast, padding)
 }
 
 
-#' @export
+#' @exportS3Method
 as_document.rmd_markdown = function(md) {
   as.character(md)
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_chunk = function(chunk) {
   if (chunk$name != "") {
     details = chunk$name
@@ -49,10 +54,6 @@ as_document.rmd_chunk = function(chunk) {
   if (details != "")
     details = paste0(" ", details)
 
-  if (details != "")
-    details = paste0(" ", details)
-
-
   lines = c(
     paste0("```{", chunk$engine, details, "}"),
     chunk$code,
@@ -65,7 +66,7 @@ as_document.rmd_chunk = function(chunk) {
   )
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_heading = function(h) {
   paste(
     paste(rep("#", h$level), collapse=""),
@@ -73,7 +74,7 @@ as_document.rmd_heading = function(h) {
   )
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_yaml = function(yaml) {
   c(
     "---",
@@ -82,7 +83,7 @@ as_document.rmd_yaml = function(yaml) {
   )
 }
 
-#' @export
+#' @exportS3Method
 as_document.rmd_yaml_list = function(yaml) {
   as_document.rmd_yaml(
     strsplit(yaml::as.yaml(yaml), "\n")[[1]]
