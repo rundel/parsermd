@@ -1,9 +1,9 @@
 # tree printing
 
     +-- YAML [4 lines]
-    +-- Heading [h1] - test
+    +-- Heading [h1] - Setup
     |   \-- Chunk [r, 1 opt, 1 lines] - setup
-    \-- Heading [h1] - hello
+    \-- Heading [h1] - Content
         +-- Heading [h2] - R Markdown
         |   +-- Markdown [4 lines]
         |   +-- Chunk [r, 1 lines] - cars

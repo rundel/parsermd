@@ -5,19 +5,19 @@ test_that("as_tibble - minimal.Rmd", {
   expect_snapshot_output(tbl)
 
   tbl_expected = tibble::tribble(
-    ~sec_h1,           ~sec_h2,           ~type,             ~label,
-    NA,                     NA, "rmd_yaml_list",                NA,
-    "test",                 NA,   "rmd_heading",                NA,
-    "test",                 NA,     "rmd_chunk",           "setup",
-    "hello",                NA,   "rmd_heading",                NA,
-    "hello",      "R Markdown",   "rmd_heading",                NA,
-    "hello",      "R Markdown",  "rmd_markdown",                NA,
-    "hello",      "R Markdown",     "rmd_chunk",            "cars",
-    "hello",      "R Markdown",     "rmd_chunk",                "",
-    "hello", "Including Plots",   "rmd_heading",                NA,
-    "hello", "Including Plots",  "rmd_markdown",                NA,
-    "hello", "Including Plots",     "rmd_chunk",        "pressure",
-    "hello", "Including Plots",  "rmd_markdown",                NA
+    ~sec_h1,             ~sec_h2,           ~type,             ~label,
+    NA,                       NA, "rmd_yaml_list",                 NA,
+    "Setup",                  NA,   "rmd_heading",                 NA,
+    "Setup",                  NA,     "rmd_chunk",            "setup",
+    "Content",                NA,   "rmd_heading",                 NA,
+    "Content",      "R Markdown",   "rmd_heading",                 NA,
+    "Content",      "R Markdown",  "rmd_markdown",                 NA,
+    "Content",      "R Markdown",     "rmd_chunk",             "cars",
+    "Content",      "R Markdown",     "rmd_chunk",                 "",
+    "Content", "Including Plots",   "rmd_heading",                 NA,
+    "Content", "Including Plots",  "rmd_markdown",                 NA,
+    "Content", "Including Plots",     "rmd_chunk",         "pressure",
+    "Content", "Including Plots",  "rmd_markdown",                 NA
   )
   class(tbl_expected) = c("rmd_tibble", class(tbl_expected))
 

@@ -7,13 +7,13 @@
     output: html_document
     ---
     
-    # test
+    # Setup
     
     ```{r setup, include = FALSE}
     knitr::opts_chunk$set(echo = TRUE)
     ```
     
-    # hello
+    # Content
     
     ## R Markdown
     
