@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get and set code chunk options — chunk_options • parsermd</title>
+<title>Convert an parsermd rmd_ast or related object into a text document — as_document • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Get and set code chunk options — chunk_options" />
-<meta property="og:description" content="Helper functions for obtaining or changing chunk options
-within an Rmd document." />
+<meta property="og:title" content="Convert an parsermd rmd_ast or related object into a text document — as_document" />
+<meta property="og:description" content="Convert an parsermd rmd_ast or related object into a text document" />
 
 
 
@@ -122,88 +121,31 @@ within an Rmd document." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get and set code chunk options</h1>
+    <h1>Convert an parsermd <code>rmd_ast</code> or related object into a text document</h1>
     
-    <div class="hidden name"><code>chunk_options.Rd</code></div>
+    <div class="hidden name"><code>as_document.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Helper functions for obtaining or changing chunk options
-within an Rmd document.</p>
+    <p>Convert an parsermd <code>rmd_ast</code> or related object into a text document</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rmd_set_options</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>rmd_get_options</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>obj</span>, padding <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>An <code>rmd_ast</code>, <code>rmd_tibble</code>, or any rmd ast node object.</p></td>
+      <td><p><code>rmd_ast</code>, <code>rmd_tibble</code>, or parsermd node object</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Either a collection of named values for the setter or a character values
-of the option names for the getter.</p></td>
+      <th>padding</th>
+      <td><p>Padding to add between nodes when assembling the document.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>rmd_set_options</code> returns the modified version of the original object.</p>
-<p><code>rmd_get_options</code> returns a list of the requested options (or all options if none
-are specified). Non-chunk nodes return <code>NULL</code>.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>rmd</span> <span class='op'>=</span> <span class='fu'>parse_rmd</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"minimal.Rmd"</span>, package <span class='op'>=</span> <span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>rmd_get_options</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 12
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ :List of 1
-#&gt;   ..$ include: chr "FALSE"
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ : Named list()
-#&gt;  $ : Named list()
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ :List of 1
-#&gt;   ..$ echo: chr "FALSE"
-#&gt;  $ : NULL</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='fu'>rmd_get_options</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>, <span class='st'>"include"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 12
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ :List of 1
-#&gt;   ..$ include: chr "FALSE"
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ : Named list()
-#&gt;  $ : Named list()
-#&gt;  $ : NULL
-#&gt;  $ : NULL
-#&gt;  $ :List of 1
-#&gt;   ..$ echo: chr "FALSE"
-#&gt;  $ : NULL</div><div class='input'>
-<span class='fu'>rmd_set_options</span><span class='op'>(</span><span class='va'>rmd</span>, include <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; ├── YAML <span style='color: #555555;'>[4 lines]</span><span>
-#&gt; ├── Heading </span><span style='color: #555555;'>[h1] - </span><span style='color: #555555;font-weight: bold;'>Setup</span><span>
-#&gt; │   └── Chunk </span><span style='color: #555555;'>[r, 1 opt, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>setup</span><span>
-#&gt; └── Heading </span><span style='color: #555555;'>[h1] - </span><span style='color: #555555;font-weight: bold;'>Content</span><span>
-#&gt;     ├── Heading </span><span style='color: #555555;'>[h2] - </span><span style='color: #555555;font-weight: bold;'>R Markdown</span><span>
-#&gt;     │   ├── Markdown </span><span style='color: #555555;'>[4 lines]</span><span>
-#&gt;     │   ├── Chunk </span><span style='color: #555555;'>[r, 1 opt, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>cars</span><span>
-#&gt;     │   └── Chunk </span><span style='color: #555555;'>[r, 1 opt, 1 lines] - </span><span style='color: #555555;font-style: italic;'>&lt;unnamed&gt;</span><span>
-#&gt;     └── Heading </span><span style='color: #555555;'>[h2] - </span><span style='color: #555555;font-weight: bold;'>Including Plots</span><span>
-#&gt;         ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
-#&gt;         ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>pressure</span><span>
-#&gt;         └── Markdown </span><span style='color: #555555;'>[1 lines]</span><span></div><div class='input'>
-</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
