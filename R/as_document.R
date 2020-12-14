@@ -5,7 +5,7 @@ as_document = function(obj, ...) {
 
 #' @export
 as_document.default = function(obj, ...) {
-  stop("Unsupports type:", class(obj))
+  stop("This function does not support class:", class(obj))
 }
 
 #' @export
@@ -45,7 +45,7 @@ as_document.rmd_chunk = function(chunk) {
       details,
       paste(names(chunk$options), "=", chunk$options, collapse=", ")
     )
-  
+
   if (details != "")
     details = paste0(" ", details)
 
