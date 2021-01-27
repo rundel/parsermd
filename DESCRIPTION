@@ -1,5 +1,6 @@
 Package: parsermd
-Title: Parse Rmd files and manipulate their contents programmatically.
+Title: Parse Rmd files and manipulate their contents
+    programmatically.
 Version: 0.0.1.9000
 Authors@R: 
     person(given = "Colin",
@@ -8,30 +9,37 @@ Authors@R:
            email = "rundel@gmail.com")
 Description: Stuff
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-Roxygen: list(markdown = TRUE)
-Depends: R (>= 3.5.0)
+Depends: 
+    R (>= 3.5.0)
 Imports: 
+    checkmate,
+    cli,
+    dplyr,
+    pillar,
     purrr,
     Rcpp,
-    cli,
-    checkmate,
     readr,
-    tidyr,
-    dplyr,
+    rmarkdown,
     tibble,
-    yaml,
+    tidyr,
+    utils,
     withr,
-    rmarkdown
-RoxygenNote: 7.1.1
-SystemRequirements: C++14
+    yaml
+Suggests: 
+    fs,
+    knitr,
+    magrittr,
+    testthat (>= 3.0.0)
 LinkingTo: 
     Rcpp,
     BH
-Suggests: 
-    testthat (>= 3.0.0),
+VignetteBuilder: 
     knitr
-Remotes: r-lib/testthat
+Remotes: 
+    r-lib/testthat
 Config/testthat/edition: 3
-VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+SystemRequirements: C++14
