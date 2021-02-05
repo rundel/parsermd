@@ -46,16 +46,17 @@ test_that("minimal.Rmd", {
 
 test_that("knitr examples", {
 
-  files = fs::dir_ls(
+  files = dir(
     system.file("tests/testthat/knitr-examples/", package = "parsermd"),
-    glob="*.Rmd"
+    pattern = utils::glob2rx("*.Rmd"),
+    full.names = TRUE
   )
 
   for(file in files) {
     if (grepl("065-rmd-chunk\\.Rmd", file))
       next
 
-    label = paste("Parsing", fs::path_file(file))
+    label = paste("Parsing", basename(file))
     expect_error(parse_rmd(!!file, allow_incomplete = FALSE), regexp = NA, label = label)
   }
 })
