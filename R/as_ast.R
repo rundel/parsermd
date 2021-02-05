@@ -4,6 +4,7 @@
 #' Currently only supports conversion of `rmd_tibble` objects.
 #'
 #' @param x Object to convert
+#' @param ... Unused, for extensibility.
 #'
 #' @examples
 #' parse_rmd(system.file("hw01.Rmd", package="parsermd")) %>%

@@ -27,7 +27,8 @@ Imports:
     withr,
     rmarkdown,
     pillar,
-    rlang
+    rlang,
+    magrittr
 RoxygenNote: 7.1.1
 SystemRequirements: C++14
 LinkingTo: 
@@ -35,8 +36,7 @@ LinkingTo:
     BH
 Suggests: 
     testthat (>= 3.0.0),
-    knitr,
-    magrittr
+    knitr
 Remotes: r-lib/testthat
 Config/testthat/edition: 3
 VignetteBuilder: knitr

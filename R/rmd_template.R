@@ -9,6 +9,7 @@
 #' @param keep_labels Should the template keep the document's code chunk labels.
 #' @param keep_headings Should the template keep the document's headings.
 #' @param keep_yaml Should the template keep the document's yaml.
+#' @param ... Unused, for extensibility.
 #'
 #' @examples
 #' rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))

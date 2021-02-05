@@ -1,21 +1,22 @@
 #' @title Convert an `rmd_ast`, `rmd_tibble`, or any ast node into text.
 #'
-#' @param obj `rmd_ast`, `rmd_tibble`, or parsermd node object
-#' @param padding Padding to add between nodes when assembling the text
-#' @param collapse If not `NULL`, use value to collapse lines
+#' @param x `rmd_ast`, `rmd_tibble`, or parsermd node object.
+#' @param padding Padding to add between nodes when assembling the text.
+#' @param collapse If not `NULL`, use value to collapse lines.
+#' @param ... Unused, for extensibility.
 #'
 #' @export
-as_document = function(x, ...) {
+as_document = function(x, padding = "", collapse = NULL, ...) {
   UseMethod("as_document")
 }
 
 #' @exportS3Method
-as_document.default = function(x) {
+as_document.default = function(x, ...) {
   stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
 #' @exportS3Method
-as_document.rmd_ast = function(x, padding = "", collapse = NULL) {
+as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
   lines = unlist(
     purrr::map(x, ~ c(as_document(.x), padding))
   )
@@ -27,18 +28,18 @@ as_document.rmd_ast = function(x, padding = "", collapse = NULL) {
 }
 
 #' @exportS3Method
-as_document.rmd_tibble = function(x, padding = "", collapse = NULL) {
+as_document.rmd_tibble = function(x, padding = "", collapse = NULL, ...) {
   as_document(x$ast, padding, collapse)
 }
 
 
 #' @exportS3Method
-as_document.rmd_markdown = function(x) {
+as_document.rmd_markdown = function(x, ...) {
   as.character(x)
 }
 
 #' @exportS3Method
-as_document.rmd_chunk = function(x) {
+as_document.rmd_chunk = function(x, ...) {
   if (x$name != "") {
     details = x$name
 
@@ -70,7 +71,7 @@ as_document.rmd_chunk = function(x) {
 }
 
 #' @exportS3Method
-as_document.rmd_heading = function(x) {
+as_document.rmd_heading = function(x, ...) {
   paste(
     paste(rep("#", x$level), collapse=""),
     x$name
@@ -78,7 +79,7 @@ as_document.rmd_heading = function(x) {
 }
 
 #' @exportS3Method
-as_document.rmd_yaml = function(x) {
+as_document.rmd_yaml = function(x, ...) {
   c(
     "---",
     as.character(x),
@@ -87,7 +88,7 @@ as_document.rmd_yaml = function(x) {
 }
 
 #' @exportS3Method
-as_document.rmd_yaml_list = function(x) {
+as_document.rmd_yaml_list = function(x, ...) {
   as_document.rmd_yaml(
     strsplit(yaml::as.yaml(x), "\n")[[1]]
   )

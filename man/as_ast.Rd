@@ -8,6 +8,8 @@ as_ast(x, ...)
 }
 \arguments{
 \item{x}{Object to convert}
+
+\item{...}{Unused, for extensibility.}
 }
 \description{
 Currently only supports conversion of \code{rmd_tibble} objects.

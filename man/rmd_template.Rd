@@ -23,6 +23,8 @@ rmd_template(
 \item{keep_headings}{Should the template keep the document's headings.}
 
 \item{keep_yaml}{Should the template keep the document's yaml.}
+
+\item{...}{Unused, for extensibility.}
 }
 \description{
 Templates are objects which are meant to capture the structure of an RMarkdown document and facilitate the

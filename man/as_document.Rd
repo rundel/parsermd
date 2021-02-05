@@ -4,14 +4,16 @@
 \alias{as_document}
 \title{Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.}
 \usage{
-as_document(x, ...)
+as_document(x, padding = "", collapse = NULL, ...)
 }
 \arguments{
-\item{obj}{\code{rmd_ast}, \code{rmd_tibble}, or parsermd node object}
+\item{x}{\code{rmd_ast}, \code{rmd_tibble}, or parsermd node object.}
 
-\item{padding}{Padding to add between nodes when assembling the text}
+\item{padding}{Padding to add between nodes when assembling the text.}
 
-\item{collapse}{If not \code{NULL}, use value to collapse lines}
+\item{collapse}{If not \code{NULL}, use value to collapse lines.}
+
+\item{...}{Unused, for extensibility.}
 }
 \description{
 Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.

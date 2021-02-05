@@ -3,21 +3,21 @@
 tibble::as_tibble
 
 #' @exportS3Method
-as.data.frame.rmd_ast = function(ast, include_yaml = TRUE) {
-  as_tibble.rmd_ast(ast, include_yaml)
+as.data.frame.rmd_ast = function(x, include_yaml = TRUE, ...) {
+  as_tibble.rmd_ast(x, include_yaml)
 }
 
 #' @exportS3Method
-as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
+as_tibble.rmd_ast = function(x, include_yaml = TRUE, ...) {
 
-  if (!include_yaml & inherits(ast[[1]], "rmd_yaml"))
-    ast = ast[-1]
+  if (!include_yaml & inherits(x[[1]], "rmd_yaml"))
+    x = x[-1]
 
   df = tibble::as_tibble( list(
-    sections = rmd_node_sections(ast, drop_na = FALSE),
-    type = rmd_node_type(ast),
-    label = rmd_node_label(ast),
-    ast = ast
+    sections = rmd_node_sections(x, drop_na = FALSE),
+    type = rmd_node_type(x),
+    label = rmd_node_label(x),
+    ast = x
   ) )
 
   df = tidyr::unnest_wider(df, .data[["sections"]])
