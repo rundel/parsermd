@@ -28,8 +28,6 @@ as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
 
 
 #' @importFrom pillar type_sum
-#' @export
-#'
 pillar::type_sum
 
 #' @export
