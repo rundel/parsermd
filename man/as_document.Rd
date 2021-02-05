@@ -4,12 +4,14 @@
 \alias{as_document}
 \title{Convert an parsermd \code{rmd_ast} or related object into a text document}
 \usage{
-as_document(obj, padding = "")
+as_document(obj, padding = "", collapse = NULL)
 }
 \arguments{
 \item{obj}{\code{rmd_ast}, \code{rmd_tibble}, or parsermd node object}
 
 \item{padding}{Padding to add between nodes when assembling the document.}
+
+\item{collapse}{If defined use character value to collapse lines together.}
 }
 \description{
 Convert an parsermd \code{rmd_ast} or related object into a text document

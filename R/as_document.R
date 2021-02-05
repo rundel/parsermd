@@ -2,9 +2,10 @@
 #'
 #' @param obj `rmd_ast`, `rmd_tibble`, or parsermd node object
 #' @param padding Padding to add between nodes when assembling the document.
+#' @param collapse If defined use character value to collapse lines together.
 #'
 #' @export
-as_document = function(obj, padding = "") {
+as_document = function(obj, padding = "", collapse = NULL) {
   UseMethod("as_document")
 }
 
@@ -14,18 +15,23 @@ as_document.default = function(obj) {
 }
 
 #' @exportS3Method
-as_document.rmd_ast = function(ast, padding = "") {
-  unlist(
+as_document.rmd_ast = function(ast, padding = "", collapse = NULL) {
+  lines = unlist(
     purrr::map(
       ast,
       ~ c(as_document(.x), padding)
     )
   )
+
+  if (!is.null(collapse))
+    lines = paste(lines, collapse = collapse)
+
+  lines
 }
 
 #' @exportS3Method
-as_document.rmd_tibble = function(tbl, padding = "") {
-  as_document(tbl$ast, padding)
+as_document.rmd_tibble = function(tbl, padding = "", collapse = NULL) {
+  as_document(tbl$ast, padding, collapse)
 }
 
 
