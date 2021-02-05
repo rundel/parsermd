@@ -27,7 +27,7 @@ rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE
     rmd = dplyr::filter(rmd, .data[["type"]] != "rmd_heading")
 
   if (!keep_yaml)
-    rmd = dplyr::filter(rmd, .data[["type"]] %in% c("rmd_yaml","rmd_yaml_list"))
+    rmd = dplyr::filter(rmd, !(.data[["type"]] %in% c("rmd_yaml","rmd_yaml_list")))
 
 
   rmd = dplyr::select(rmd, -.data[["ast"]])
