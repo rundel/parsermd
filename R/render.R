@@ -9,44 +9,44 @@ arg_var_name = function(x, default = "Untitled") {
 #' @rdname render
 
 #' @title Render `parsermd` objects using [rmarkdown::render()]
-#'
+#' @description
 #' Object contents are converted to a character vector and written to a
 #' temporary directory before rendering.
 #'
 #' Note that this function has the potential to overwrite existing output
 #' files (e.g. `.html`, `.pdf`, etc).
 #'
-#' @param obj Object to render, e.g. a `rmd_ast`, `rmd_tibble`, `character` vector, etc.
-#' @param name Name of the output file, if not given it will be infered from the
-#' name of `obj`.
+#' @param x Object to render, e.g. a `rmd_ast`, `rmd_tibble`, `character` vector, etc.
+#' @param name Name of the output file, if not given it will be inferred from the
+#' name of `x`.
 #' @param ... Any additional arguments to be passed to [rmarkdown::render()]
 #'
 #' @export
-render = function(obj, name = NULL, ...) {
+render = function(x, name = NULL, ...) {
   if (is.null(name))
-    render(obj, arg_var_name(substitute(obj)), ...)
+    render(x, arg_var_name(substitute(x)), ...)
   else
     UseMethod("render")
 }
 
 #' @exportS3Method
-render.default = function(obj, name, ...) {
-  classes = paste(class(obj), collapse = ", ")
+render.default = function(x, name, ...) {
+  classes = paste(class(x), collapse = ", ")
   stop("This function does not support class: ", classes)
 }
 
 #' @exportS3Method
-render.character = function(txt, name, ...) {
-  # Check if txt is a path
-  if (length(txt) == 1 && !grepl("\n", txt) && file.exists(txt)) {
+render.character = function(x, name, ...) {
+  # Check if x is a path
+  if (length(x) == 1 && !grepl("\n", x) && file.exists(x)) {
     # If no name replace with input name
     if (name == "Untitled")
-      name = gsub("\\..*$", "", basename(txt))
+      name = gsub("\\..*$", "", basename(x))
 
-    txt = readLines(txt)
+    x = readLines(x)
   }
 
-  txt = paste(txt, collapse = "\n")
+  x = paste(x, collapse = "\n")
 
   if (name == ".") # can occur due to pipe usage
     name = "Untitled"
@@ -57,7 +57,7 @@ render.character = function(txt, name, ...) {
   dir = withr::local_tempdir(pattern = "parsermd")
   path = file.path(dir, name)
 
-  readr::write_file(txt, path)
+  readr::write_file(x, path)
 
   args = list(...)
   args[["input"]] = path
@@ -68,11 +68,11 @@ render.character = function(txt, name, ...) {
 }
 
 #' @exportS3Method
-render.rmd_tibble = function(tbl, name, ...) {
-  render.character(as_document(tbl), name, ...)
+render.rmd_tibble = function(x, name, ...) {
+  render.character(as_document(x), name, ...)
 }
 
 #' @exportS3Method
-render.rmd_ast = function(ast, name, ...) {
-  render.character(as_document(ast), name, ...)
+render.rmd_ast = function(x, name, ...) {
+  render.character(as_document(x), name, ...)
 }

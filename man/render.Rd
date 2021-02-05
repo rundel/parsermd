@@ -2,27 +2,19 @@
 % Please edit documentation in R/render.R
 \name{render}
 \alias{render}
-\title{Render \code{parsermd} objects using \code{\link[rmarkdown:render]{rmarkdown::render()}}
-
-Object contents are converted to a character vector and written to a
-temporary directory before rendering.
-
-Note that this function has the potential to overwrite existing output
-files (e.g. \code{.html}, \code{.pdf}, etc).}
+\title{Render \code{parsermd} objects using \code{\link[rmarkdown:render]{rmarkdown::render()}}}
 \usage{
-render(obj, name = NULL, ...)
+render(x, name = NULL, ...)
 }
 \arguments{
-\item{obj}{Object to render, e.g. a \code{rmd_ast}, \code{rmd_tibble}, \code{character} vector, etc.}
+\item{x}{Object to render, e.g. a \code{rmd_ast}, \code{rmd_tibble}, \code{character} vector, etc.}
 
-\item{name}{Name of the output file, if not given it will be infered from the
-name of \code{obj}.}
+\item{name}{Name of the output file, if not given it will be inferred from the
+name of \code{x}.}
 
 \item{...}{Any additional arguments to be passed to \code{\link[rmarkdown:render]{rmarkdown::render()}}}
 }
 \description{
-Render \code{parsermd} objects using \code{\link[rmarkdown:render]{rmarkdown::render()}}
-
 Object contents are converted to a character vector and written to a
 temporary directory before rendering.
 
