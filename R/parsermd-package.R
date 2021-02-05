@@ -13,3 +13,6 @@ NULL
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 NULL
+
+#' @importFrom rlang .data
+NULL

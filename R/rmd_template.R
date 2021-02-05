@@ -18,19 +18,19 @@ rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, k
 #' @export
 rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE) {
   if (!keep_labels)
-    rmd = dplyr::select(tmpl, -label)
+    rmd = dplyr::select(tmpl, -.data[["label"]])
 
   if (keep_content)
     rmd$content = rmd_node_content(rmd)
 
   if (!keep_headings)
-    rmd = dplyr::filter(rmd, type != "rmd_heading")
+    rmd = dplyr::filter(rmd, .data[["type"]] != "rmd_heading")
 
   if (!keep_yaml)
-    rmd = dplyr::filter(rmd, type %in% c("rmd_yaml","rmd_yaml_list"))
+    rmd = dplyr::filter(rmd, .data[["type"]] %in% c("rmd_yaml","rmd_yaml_list"))
 
 
-  rmd = dplyr::select(rmd, -ast)
+  rmd = dplyr::select(rmd, -.data[["ast"]])
   class(rmd) = c("rmd_template", "tbl_df", "tbl", "data.frame")
 
   rmd

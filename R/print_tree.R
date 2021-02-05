@@ -4,12 +4,12 @@ pc = function(...) {
   paste(..., collapse="", sep="")
 }
 
-tree_node = function(...) {
+tree_node = function(x) {
   UseMethod("tree_node")
 }
 
-tree_node.default = function(...) {
-  stop("Unsupports type:", class(obj))
+tree_node.default = function(x) {
+  stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
 tree_node.rmd_yaml = function(x) {
