@@ -3,7 +3,7 @@
 
 #include <boost/spirit/home/x3.hpp>
 
-#include "parse_qstring.hpp"
+#include "parse_qstring.h"
 
 namespace client { namespace parser {
 

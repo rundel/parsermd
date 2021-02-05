@@ -6,7 +6,7 @@
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
-#include "parse_option_ast.hpp"
+#include "parse_option_ast.h"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;

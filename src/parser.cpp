@@ -3,9 +3,9 @@
 
 //#define BOOST_SPIRIT_X3_DEBUG
 
-#include "parse_rmd.hpp"
-#include "parser_rcpp_wrap.hpp"
-#include "parser_error_handler.hpp"
+#include "parse_rmd.h"
+#include "parser_rcpp_wrap.h"
+#include "parser_error_handler.h"
 #include <Rcpp.h>
 #include <boost/format.hpp>
 

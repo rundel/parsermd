@@ -6,8 +6,8 @@
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
-#include "parse_yaml.hpp"
-#include "parse_chunk_ast.hpp"
+#include "parse_yaml.h"
+#include "parse_chunk_ast.h"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;

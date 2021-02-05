@@ -6,7 +6,7 @@
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
-#include "parser_error_handler.hpp"
+#include "parser_error_handler.h"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;

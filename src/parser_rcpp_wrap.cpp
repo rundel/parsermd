@@ -1,4 +1,4 @@
-#include "parser_rcpp_wrap.hpp"
+#include "parser_rcpp_wrap.h"
 
 #include <Rcpp.h>
 

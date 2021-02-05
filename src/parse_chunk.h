@@ -7,11 +7,11 @@
 
 #include <Rcpp.h>
 
-#include "parse_expr.hpp"
-#include "parse_option.hpp"
-#include "parser_error_handler.hpp"
+#include "parse_expr.h"
+#include "parse_option.h"
+#include "parser_error_handler.h"
 
-#include "parse_chunk_ast.hpp"
+#include "parse_chunk_ast.h"
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;

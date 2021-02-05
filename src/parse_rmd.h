@@ -4,10 +4,10 @@
 //#define BOOST_SPIRIT_X3_DEBUG
 #include <boost/spirit/home/x3.hpp>
 
-#include "parse_yaml.hpp"
-#include "parse_chunk.hpp"
+#include "parse_yaml.h"
+#include "parse_chunk.h"
 
-#include "parse_rmd_ast.hpp"
+#include "parse_rmd_ast.h"
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
