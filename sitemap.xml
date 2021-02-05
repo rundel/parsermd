@@ -4,10 +4,16 @@
     <loc>https://rundel.github.io/parsermd/index.html</loc>
   </url>
   <url>
+    <loc>https://rundel.github.io/parsermd/reference/as_ast.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/parsermd/reference/as_document.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/chunk_options.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/parse_rmd.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/parsermd-package.html</loc>
@@ -17,6 +23,9 @@
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/render.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc>

@@ -108,7 +108,7 @@
 <a href="#parsing-rmds" class="anchor"></a>Parsing Rmds</h2>
 <p>This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parsermd</span><span class="fu">::</span><span class="fu">parse_rmd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"minimal.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parsermd</span><span class="fu">::</span><span class="fu"><a href="../reference/parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"minimal.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The RMarkdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a heirachical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for <code>rmd_ast</code> objects.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span>
@@ -159,7 +159,7 @@
 <span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span></code></pre></div>
 <p>and it is possible to convert from these data frames back into an <code>rmd_ast</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">as_ast</span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/as_ast.html">as_ast</a></span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span>
 <span class="co">#&gt; ├── YAML [4 lines]</span>
 <span class="co">#&gt; ├── Heading [h1] - Setup</span>
 <span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span>
@@ -227,7 +227,7 @@
 <a href="#working-with-the-ast" class="anchor"></a>Working with the AST</h2>
 <p>Once we have parsed an R Markdown document, there are a variety of things that we can do with our new abstract syntax tree (ast). Below we will demonstate some of the basic functionality within <code>parsermd</code> to manipulate and edit these objects as well as check their properties.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parse_rmd</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01-student.Rmd"</span>, package<span class="op">=</span><span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">rmd</span> <span class="op">=</span> <span class="fu"><a href="../reference/parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"hw01-student.Rmd"</span>, package<span class="op">=</span><span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">rmd</span>
 <span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Heading [h3] - Load packages</span>

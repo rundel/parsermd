@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert an parsermd rmd_ast or related object into a text document — as_document • parsermd</title>
+<title>Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Convert an parsermd rmd_ast or related object into a text document — as_document" />
-<meta property="og:description" content="Convert an parsermd rmd_ast or related object into a text document" />
+<meta property="og:title" content="Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document" />
+<meta property="og:description" content="Convert an rmd_ast, rmd_tibble, or any ast node into text." />
 
 
 
@@ -121,16 +121,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert an parsermd <code>rmd_ast</code> or related object into a text document</h1>
+    <h1>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</h1>
     
     <div class="hidden name"><code>as_document.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert an parsermd <code>rmd_ast</code> or related object into a text document</p>
+    <p>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>obj</span>, padding <span class='op'>=</span> <span class='st'>""</span>, collapse <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,11 +141,11 @@
     </tr>
     <tr>
       <th>padding</th>
-      <td><p>Padding to add between nodes when assembling the document.</p></td>
+      <td><p>Padding to add between nodes when assembling the text</p></td>
     </tr>
     <tr>
       <th>collapse</th>
-      <td><p>If defined use character value to collapse lines together.</p></td>
+      <td><p>If not <code>NULL</code>, use value to collapse lines</p></td>
     </tr>
     </table>
 
