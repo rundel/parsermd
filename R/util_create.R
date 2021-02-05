@@ -1,4 +1,3 @@
-#' @export
 create_ast = function(...) {
   ast = list(...)
   class(ast) = c("rmd_ast", "list")
@@ -6,8 +5,6 @@ create_ast = function(...) {
   ast
 }
 
-
-#' @export
 create_yaml = function(..., parse = TRUE) {
   yaml = c(...)
   yaml = as.character(yaml)
@@ -19,7 +16,6 @@ create_yaml = function(..., parse = TRUE) {
   yaml
 }
 
-#' @export
 create_markdown = function(...) {
   md = c(...)
   md = as.character(md)
@@ -28,7 +24,6 @@ create_markdown = function(...) {
   md
 }
 
-#' @export
 create_heading = function(name, level) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE)
   checkmate::assert_int(level, lower = 1, upper = 6, coerce = TRUE)
@@ -36,7 +31,6 @@ create_heading = function(name, level) {
   structure(list(name = name, level = as.integer(level)), class = "rmd_heading")
 }
 
-#' @export
 create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL, indent="") {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
