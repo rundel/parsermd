@@ -45,12 +45,12 @@ rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_ref
     subset = !subset
 
   if (keep_setup) {
-    labels = rmd_node_label(ast)
+    labels = rmd_node_label(df$ast)
     subset = subset | (labels == "setup" & !is.na(labels))
   }
 
   if (keep_yaml) {
-    subset = subset | (rmd_node_type(ast) %in% c("rmd_yaml", "rmd_yaml_list"))
+    subset = subset | (rmd_node_type(df$ast) %in% c("rmd_yaml", "rmd_yaml_list"))
   }
 
   df = df[subset,]
