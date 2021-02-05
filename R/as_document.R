@@ -1,26 +1,23 @@
-#' @title Convert an parsermd `rmd_ast` or related object into a text document
+#' @title Convert an `rmd_ast`, `rmd_tibble`, or any ast node into text.
 #'
 #' @param obj `rmd_ast`, `rmd_tibble`, or parsermd node object
-#' @param padding Padding to add between nodes when assembling the document.
-#' @param collapse If defined use character value to collapse lines together.
+#' @param padding Padding to add between nodes when assembling the text
+#' @param collapse If not `NULL`, use value to collapse lines
 #'
 #' @export
-as_document = function(obj, padding = "", collapse = NULL) {
+as_document = function(x, ...) {
   UseMethod("as_document")
 }
 
 #' @exportS3Method
-as_document.default = function(obj) {
-  stop("This function does not support class:", class(obj))
+as_document.default = function(x) {
+  stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
 #' @exportS3Method
-as_document.rmd_ast = function(ast, padding = "", collapse = NULL) {
+as_document.rmd_ast = function(x, padding = "", collapse = NULL) {
   lines = unlist(
-    purrr::map(
-      ast,
-      ~ c(as_document(.x), padding)
-    )
+    purrr::map(x, ~ c(as_document(.x), padding))
   )
 
   if (!is.null(collapse))
@@ -30,69 +27,69 @@ as_document.rmd_ast = function(ast, padding = "", collapse = NULL) {
 }
 
 #' @exportS3Method
-as_document.rmd_tibble = function(tbl, padding = "", collapse = NULL) {
-  as_document(tbl$ast, padding, collapse)
+as_document.rmd_tibble = function(x, padding = "", collapse = NULL) {
+  as_document(x$ast, padding, collapse)
 }
 
 
 #' @exportS3Method
-as_document.rmd_markdown = function(md) {
-  as.character(md)
+as_document.rmd_markdown = function(x) {
+  as.character(x)
 }
 
 #' @exportS3Method
-as_document.rmd_chunk = function(chunk) {
-  if (chunk$name != "") {
-    details = chunk$name
+as_document.rmd_chunk = function(x) {
+  if (x$name != "") {
+    details = x$name
 
-    if (length(chunk$options) > 0)
+    if (length(x$options) > 0)
       details = paste0(details, ", ")
   } else {
     details = ""
   }
 
-  if (length(chunk$options) > 0)
+  if (length(x$options) > 0)
     details = paste0(
       details,
-      paste(names(chunk$options), "=", chunk$options, collapse=", ")
+      paste(names(x$options), "=", x$options, collapse=", ")
     )
 
   if (details != "")
     details = paste0(" ", details)
 
   lines = c(
-    paste0("```{", chunk$engine, details, "}"),
-    chunk$code,
+    paste0("```{", x$engine, details, "}"),
+    x$code,
     "```"
   )
 
   paste0(
-    chunk$indent,
+    x$indent,
     lines
   )
 }
 
 #' @exportS3Method
-as_document.rmd_heading = function(h) {
+as_document.rmd_heading = function(x) {
   paste(
-    paste(rep("#", h$level), collapse=""),
-    h$name
+    paste(rep("#", x$level), collapse=""),
+    x$name
   )
 }
 
 #' @exportS3Method
-as_document.rmd_yaml = function(yaml) {
+as_document.rmd_yaml = function(x) {
   c(
     "---",
-    as.character(yaml),
+    as.character(x),
     "---"
   )
 }
 
 #' @exportS3Method
-as_document.rmd_yaml_list = function(yaml) {
+as_document.rmd_yaml_list = function(x) {
   as_document.rmd_yaml(
-    strsplit(yaml::as.yaml(yaml), "\n")[[1]]
+    strsplit(yaml::as.yaml(x), "\n")[[1]]
   )
 }
 

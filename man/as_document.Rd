@@ -2,17 +2,17 @@
 % Please edit documentation in R/as_document.R
 \name{as_document}
 \alias{as_document}
-\title{Convert an parsermd \code{rmd_ast} or related object into a text document}
+\title{Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.}
 \usage{
-as_document(obj, padding = "", collapse = NULL)
+as_document(x, ...)
 }
 \arguments{
 \item{obj}{\code{rmd_ast}, \code{rmd_tibble}, or parsermd node object}
 
-\item{padding}{Padding to add between nodes when assembling the document.}
+\item{padding}{Padding to add between nodes when assembling the text}
 
-\item{collapse}{If defined use character value to collapse lines together.}
+\item{collapse}{If not \code{NULL}, use value to collapse lines}
 }
 \description{
-Convert an parsermd \code{rmd_ast} or related object into a text document
+Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.
 }
