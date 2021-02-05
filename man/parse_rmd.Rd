@@ -12,7 +12,7 @@ of a RMarkdown document.}
 
 \item{allow_incomplete}{Allow incomplete parsing of the document.}
 
-\item{parse_yaml}{Use the \link{yaml} package to parse the document's yaml.}
+\item{parse_yaml}{Use the \link[yaml:read_yaml]{yaml} package to parse the document's yaml.}
 }
 \description{
 Documents are parse into an \code{rmd_ast} object.

@@ -5,7 +5,7 @@
 #' @param rmd Either the path to an `Rmd` file or a character vector containing the contents
 #' of a RMarkdown document.
 #' @param allow_incomplete Allow incomplete parsing of the document.
-#' @param parse_yaml Use the [yaml] package to parse the document's yaml.
+#' @param parse_yaml Use the [yaml][yaml::read_yaml()] package to parse the document's yaml.
 #'
 #' @examples
 #' parse_rmd(system.file("hw01.Rmd", package="parsermd"))
