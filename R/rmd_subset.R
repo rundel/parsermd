@@ -1,5 +1,5 @@
 #' @export
-rmd_subset = function(obj, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE) {
+rmd_subset = function(obj, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE, keep_yaml = TRUE, keep_setup = FALSE) {
   UseMethod("rmd_subset")
 }
 
@@ -9,11 +9,21 @@ rmd_subset.default = function(obj, ...) {
 }
 
 #' @export
-rmd_subset.rmd_ast = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE) {
+rmd_subset.rmd_ast = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE, keep_yaml = TRUE, keep_setup = FALSE) {
   subset = comb_subset(ast, sec_refs, type_refs, name_refs, combine = `|`, inc_parents = !exclude)
 
   if (exclude)
     subset = !subset
+
+  if (keep_setup) {
+    labels = rmd_node_label(ast)
+    subset = subset | (labels == "setup" & !is.na(labels))
+  }
+
+  if (keep_yaml) {
+    subset = subset | (rmd_node_type(ast) %in% c("rmd_yaml", "rmd_yaml_list"))
+  }
+
 
   ast = ast[subset]
   class(ast) = c("rmd_ast", "list")
@@ -22,7 +32,7 @@ rmd_subset.rmd_ast = function(ast, sec_refs = NULL, type_refs = NULL, name_refs 
 }
 
 #' @export
-rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE) {
+rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE, keep_yaml = TRUE, keep_setup = FALSE) {
   sec_cols = names(df)[grepl("^sec_h", names(df))]
   bad_cols = sec_cols[!sec_cols %in% paste0("sec_h", 1:6)]
 
@@ -33,6 +43,15 @@ rmd_subset.rmd_tibble = function(df, sec_refs = NULL, type_refs = NULL, name_ref
 
   if (exclude)
     subset = !subset
+
+  if (keep_setup) {
+    labels = rmd_node_label(ast)
+    subset = subset | (labels == "setup" & !is.na(labels))
+  }
+
+  if (keep_yaml) {
+    subset = subset | (rmd_node_type(ast) %in% c("rmd_yaml", "rmd_yaml_list"))
+  }
 
   df = df[subset,]
 

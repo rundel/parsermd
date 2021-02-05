@@ -1,5 +1,5 @@
 #' @export
-rmd_template = function(rmd, keep_content, keep_labels, keep_headings) {
+rmd_template = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE) {
   UseMethod("rmd_template")
 }
 
@@ -10,13 +10,13 @@ rmd_template.default = function(rmd, ...) {
 
 
 #' @export
-rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE) {
+rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE) {
   rmd_template( as_tibble(rmd), keep_content = keep_content, keep_labels = keep_labels )
 }
 
 
 #' @export
-rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE) {
+rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE) {
   if (!keep_labels)
     rmd = dplyr::select(tmpl, -label)
 
@@ -25,6 +25,9 @@ rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE
 
   if (!keep_headings)
     rmd = dplyr::filter(rmd, type != "rmd_heading")
+
+  if (!keep_yaml)
+    rmd = dplyr::filter(rmd, type %in% c("rmd_yaml","rmd_yaml_list"))
 
 
   rmd = dplyr::select(rmd, -ast)
