@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -75,8 +75,7 @@
 
       
 
-      </header><script src="parsermd_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="parsermd_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="parsermd_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="parsermd_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting Started</h1>
@@ -118,13 +117,13 @@
 <span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span>
 <span class="co">#&gt; └── Heading [h1] - Content</span>
 <span class="co">#&gt;     ├── Heading [h2] - R Markdown</span>
-<span class="co">#&gt;     │   ├── Markdown [4 lines]</span>
+<span class="co">#&gt;     │   ├── Markdown [6 lines]</span>
 <span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span>
 <span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
 <span class="co">#&gt;     └── Heading [h2] - Including Plots</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
-<span class="co">#&gt;         └── Markdown [1 lines]</span></code></pre></div>
+<span class="co">#&gt;         └── Markdown [2 lines]</span></code></pre></div>
 <p>If you would prefer to see the underlying flat structure, this can be printed by setting <code>use_headings = FALSE</code> with <code>print</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">rmd</span>, use_headings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -133,13 +132,13 @@
 <span class="co">#&gt; ├── Chunk [r, 1 opt, 1 lines] - setup</span>
 <span class="co">#&gt; ├── Heading [h1] - Content</span>
 <span class="co">#&gt; ├── Heading [h2] - R Markdown</span>
-<span class="co">#&gt; ├── Markdown [4 lines]</span>
+<span class="co">#&gt; ├── Markdown [6 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 1 lines] - cars</span>
 <span class="co">#&gt; ├── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
 <span class="co">#&gt; ├── Heading [h2] - Including Plots</span>
 <span class="co">#&gt; ├── Markdown [2 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
-<span class="co">#&gt; └── Markdown [1 lines]</span></code></pre></div>
+<span class="co">#&gt; └── Markdown [2 lines]</span></code></pre></div>
 <p>Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with <code>as_tibble</code> or <code>as.data.frame</code> (both return a tibble).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span>
@@ -151,13 +150,13 @@
 <span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
 <span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [4]&gt;</span>
+<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [6]&gt;</span>
 <span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
 <span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
 <span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [1]&gt;</span></code></pre></div>
+<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span></code></pre></div>
 <p>and it is possible to convert from these data frames back into an <code>rmd_ast</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">as_ast</span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span>
@@ -166,13 +165,13 @@
 <span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span>
 <span class="co">#&gt; └── Heading [h1] - Content</span>
 <span class="co">#&gt;     ├── Heading [h2] - R Markdown</span>
-<span class="co">#&gt;     │   ├── Markdown [4 lines]</span>
+<span class="co">#&gt;     │   ├── Markdown [6 lines]</span>
 <span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span>
 <span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
 <span class="co">#&gt;     └── Heading [h2] - Including Plots</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
-<span class="co">#&gt;         └── Markdown [1 lines]</span></code></pre></div>
+<span class="co">#&gt;         └── Markdown [2 lines]</span></code></pre></div>
 <p>Finally, we can also convert the <code>rmd_ast</code> back into an RMarkdown document via <code>as_document</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span>
@@ -196,9 +195,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ## R Markdown</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;http://rmarkdown.rstudio.com&gt;.</span>
+<span class="co">#&gt; This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, </span>
+<span class="co">#&gt; PDF, and MS Word documents. For more details on using R Markdown see &lt;http://rmarkdown.rstudio.com&gt;.</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</span>
+<span class="co">#&gt; When you click the **Knit** button a document will be generated that includes both content as well </span>
+<span class="co">#&gt; as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ```{r cars}</span>
@@ -218,7 +219,8 @@
 <span class="co">#&gt; plot(pressure)</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.</span></code></pre></div>
+<span class="co">#&gt; Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code </span>
+<span class="co">#&gt; that generated the plot.</span></code></pre></div>
 </div>
 <div id="working-with-the-ast" class="section level2">
 <h2 class="hasAnchor">
@@ -249,6 +251,7 @@
 <p>Saw we were interested in examining the solution a student entered for Exercise 1 - we can get acess to this using the <code>rmd_subset</code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; └── Heading [h3] - Exercise 1</span>
 <span class="co">#&gt;     └── Heading [h4] - Solution</span>
 <span class="co">#&gt;         └── Markdown [5 lines]</span></code></pre></div>
@@ -265,6 +268,7 @@
 <p>We can use a similar approach to examine the solutions to Exercise 2.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; └── Heading [h3] - Exercise 2</span>
 <span class="co">#&gt;     └── Heading [h4] - Solution</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
@@ -275,12 +279,14 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">rmd_subset</span><span class="op">(</span>type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span>
 <span class="co">#&gt; └── Chunk [r, 2 lines] - cor-dino</span></code></pre></div>
 <p>in this case since our second call to <code>rmd_subset</code> did not include a <code>sec_refs</code> argument the assumption is that we no longer care about the section structure and these are therefore dropped. Had we wanted to keep these headings we would have used the <code>sec_refs</code> argument to specify which of the headings to keep.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">rmd_subset</span><span class="op">(</span>sec_refs <span class="op">=</span> <span class="st">"Exercise 2"</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; └── Heading [h3] - Exercise 2</span>
 <span class="co">#&gt;     ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span>
 <span class="co">#&gt;     └── Chunk [r, 2 lines] - cor-dino</span></code></pre></div>
@@ -319,6 +325,7 @@
 <p>One useful feature of these subsetting functions is that they support <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob</a> style pattern matching for determining matches within section headings and in chunk labels. As such we can do the following to extract all of the solutions from our document:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Heading [h3] - Exercise 1</span>
 <span class="co">#&gt; │   └── Heading [h4] - Solution</span>
 <span class="co">#&gt; │       └── Markdown [5 lines]</span>
@@ -335,11 +342,13 @@
 <p>Similarly, if we wanted to just extract the chunks that involve plotting we can match for chunk labels with a “plot” prefix,</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, name_refs <span class="op">=</span> <span class="st">"plot*"</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 2 opts, 5 lines] - plot-dino</span>
 <span class="co">#&gt; └── Chunk [r, 2 opts, 5 lines] - plot-star</span></code></pre></div>
 <p>and as before if we want to keep track of the parent headings we need to specify an appropriate <code>sec_refs</code>,</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="st">"Exercise *"</span>, name_refs <span class="op">=</span> <span class="st">"plot*"</span><span class="op">)</span>
+<span class="co">#&gt; ├── YAML [2 lines]</span>
 <span class="co">#&gt; ├── Heading [h3] - Exercise 1</span>
 <span class="co">#&gt; ├── Heading [h3] - Exercise 2</span>
 <span class="co">#&gt; │   └── Chunk [r, 2 opts, 5 lines] - plot-dino</span>
@@ -378,37 +387,39 @@
 <p>All of the functions above also work with this tibble representation, and allow for the same manipulations of the underlying ast.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">tbl</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 13 x 5</span>
-<span class="co">#&gt;    sec_h3     sec_h4   type         label     ast           </span>
-<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;     </span>
-<span class="co">#&gt;  1 Exercise 1 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  2 Exercise 1 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  3 Exercise 1 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [5]&gt;</span>
-<span class="co">#&gt;  4 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  5 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  6 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span>
-<span class="co">#&gt;  7 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  8 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span>
-<span class="co">#&gt;  9 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 10 Exercise 3 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt; 11 Exercise 3 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt; 12 Exercise 3 Solution rmd_chunk    plot-star &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 13 Exercise 3 Solution rmd_chunk    cor-star  &lt;chunk [r]&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 14 x 5</span>
+<span class="co">#&gt;    sec_h3     sec_h4   type          label     ast           </span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;     &lt;rmd_ast&gt;     </span>
+<span class="co">#&gt;  1 &lt;NA&gt;       &lt;NA&gt;     rmd_yaml_list &lt;NA&gt;      &lt;yaml&gt;        </span>
+<span class="co">#&gt;  2 Exercise 1 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt;  3 Exercise 1 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt;  4 Exercise 1 Solution rmd_markdown  &lt;NA&gt;      &lt;markdown [5]&gt;</span>
+<span class="co">#&gt;  5 Exercise 2 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt;  6 Exercise 2 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt;  7 Exercise 2 Solution rmd_markdown  &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt;  8 Exercise 2 Solution rmd_chunk     plot-dino &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  9 Exercise 2 Solution rmd_markdown  &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 10 Exercise 2 Solution rmd_chunk     cor-dino  &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt; 11 Exercise 3 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt; 12 Exercise 3 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt; 13 Exercise 3 Solution rmd_chunk     plot-star &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt; 14 Exercise 3 Solution rmd_chunk     cor-star  &lt;chunk [r]&gt;</span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">tbl</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 10 x 5</span>
-<span class="co">#&gt;    sec_h3     sec_h4   type        label     ast           </span>
-<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     &lt;rmd_ast&gt;     </span>
-<span class="co">#&gt;  1 Exercise 1 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  2 Exercise 1 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  3 Exercise 2 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  4 Exercise 2 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  5 Exercise 2 Solution rmd_chunk   plot-dino &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  6 Exercise 2 Solution rmd_chunk   cor-dino  &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  7 Exercise 3 &lt;NA&gt;     rmd_heading &lt;NA&gt;      &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  8 Exercise 3 Solution rmd_heading &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  9 Exercise 3 Solution rmd_chunk   plot-star &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 10 Exercise 3 Solution rmd_chunk   cor-star  &lt;chunk [r]&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 11 x 5</span>
+<span class="co">#&gt;    sec_h3     sec_h4   type          label     ast           </span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;     &lt;rmd_ast&gt;     </span>
+<span class="co">#&gt;  1 &lt;NA&gt;       &lt;NA&gt;     rmd_yaml_list &lt;NA&gt;      &lt;yaml&gt;        </span>
+<span class="co">#&gt;  2 Exercise 1 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt;  3 Exercise 1 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt;  4 Exercise 2 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt;  5 Exercise 2 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt;  6 Exercise 2 Solution rmd_chunk     plot-dino &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  7 Exercise 2 Solution rmd_chunk     cor-dino  &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  8 Exercise 3 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;</span>
+<span class="co">#&gt;  9 Exercise 3 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;</span>
+<span class="co">#&gt; 10 Exercise 3 Solution rmd_chunk     plot-star &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt; 11 Exercise 3 Solution rmd_chunk     cor-star  &lt;chunk [r]&gt;</span></code></pre></div>
 <p>As the complete ast is store directly in the <code>ast</code> column, we can also manipulate this tibble using dplyr or similar packages and have these changes persist. For example we can use the <code>rmd_node_length</code> function to return the number of lines in the various nodes of the ast and add a new length column to our tibble.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_lines</span> <span class="op">=</span> <span class="va">tbl</span> <span class="op">%&gt;%</span>
@@ -440,15 +451,16 @@
 <p>Now we can apply a <code>rmd_subset</code> to this updated tibble</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">tbl_lines</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;   sec_h3     sec_h4   type         label     ast            lines</span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span>
-<span class="co">#&gt; 1 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;    NA</span>
-<span class="co">#&gt; 2 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span>
-<span class="co">#&gt; 3 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
-<span class="co">#&gt; 4 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;        5</span>
-<span class="co">#&gt; 5 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
-<span class="co">#&gt; 6 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;        2</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 7 x 6</span>
+<span class="co">#&gt;   sec_h3     sec_h4   type          label     ast            lines</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span>
+<span class="co">#&gt; 1 &lt;NA&gt;       &lt;NA&gt;     rmd_yaml_list &lt;NA&gt;      &lt;yaml&gt;             2</span>
+<span class="co">#&gt; 2 Exercise 2 &lt;NA&gt;     rmd_heading   &lt;NA&gt;      &lt;heading [h3]&gt;    NA</span>
+<span class="co">#&gt; 3 Exercise 2 Solution rmd_heading   &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span>
+<span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown  &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk     plot-dino &lt;chunk [r]&gt;        5</span>
+<span class="co">#&gt; 6 Exercise 2 Solution rmd_markdown  &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 7 Exercise 2 Solution rmd_chunk     cor-dino  &lt;chunk [r]&gt;        2</span></code></pre></div>
 <p>and see that our new <code>lines</code> column is maintained.</p>
 <p>Note that using the <code>rmd_subset</code> function is optional here and we can also accomplish the same task using <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> or any similar approach</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -492,6 +504,11 @@
 <code class="sourceCode R"><span class="fu">rmd_subset</span><span class="op">(</span><span class="va">tbl</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 2"</span>, <span class="st">"Solution"</span><span class="op">)</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/as_document.html">as_document</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span>sep<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; title: Lab 01 - Hello R</span>
+<span class="co">#&gt; output: html_document</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; ### Exercise 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; #### Solution</span>

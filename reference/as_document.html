@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -130,7 +130,7 @@
     <p>Convert an parsermd <code>rmd_ast</code> or related object into a text document</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>obj</span>, padding <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>obj</span>, padding <span class='op'>=</span> <span class='st'>""</span>, collapse <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +142,10 @@
     <tr>
       <th>padding</th>
       <td><p>Padding to add between nodes when assembling the document.</p></td>
+    </tr>
+    <tr>
+      <th>collapse</th>
+      <td><p>If defined use character value to collapse lines together.</p></td>
     </tr>
     </table>
 
