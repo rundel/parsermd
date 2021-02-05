@@ -1,28 +1,48 @@
+#' @title Check an Rmd against a template
+#' @description
+#' This function compares the provided Rmd against a template and reports on
+#' discrepancies (e.g. missing or unmodified components).
+#'
+#' @param rmd The rmd to be check, can be an `rmd_ast`, `rmd_tibble`, or text
+#' that can be handled by `parse_rmd`.
+#' @param template `rmd_template` object from [rmd_template()].
+#' @param ... Unused, for extensibility.
+#'
+#' @examples
+#' tmpl = parse_rmd(system.file("hw01.Rmd", package = "parsermd")) %>%
+#'   rmd_subset(sec_refs = c("Exercise *", "Solution")) %>%
+#'   rmd_template(keep_content = TRUE)
+#'
+#' rmd_check_template(
+#'   system.file("hw01-student.Rmd", package = "parsermd"),
+#'   tmpl
+#' )
+#'
 #' @export
-rmd_check_template = function(rmd, template) {
+rmd_check_template = function(rmd, template, ...) {
   UseMethod("rmd_check_template")
 }
 
-#' @export
-rmd_check_template.default = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.default = function(rmd, template, ...) {
   stop("Unable to check an Rmd template for an object with class: ", class(rmd))
 }
 
-#' @export
-rmd_check_template.character = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.character = function(rmd, template, ...) {
   rmd = as_tibble(parse_rmd(rmd))
   rmd_check_template( rmd = rmd, template = template )
 }
 
-#' @export
-rmd_check_template.rmd_ast = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.rmd_ast = function(rmd, template, ...) {
   rmd_check_template( rmd = as_tibble(rmd), template = template )
 }
 
 
 
-#' @export
-rmd_check_template.rmd_tibble = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.rmd_tibble = function(rmd, template, ...) {
   keep_headings = any("rmd_heading" %in% template[["type"]])
   keep_content = ("content" %in% names(template))
 
