@@ -31,7 +31,8 @@ render = function(obj, name = NULL, ...) {
 
 #' @exportS3Method
 render.default = function(obj, name, ...) {
-  stop("This function does not support class:", class(obj))
+  classes = paste(class(obj), collapse = ", ")
+  stop("This function does not support class: ", classes)
 }
 
 #' @exportS3Method
@@ -46,6 +47,9 @@ render.character = function(txt, name, ...) {
   }
 
   txt = paste(txt, collapse = "\n")
+
+  if (name == ".") # can occur due to pipe usage
+    name = "Untitled"
 
   if (!grepl("\\.[Rr]md$", name))
     name = paste0(name, ".Rmd")
@@ -68,6 +72,7 @@ render.rmd_tibble = function(tbl, name, ...) {
   render.character(as_document(tbl), name, ...)
 }
 
+#' @exportS3Method
 render.rmd_ast = function(ast, name, ...) {
   render.character(as_document(ast), name, ...)
 }
