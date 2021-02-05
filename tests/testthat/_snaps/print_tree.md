@@ -5,13 +5,13 @@
     |   \-- Chunk [r, 1 opt, 1 lines] - setup
     \-- Heading [h1] - Content
         +-- Heading [h2] - R Markdown
-        |   +-- Markdown [4 lines]
+        |   +-- Markdown [6 lines]
         |   +-- Chunk [r, 1 lines] - cars
         |   \-- Chunk [r, 1 lines] - <unnamed>
         \-- Heading [h2] - Including Plots
             +-- Markdown [2 lines]
             +-- Chunk [r, 1 opt, 1 lines] - pressure
-            \-- Markdown [1 lines]
+            \-- Markdown [2 lines]
 
 ---
 

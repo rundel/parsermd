@@ -8,13 +8,13 @@
      3 Setup   <NA>            rmd_chunk     "setup"    <chunk [r]>   
      4 Content <NA>            rmd_heading    <NA>      <heading [h1]>
      5 Content R Markdown      rmd_heading    <NA>      <heading [h2]>
-     6 Content R Markdown      rmd_markdown   <NA>      <markdown [4]>
+     6 Content R Markdown      rmd_markdown   <NA>      <markdown [6]>
      7 Content R Markdown      rmd_chunk     "cars"     <chunk [r]>   
      8 Content R Markdown      rmd_chunk     ""         <chunk [r]>   
      9 Content Including Plots rmd_heading    <NA>      <heading [h2]>
     10 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
     11 Content Including Plots rmd_chunk     "pressure" <chunk [r]>   
-    12 Content Including Plots rmd_markdown   <NA>      <markdown [1]>
+    12 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
 
 # as_tibble - hw01.Rmd
 
