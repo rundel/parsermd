@@ -15,7 +15,7 @@
 #'
 #' rmd_subset(rmd, sec_refs = c("Exercise *", "Solution")) %>%
 #'   rmd_template()
-#'
+
 #' @export
 rmd_template = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE, ...) {
   UseMethod("rmd_template")

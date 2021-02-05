@@ -34,5 +34,4 @@ rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
 
 rmd_subset(rmd, sec_refs = c("Exercise *", "Solution")) \%>\%
   rmd_template()
-
 }
