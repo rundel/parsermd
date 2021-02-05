@@ -18,7 +18,7 @@ rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, k
 #' @export
 rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE) {
   if (!keep_labels)
-    rmd = dplyr::select(tmpl, -.data[["label"]])
+    rmd = dplyr::select(rmd, -.data[["label"]])
 
   if (keep_content)
     rmd$content = rmd_node_content(rmd)
