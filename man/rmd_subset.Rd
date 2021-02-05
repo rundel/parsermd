@@ -16,15 +16,19 @@ rmd_subset(
 )
 }
 \arguments{
-\item{sec_refs}{Section references, TODO - add details}
+\item{x}{rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
 
-\item{type_refs}{Node type references, TODO - add details}
+\item{sec_refs}{Section references, TODO - add details.}
 
-\item{name_refs}{Name references, TODO - add details}
+\item{type_refs}{Node type references, TODO - add details.}
 
-\item{exclude}{Should the matching nodes be excluded}
+\item{name_refs}{Name references, TODO - add details.}
 
-\item{keep_yaml}{Should the document setup chunk be kept.}
+\item{exclude}{Should the matching nodes be excluded.}
+
+\item{keep_yaml}{Should the document yaml be kept.}
+
+\item{keep_setup}{Should the document setup chunk be kept.}
 
 \item{...}{Unused, for extensibility.}
 }

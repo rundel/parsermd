@@ -2,12 +2,13 @@
 #' @description
 #' Subset an rmd object based on sections, node types, or names.
 #'
-#' @param sec_refs Section references, TODO - add details
-#' @param type_refs Node type references, TODO - add details
-#' @param name_refs Name references, TODO - add details
-#' @param exclude Should the matching nodes be excluded
+#' @param x rmd object, e.g. `rmd_ast` or `rmd_tibble`.
+#' @param sec_refs Section references, TODO - add details.
+#' @param type_refs Node type references, TODO - add details.
+#' @param name_refs Name references, TODO - add details.
+#' @param exclude Should the matching nodes be excluded.
 #' @param keep_yaml Should the document yaml be kept.
-#' @param keep_yaml Should the document setup chunk be kept.
+#' @param keep_setup Should the document setup chunk be kept.
 #' @param ... Unused, for extensibility.
 #'
 #' @export
@@ -28,12 +29,12 @@ rmd_subset.rmd_ast = function(x, sec_refs = NULL, type_refs = NULL, name_refs = 
     subset = !subset
 
   if (keep_setup) {
-    labels = rmd_node_label(ast)
+    labels = rmd_node_label(x)
     subset = subset | (labels == "setup" & !is.na(labels))
   }
 
   if (keep_yaml) {
-    subset = subset | (rmd_node_type(ast) %in% c("rmd_yaml", "rmd_yaml_list"))
+    subset = subset | (rmd_node_type(x) %in% c("rmd_yaml", "rmd_yaml_list"))
   }
 
   x = x[subset]
