@@ -3,7 +3,7 @@
 tibble::as_tibble
 
 #' @exportS3Method
-as.data.frame.rmd_ast = function(x, include_yaml = TRUE, ...) {
+as.data.frame.rmd_ast = function(x, ..., include_yaml = TRUE) {
   as_tibble.rmd_ast(x, include_yaml)
 }
 

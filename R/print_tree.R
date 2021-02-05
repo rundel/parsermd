@@ -95,9 +95,9 @@ has_sibling = function(level, remaining) {
     next_cur_level < next_higher_level
 }
 
-#' @export
-print.rmd_ast = function(ast, use_headings = TRUE) {
-  print_tree(ast, use_headings)
+#' @exportS3Method
+print.rmd_ast = function(x, use_headings = TRUE, ...) {
+  print_tree(x, use_headings)
 }
 
 
