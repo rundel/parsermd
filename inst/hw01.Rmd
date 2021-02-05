@@ -1,5 +1,5 @@
 ---
-title: "Lab 01 - Hello R"
+title: "Homework 01 - Hello R"
 output: html_document
 ---
 
