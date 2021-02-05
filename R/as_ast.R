@@ -1,7 +1,7 @@
 #' @title Convert an object into an `rmd_ast`.
 #'
 #' @description
-#' Currently only supports conversion of `rmd_tibble`s.
+#' Currently only supports conversion of `rmd_tibble` objects.
 #'
 #' @param x Object to convert
 #'
@@ -15,14 +15,12 @@ as_ast = function(x, ...) {
   UseMethod("as_ast")
 }
 
-#' @rdname as_ast
-#' @export
+#' @exportS3Method
 as_ast.default = function(x, ...) {
   stop("Unsupported class: ", paste0(class(x), collapse = ", "))
 }
 
-#' @rdname as_ast
-#' @export
+#' @exportS3Method
 as_ast.rmd_tibble = function(x, ...) {
   x$ast
 }

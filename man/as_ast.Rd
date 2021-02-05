@@ -2,21 +2,15 @@
 % Please edit documentation in R/as_ast.R
 \name{as_ast}
 \alias{as_ast}
-\alias{as_ast.default}
-\alias{as_ast.rmd_tibble}
 \title{Convert an object into an \code{rmd_ast}.}
 \usage{
 as_ast(x, ...)
-
-\method{as_ast}{default}(x, ...)
-
-\method{as_ast}{rmd_tibble}(x, ...)
 }
 \arguments{
 \item{x}{Object to convert}
 }
 \description{
-Currently only supports conversion of \code{rmd_tibble}s.
+Currently only supports conversion of \code{rmd_tibble} objects.
 }
 \examples{
 parse_rmd(system.file("hw01.Rmd", package="parsermd")) \%>\%

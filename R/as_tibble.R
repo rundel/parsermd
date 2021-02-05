@@ -2,12 +2,12 @@
 #' @export
 tibble::as_tibble
 
-#' @export
+#' @exportS3Method
 as.data.frame.rmd_ast = function(ast, include_yaml = TRUE) {
   as_tibble.rmd_ast(ast, include_yaml)
 }
 
-#' @export
+#' @exportS3Method
 as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
 
   if (!include_yaml & inherits(ast[[1]], "rmd_yaml"))
@@ -30,7 +30,7 @@ as_tibble.rmd_ast = function(ast, include_yaml = TRUE) {
 #' @importFrom pillar type_sum
 pillar::type_sum
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_chunk = function(x) {
   paste(
     cli::style_bold("chunk"),
@@ -39,14 +39,14 @@ type_sum.rmd_chunk = function(x) {
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_yaml = function(x) {
   paste(
     cli::style_bold("yaml"),
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_heading = function(x) {
   paste(
     cli::style_bold("heading"),
@@ -54,14 +54,14 @@ type_sum.rmd_heading = function(x) {
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_yaml_list = function(x) {
   paste(
     cli::style_bold("yaml")
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_markdown = function(x) {
   cli::style_bold("markdown")
 }
