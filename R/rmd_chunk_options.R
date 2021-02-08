@@ -4,9 +4,9 @@
 #' @title Get and set code chunk options
 #'
 #' @description Helper functions for obtaining or changing chunk options
-#' within an Rmd document.
+#' within an rmd object.
 #'
-#' @param obj An `rmd_ast`, `rmd_tibble`, or any rmd ast node object.
+#' @param x An `rmd_ast`, `rmd_tibble`, or any rmd ast node object.
 #' @param ... Either a collection of named values for the setter or a character values
 #' of the option names for the getter.
 #'
@@ -27,42 +27,42 @@ NULL
 
 #' @rdname chunk_options
 #' @export
-rmd_set_options = function(obj, ...) {
+rmd_set_options = function(x, ...) {
   UseMethod("rmd_set_options")
 }
 
 #' @exportS3Method
-rmd_set_options.default = function(obj, ...) {
-  obj
+rmd_set_options.default = function(x, ...) {
+  x
 }
 
 #' @exportS3Method
-rmd_set_options.rmd_chunk = function(obj, ...) {
+rmd_set_options.rmd_chunk = function(x, ...) {
   opts = list(...)
 
   if (is.null(names(opts)) | any(names(opts) == ""))
     stop("All options must be named", call. = FALSE)
 
   for(i in seq_along(opts)) {
-    obj[["options"]][[ names(opts)[i] ]] = opts[[i]]
+    x[["options"]][[ names(opts)[i] ]] = opts[[i]]
   }
 
-  obj
+  x
 }
 
 #' @exportS3Method
-rmd_set_options.rmd_ast = function(ast, ...) {
-  ast = purrr::map(ast, rmd_set_options, ...)
+rmd_set_options.rmd_ast = function(x, ...) {
+  ast = purrr::map(x, rmd_set_options, ...)
 
   class(ast) = c("rmd_ast", "list")
   ast
 }
 
 #' @exportS3Method
-rmd_set_options.rmd_tibble = function(tbl, ...) {
-  tbl$ast = rmd_set_options.rmd_ast(tbl$ast, ...)
+rmd_set_options.rmd_tibble = function(x, ...) {
+  x$ast = rmd_set_options.rmd_ast(x$ast, ...)
 
-  tbl
+  x
 }
 
 
@@ -70,35 +70,35 @@ rmd_set_options.rmd_tibble = function(tbl, ...) {
 
 #' @rdname chunk_options
 #' @export
-rmd_get_options = function(obj, ...) {
+rmd_get_options = function(x, ...) {
   UseMethod("rmd_get_options")
 }
 
 #' @exportS3Method
-rmd_get_options.default = function(obj, ...) {
+rmd_get_options.default = function(x, ...) {
   NULL
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_chunk = function(obj, ...) {
+rmd_get_options.rmd_chunk = function(x, ...) {
   opts = unlist(list(...))
 
   if (length(opts) == 0)
-    obj[["options"]]
+    x[["options"]]
   else
-    obj[["options"]][ opts ]
+    x[["options"]][ opts ]
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_ast = function(ast, ...) {
+rmd_get_options.rmd_ast = function(x, ...) {
   opts = unlist(list(...))
 
-  purrr::map(ast, rmd_get_options, opts)
+  purrr::map(x, rmd_get_options, opts)
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_tibble = function(tbl, ...) {
-  rmd_get_options.rmd_ast(tbl$ast, ...)
+rmd_get_options.rmd_tibble = function(x, ...) {
+  rmd_get_options.rmd_ast(x$ast, ...)
 }
 
 

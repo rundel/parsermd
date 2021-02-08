@@ -6,12 +6,12 @@
 \alias{rmd_get_options}
 \title{Get and set code chunk options}
 \usage{
-rmd_set_options(obj, ...)
+rmd_set_options(x, ...)
 
-rmd_get_options(obj, ...)
+rmd_get_options(x, ...)
 }
 \arguments{
-\item{obj}{An \code{rmd_ast}, \code{rmd_tibble}, or any rmd ast node object.}
+\item{x}{An \code{rmd_ast}, \code{rmd_tibble}, or any rmd ast node object.}
 
 \item{...}{Either a collection of named values for the setter or a character values
 of the option names for the getter.}
@@ -24,7 +24,7 @@ are specified). Non-chunk nodes return \code{NULL}.
 }
 \description{
 Helper functions for obtaining or changing chunk options
-within an Rmd document.
+within an rmd object.
 }
 \examples{
 rmd = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))

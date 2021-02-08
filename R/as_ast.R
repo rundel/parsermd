@@ -23,5 +23,5 @@ as_ast.default = function(x, ...) {
 
 #' @exportS3Method
 as_ast.rmd_tibble = function(x, ...) {
-  x$ast
+  x[["ast"]]
 }
