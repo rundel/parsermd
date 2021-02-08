@@ -32,6 +32,8 @@ rmd_node_code(x, ...)
 \item{x}{An rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
 
 \item{...}{Unused, for extensibility.}
+
+\item{attr}{Attribute name to extract.}
 }
 \description{
 \code{rmd_node_label()} - returns a node(s) labels.

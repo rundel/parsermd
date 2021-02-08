@@ -20,6 +20,7 @@
 #' `rmd_node_code()` - returns chunk(s) code, `NA` for all other node types.
 #'
 #' @param x An rmd object, e.g. `rmd_ast` or `rmd_tibble`.
+#' @param attr Attribute name to extract.
 #' @param ... Unused, for extensibility.
 #'
 NULL
@@ -172,6 +173,8 @@ rmd_node_attr = function(x, attr, ...) {
 
 #' @exportS3Method
 rmd_node_attr.default = function(x, attr, ...) {
+  checkmate::assert_character(x, len = 1)
+
   if (is.list(x))
     x[[attr]]
   else
