@@ -286,3 +286,15 @@ test_that("chunk parsing - bad chunks", {
   expect_snapshot_error( parse("```{r x=, y=1}\n```\n") )
   expect_snapshot_error( parse("```{r x=1, y=}\n```\n") )
 })
+
+
+test_that("chunk parsing - raw attribute chunk", {
+  parse = parsermd:::check_chunk_parser
+
+  expect_equal( parse("```{=html}\n```\n"),   make_chunk_obj(engine = "=html") )
+  expect_equal( parse("```{=md}\n```\n"),   make_chunk_obj(engine = "=md") )
+
+  expect_error( parse("```{==}\n```\n"))
+  expect_error( parse("```{=a=}\n```\n"))
+  expect_error( parse("```{a=}\n```\n"))
+})
