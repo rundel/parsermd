@@ -58,3 +58,21 @@ create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL
     class = "rmd_chunk"
   )
 }
+
+create_raw_chunk = function(format, code = NULL, indent="") {
+  checkmate::assert_character(format, len = 1, any.missing = FALSE)
+  checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_character(indent, len = 1, any.missing = FALSE)
+
+  if (is.null(code))
+    code = ""
+
+  structure(
+    list(
+      format = format,
+      code = code,
+      indent = indent
+    ),
+    class = "rmd_raw_chunk"
+  )
+}
