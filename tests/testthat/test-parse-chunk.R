@@ -13,6 +13,9 @@ make_chunk_obj = function(
 }
 
 
+
+
+
 test_that("chunk parsing - Basic", {
   expect_equal(
     parsermd:::check_chunk_parser("```{r}\n```\n"),
@@ -291,9 +294,30 @@ test_that("chunk parsing - bad chunks", {
 test_that("chunk parsing - raw attribute chunk", {
   parse = parsermd:::check_chunk_parser
 
-  expect_equal( parse("```{=html}\n```\n"),   make_chunk_obj(engine = "=html") )
-  expect_equal( parse("```{=md}\n```\n"),   make_chunk_obj(engine = "=md") )
+  make_raw_chunk = function(format, code = character(), indent = "") {
+    structure(
+      list(format = format, code = code, indent = indent),
+      class = "rmd_raw_chunk"
+    )
+  }
 
+  expect_equal( parse("```{=html}\n```\n"),   make_raw_chunk("html") )
+  expect_equal( parse("```{=md}\n```\n"),   make_raw_chunk("md") )
+
+  # Check code
+  expect_equal(
+    parse("```{=html}\n<h1>hello</h1>\n```\n"),
+    make_raw_chunk("html", code = "<h1>hello</h1>")
+  )
+
+  # Check indent
+  expect_equal(
+    parse("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
+    make_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
+  )
+
+  # Bad
+  expect_error( parse("```{=}\n```\n"))
   expect_error( parse("```{==}\n```\n"))
   expect_error( parse("```{=a=}\n```\n"))
   expect_error( parse("```{a=}\n```\n"))

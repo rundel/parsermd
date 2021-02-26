@@ -5,6 +5,20 @@
 namespace Rcpp {
   // chunk wrappers
   template <> SEXP wrap(client::ast::chunk const& chunk) {
+
+    // Pandoc raw attribute chunks get their own node class
+    if (chunk.args.engine[0] == '=') {
+      Rcpp::List res = Rcpp::List::create(
+        Rcpp::Named("format")  = chunk.args.engine.substr(1, chunk.args.engine.size()-1),
+        Rcpp::Named("code")    = chunk.code,
+        Rcpp::Named("indent")  = chunk.args.indent
+      );
+
+      res.attr("class") = "rmd_raw_chunk";
+
+      return res;
+    }
+
     Rcpp::List res = Rcpp::List::create(
       Rcpp::Named("engine")  = chunk.args.engine,
       Rcpp::Named("name")    = chunk.args.name,
