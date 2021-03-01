@@ -7,6 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/parsermd/actions)
 <!-- badges: end -->
 
 The goal of parsermd is to extract the content of an Rmarkdown file to
@@ -43,13 +44,13 @@ any of the topic specific articles.
 #> │   └── Chunk [r, 1 opt, 1 lines] - setup
 #> └── Heading [h1] - Content
 #>     ├── Heading [h2] - R Markdown
-#>     │   ├── Markdown [4 lines]
+#>     │   ├── Markdown [6 lines]
 #>     │   ├── Chunk [r, 1 lines] - cars
 #>     │   └── Chunk [r, 1 lines] - <unnamed>
 #>     └── Heading [h2] - Including Plots
 #>         ├── Markdown [2 lines]
 #>         ├── Chunk [r, 1 opt, 1 lines] - pressure
-#>         └── Markdown [1 lines]
+#>         └── Markdown [2 lines]
 
 as_tibble(rmd)
 #> # A tibble: 12 x 5
@@ -60,17 +61,19 @@ as_tibble(rmd)
 #>  3 Setup   <NA>            rmd_chunk     "setup"    <chunk [r]>   
 #>  4 Content <NA>            rmd_heading    <NA>      <heading [h1]>
 #>  5 Content R Markdown      rmd_heading    <NA>      <heading [h2]>
-#>  6 Content R Markdown      rmd_markdown   <NA>      <markdown [4]>
+#>  6 Content R Markdown      rmd_markdown   <NA>      <markdown [6]>
 #>  7 Content R Markdown      rmd_chunk     "cars"     <chunk [r]>   
 #>  8 Content R Markdown      rmd_chunk     ""         <chunk [r]>   
 #>  9 Content Including Plots rmd_heading    <NA>      <heading [h2]>
 #> 10 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
 #> 11 Content Including Plots rmd_chunk     "pressure" <chunk [r]>   
-#> 12 Content Including Plots rmd_markdown   <NA>      <markdown [1]>
+#> 12 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
 
 rmd_subset(rmd, sec_refs = "hello", type_refs = "rmd_chunk")
+#> └── YAML [4 lines]
 
 rmd_subset(rmd, sec_refs = c("hello", "*"), type_refs = "rmd_chunk")
+#> └── YAML [4 lines]
 
 rmd_get_node(rmd, name_refs = "pressure")
 #> $engine
