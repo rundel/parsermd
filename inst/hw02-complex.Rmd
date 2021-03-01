@@ -1,0 +1,50 @@
+---
+title: "Lab 02 - More"
+output: html_document
+---
+
+## Lab 02
+
+### Load packages
+
+```{r load-packages, message=FALSE}
+library(tidyverse) 
+```
+
+
+### Exercise 1
+
+Amet dignissim eu hac. Posuere euismod elementum augue imperdiet est ante volutpat interdum rhoncus imperdiet! Ad cum inceptos netus hendrerit neque taciti justo scelerisque facilisi faucibus tellus? Augue cras gravida urna consequat.
+
+#### Scratch
+
+Amet justo venenatis et lectus sapien facilisi tortor pharetra suspendisse sagittis. Accumsan senectus nam donec sollicitudin iaculis montes venenatis cras morbi. Volutpat lobortis enim mauris curae commodo mollis taciti rutrum lectus inceptos facilisi ornare vestibulum? Purus elementum ultricies auctor augue odio dictumst turpis ullamcorper aliquam fermentum platea accumsan nunc. Eget curabitur convallis velit suspendisse parturient fusce tellus tellus ultricies fusce montes. Mi urna tristique ultrices sed eget varius. Etiam erat ullamcorper commodo laoreet himenaeos in sapien.
+
+#### Answer
+
+Amet lacus diam feugiat placerat non platea mattis. Fusce semper curabitur sodales eros aptent cubilia. Maecenas dui cras phasellus eleifend inceptos habitant felis varius pharetra pulvinar pretium proin diam dignissim pellentesque in tempus in.
+
+### Exercise 2
+
+Plot `y` vs. `x` for the `dino` dataset. Then, calculate the correlation coefficient between x and y for this dataset.
+
+#### Scratch
+
+```{r}
+1+1
+```
+
+#### Answer
+
+First let's plot the data :
+
+```{r ex2-plot, fig.height=3, fig.width=6}
+plot(rnorm(100))
+```
+
+And next calculate the sum:
+
+```{r cor-dino}
+sum(rnorm(100))
+```
+
