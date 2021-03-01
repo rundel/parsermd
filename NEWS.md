@@ -8,6 +8,8 @@
 
 * Added `rmd_get_options` and `rmd_set_options`
 
+* Added support for [raw attribute chunks](https://pandoc.org/MANUAL.html#extension-raw_attribute) (#13)
+
 # parsermd 0.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
