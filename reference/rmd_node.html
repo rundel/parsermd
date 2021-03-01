@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document • parsermd</title>
+<title>rmd node utility functions — rmd_node • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,15 @@
 
 
 
-<meta property="og:title" content="Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document" />
-<meta property="og:description" content="Convert an rmd_ast, rmd_tibble, or any ast node into text." />
+<meta property="og:title" content="rmd node utility functions — rmd_node" />
+<meta property="og:description" content="rmd_node_label() - returns a node(s) labels.
+rmd_node_type() - returns node(s) type / class.
+rmd_node_length() - returns node(s) length (i.e. lines of code, lines of text, etc.)
+rmd_node_content() - returns node(s) text content.
+rmd_node_attr() - returns node(s) attribute value.
+rmd_node_engine() - returns chunk(s) engine, NA for all other node types.
+rmd_node_options() - returns chunk(s) options, NA for all other node types.
+rmd_node_code() - returns chunk(s) code, NA for all other node types." />
 
 
 
@@ -121,35 +128,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</h1>
+    <h1>rmd node utility functions</h1>
     
-    <div class="hidden name"><code>as_document.Rd</code></div>
+    <div class="hidden name"><code>rmd_node.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</p>
+    <p><code>rmd_node_label()</code> - returns a node(s) labels.</p>
+<p><code>rmd_node_type()</code> - returns node(s) type / class.</p>
+<p><code>rmd_node_length()</code> - returns node(s) length (i.e. lines of code, lines of text, etc.)</p>
+<p><code>rmd_node_content()</code> - returns node(s) text content.</p>
+<p><code>rmd_node_attr()</code> - returns node(s) attribute value.</p>
+<p><code>rmd_node_engine()</code> - returns chunk(s) engine, <code>NA</code> for all other node types.</p>
+<p><code>rmd_node_options()</code> - returns chunk(s) options, <code>NA</code> for all other node types.</p>
+<p><code>rmd_node_code()</code> - returns chunk(s) code, <code>NA</code> for all other node types.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>x</span>, padding <span class='op'>=</span> <span class='st'>""</span>, collapse <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rmd_node_label</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_type</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_length</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_content</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_attr</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>attr</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_engine</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_options</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_code</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>rmd_ast</code>, <code>rmd_tibble</code>, or parsermd node object.</p></td>
-    </tr>
-    <tr>
-      <th>padding</th>
-      <td><p>Padding to add between nodes when assembling the text.</p></td>
-    </tr>
-    <tr>
-      <th>collapse</th>
-      <td><p>If not <code>NULL</code>, use value to collapse lines.</p></td>
+      <td><p>An rmd object, e.g. <code>rmd_ast</code> or <code>rmd_tibble</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Unused, for extensibility.</p></td>
+    </tr>
+    <tr>
+      <th>attr</th>
+      <td><p>Attribute name to extract.</p></td>
     </tr>
     </table>
 

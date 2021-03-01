@@ -105,13 +105,13 @@
 <span class="co">#&gt; │   └── Chunk [r, 1 opt, 1 lines] - setup</span>
 <span class="co">#&gt; └── Heading [h1] - Content</span>
 <span class="co">#&gt;     ├── Heading [h2] - R Markdown</span>
-<span class="co">#&gt;     │   ├── Markdown [4 lines]</span>
+<span class="co">#&gt;     │   ├── Markdown [6 lines]</span>
 <span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span>
 <span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
 <span class="co">#&gt;     └── Heading [h2] - Including Plots</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
-<span class="co">#&gt;         └── Markdown [1 lines]</span>
+<span class="co">#&gt;         └── Markdown [2 lines]</span>
 
 <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 12 x 5</span>
@@ -122,19 +122,21 @@
 <span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
 <span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [4]&gt;</span>
+<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [6]&gt;</span>
 <span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
 <span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
 <span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [1]&gt;</span>
+<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
 
-<span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="st">"hello"</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="fu"><a href="reference/rmd_subset.html">rmd_subset</a></span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="st">"hello"</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="co">#&gt; └── YAML [4 lines]</span>
 
-<span class="fu">rmd_subset</span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hello"</span>, <span class="st">"*"</span><span class="op">)</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="fu"><a href="reference/rmd_subset.html">rmd_subset</a></span><span class="op">(</span><span class="va">rmd</span>, sec_refs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hello"</span>, <span class="st">"*"</span><span class="op">)</span>, type_refs <span class="op">=</span> <span class="st">"rmd_chunk"</span><span class="op">)</span>
+<span class="co">#&gt; └── YAML [4 lines]</span>
 
-<span class="fu">rmd_get_node</span><span class="op">(</span><span class="va">rmd</span>, name_refs <span class="op">=</span> <span class="st">"pressure"</span><span class="op">)</span>
+<span class="fu"><a href="reference/rmd_get_node.html">rmd_get_node</a></span><span class="op">(</span><span class="va">rmd</span>, name_refs <span class="op">=</span> <span class="st">"pressure"</span><span class="op">)</span>
 <span class="co">#&gt; $engine</span>
 <span class="co">#&gt; [1] "r"</span>
 <span class="co">#&gt; </span>
@@ -177,6 +179,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/rundel/parsermd/actions"><img src="https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document • parsermd</title>
+<title>Find the sections for each rmd object node — rmd_node_sections • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document" />
-<meta property="og:description" content="Convert an rmd_ast, rmd_tibble, or any ast node into text." />
+<meta property="og:title" content="Find the sections for each rmd object node — rmd_node_sections" />
+<meta property="og:description" content="Uses the section headings of an rmd object to indentify the heirarchical
+structure of the document." />
 
 
 
@@ -121,38 +122,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</h1>
+    <h1>Find the sections for each rmd object node</h1>
     
-    <div class="hidden name"><code>as_document.Rd</code></div>
+    <div class="hidden name"><code>rmd_node_sections.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</p>
+    <p>Uses the section headings of an rmd object to indentify the heirarchical
+structure of the document.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>x</span>, padding <span class='op'>=</span> <span class='st'>""</span>, collapse <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rmd_node_sections</span><span class='op'>(</span><span class='va'>x</span>, levels <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, drop_na <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>rmd_ast</code>, <code>rmd_tibble</code>, or parsermd node object.</p></td>
+      <td><p>An rmd object, e.g. <code>rmd_ast</code> or <code>rmd_tibble</code>.</p></td>
     </tr>
     <tr>
-      <th>padding</th>
-      <td><p>Padding to add between nodes when assembling the text.</p></td>
+      <th>levels</th>
+      <td><p>Limit which section heading levels to return.</p></td>
     </tr>
     <tr>
-      <th>collapse</th>
-      <td><p>If not <code>NULL</code>, use value to collapse lines.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Unused, for extensibility.</p></td>
+      <th>drop_na</th>
+      <td><p>Should <code>NA</code> sections be dropped.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of section names for each node.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

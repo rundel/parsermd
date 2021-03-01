@@ -25,6 +25,24 @@
     <loc>https://rundel.github.io/parsermd/reference/render.html</loc>
   </url>
   <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_check_template.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_get_node.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_has_node.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_node.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_node_sections.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/rmd_subset.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc>
   </url>
   <url>

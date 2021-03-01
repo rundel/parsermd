@@ -139,6 +139,10 @@
       <th>x</th>
       <td><p>Object to convert</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Unused, for extensibility.</p></td>
+    </tr>
     </table>
 
 
@@ -146,8 +150,28 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='parse_rmd.html'>parse_rmd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"hw01.Rmd"</span>, package<span class='op'>=</span><span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>as_ast</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in parse_rmd(system.file("hw01.Rmd", package = "parsermd")) %&gt;%     as_tibble() %&gt;% as_ast(): could not find function "%&gt;%"</span></div><div class='input'>
-</div></pre>
+</div><div class='output co'>#&gt; ├── YAML <span style='color: #555555;'>[2 lines]</span><span>
+#&gt; ├── Heading </span><span style='color: #555555;'>[h3] - </span><span style='color: #555555;font-weight: bold;'>Load packages</span><span>
+#&gt; │   └── Chunk </span><span style='color: #555555;'>[r, 1 opt, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>load-packages</span><span>
+#&gt; ├── Heading </span><span style='color: #555555;'>[h3] - </span><span style='color: #555555;font-weight: bold;'>Exercise 1</span><span>
+#&gt; │   ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt; │   └── Heading </span><span style='color: #555555;'>[h4] - </span><span style='color: #555555;font-weight: bold;'>Solution</span><span>
+#&gt; │       └── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt; ├── Heading </span><span style='color: #555555;'>[h3] - </span><span style='color: #555555;font-weight: bold;'>Exercise 2</span><span>
+#&gt; │   ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt; │   └── Heading </span><span style='color: #555555;'>[h4] - </span><span style='color: #555555;font-weight: bold;'>Solution</span><span>
+#&gt; │       ├── Markdown </span><span style='color: #555555;'>[4 lines]</span><span>
+#&gt; │       ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
+#&gt; │       ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt; │       └── Chunk </span><span style='color: #555555;'>[r, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-dino</span><span>
+#&gt; └── Heading </span><span style='color: #555555;'>[h3] - </span><span style='color: #555555;font-weight: bold;'>Exercise 3</span><span>
+#&gt;     ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt;     └── Heading </span><span style='color: #555555;'>[h4] - </span><span style='color: #555555;font-weight: bold;'>Solution</span><span>
+#&gt;         ├── Markdown </span><span style='color: #555555;'>[4 lines]</span><span>
+#&gt;         ├── Chunk </span><span style='color: #555555;'>[r, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-star</span><span>
+#&gt;         ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
+#&gt;         └── Chunk </span><span style='color: #555555;'>[r, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-star</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

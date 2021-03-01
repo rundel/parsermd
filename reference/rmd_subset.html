@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document • parsermd</title>
+<title>Subset the nodes of an rmd object — rmd_subset • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Convert an rmd_ast, rmd_tibble, or any ast node into text. — as_document" />
-<meta property="og:description" content="Convert an rmd_ast, rmd_tibble, or any ast node into text." />
+<meta property="og:title" content="Subset the nodes of an rmd object — rmd_subset" />
+<meta property="og:description" content="Subset an rmd object based on sections, node types, or names." />
 
 
 
@@ -121,31 +121,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</h1>
+    <h1>Subset the nodes of an rmd object</h1>
     
-    <div class="hidden name"><code>as_document.Rd</code></div>
+    <div class="hidden name"><code>rmd_subset.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</p>
+    <p>Subset an rmd object based on sections, node types, or names.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_document</span><span class='op'>(</span><span class='va'>x</span>, padding <span class='op'>=</span> <span class='st'>""</span>, collapse <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rmd_subset</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  type_refs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  name_refs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  exclude <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  keep_yaml <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  keep_setup <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>rmd_ast</code>, <code>rmd_tibble</code>, or parsermd node object.</p></td>
+      <td><p>rmd object, e.g. <code>rmd_ast</code> or <code>rmd_tibble</code>.</p></td>
     </tr>
     <tr>
-      <th>padding</th>
-      <td><p>Padding to add between nodes when assembling the text.</p></td>
+      <th>sec_refs</th>
+      <td><p>Section references, TODO - add details.</p></td>
     </tr>
     <tr>
-      <th>collapse</th>
-      <td><p>If not <code>NULL</code>, use value to collapse lines.</p></td>
+      <th>type_refs</th>
+      <td><p>Node type references, TODO - add details.</p></td>
+    </tr>
+    <tr>
+      <th>name_refs</th>
+      <td><p>Name references, TODO - add details.</p></td>
+    </tr>
+    <tr>
+      <th>exclude</th>
+      <td><p>Should the matching nodes be excluded.</p></td>
+    </tr>
+    <tr>
+      <th>keep_yaml</th>
+      <td><p>Should the document yaml be kept.</p></td>
+    </tr>
+    <tr>
+      <th>keep_setup</th>
+      <td><p>Should the document setup chunk be kept.</p></td>
     </tr>
     <tr>
       <th>...</th>
