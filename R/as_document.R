@@ -71,6 +71,21 @@ as_document.rmd_chunk = function(x, ...) {
 }
 
 #' @exportS3Method
+as_document.rmd_raw_chunk = function(x, ...) {
+  lines = c(
+    paste0("```{=", x$format,"}"),
+    x$code,
+    "```"
+  )
+
+  paste0(
+    x$indent,
+    lines
+  )
+}
+
+
+#' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
   paste(
     paste(rep("#", x$level), collapse=""),

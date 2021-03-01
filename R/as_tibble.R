@@ -40,6 +40,14 @@ type_sum.rmd_chunk = function(x) {
 }
 
 #' @exportS3Method
+type_sum.rmd_raw_chunk = function(x) {
+  paste(
+    cli::style_bold("raw attr chunk"),
+    paste0("[", x$format, "]")
+  )
+}
+
+#' @exportS3Method
 type_sum.rmd_yaml = function(x) {
   paste(
     cli::style_bold("yaml"),

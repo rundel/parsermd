@@ -105,6 +105,11 @@ rmd_node_length.rmd_chunk = function(x, ...) {
 }
 
 #' @exportS3Method
+rmd_node_length.rmd_raw_chunk = function(x, ...) {
+  length(x$code)
+}
+
+#' @exportS3Method
 rmd_node_length.rmd_markdown = function(x, ...) {
   length(x)
 }
@@ -150,6 +155,11 @@ rmd_node_content.rmd_tibble = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_content.rmd_chunk = function(x, ...) {
+  paste(x$code, collapse="\n")
+}
+
+#' @exportS3Method
+rmd_node_content.rmd_raw_chunk = function(x, ...) {
   paste(x$code, collapse="\n")
 }
 

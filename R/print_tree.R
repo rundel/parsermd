@@ -45,6 +45,14 @@ tree_node.rmd_chunk = function(x) {
   )
 }
 
+tree_node.rmd_raw_chunk = function(x) {
+  list(
+    text = "Raw Attr Chunk",
+    label = paste0("[", x$format, ", ", length(x$code), " lines]")
+  )
+}
+
+
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",

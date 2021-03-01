@@ -68,7 +68,10 @@ namespace client { namespace parser {
   // Chunk arg stuff
 
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
-  = (x3::lexeme[ +x3::char_("A-Za-z0-9_") ]);
+  = (x3::lexeme[
+       (x3::char_("=") > +x3::char_("A-Za-z0-9_")) |  // Pandoc raw attribute chunk
+       (+x3::char_("A-Za-z0-9_"))                     // Rmd chunk engine
+    ]);
   //[
   //  ([](auto& ctx){ _val(ctx) = _attr(ctx); }) //Override the default concat behavior
   //];

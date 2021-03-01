@@ -67,3 +67,13 @@
     |   \-- Heading [h3] - H3 - Part 2
     \-- Heading [h1] - H1
 
+---
+
+    +-- YAML [1 lines]
+    +-- Heading [h2] - R Markdown
+    |   +-- Markdown [4 lines]
+    |   \-- Chunk [r, 1 lines] - cars
+    \-- Heading [h2] - Pandoc Raw Attribute Chunk
+        +-- Markdown [2 lines]
+        \-- Raw Attr Chunk [html, 5 lines]
+
