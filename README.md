@@ -69,11 +69,21 @@ as_tibble(rmd)
 #> 11 Content Including Plots rmd_chunk     "pressure" <chunk [r]>   
 #> 12 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
 
-rmd_subset(rmd, sec_refs = "hello", type_refs = "rmd_chunk")
-#> └── YAML [4 lines]
+rmd_subset(rmd, sec_refs = "Content", type_refs = "rmd_chunk")
+#> ├── YAML [4 lines]
+#> └── Heading [h1] - Content
+#>     ├── Chunk [r, 1 lines] - cars
+#>     ├── Chunk [r, 1 lines] - <unnamed>
+#>     └── Chunk [r, 1 opt, 1 lines] - pressure
 
-rmd_subset(rmd, sec_refs = c("hello", "*"), type_refs = "rmd_chunk")
-#> └── YAML [4 lines]
+rmd_subset(rmd, sec_refs = c("Content", "*"), type_refs = "rmd_chunk")
+#> ├── YAML [4 lines]
+#> └── Heading [h1] - Content
+#>     ├── Heading [h2] - R Markdown
+#>     │   ├── Chunk [r, 1 lines] - cars
+#>     │   └── Chunk [r, 1 lines] - <unnamed>
+#>     └── Heading [h2] - Including Plots
+#>         └── Chunk [r, 1 opt, 1 lines] - pressure
 
 rmd_get_node(rmd, name_refs = "pressure")
 #> $engine

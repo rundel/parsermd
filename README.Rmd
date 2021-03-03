@@ -47,9 +47,9 @@ For more details see the getting started [vignette](https://rundel.github.io/par
 
 as_tibble(rmd)
 
-rmd_subset(rmd, sec_refs = "hello", type_refs = "rmd_chunk")
+rmd_subset(rmd, sec_refs = "Content", type_refs = "rmd_chunk")
 
-rmd_subset(rmd, sec_refs = c("hello", "*"), type_refs = "rmd_chunk")
+rmd_subset(rmd, sec_refs = c("Content", "*"), type_refs = "rmd_chunk")
 
 rmd_get_node(rmd, name_refs = "pressure")
 ```
