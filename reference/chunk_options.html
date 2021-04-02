@@ -134,7 +134,7 @@ within an rmd object.</p>
 
     <pre class="usage"><span class='fu'>rmd_set_options</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>rmd_get_options</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>rmd_get_options</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, defaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +147,10 @@ within an rmd object.</p>
       <th>...</th>
       <td><p>Either a collection of named values for the setter or a character values
 of the option names for the getter.</p></td>
+    </tr>
+    <tr>
+      <th>defaults</th>
+      <td><p>A named list of default values for the options.</p></td>
     </tr>
     </table>
 

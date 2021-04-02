@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • parsermd</title>
+<title>Source the code chunks of an Rmd document — rmd_source • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Source the code chunks of an Rmd document — rmd_source" />
+<meta property="og:description" content="
+
+" />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,41 +123,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      
+    <h1>Source the code chunks of an Rmd document</h1>
+    
+    <div class="hidden name"><code>rmd_source.Rd</code></div>
     </div>
 
-    <div id="parsermd-002" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.2">
-<a href="#parsermd-002" class="anchor"></a>parsermd 0.0.2</h1>
-<ul>
-<li><p>Added new parser error reporting system</p></li>
-<li><p>Adopt testthat 3.0.0 for testing</p></li>
-<li><p>Added new <code>render</code> function to support rendering <code>rmd_ast</code> related objects</p></li>
-<li><p>Added <code>rmd_get_options</code> and <code>rmd_set_options</code></p></li>
-<li><p>Added support for <a href="https://pandoc.org/MANUAL.html#extension-raw_attribute">raw attribute chunks</a> (#13)</p></li>
-<li><p>Added <code>rmd_source</code> to support sourcing chunks directly into a session.</p></li>
-</ul>
-</div>
-    <div id="parsermd-001" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.1">
-<a href="#parsermd-001" class="anchor"></a>parsermd 0.0.1</h1>
-<ul>
-<li><p>Added a <code>NEWS.md</code> file to track changes to the package.</p></li>
-<li><p>Incremented the version number.</p></li>
-<li><p>Overhauled the ast and tibble representations to make them as compatible as possible.</p></li>
-<li><p>Starting to add helper functions: <code>rmd_subset</code>, <code>rmd_has_node</code>, <code>rmd_get_node</code>, etc.</p></li>
-<li><p>Initial implementation of Rmd templates</p></li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
 
+
+    </div>
+
+    <pre class="usage"><span class='fu'>rmd_source</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, label_comment <span class='op'>=</span> <span class='cn'>TRUE</span>, use_eval <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>An Rmd document (e.g. <code>rmd_ast</code>, <code>rmd_tibble</code>, etc.)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments passed to <code><a href='https://rdrr.io/r/base/source.html'>source</a></code></p></td>
+    </tr>
+    <tr>
+      <th>label_comment</th>
+      <td><p>Attach chunk labels as comment before each code block</p></td>
+    </tr>
+    <tr>
+      <th>use_eval</th>
+      <td><p>Use the <code>eval</code> chunk option to determine if code is included</p></td>
+    </tr>
+    </table>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
