@@ -8,13 +8,15 @@
 \usage{
 rmd_set_options(x, ...)
 
-rmd_get_options(x, ...)
+rmd_get_options(x, ..., defaults = list())
 }
 \arguments{
 \item{x}{An \code{rmd_ast}, \code{rmd_tibble}, or any rmd ast node object.}
 
 \item{...}{Either a collection of named values for the setter or a character values
 of the option names for the getter.}
+
+\item{defaults}{A named list of default values for the options.}
 }
 \value{
 \code{rmd_set_options} returns the modified version of the original object.
