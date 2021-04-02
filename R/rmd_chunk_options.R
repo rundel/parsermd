@@ -9,6 +9,7 @@
 #' @param x An `rmd_ast`, `rmd_tibble`, or any rmd ast node object.
 #' @param ... Either a collection of named values for the setter or a character values
 #' of the option names for the getter.
+#' @param defaults A named list of default values for the options.
 #'
 #' @return `rmd_set_options` returns the modified version of the original object.
 #'
@@ -70,35 +71,47 @@ rmd_set_options.rmd_tibble = function(x, ...) {
 
 #' @rdname chunk_options
 #' @export
-rmd_get_options = function(x, ...) {
+rmd_get_options = function(x, ..., defaults = list()) {
   UseMethod("rmd_get_options")
 }
 
 #' @exportS3Method
-rmd_get_options.default = function(x, ...) {
+rmd_get_options.default = function(x, ..., defaults = list()) {
   NULL
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_chunk = function(x, ...) {
+rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   opts = unlist(list(...))
 
-  if (length(opts) == 0)
+  if (length(opts) == 0) {
     x[["options"]]
-  else
-    x[["options"]][ opts ]
+  } else {
+    checkmate::assert_character(opts, any.missing = FALSE)
+    res = list()
+
+    purrr::map(
+      opts, ~ x[["options"]][[ .x ]] %||% defaults[[ .x ]]
+    ) %>%
+      setNames(opts)
+
+    #for(opt in opts) {
+    #  res[opt] =
+    #}
+
+    #res
+  }
+
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_ast = function(x, ...) {
-  opts = unlist(list(...))
-
-  purrr::map(x, rmd_get_options, opts)
+rmd_get_options.rmd_ast = function(x, ..., defaults = list()) {
+  purrr::map(x, rmd_get_options, ..., defaults = defaults)
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_tibble = function(x, ...) {
-  rmd_get_options.rmd_ast(x$ast, ...)
+rmd_get_options.rmd_tibble = function(x, ..., defaults = list()) {
+  rmd_get_options(as_ast(x), ..., defaults = defaults)
 }
 
 
