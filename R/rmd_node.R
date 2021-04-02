@@ -183,7 +183,7 @@ rmd_node_attr = function(x, attr, ...) {
 
 #' @exportS3Method
 rmd_node_attr.default = function(x, attr, ...) {
-  checkmate::assert_character(x, len = 1)
+  checkmate::assert_character(attr, len = 1)
 
   if (is.list(x))
     x[[attr]]
@@ -206,7 +206,7 @@ rmd_node_attr.rmd_tibble = function(x, attr, ...) {
 #' @rdname rmd_node
 #' @export
 rmd_node_engine = function(x, ...) {
-  rmd_node_attr(x, "engine")
+  unlist(rmd_node_attr(x, "engine"))
 }
 
 #' @rdname rmd_node
