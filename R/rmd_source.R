@@ -52,7 +52,7 @@ rmd_source.rmd_tibble = function(x, local = FALSE, ..., label_comment = TRUE, us
 rmd_source.rmd_ast = function(x, local = FALSE, ..., label_comment = TRUE, use_eval = TRUE) {
 
   if (isTRUE(local))
-    local = parent.frame(n = 2) # needed because of S3
+    local = parent.frame(n = 1) # needed because of S3
 
   opts = list(...)
   if (!is.null(opts$file))
