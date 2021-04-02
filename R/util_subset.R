@@ -1,3 +1,15 @@
+#' @export
+#'
+`[.rmd_ast` = function(x, i, j, drop=FALSE, ...) {
+  if (!missing(j))
+    stop("incorrect number of dimensions", call. = FALSE)
+
+  x = unclass(x)[i]
+  class(x) = c("rmd_ast", "list")
+
+  x
+}
+
 # Vectorized grepl
 vec_grepl = function(patterns, x) {
   purrr::map2_lgl(patterns, x, grepl)
