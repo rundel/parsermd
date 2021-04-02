@@ -10,6 +10,8 @@
 
 * Added support for [raw attribute chunks](https://pandoc.org/MANUAL.html#extension-raw_attribute) (#13)
 
+* Added `rmd_source` to support sourcing chunks directly into a session.
+
 # parsermd 0.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
