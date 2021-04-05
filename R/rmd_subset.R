@@ -67,7 +67,7 @@ rmd_subset.rmd_tibble = function(x, sec_refs = NULL, type_refs = NULL, name_refs
 
   x = x[subset,]
 
-  x = dplyr:: bind_cols(
+  x = dplyr::bind_cols(
     dplyr::bind_rows(rmd_node_sections(x$ast)),  # add new sec_h* columns
     dplyr::select(x, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
