@@ -10,7 +10,11 @@
 
 * Added support for [raw attribute chunks](https://pandoc.org/MANUAL.html#extension-raw_attribute) (#13)
 
-* Added `rmd_source` to support sourcing chunks directly into a session.
+* Added `rmd_source` to support sourcing chunks directly into an environment.
+
+* Added `rmd_select` which used tidyselect based syntax as a replacement for `rmd_subset`.
+
+* Soft deprecated `rmd_subset`, `rmd_get_node`, `rmd_get_markdwon`, and `rmd_get_chunk`.
 
 # parsermd 0.0.1
 
