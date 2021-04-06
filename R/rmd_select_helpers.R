@@ -70,3 +70,21 @@ by_section = function(sec_ref, keep_parents = TRUE) {
   #
   which(matching)
 }
+
+#' @rdname rmd_select_helpers
+#'
+#' @param label character vector, glob patterns for matching chunk labels.
+#'
+#' @export
+by_label = function(label) {
+  checkmate::assert_character(label, any.missing = FALSE, min.len = 1)
+
+  x = tidyselect::peek_data(fn = "by_section")
+
+  node_labs = rmd_node_label(x)
+  regex = utils::glob2rx(label)
+  matching = purrr::map(regex, grepl, x = node_labs) %>%
+    purrr::reduce(`|`)
+
+  which(matching)
+}

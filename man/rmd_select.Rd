@@ -18,7 +18,7 @@ This function is implemented using \code{\link[tidyselect:eval_select]{tidyselec
 a variety of useful syntax for selecting nodes from the ast.
 
 Additionally, a number of additional \code{parsermd} specific selection helpers are available:
-\code{\link[=has_type]{has_type()}}, \code{\link[=by_section]{by_section()}},
+\code{\link[=has_type]{has_type()}}, \code{\link[=by_section]{by_section()}}, \code{\link[=by_label]{by_label()}}
 }
 \examples{
 rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))

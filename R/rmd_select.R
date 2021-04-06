@@ -7,7 +7,7 @@
 #' a variety of useful syntax for selecting nodes from the ast.
 #'
 #' Additionally, a number of additional `parsermd` specific selection helpers are available:
-#' [has_type()], [by_section()],
+#' [has_type()], [by_section()], [by_label()]
 #'
 #' @param x Rmd object, e.g. `rmd_ast` or `rmd_tibble`.
 #' @param ... One or more unquoted expressions separated by commas. Chunk labels can be used

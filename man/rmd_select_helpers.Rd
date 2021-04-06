@@ -4,11 +4,14 @@
 \alias{rmd_select_helpers}
 \alias{has_type}
 \alias{by_section}
+\alias{by_label}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
 
 by_section(sec_ref, keep_parents = TRUE)
+
+by_label(label)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -18,6 +21,8 @@ for further details on how these are constructed.}
 
 \item{keep_parents}{Logical, retain the parent headings of selected sections.
 Default: \code{TRUE}}
+
+\item{label}{character vector, glob patterns for matching chunk labels.}
 }
 \description{
 These functions are used in conjunction with \code{\link[=rmd_select]{rmd_select()}} to
