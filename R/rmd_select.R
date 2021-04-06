@@ -1,11 +1,28 @@
 #' @name rmd_select
 #' @rdname rmd_select
 #'
-#' @title Select nodes of the Rmd ast
+#' @title Select nodes of an Rmd ast
 #'
-#' @description
+#' @description This function is implemented using [tidyselect::eval_select()] which enables
+#' a variety of useful syntax for selecting nodes from the ast.
+#'
+#' Additionally, a number of additional `parsermd` specific selection helpers are available:
+#' [has_type()], [by_section()],
+#'
+#' @param x Rmd object, e.g. `rmd_ast` or `rmd_tibble`.
+#' @param ... One or more unquoted expressions separated by commas. Chunk labels can be used
+#' as if they were positions in the data frame, so expressions like x:y can be used to
+#' select a range of nodes.
 #'
 #' @examples
+#' rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+#'
+#' rmd_select(rmd, "plot-dino", "cor-dino")
+#' rmd_select(rmd, `plot-dino`:`cor-dino`)
+#'
+#' rmd_select(rmd, has_type("rmd_chunk"))
+#'
+#' rmd_select(rmd, by_section(c("Exercise *", "Solution")))
 #'
 #' @export
 #'
@@ -52,46 +69,6 @@ rmd_select.rmd_tibble = function(x, ...) {
 
 #' @exportS3Method
 rmd_select.rmd_ast = function(x, ...) {
-  loc = rmd_select_impl(x$ast, ...)
+  loc = rmd_select_impl(x, ...)
   x[loc]
-}
-
-#' @export
-has_type = function(...) {
-  allowed_types = c(...)
-  checkmate::assert_character(allowed_types, any.missing = FALSE)
-
-  x = tidyselect::peek_data(fn = "has_type")
-
-  which(rmd_node_type(x) %in% allowed_types)
-}
-
-#has_label = function(...) {
-#  allowed_labels = c(...)
-#  checkmate::assert_character(allowed_labels, any.missing = FALSE)
-#
-#  x = tidyselect::peek_data(fn = "has_label")
-#
-#  which(rmd_node_label(x) %in% allowed_labels)
-#}
-
-#' @export
-by_section = function(sec_ref, keep_parents = TRUE) {
-  checkmate::assert_character(sec_ref, any.missing = FALSE, min.len = 1)
-  checkmate::assert_logical(keep_parents, any.missing = FALSE, len = 1)
-
-  x = tidyselect::peek_data(fn = "by_section")
-
-  types = rmd_node_type(x)
-  secs = rmd_node_sections(x, drop_na = TRUE)
-
-  regex = utils::glob2rx(sec_ref)
-  matching = purrr::map_lgl(secs, subset_match, regex = regex)
-
-  if (any(matching) & keep_parents) {
-    parents = (parent_match(secs, regex) & types == "rmd_heading")
-    matching = matching | parents
-  }
-
-  which(matching)
 }

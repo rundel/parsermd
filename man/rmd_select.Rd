@@ -2,13 +2,32 @@
 % Please edit documentation in R/rmd_select.R
 \name{rmd_select}
 \alias{rmd_select}
-\title{Select nodes of the Rmd ast}
+\title{Select nodes of an Rmd ast}
 \usage{
 rmd_select(x, ...)
 }
-\description{
+\arguments{
+\item{x}{Rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
 
+\item{...}{One or more unquoted expressions separated by commas. Chunk labels can be used
+as if they were positions in the data frame, so expressions like x:y can be used to
+select a range of nodes.}
+}
+\description{
+This function is implemented using \code{\link[tidyselect:eval_select]{tidyselect::eval_select()}} which enables
+a variety of useful syntax for selecting nodes from the ast.
+
+Additionally, a number of additional \code{parsermd} specific selection helpers are available:
+\code{\link[=has_type]{has_type()}}, \code{\link[=by_section]{by_section()}},
 }
 \examples{
+rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+
+rmd_select(rmd, "plot-dino", "cor-dino")
+rmd_select(rmd, `plot-dino`:`cor-dino`)
+
+rmd_select(rmd, has_type("rmd_chunk"))
+
+rmd_select(rmd, by_section(c("Exercise *", "Solution")))
 
 }
