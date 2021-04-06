@@ -16,7 +16,7 @@
 #' @param use_eval Use the `eval` chunk option to determine if code is included.
 #' @examples
 #'
-#' rmd_source(system.file("hw01.Rmd", package = "parsermd"), echo=TRUE)
+#' rmd_source(system.file("minimal.Rmd", package = "parsermd"), echo=TRUE)
 #'
 #' @export
 #'
