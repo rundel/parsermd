@@ -1,5 +1,6 @@
 #' @title Subset the nodes of an rmd object
 #' @description
+#' `r lifecycle::badge('deprecated')`
 #' Subset an rmd object based on sections, node types, or names.
 #'
 #' @param x rmd object, e.g. `rmd_ast` or `rmd_tibble`.
@@ -13,6 +14,7 @@
 #'
 #' @export
 rmd_subset = function(x, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE, keep_yaml = TRUE, keep_setup = FALSE, ...) {
+  lifecycle::deprecate_soft("0.0.2", "rmd_subset()", "rmd_select()")
   UseMethod("rmd_subset")
 }
 

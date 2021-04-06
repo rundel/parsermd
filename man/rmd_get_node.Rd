@@ -24,5 +24,6 @@ rmd_get_markdown(x, sec_refs = NULL)
 \item{...}{Unused, for extensibility.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Returns a single node using \link{rmd_subset} selection.
 }

@@ -33,5 +33,6 @@ rmd_subset(
 \item{...}{Unused, for extensibility.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Subset an rmd object based on sections, node types, or names.
 }
