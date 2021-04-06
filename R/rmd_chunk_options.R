@@ -92,7 +92,7 @@ rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
     res = purrr::map(
       opts, ~ x[["options"]][[ .x ]] %||% defaults[[ .x ]]
     )
-    names(res) = opts%>%
+    names(res) = opts
     res
   }
 }
