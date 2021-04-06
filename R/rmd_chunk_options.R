@@ -88,20 +88,13 @@ rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
     x[["options"]]
   } else {
     checkmate::assert_character(opts, any.missing = FALSE)
-    res = list()
 
-    purrr::map(
+    res = purrr::map(
       opts, ~ x[["options"]][[ .x ]] %||% defaults[[ .x ]]
-    ) %>%
-      setNames(opts)
-
-    #for(opt in opts) {
-    #  res[opt] =
-    #}
-
-    #res
+    )
+    names(res) = opts%>%
+    res
   }
-
 }
 
 #' @exportS3Method
