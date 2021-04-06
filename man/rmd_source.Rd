@@ -21,7 +21,8 @@ source is called.}
 \item{use_eval}{Use the \code{eval} chunk option to determine if code is included.}
 }
 \description{
-
+This is the equivalent of the \code{\link[=source]{source()}} function for Rmd files or
+their resulting asts.
 }
 \examples{
 

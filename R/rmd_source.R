@@ -3,7 +3,8 @@
 #'
 #' @title Source the code chunks of an Rmd document
 #'
-#' @description
+#' @description This is the equivalent of the [source()] function for Rmd files or
+#' their resulting asts.
 #'
 #' @param x An Rmd document (e.g. `rmd_ast`, `rmd_tibble`, Rmd file path, etc.)
 #' @param local `TRUE`, `FALSE` or an environment, determining where the parsed
