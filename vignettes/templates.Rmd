@@ -32,20 +32,21 @@ Imagine that a homework assignment has been distributed to students in the form 
 (rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd")))
 ```
 
-We can see examples of this templating by extracting the contents of the markdown in the Exercsie 1 > Solution section.
+We can see examples of this templating by extracting the contents of the markdown in the Exercise 1 > Solution section.
 
 ```{r}
-rmd_get_markdown(rmd, c("Exercise 1", "Solution"))
+rmd_select(rmd, by_section(c("Exercise 1", "Solution")) & has_type("rmd_markdown")) %>%
+  as_document()
 ```
 
 When a student completes this assignment we want to be able to check that they have included solutions in the appropriate sections. At a minimum this means that we need to check that these sections still exist, and secondarily we might also want to check that the provided content in the solution differs from the provided scaffolding.
 
 ### Constructing a template
 
-We will begin by constructing subsetting the original parsed document to select only the elements that will contoain the student's answers - this assumes the other sections and elements are extraneous and contain things like background, instructions, and question text. Below we use `rmd_subset` to select all of the elements of the original document contained withing a section matching "Exercise *" and "Solution" which should cover the answers for all three exercises.
+We will begin by subsetting the original parsed document to select only the elements that will contain the student's answers - this assumes the other sections and elements are extraneous and contain things like background, instructions, and question text. Below we use `rmd_select` to select all of the elements of the original document contained withing a section matching "Exercise *" and "Solution" which should cover the answers for all three exercises.
 
 ```{r}
-(rmd_sols = rmd_subset(rmd, sec_refs = c("Exercise *", "Solution")))
+(rmd_sols = rmd_select(rmd, by_section(c("Exercise *", "Solution"))))
 ```
 
 One we have this more limited set of elements we use the `rmd_template` function to generate our template. Here we have included `keep_content  = TRUE` in order to keep the scaffolded content for each answer which will then be compared to the student's answers.
@@ -68,18 +69,18 @@ From the output we can see that there are several issues with the document submi
 
 Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students. 
 
-If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggetsed workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_subset` with `exlcude = TRUE` to remove these specific markdown elements.
+If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggetsed workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_select` with the `!` operator to remove these specific markdown elements.
 
 ```{r}
 rmd_sols %>%
-  rmd_subset(sec_refs = c("Exercise 3", "Solution"), type_refs = "rmd_markdown", exclude = TRUE)
+  rmd_select( !(by_section(c("Exercise 3", "Solution")) & has_type("rmd_markdown")) )
 ```
 
-This new AST can then be used with `rmd_template` and `rmd_check_template` to provide the new feedback,
+This new AST can then be passed to `rmd_template` and `rmd_check_template` to provide the revised feedback,
 
 ```{r}
 rmd_sols %>%
-  rmd_subset(sec_refs = c("Exercise 3", "Solution"), type_refs = "rmd_markdown", exclude = TRUE) %>%
+  rmd_select( !(by_section(c("Exercise 3", "Solution")) & has_type("rmd_markdown")) ) %>%
   rmd_template(keep_content = TRUE) %>%
   rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), .)
 ```

@@ -86,68 +86,52 @@ rmd = parse_rmd(system.file("hw01-student.Rmd", package="parsermd"))
 rmd
 ```
 
-Saw we were interested in examining the solution a student entered for Exercise 1 - we can get acess to this using the `rmd_subset` function.
+Say we were interested in examining the solution a student entered for Exercise 1 - we can get access to this using the `rmd_select` function and its selection helper functions, specifically the `by_section` helper.
 
 ```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 1", "Solution"))
+rmd_select(rmd, by_section( c("Exercise 1", "Solution") ))
 ```
 
-Note that this gives me the *Exercise 1* and *Solution* headings and the contained markdown text, if we want to examine the actual text then we can extact that specific node of the ast usign `rmd_get_node`. Here we further specify that we want just nodes with type `rmd_markdown` via the `type_refs` argument.
+To view the content instead of the AST we can use the `as_document()` function,
 
 ```{r}
-rmd_get_node(rmd, sec_refs = c("Exercise 1", "Solution"), type_refs = "rmd_markdown")
+rmd_select(rmd, by_section( c("Exercise 1", "Solution") )) %>%
+  as_document()
 ```
 
-We can use a similar approach to examine the solutions to Exercise 2.
+
+Note that this gives us the *Exercise 1* and *Solution* headings and the contained markdown text, if we only wanted the markdown text then we can refine our selector to only include nodes with the type `rmd_markdown` via the `has_type` helper.
 
 ```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution"))
+rmd_select(rmd, by_section(c("Exercise 1", "Solution")) & has_type("rmd_markdown")) %>%
+  as_document()
 ```
 
-and also note that test functions can be strung together using pipes, so the following extracts just the code chunks from this set of solutions.
+This approach uses the tidyselect `&` operator within the selection to find the intersection of the selectors `by_section(c("Exercise 1", "Solution"))` and `has_type("rmd_markdown")`. Alternative the same result can be achieved by chaining multiple `rmd_select`s together,
 
 ```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
-  rmd_subset(type_refs = "rmd_chunk")
-```
-
-in this case since our second call to `rmd_subset` did not include a `sec_refs` argument the assumption is that we no longer care about the section structure and these are therefore dropped. Had we wanted to keep these headings we would have used the `sec_refs` argument to specify which of the headings to keep.
-
-```{r}
-rmd_subset(rmd, sec_refs = c("Exercise 2", "Solution")) %>% 
-  rmd_subset(sec_refs = "Exercise 2", type_refs = "rmd_chunk")
-```
-
-Since chunk labels are, supposed to be, unique we can also use these to reference chunks directly.
-
-```{r}
-rmd_get_node(rmd, name_refs = "plot-dino")
+rmd_select(rmd, by_section(c("Exercise 1", "Solution"))) %>%
+  rmd_select(has_type("rmd_markdown")) %>%
+  as_document()
 ```
 
 ### Wildcards
 
-One useful feature of these subsetting functions is that they support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) style pattern matching for determining matches within section headings and in chunk labels. As such we can do the following to extract all of the solutions from our document:
+One useful feature of the `by_section()` and `by_label()` selection helpers is that they support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) style pattern matching. As such we can do the following to extract all of the solutions from our document:
 
 ```{r}
-rmd_subset(rmd, sec_refs = c("Exercise *", "Solution"))
+rmd_select(rmd, by_section(c("Exercise *", "Solution")))
 ```
 
 Similarly, if we wanted to just extract the chunks that involve plotting we can match for chunk labels with a "plot" prefix,
 
 ```{r}
-rmd_subset(rmd, name_refs = "plot*")
+rmd_select(rmd, by_label("plot*"))
 ```
-
-and as before if we want to keep track of the parent headings we need to specify an appropriate `sec_refs`,
-
-```{r}
-rmd_subset(rmd, sec_refs = "Exercise *", name_refs = "plot*")
-```
-
 
 ### ast as a tibble
 
-As mentioned earlier, the ast can be represented as a tibble, in which case we construct several columns using the properties of the ast (sections, type, and chunk label).
+As mentioned earlier, the ast can also be represented as a tibble, in which case we construct several columns using the properties of the ast (sections, type, and chunk label).
 
 ```{r}
 tbl = as_tibble(rmd)
@@ -157,11 +141,7 @@ tbl
 All of the functions above also work with this tibble representation, and allow for the same manipulations of the underlying ast.
 
 ```{r}
-rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"))
-```
-
-```{r}
-rmd_subset(tbl, sec_refs = c("Exercise *", "Solution"), type = "rmd_chunk")
+rmd_select(tbl, by_section(c("Exercise *", "Solution")))
 ```
 
 As the complete ast is store directly in the `ast` column, we can also manipulate this tibble using dplyr or similar packages and have these changes persist. For example we can use the `rmd_node_length` function to return the number of lines in the various nodes of the ast and add a new length column to our tibble.
@@ -173,32 +153,35 @@ tbl_lines = tbl %>%
 tbl_lines
 ```
 
-Now we can apply a `rmd_subset` to this updated tibble
+Now we can apply a `rmd_select` to this updated tibble
 
 ```{r}
-rmd_subset(tbl_lines, sec_refs = c("Exercise 2", "Solution"))
+rmd_select(tbl_lines, by_section(c("Exercise 2", "Solution")))
 ```
 
 and see that our new `lines` column is maintained.
 
-Note that using the `rmd_subset` function is optional here and we can also accomplish the same task using `dplyr::filter` or any similar approach
+Note that using the `rmd_select` function is optional here and we can also accomplish the same task using `dplyr::filter` or any similar approach
 
 ```{r}
-dplyr::filter(tbl_lines, sec_h3 == "Exercise 2", sec_h4 == "Solution")
+tbl_lines %>%
+  dplyr::filter(sec_h3 == "Exercise 2", sec_h4 == "Solution")
 ```
 
-As such, it is possible to mix and match between `parsermd`'s built-in functions and any of your other prefered data manipulation packages. 
+As such, it is possible to mix and match between `parsermd`'s built-in functions and any of your other preferred data manipulation packages. 
 
-One small note of caution is that when converting back to an ast, `as_ast`, or document, `as_document`, only the structure of the `ast` column matters so changes made to the section columns, `type` column, or the `label` column will not affect the output in any way. This is particularly important when headings are filtered out, as their columns may still appear in the tibble while they are no longer in the ast - the `rmd_subset` circumvents this by recalclating these specific columns as part of the subset process.
+One small note of caution is that when converting back to an ast, `as_ast`, or document, `as_document`, only the structure of the `ast` column matters so changes made to the section columns, `type` column, or the `label` column will not affect the output in any way. This is particularly important when headings are filtered out, as their columns may still appear in the tibble while they are no longer in the ast - `rmd_select` attempts to avoid this by recalculating these specific columns as part of the subsetting process.
 
 ```{r}
-dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk")
+tbl %>%
+  dplyr::filter(sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk")
 ```
 
 <br/>
 
 ```{r}
-dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk") %>%
+tbl %>%
+  dplyr::filter(sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_chunk") %>%
   as_document() %>% 
   cat(sep="\n")
 ```
@@ -206,7 +189,8 @@ dplyr::filter(tbl, sec_h3 == "Exercise 2", sec_h4 == "Solution", type == "rmd_ch
 <br/>
 
 ```{r}
-rmd_subset(tbl, sec_refs = c("Exercise 2", "Solution"), type_refs = "rmd_chunk") %>%
+tbl %>%
+  rmd_select(by_section(c("Exercise 2", "Solution")) & has_type("rmd_chunk")) %>%
   as_document() %>% 
   cat(sep="\n")
 ```

@@ -69,15 +69,19 @@ as_tibble(rmd)
 #> 11 Content Including Plots rmd_chunk     "pressure" <chunk [r]>   
 #> 12 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
 
-rmd_subset(rmd, sec_refs = "Content", type_refs = "rmd_chunk")
-#> ├── YAML [4 lines]
+rmd_select(rmd, by_section("Content"))
 #> └── Heading [h1] - Content
-#>     ├── Chunk [r, 1 lines] - cars
-#>     ├── Chunk [r, 1 lines] - <unnamed>
-#>     └── Chunk [r, 1 opt, 1 lines] - pressure
+#>     ├── Heading [h2] - R Markdown
+#>     │   ├── Markdown [6 lines]
+#>     │   ├── Chunk [r, 1 lines] - cars
+#>     │   └── Chunk [r, 1 lines] - <unnamed>
+#>     └── Heading [h2] - Including Plots
+#>         ├── Markdown [2 lines]
+#>         ├── Chunk [r, 1 opt, 1 lines] - pressure
+#>         └── Markdown [2 lines]
 
-rmd_subset(rmd, sec_refs = c("Content", "*"), type_refs = "rmd_chunk")
-#> ├── YAML [4 lines]
+rmd_select(rmd, by_section(c("Content", "*"))) %>%
+  rmd_select(has_type(c("rmd_chunk", "rmd_heading")))
 #> └── Heading [h1] - Content
 #>     ├── Heading [h2] - R Markdown
 #>     │   ├── Chunk [r, 1 lines] - cars
@@ -85,24 +89,11 @@ rmd_subset(rmd, sec_refs = c("Content", "*"), type_refs = "rmd_chunk")
 #>     └── Heading [h2] - Including Plots
 #>         └── Chunk [r, 1 opt, 1 lines] - pressure
 
-rmd_get_node(rmd, name_refs = "pressure")
-#> $engine
-#> [1] "r"
-#> 
-#> $name
-#> [1] "pressure"
-#> 
-#> $options
-#> $options$echo
-#> [1] "FALSE"
-#> 
-#> 
-#> $code
-#> [1] "plot(pressure)"
-#> 
-#> $indent
-#> [1] ""
-#> 
-#> attr(,"class")
-#> [1] "rmd_chunk"
+rmd_select(rmd, "pressure")
+#> └── Chunk [r, 1 opt, 1 lines] - pressure
+
+rmd_select(rmd, 1:3)
+#> ├── YAML [4 lines]
+#> └── Heading [h1] - Setup
+#>     └── Chunk [r, 1 opt, 1 lines] - setup
 ```
