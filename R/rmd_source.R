@@ -16,6 +16,8 @@
 #' @param use_eval Use the `eval` chunk option to determine if code is included.
 #' @examples
 #'
+#' rmd_source(system.file("hw01.Rmd", package = "parsermd"), echo=TRUE)
+#'
 #' @export
 #'
 rmd_source = function(x, local = FALSE, ..., label_comment = TRUE, use_eval = TRUE) {
