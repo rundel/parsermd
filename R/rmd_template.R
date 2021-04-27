@@ -1,10 +1,10 @@
 #' @title Create a template from an `rmd` object.
 #' @description
-#' Templates are objects which are meant to capture the structure of an RMarkdown document and facilitate the
+#' Templates are objects which are meant to capture the structure of an R Markdown document and facilitate the
 #' comparison between the template and new Rmd documents, usually to ensure the structure and/or content matches
 #' sufficiently.
 #'
-#' @param rmd RMarkdown document in the form of an `rmd_ast` or `rmd_tibble`.
+#' @param rmd R Markdown document in the form of an `rmd_ast` or `rmd_tibble`.
 #' @param keep_content Should the template keep the document's content (markdown text and chunk code).
 #' @param keep_labels Should the template keep the document's code chunk labels.
 #' @param keep_headings Should the template keep the document's headings.

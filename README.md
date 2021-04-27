@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/parsermd/actions)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to
+The goal of parsermd is to extract the content of an R Markdown file to
 allow for programmatic interactions with the document’s contents
 (i.e. code chunks and markdown text). The goal is to capture the
 fundamental structure of the document and as such we do not attempt to

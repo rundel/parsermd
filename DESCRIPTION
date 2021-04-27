@@ -1,12 +1,12 @@
 Package: parsermd
-Title: Formal Parser and Related Tools for RMarkdown Documents
+Title: Formal Parser and Related Tools for R Markdown Documents
 Version: 0.1.0
 Authors@R: 
     person(given = "Colin",
            family = "Rundel",
            role = c("aut", "cre"),
            email = "rundel@gmail.com")
-Description: An implementation of a formal grammar and parser for Rmarkdown documents
+Description: An implementation of a formal grammar and parser for R Markdown documents
     using the Boost Spirit X3 library. It also includes a collection of high level
     functions for working with the resulting abstract syntax tree (AST).
 License: MIT + file LICENSE
@@ -41,3 +41,5 @@ Suggests:
     knitr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://github.com/rundel/parsermd
+BugReports: https://github.com/rundel/parsermd/issues

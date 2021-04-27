@@ -1,7 +1,7 @@
 #' @title Find the sections for each rmd object node
 #'
 #' @description
-#' Uses the section headings of an rmd object to indentify the heirarchical
+#' Uses the section headings of an rmd object to identify the hierarchical
 #' structure of the document.
 #'
 #' @return A list of section names for each node.

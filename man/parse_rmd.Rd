@@ -2,13 +2,13 @@
 % Please edit documentation in R/parse_rmd.R
 \name{parse_rmd}
 \alias{parse_rmd}
-\title{Parse an RMarkdown document}
+\title{Parse an R Markdown document}
 \usage{
 parse_rmd(rmd, allow_incomplete = FALSE, parse_yaml = TRUE)
 }
 \arguments{
 \item{rmd}{Either the path to an \code{Rmd} file or a character vector containing the contents
-of a RMarkdown document.}
+of a R Markdown document.}
 
 \item{allow_incomplete}{Allow incomplete parsing of the document.}
 

@@ -1,4 +1,4 @@
-test_that("Basic heirarchy", {
+test_that("Basic hierarchy", {
   ast = create_ast(
     create_heading("H1", 1),
     create_heading("H2", 2),
@@ -39,7 +39,7 @@ test_that("Basic heirarchy", {
   )
 })
 
-test_that("Inverted heirarchy", {
+test_that("Inverted hierarchy", {
   ast = create_ast(
     create_heading("H4", 4),
     create_heading("H3", 3),

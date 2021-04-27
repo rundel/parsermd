@@ -14,7 +14,7 @@ rmd_template(
 )
 }
 \arguments{
-\item{rmd}{RMarkdown document in the form of an \code{rmd_ast} or \code{rmd_tibble}.}
+\item{rmd}{R Markdown document in the form of an \code{rmd_ast} or \code{rmd_tibble}.}
 
 \item{keep_content}{Should the template keep the document's content (markdown text and chunk code).}
 
@@ -27,7 +27,7 @@ rmd_template(
 \item{...}{Unused, for extensibility.}
 }
 \description{
-Templates are objects which are meant to capture the structure of an RMarkdown document and facilitate the
+Templates are objects which are meant to capture the structure of an R Markdown document and facilitate the
 comparison between the template and new Rmd documents, usually to ensure the structure and/or content matches
 sufficiently.
 }

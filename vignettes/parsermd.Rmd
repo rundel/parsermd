@@ -22,7 +22,7 @@ library(magrittr)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the document's cotents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
+The goal of parsermd is to extract the content of an R Markdown file to allow for programmatic interactions with the document's contents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
 
 ## Installation
 
@@ -44,7 +44,7 @@ This is a basic example which shows you the basic abstract syntax tree (AST) tha
 rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
 ```
 
-The RMarkdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a heirachical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for `rmd_ast` objects.
+The R Markdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a hierarchical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for `rmd_ast` objects.
 
 ```{r tree}
 print(rmd)
@@ -68,7 +68,7 @@ and it is possible to convert from these data frames back into an `rmd_ast`.
 as_ast( as_tibble(rmd) )
 ```
 
-Finally, we can also convert the `rmd_ast` back into an RMarkdown document via `as_document`
+Finally, we can also convert the `rmd_ast` back into an R Markdown document via `as_document`
 
 ```{r as_doc}
 cat(
@@ -79,7 +79,7 @@ cat(
 
 ## Working with the AST
 
-Once we have parsed an R Markdown document, there are a variety of things that we can do with our new abstract syntax tree (ast). Below we will demonstate some of the basic functionality within `parsermd` to manipulate and edit these objects as well as check their properties.
+Once we have parsed an R Markdown document, there are a variety of things that we can do with our new abstract syntax tree (ast). Below we will demonstrate some of the basic functionality within `parsermd` to manipulate and edit these objects as well as check their properties.
 
 ```{r}
 rmd = parse_rmd(system.file("hw01-student.Rmd", package="parsermd"))

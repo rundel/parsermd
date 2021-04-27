@@ -24,7 +24,7 @@ library(magrittr)
 [![R-CMD-check](https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/parsermd/actions)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the document's contents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
+The goal of parsermd is to extract the content of an R Markdown file to allow for programmatic interactions with the document's contents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
 
 ## Installation
 

@@ -17,6 +17,6 @@ rmd_node_sections(x, levels = 1:6, drop_na = FALSE)
 A list of section names for each node.
 }
 \description{
-Uses the section headings of an rmd object to indentify the heirarchical
+Uses the section headings of an rmd object to identify the hierarchical
 structure of the document.
 }
