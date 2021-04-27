@@ -16,6 +16,8 @@
 #' @param use_eval Use the `eval` chunk option to determine if code is included.
 #' @examples
 #'
+#' rmd_source(system.file("minimal.Rmd", package = "parsermd"), echo=TRUE)
+#'
 #' @export
 #'
 rmd_source = function(x, local = FALSE, ..., label_comment = TRUE, use_eval = TRUE) {
@@ -59,7 +61,7 @@ rmd_source.rmd_ast = function(x, local = FALSE, ..., label_comment = TRUE, use_e
   if (!is.null(opts$file))
     stop("`file` argument cannot be used.")
 
-  x = rmd_subset(x, type_refs = "rmd_chunk", keep_yaml = FALSE)
+  x = rmd_select(x, has_type("rmd_chunk"))
 
   label = rmd_node_label(x)
   engine = rmd_node_engine(x)

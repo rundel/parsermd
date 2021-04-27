@@ -26,4 +26,6 @@ their resulting asts.
 }
 \examples{
 
+rmd_source(system.file("minimal.Rmd", package = "parsermd"), echo=TRUE)
+
 }

@@ -28,7 +28,9 @@ Imports:
     rmarkdown,
     pillar,
     rlang,
-    magrittr
+    magrittr,
+    tidyselect,
+    lifecycle
 RoxygenNote: 7.1.1
 SystemRequirements: C++14
 LinkingTo: 

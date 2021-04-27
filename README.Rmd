@@ -47,9 +47,12 @@ For more details see the getting started [vignette](https://rundel.github.io/par
 
 as_tibble(rmd)
 
-rmd_subset(rmd, sec_refs = "Content", type_refs = "rmd_chunk")
+rmd_select(rmd, by_section("Content"))
 
-rmd_subset(rmd, sec_refs = c("Content", "*"), type_refs = "rmd_chunk")
+rmd_select(rmd, by_section(c("Content", "*"))) %>%
+  rmd_select(has_type(c("rmd_chunk", "rmd_heading")))
 
-rmd_get_node(rmd, name_refs = "pressure")
+rmd_select(rmd, "pressure")
+
+rmd_select(rmd, 1:3)
 ```

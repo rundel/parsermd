@@ -1,11 +1,14 @@
 #' @rdname rmd_get_node
 #' @title Extract a node from an rmd object
 #' @description
+#' `r lifecycle::badge('deprecated')`
 #' Returns a single node using [rmd_subset] selection.
 #'
 #' @inheritParams rmd_subset
 #' @export
 rmd_get_node = function(x, sec_refs = NULL, type_refs = NULL, name_refs = NULL, ...) {
+  lifecycle::deprecate_soft("0.0.2", "rmd_get_node()", "rmd_select()")
+
   UseMethod("rmd_get_node")
 }
 
@@ -35,11 +38,13 @@ rmd_get_node.rmd_tibble = function(x, sec_refs = NULL, type_refs = NULL, name_re
 #' @rdname rmd_get_node
 #' @export
 rmd_get_chunk = function(x, sec_refs = NULL, name_refs = NULL) {
+  lifecycle::deprecate_soft("0.0.2", "rmd_get_chunk()", "rmd_select()")
   rmd_get_node(x, sec_refs = sec_refs, type_refs = "rmd_chunk", name_refs = name_refs)
 }
 
 #' @rdname rmd_get_node
 #' @export
 rmd_get_markdown = function(x, sec_refs = NULL) {
+  lifecycle::deprecate_soft("0.0.2", "rmd_get_chunk()", "rmd_select()")
   rmd_get_node(x, sec_refs = sec_refs, type_refs = "rmd_markdown")
 }

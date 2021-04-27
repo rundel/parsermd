@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' tmpl = parse_rmd(system.file("hw01.Rmd", package = "parsermd")) %>%
-#'   rmd_subset(sec_refs = c("Exercise *", "Solution")) %>%
+#'   rmd_select(by_section(c("Exercise *", "Solution"))) %>%
 #'   rmd_template(keep_content = TRUE)
 #'
 #' rmd_check_template(
