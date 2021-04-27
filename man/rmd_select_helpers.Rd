@@ -5,6 +5,7 @@
 \alias{has_type}
 \alias{by_section}
 \alias{by_label}
+\alias{has_option}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
@@ -12,6 +13,8 @@ has_type(types)
 by_section(sec_ref, keep_parents = TRUE)
 
 by_label(label)
+
+has_option(...)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -23,6 +26,10 @@ for further details on how these are constructed.}
 Default: \code{TRUE}}
 
 \item{label}{character vector, glob patterns for matching chunk labels.}
+
+\item{...}{Either option names represented by a scalar string or a named argument with the form
+\code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example
+\code{eval = TRUE} would check for the option \code{eval} being set to \code{TRUE}.}
 }
 \description{
 These functions are used in conjunction with \code{\link[=rmd_select]{rmd_select()}} to

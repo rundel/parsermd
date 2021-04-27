@@ -88,3 +88,37 @@ by_label = function(label) {
 
   which(matching)
 }
+
+
+#' @rdname rmd_select_helpers
+#'
+#' @param ... Either option names represented by a scalar string or a named argument with the form
+#' `opt = value` where `opt` is the option name and `value` is the value to be checked. For example
+#' `eval = TRUE` would check for the option `eval` being set to `TRUE`.
+#'
+#' @export
+has_option = function(...) {
+  opts = c(...)
+
+  checkmate::assert_character(opts, any.missing = FALSE, min.len = 1)
+
+  if (is.null(names(opts))) # missing names will be ""
+      names(opts) = rep("", length(opts))
+
+  x = tidyselect::peek_data(fn = "has_option")
+
+  purrr::map2(
+    opts, names(opts),
+    function(opt, name) {
+      if (name == "") {
+        rmd_get_options(x, opt) %>%
+          purrr::map_lgl(~!is.null(.x[[opt]]))
+      } else {
+        rmd_get_options(x, name) %>%
+          purrr::map_lgl(~identical(.x[[name]], as.character(opt)))
+      }
+    }
+  ) %>%
+    purrr::reduce(`|`) %>%
+    which()
+}
