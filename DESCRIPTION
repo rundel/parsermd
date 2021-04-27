@@ -1,5 +1,5 @@
 Package: parsermd
-Title: Parse Rmd files and manipulate their contents programmatically
+Title: Formal Parser and Related Tools for RMarkdown Documents
 Version: 0.0.2
 Authors@R: 
     person(given = "Colin",
@@ -7,8 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "rundel@gmail.com")
 Description: parsermd implements a formal grammar and parser for Rmarkdown documents
-    using the Boost Spirit X3 library. The package also includes a number of higher level
-    functions for working with the resulting AST.
+    using the Boost Spirit X3 library. The package also includes a collection of high level
+    functions for working with the resulting abstract syntax tree (AST).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -39,6 +39,5 @@ LinkingTo:
 Suggests: 
     testthat (>= 3.0.0),
     knitr
-Remotes: r-lib/testthat
 Config/testthat/edition: 3
 VignetteBuilder: knitr
