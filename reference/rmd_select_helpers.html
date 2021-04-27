@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract a node from an rmd object — rmd_get_node • parsermd</title>
+<title>Rmd selection helper functions — rmd_select_helpers • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,13 @@
 
 
 
-<meta property="og:title" content="Extract a node from an rmd object — rmd_get_node" />
-<meta property="og:description" content="
-Returns a single node using rmd_subset selection." />
+<meta property="og:title" content="Rmd selection helper functions — rmd_select_helpers" />
+<meta property="og:description" content="These functions are used in conjunction with rmd_select() to
+select nodes from an Rmd ast.
+has_type() - selects all nodes that have the given type(s).
+by_section() - uses section selectors to select nodes.
+
+" />
 
 
 
@@ -122,46 +126,76 @@ Returns a single node using rmd_subset selection." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract a node from an rmd object</h1>
+    <h1>Rmd selection helper functions</h1>
     
-    <div class="hidden name"><code>rmd_get_node.Rd</code></div>
+    <div class="hidden name"><code>rmd_select_helpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a>
-Returns a single node using <a href='rmd_subset.html'>rmd_subset</a> selection.</p>
+    <p>These functions are used in conjunction with <code><a href='rmd_select.html'>rmd_select()</a></code> to
+select nodes from an Rmd ast.</p><ul>
+<li><p><code>has_type()</code> - selects all nodes that have the given type(s).</p></li>
+<li><p><code>by_section()</code> - uses section selectors to select nodes.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>rmd_get_node</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, type_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>has_type</span><span class='op'>(</span><span class='va'>types</span><span class='op'>)</span>
 
-<span class='fu'>rmd_get_chunk</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>by_section</span><span class='op'>(</span><span class='va'>sec_ref</span>, keep_parents <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>rmd_get_markdown</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+<span class='fu'>by_label</span><span class='op'>(</span><span class='va'>label</span><span class='op'>)</span>
+
+<span class='fu'>has_option</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>rmd object, e.g. <code>rmd_ast</code> or <code>rmd_tibble</code>.</p></td>
+      <th>types</th>
+      <td><p>Vector of character type names, e.g. <code>rmd_chunk</code>, <code>rmd_heading</code>, etc.</p></td>
     </tr>
     <tr>
-      <th>sec_refs</th>
-      <td><p>Section references, TODO - add details.</p></td>
+      <th>sec_ref</th>
+      <td><p>character vector, a section reference selector. See details below
+for further details on how these are constructed.</p></td>
     </tr>
     <tr>
-      <th>type_refs</th>
-      <td><p>Node type references, TODO - add details.</p></td>
+      <th>keep_parents</th>
+      <td><p>Logical, retain the parent headings of selected sections.
+Default: <code>TRUE</code></p></td>
     </tr>
     <tr>
-      <th>name_refs</th>
-      <td><p>Name references, TODO - add details.</p></td>
+      <th>label</th>
+      <td><p>character vector, glob patterns for matching chunk labels.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Unused, for extensibility.</p></td>
+      <td><p>Either option names represented by a scalar string or a named argument with the form
+<code>opt = value</code> where <code>opt</code> is the option name and <code>value</code> is the value to be checked. For example
+<code>eval = TRUE</code> would check for the option <code>eval</code> being set to <code>TRUE</code>.</p></td>
     </tr>
     </table>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Section reference selectors</h3>
+
+
+<p>Section reference selectors are a simplified version of CSS selectors that
+are designed to enable the selection nodes in a way that respects the implied
+hierarchy of a document's section headings.</p>
+<p>They consist of a character vector of heading names where each subsequent value
+is assumed to be nested within the preceding value. For example, the section
+selector <code><a href='https://rdrr.io/r/base/c.html'>c("Sec 1", "Sec 2")</a></code> would select all nodes that are contained within
+a section named <code>Sec 2</code> that is in turn contained within a section named <code>Sec 1</code>
+(or a section contained within a section named <code>Sec 1</code>, and so on).</p>
+<p>The individual section names can be specified using wildcards (aka globbing
+patterns), which may match one or more sections within the document, e.g.
+<code><a href='https://rdrr.io/r/base/c.html'>c("Sec 1", "Sec *")</a></code>. See <code><a href='https://rdrr.io/r/utils/glob2rx.html'>utils::glob2rx()</a></code> or
+<a href='https://en.wikipedia.org/wiki/Glob_(programming)'>wikipedia</a>
+for more details on the syntax for these patterns.</p>
 
 
   </div>
