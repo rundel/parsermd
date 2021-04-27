@@ -1,6 +1,6 @@
 Package: parsermd
 Title: Formal Parser and Related Tools for RMarkdown Documents
-Version: 0.0.2
+Version: 0.1.0
 Authors@R: 
     person(given = "Colin",
            family = "Rundel",

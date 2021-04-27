@@ -1,4 +1,4 @@
-# parsermd 0.0.2
+# parsermd 0.1.0
 
 * Added new parser error reporting system
 
