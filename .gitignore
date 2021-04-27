@@ -9,3 +9,4 @@ inst/doc
 src/*.o
 src/*.o.tmp
 TODO.md
+check
