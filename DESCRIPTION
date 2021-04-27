@@ -1,6 +1,6 @@
 Package: parsermd
 Title: Parse Rmd files and manipulate their contents programmatically
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: 
     person(given = "Colin",
            family = "Rundel",
