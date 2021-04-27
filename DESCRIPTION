@@ -17,7 +17,7 @@ Depends: R (>= 3.5.0)
 Imports: 
     purrr,
     Rcpp,
-    cli,
+    cli (>= 2.5.0),
     checkmate,
     readr,
     tidyr,

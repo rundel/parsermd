@@ -1,6 +1,4 @@
 test_that("check output - with content", {
-  skip_on_cran()
-
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
   ans = rmd_select(ast, by_section(c("Exercise *", "Answer")))
   template = rmd_template(ans, keep_content = TRUE)
@@ -12,8 +10,6 @@ test_that("check output - with content", {
 })
 
 test_that("check output - without content", {
-  skip_on_cran()
-
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
   ans = rmd_select(ast, by_section(c("Exercise *", "Answer")))
   template = rmd_template(ans, keep_content = FALSE)
