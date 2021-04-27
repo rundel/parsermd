@@ -12,7 +12,7 @@
 
 * Added `rmd_source` to support sourcing chunks directly into an environment.
 
-* Added `rmd_select` which used tidyselect based syntax as a replacement for `rmd_subset`.
+* Added `rmd_select` which uses tidyselect based syntax as a replacement for `rmd_subset`.
 
 * Soft deprecated `rmd_subset`, `rmd_get_node`, `rmd_get_markdwon`, and `rmd_get_chunk`.
 
