@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">parsermd</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -65,7 +65,14 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/rundel/parsermd/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,7 +88,7 @@
       <h1 data-toc-skip>Rmd Templates</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/rundel/parsermd/blob/master/vignettes/templates.Rmd"><code>vignettes/templates.Rmd</code></a></small>
       <div class="hidden name"><code>templates.Rmd</code></div>
 
     </div>
@@ -185,7 +192,7 @@
 <h3 class="hasAnchor">
 <a href="#revising-a-template" class="anchor"></a>Revising a template</h3>
 <p>Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students.</p>
-<p>If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from <code>rmd_sols</code> or from <code>rmd_tmpl</code>. (Generally, the former is the suggetsed workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use <code>rmd_select</code> with the <code><a href="https://rdrr.io/r/base/Logic.html">!</a></code> operator to remove these specific markdown elements.</p>
+<p>If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from <code>rmd_sols</code> or from <code>rmd_tmpl</code>. (Generally, the former is the suggested workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use <code>rmd_select</code> with the <code><a href="https://rdrr.io/r/base/Logic.html">!</a></code> operator to remove these specific markdown elements.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rmd_sols</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span> <span class="op">!</span><span class="op">(</span><span class="fu"><a href="../reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exercise 3"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="../reference/rmd_select_helpers.html">has_type</a></span><span class="op">(</span><span class="st">"rmd_markdown"</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span>
