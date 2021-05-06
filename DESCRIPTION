@@ -11,7 +11,6 @@ Description: An implementation of a formal grammar and parser for R Markdown doc
     functions for working with the resulting abstract syntax tree.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 3.5.0)
 Imports: 
