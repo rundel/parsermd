@@ -19,3 +19,6 @@ There was 1 NOTE:
 
 There are no current downstream dependencies on CRAN.
 
+## Resubmission
+
+As suggested all functions' documentation has been revised to include \value information for the returned object.
