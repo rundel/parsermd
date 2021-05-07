@@ -20,4 +20,4 @@ local_cli_config = function(
   )
 }
 
-local_cli_config(unicode = TRUE, num_colors = 256)
+# local_cli_config(unicode = TRUE, num_colors = 256)
