@@ -11,6 +11,9 @@
 #' @param keep_yaml Should the template keep the document's yaml.
 #' @param ... Unused, for extensibility.
 #'
+#' @return Returns an `rmd_template` object, which is a derived tibble containing relevant structural
+#' details of the document.
+#'
 #' @examples
 #' rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
 #'

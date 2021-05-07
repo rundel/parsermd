@@ -5,6 +5,8 @@
 #' @param collapse If not `NULL`, use value to collapse lines.
 #' @param ... Unused, for extensibility.
 #'
+#' @return Returns a character vector.
+#'
 #' @export
 as_document = function(x, padding = "", collapse = NULL, ...) {
   UseMethod("as_document")

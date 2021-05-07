@@ -8,6 +8,8 @@
 #' @param template `rmd_template` object from [rmd_template()].
 #' @param ... Unused, for extensibility.
 #'
+#' @return Invisibly returns `TRUE` if the rmd matches the template, `FALSE` otherwise.
+#'
 #' @examples
 #' tmpl = parse_rmd(system.file("hw01.Rmd", package = "parsermd")) %>%
 #'   rmd_select(by_section(c("Exercise *", "Solution"))) %>%

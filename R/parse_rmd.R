@@ -7,6 +7,8 @@
 #' @param allow_incomplete Allow incomplete parsing of the document.
 #' @param parse_yaml Use the [yaml][yaml::read_yaml()] package to parse the document's yaml.
 #'
+#' @return Returns a `rmd_ast` object.
+#'
 #' @examples
 #' parse_rmd(system.file("hw01.Rmd", package="parsermd"))
 #'

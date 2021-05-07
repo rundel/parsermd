@@ -1,27 +1,45 @@
 #' @name rmd_node
 #' @title rmd node utility functions
 #'
-#' @description
+#' @description Functions for extracting information for Rmd nodes.
 #'
-#' `rmd_node_label()` - returns a node(s) labels.
+#' @returns
 #'
-#' `rmd_node_type()` - returns node(s) type / class.
+#' * `rmd_node_label()` - returns a character vector of node labels,
+#' nodes without labels return `NA`.
 #'
-#' `rmd_node_length()` - returns node(s) length (i.e. lines of code, lines of text, etc.)
+#' * `rmd_node_type()` - returns a character vector of node types.
 #'
-#' `rmd_node_content()` - returns node(s) text content.
+#' * `rmd_node_length()` - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
+#' nodes without a length return `NA`.
 #'
-#' `rmd_node_attr()` - returns node(s) attribute value.
+#' * `rmd_node_content()` - returns a character vector of node textual content, nodes without content return `NA`.
 #'
-#' `rmd_node_engine()` - returns chunk(s) engine, `NA` for all other node types.
+#' * `rmd_node_attr()` - returns a list of node attribute values.
 #'
-#' `rmd_node_options()` - returns chunk(s) options, `NA` for all other node types.
+#' * `rmd_node_engine()` - returns a character vector of chunk engines,
+#' `NA` for all other node types.
 #'
-#' `rmd_node_code()` - returns chunk(s) code, `NA` for all other node types.
+#' * `rmd_node_options()` - returns a list of chunk node options (named list), `MULL` for all other node types.
+#'
+#' * `rmd_node_code()` - returns a list of chunk node code (character vector),
+#' `NULL` for all other node types.
 #'
 #' @param x An rmd object, e.g. `rmd_ast` or `rmd_tibble`.
 #' @param attr Attribute name to extract.
 #' @param ... Unused, for extensibility.
+#'
+#' @examples
+#'
+#' rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+#'
+#' rmd_node_label(rmd)
+#' rmd_node_type(rmd)
+#' rmd_node_content(rmd)
+#' rmd_node_attr(rmd, "level")
+#' rmd_node_engine(rmd)
+#' rmd_node_options(rmd)
+#' rmd_node_code(rmd)
 #'
 NULL
 
@@ -206,7 +224,10 @@ rmd_node_attr.rmd_tibble = function(x, attr, ...) {
 #' @rdname rmd_node
 #' @export
 rmd_node_engine = function(x, ...) {
-  unlist(rmd_node_attr(x, "engine"))
+  purrr::map_chr(
+    rmd_node_attr(x, "engine"), 1,
+    .default = NA_character_
+  )
 }
 
 #' @rdname rmd_node

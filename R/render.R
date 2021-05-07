@@ -21,6 +21,8 @@ arg_var_name = function(x, default = "Untitled") {
 #' name of `x`.
 #' @param ... Any additional arguments to be passed to [rmarkdown::render()]
 #'
+#' @return Returns the results of [rmarkdown::render()].
+#'
 #' @export
 render = function(x, name = NULL, ...) {
   if (is.null(name))

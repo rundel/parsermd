@@ -14,6 +14,9 @@
 #' @param ... Additional arguments passed to [`source`].
 #' @param label_comment Attach chunk labels as comment before each code block.
 #' @param use_eval Use the `eval` chunk option to determine if code is included.
+#'
+#' @return Returns the result of [source()] for any R code chunks.
+#'
 #' @examples
 #'
 #' rmd_source(system.file("minimal.Rmd", package = "parsermd"), echo=TRUE)
