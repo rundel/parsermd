@@ -10,3 +10,4 @@ src/*.o
 src/*.o.tmp
 TODO.md
 check
+CRAN-RELEASE
