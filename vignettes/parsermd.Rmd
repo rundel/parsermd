@@ -116,7 +116,7 @@ rmd_select(rmd, by_section(c("Exercise 1", "Solution"))) %>%
 
 ### Wildcards
 
-One useful feature of the `by_section()` and `by_label()` selection helpers is that they support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) style pattern matching. As such we can do the following to extract all of the solutions from our document:
+One useful feature of the `by_section()` and `has_label()` selection helpers is that they support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) style pattern matching. As such we can do the following to extract all of the solutions from our document:
 
 ```{r}
 rmd_select(rmd, by_section(c("Exercise *", "Solution")))
@@ -125,7 +125,7 @@ rmd_select(rmd, by_section(c("Exercise *", "Solution")))
 Similarly, if we wanted to just extract the chunks that involve plotting we can match for chunk labels with a "plot" prefix,
 
 ```{r}
-rmd_select(rmd, by_label("plot*"))
+rmd_select(rmd, has_label("plot*"))
 ```
 
 ### ast as a tibble
