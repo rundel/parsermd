@@ -12,9 +12,11 @@
 #' @param keep_setup Should the document setup chunk be kept.
 #' @param ... Unused, for extensibility.
 #'
+#' @return Returns a subset Rmd object (either `rmd_ast` or `rmd_tibble` depending on input).
+#'
 #' @export
 rmd_subset = function(x, sec_refs = NULL, type_refs = NULL, name_refs = NULL, exclude = FALSE, keep_yaml = TRUE, keep_setup = FALSE, ...) {
-  lifecycle::deprecate_soft("0.0.2", "rmd_subset()", "rmd_select()")
+  lifecycle::deprecate_soft("0.1.0", "rmd_subset()", "rmd_select()")
   UseMethod("rmd_subset")
 }
 
