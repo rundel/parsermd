@@ -42,8 +42,10 @@
 <meta property="og:title" content="Rmd selection helper functions — rmd_select_helpers" />
 <meta property="og:description" content="These functions are used in conjunction with rmd_select() to
 select nodes from an Rmd ast.
-has_type() - selects all nodes that have the given type(s).
 by_section() - uses section selectors to select nodes.
+has_type() - selects all nodes that have the given type(s).
+has_label() - selects nodes with labels matching the given glob.
+has_option() - selects nodes that have the given option(s) set.
 
 " />
 
@@ -139,8 +141,10 @@ by_section() - uses section selectors to select nodes.
     <div class="ref-description">
     <p>These functions are used in conjunction with <code><a href='rmd_select.html'>rmd_select()</a></code> to
 select nodes from an Rmd ast.</p><ul>
-<li><p><code>has_type()</code> - selects all nodes that have the given type(s).</p></li>
 <li><p><code>by_section()</code> - uses section selectors to select nodes.</p></li>
+<li><p><code>has_type()</code> - selects all nodes that have the given type(s).</p></li>
+<li><p><code>has_label()</code> - selects nodes with labels matching the given glob.</p></li>
+<li><p><code>has_option()</code> - selects nodes that have the given option(s) set.</p></li>
 </ul>
 
     </div>
@@ -149,7 +153,7 @@ select nodes from an Rmd ast.</p><ul>
 
 <span class='fu'>by_section</span><span class='op'>(</span><span class='va'>sec_ref</span>, keep_parents <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>by_label</span><span class='op'>(</span><span class='va'>label</span><span class='op'>)</span>
+<span class='fu'>has_label</span><span class='op'>(</span><span class='va'>label</span><span class='op'>)</span>
 
 <span class='fu'>has_option</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -182,6 +186,9 @@ Default: <code>TRUE</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>All helper functions return an integer vector of selected indexes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
@@ -203,6 +210,25 @@ patterns), which may match one or more sections within the document, e.g.
 for more details on the syntax for these patterns.</p>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='va'>rmd</span> <span class='op'>=</span> <span class='fu'><a href='parse_rmd.html'>parse_rmd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"hw01.Rmd"</span>, package<span class='op'>=</span><span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='rmd_select.html'>rmd_select</a></span><span class='op'>(</span><span class='va'>rmd</span>, <span class='fu'>has_type</span><span class='op'>(</span><span class='st'>"rmd_chunk"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; ├── Chunk <span style='color: #555555;'>[r, 1 opt, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>load-packages</span><span>
+#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
+#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-dino</span><span>
+#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-star</span><span>
+#&gt; └── Chunk </span><span style='color: #555555;'>[r, 1 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-star</span><span></div><div class='input'>
+<span class='fu'><a href='rmd_select.html'>rmd_select</a></span><span class='op'>(</span><span class='va'>rmd</span>, <span class='fu'>has_label</span><span class='op'>(</span><span class='st'>"*dino"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
+#&gt; └── Chunk </span><span style='color: #555555;'>[r, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-dino</span><span></div><div class='input'>
+<span class='fu'><a href='rmd_select.html'>rmd_select</a></span><span class='op'>(</span><span class='va'>rmd</span>, <span class='fu'>has_option</span><span class='op'>(</span><span class='st'>"message"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; └── Chunk </span><span style='color: #555555;'>[r, 1 opt, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>load-packages</span><span></div><div class='input'><span class='fu'><a href='rmd_select.html'>rmd_select</a></span><span class='op'>(</span><span class='va'>rmd</span>, <span class='fu'>has_option</span><span class='op'>(</span>message <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; └── Chunk </span><span style='color: #555555;'>[r, 1 opt, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>load-packages</span><span></div><div class='input'><span class='fu'><a href='rmd_select.html'>rmd_select</a></span><span class='op'>(</span><span class='va'>rmd</span>, <span class='fu'>has_option</span><span class='op'>(</span>message <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

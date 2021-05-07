@@ -40,14 +40,7 @@
 
 
 <meta property="og:title" content="rmd node utility functions — rmd_node" />
-<meta property="og:description" content="rmd_node_label() - returns a node(s) labels.
-rmd_node_type() - returns node(s) type / class.
-rmd_node_length() - returns node(s) length (i.e. lines of code, lines of text, etc.)
-rmd_node_content() - returns node(s) text content.
-rmd_node_attr() - returns node(s) attribute value.
-rmd_node_engine() - returns chunk(s) engine, NA for all other node types.
-rmd_node_options() - returns chunk(s) options, NA for all other node types.
-rmd_node_code() - returns chunk(s) code, NA for all other node types." />
+<meta property="og:description" content="Functions for extracting information for Rmd nodes." />
 
 
 
@@ -139,14 +132,7 @@ rmd_node_code() - returns chunk(s) code, NA for all other node types." />
     </div>
 
     <div class="ref-description">
-    <p><code>rmd_node_label()</code> - returns a node(s) labels.</p>
-<p><code>rmd_node_type()</code> - returns node(s) type / class.</p>
-<p><code>rmd_node_length()</code> - returns node(s) length (i.e. lines of code, lines of text, etc.)</p>
-<p><code>rmd_node_content()</code> - returns node(s) text content.</p>
-<p><code>rmd_node_attr()</code> - returns node(s) attribute value.</p>
-<p><code>rmd_node_engine()</code> - returns chunk(s) engine, <code>NA</code> for all other node types.</p>
-<p><code>rmd_node_options()</code> - returns chunk(s) options, <code>NA</code> for all other node types.</p>
-<p><code>rmd_node_code()</code> - returns chunk(s) code, <code>NA</code> for all other node types.</p>
+    <p>Functions for extracting information for Rmd nodes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rmd_node_label</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -182,7 +168,266 @@ rmd_node_code() - returns chunk(s) code, NA for all other node types." />
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    
+<ul>
+<li><p><code>rmd_node_label()</code> - returns a character vector of node labels,
+nodes without labels return <code>NA</code>.</p></li>
+<li><p><code>rmd_node_type()</code> - returns a character vector of node types.</p></li>
+<li><p><code>rmd_node_length()</code> - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
+nodes without a length return <code>NA</code>.</p></li>
+<li><p><code>rmd_node_content()</code> - returns a character vector of node textual content, nodes without content return <code>NA</code>.</p></li>
+<li><p><code>rmd_node_attr()</code> - returns a list of node attribute values.</p></li>
+<li><p><code>rmd_node_engine()</code> - returns a character vector of chunk engines,
+<code>NA</code> for all other node types.</p></li>
+<li><p><code>rmd_node_options()</code> - returns a list of chunk node options (named list), <code>MULL</code> for all other node types.</p></li>
+<li><p><code>rmd_node_code()</code> - returns a list of chunk node code (character vector),
+<code>NULL</code> for all other node types.</p></li>
+</ul>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='va'>rmd</span> <span class='op'>=</span> <span class='fu'><a href='parse_rmd.html'>parse_rmd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"hw01.Rmd"</span>, package<span class='op'>=</span><span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>rmd_node_label</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] NA              NA              "load-packages" NA             
+#&gt;  [5] NA              NA              NA              NA             
+#&gt;  [9] NA              NA              NA              "plot-dino"    
+#&gt; [13] NA              "cor-dino"      NA              NA             
+#&gt; [17] NA              NA              "plot-star"     NA             
+#&gt; [21] "cor-star"     </div><div class='input'><span class='fu'>rmd_node_type</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "rmd_yaml_list" "rmd_heading"   "rmd_chunk"     "rmd_heading"  
+#&gt;  [5] "rmd_markdown"  "rmd_heading"   "rmd_markdown"  "rmd_heading"  
+#&gt;  [9] "rmd_markdown"  "rmd_heading"   "rmd_markdown"  "rmd_chunk"    
+#&gt; [13] "rmd_markdown"  "rmd_chunk"     "rmd_heading"   "rmd_markdown" 
+#&gt; [17] "rmd_heading"   "rmd_markdown"  "rmd_chunk"     "rmd_markdown" 
+#&gt; [21] "rmd_chunk"    </div><div class='input'><span class='fu'>rmd_node_content</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] NA                                                                                                                                                                                                                                                                                                
+#&gt;  [2] NA                                                                                                                                                                                                                                                                                                
+#&gt;  [3] "library(tidyverse) \nlibrary(datasauRus)"                                                                                                                                                                                                                                                        
+#&gt;  [4] NA                                                                                                                                                                                                                                                                                                
+#&gt;  [5] "Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message \"Added answer for Ex 1\", and push.\n"
+#&gt;  [6] NA                                                                                                                                                                                                                                                                                                
+#&gt;  [7] "(Type your answer to Exercise 1 here. This exercise does not require any R code.)\n"                                                                                                                                                                                                             
+#&gt;  [8] NA                                                                                                                                                                                                                                                                                                
+#&gt;  [9] "Plot `y` vs. `x` for the `dino` dataset. Then, calculate the correlation coefficient between x and y for this dataset.\n"                                                                                                                                                                        
+#&gt; [10] NA                                                                                                                                                                                                                                                                                                
+#&gt; [11] "(The answers for this Exercise are given for you below. But you should clean up some of the narrative so that it only includes what you want to turn in.)\n\nFirst let's plot the data in the dino dataset:\n"                                                                                   
+#&gt; [12] "dino_data &lt;- datasaurus_dozen %&gt;%\n  filter(dataset == \"dino\")\n\nggplot(data = dino_data, mapping = aes(x = x, y = y)) +\n  geom_point()"                                                                                                                                                     
+#&gt; [13] "And next calculate the correlation between `x` and `y` in this dataset:\n"                                                                                                                                                                                                                       
+#&gt; [14] "dino_data %&gt;%\n  summarize(r = cor(x, y))"                                                                                                                                                                                                                                                       
+#&gt; [15] NA                                                                                                                                                                                                                                                                                                
+#&gt; [16] "Plot `y` vs. `x` for the `star` dataset. You can (and should) reuse code we introduced above, just replace the dataset name with the desired dataset. Then, calculate the correlation coefficient between x and y for this dataset. How does this value compare to the r of dino?\n"             
+#&gt; [17] NA                                                                                                                                                                                                                                                                                                
+#&gt; [18] "(Add code and narrative as needed. Note that the R chunks are labeled with `plot-star` and `cor-star` to provide spaces to place the code for plotting and calculating the correlation coefficient. To finish, clean up the narrative by removing these instructions.)\n\nBlah blah blah...\n"   
+#&gt; [19] ""                                                                                                                                                                                                                                                                                                
+#&gt; [20] "I'm some text, you should replace me with more meaningful text...\n"                                                                                                                                                                                                                             
+#&gt; [21] ""                                                                                                                                                                                                                                                                                                </div><div class='input'><span class='fu'>rmd_node_attr</span><span class='op'>(</span><span class='va'>rmd</span>, <span class='st'>"level"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt; NULL
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 3
+#&gt; 
+#&gt; [[3]]
+#&gt; NULL
+#&gt; 
+#&gt; [[4]]
+#&gt; [1] 3
+#&gt; 
+#&gt; [[5]]
+#&gt; NULL
+#&gt; 
+#&gt; [[6]]
+#&gt; [1] 4
+#&gt; 
+#&gt; [[7]]
+#&gt; NULL
+#&gt; 
+#&gt; [[8]]
+#&gt; [1] 3
+#&gt; 
+#&gt; [[9]]
+#&gt; NULL
+#&gt; 
+#&gt; [[10]]
+#&gt; [1] 4
+#&gt; 
+#&gt; [[11]]
+#&gt; NULL
+#&gt; 
+#&gt; [[12]]
+#&gt; NULL
+#&gt; 
+#&gt; [[13]]
+#&gt; NULL
+#&gt; 
+#&gt; [[14]]
+#&gt; NULL
+#&gt; 
+#&gt; [[15]]
+#&gt; [1] 3
+#&gt; 
+#&gt; [[16]]
+#&gt; NULL
+#&gt; 
+#&gt; [[17]]
+#&gt; [1] 4
+#&gt; 
+#&gt; [[18]]
+#&gt; NULL
+#&gt; 
+#&gt; [[19]]
+#&gt; NULL
+#&gt; 
+#&gt; [[20]]
+#&gt; NULL
+#&gt; 
+#&gt; [[21]]
+#&gt; NULL
+#&gt; </div><div class='input'><span class='fu'>rmd_node_engine</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] NA  NA  "r" NA  NA  NA  NA  NA  NA  NA  NA  "r" NA  "r" NA  NA  NA  NA  "r"
+#&gt; [20] NA  "r"</div><div class='input'><span class='fu'>rmd_node_options</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt; NULL
+#&gt; 
+#&gt; [[2]]
+#&gt; NULL
+#&gt; 
+#&gt; [[3]]
+#&gt; [[3]]$message
+#&gt; [1] "FALSE"
+#&gt; 
+#&gt; 
+#&gt; [[4]]
+#&gt; NULL
+#&gt; 
+#&gt; [[5]]
+#&gt; NULL
+#&gt; 
+#&gt; [[6]]
+#&gt; NULL
+#&gt; 
+#&gt; [[7]]
+#&gt; NULL
+#&gt; 
+#&gt; [[8]]
+#&gt; NULL
+#&gt; 
+#&gt; [[9]]
+#&gt; NULL
+#&gt; 
+#&gt; [[10]]
+#&gt; NULL
+#&gt; 
+#&gt; [[11]]
+#&gt; NULL
+#&gt; 
+#&gt; [[12]]
+#&gt; [[12]]$fig.height
+#&gt; [1] "3"
+#&gt; 
+#&gt; [[12]]$fig.width
+#&gt; [1] "6"
+#&gt; 
+#&gt; 
+#&gt; [[13]]
+#&gt; NULL
+#&gt; 
+#&gt; [[14]]
+#&gt; named list()
+#&gt; 
+#&gt; [[15]]
+#&gt; NULL
+#&gt; 
+#&gt; [[16]]
+#&gt; NULL
+#&gt; 
+#&gt; [[17]]
+#&gt; NULL
+#&gt; 
+#&gt; [[18]]
+#&gt; NULL
+#&gt; 
+#&gt; [[19]]
+#&gt; named list()
+#&gt; 
+#&gt; [[20]]
+#&gt; NULL
+#&gt; 
+#&gt; [[21]]
+#&gt; named list()
+#&gt; </div><div class='input'><span class='fu'>rmd_node_code</span><span class='op'>(</span><span class='va'>rmd</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt; NULL
+#&gt; 
+#&gt; [[2]]
+#&gt; NULL
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] "library(tidyverse) " "library(datasauRus)"
+#&gt; 
+#&gt; [[4]]
+#&gt; NULL
+#&gt; 
+#&gt; [[5]]
+#&gt; NULL
+#&gt; 
+#&gt; [[6]]
+#&gt; NULL
+#&gt; 
+#&gt; [[7]]
+#&gt; NULL
+#&gt; 
+#&gt; [[8]]
+#&gt; NULL
+#&gt; 
+#&gt; [[9]]
+#&gt; NULL
+#&gt; 
+#&gt; [[10]]
+#&gt; NULL
+#&gt; 
+#&gt; [[11]]
+#&gt; NULL
+#&gt; 
+#&gt; [[12]]
+#&gt; [1] "dino_data &lt;- datasaurus_dozen %&gt;%"                      
+#&gt; [2] "  filter(dataset == \"dino\")"                          
+#&gt; [3] ""                                                       
+#&gt; [4] "ggplot(data = dino_data, mapping = aes(x = x, y = y)) +"
+#&gt; [5] "  geom_point()"                                         
+#&gt; 
+#&gt; [[13]]
+#&gt; NULL
+#&gt; 
+#&gt; [[14]]
+#&gt; [1] "dino_data %&gt;%"              "  summarize(r = cor(x, y))"
+#&gt; 
+#&gt; [[15]]
+#&gt; NULL
+#&gt; 
+#&gt; [[16]]
+#&gt; NULL
+#&gt; 
+#&gt; [[17]]
+#&gt; NULL
+#&gt; 
+#&gt; [[18]]
+#&gt; NULL
+#&gt; 
+#&gt; [[19]]
+#&gt; [1] ""
+#&gt; 
+#&gt; [[20]]
+#&gt; NULL
+#&gt; 
+#&gt; [[21]]
+#&gt; [1] ""
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

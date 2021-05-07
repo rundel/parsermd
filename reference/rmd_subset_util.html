@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Source the code chunks of an Rmd document — rmd_source • parsermd</title>
+<title>rmd_subset utility functions — rmd_subset_util • parsermd</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Source the code chunks of an Rmd document — rmd_source" />
-<meta property="og:description" content="This is the equivalent of the source() function for Rmd files or
-their resulting asts." />
+<meta property="og:title" content="rmd_subset utility functions — rmd_subset_util" />
+<meta property="og:description" content="
+Tools for selecting or checking a single node using rmd_subset() selection." />
 
 
 
@@ -127,92 +127,62 @@ their resulting asts." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Source the code chunks of an Rmd document</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/parsermd/blob/master/R/rmd_source.R'><code>R/rmd_source.R</code></a></small>
-    <div class="hidden name"><code>rmd_source.Rd</code></div>
+    <h1>rmd_subset utility functions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/parsermd/blob/master/R/rmd_subset_util.R'><code>R/rmd_subset_util.R</code></a></small>
+    <div class="hidden name"><code>rmd_subset_util.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is the equivalent of the <code><a href='https://rdrr.io/r/base/source.html'>source()</a></code> function for Rmd files or
-their resulting asts.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a></p>
+<p>Tools for selecting or checking a single node using <code><a href='rmd_subset.html'>rmd_subset()</a></code> selection.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rmd_source</span><span class='op'>(</span><span class='va'>x</span>, local <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span>, label_comment <span class='op'>=</span> <span class='cn'>TRUE</span>, use_eval <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rmd_get_node</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, type_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_get_chunk</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
+<span class='fu'>rmd_get_markdown</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
+<span class='fu'>rmd_has_node</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, type_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_has_chunk</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, name_refs <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>rmd_has_markdown</span><span class='op'>(</span><span class='va'>x</span>, sec_refs <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An Rmd document (e.g. <code>rmd_ast</code>, <code>rmd_tibble</code>, Rmd file path, etc.)</p></td>
+      <td><p>rmd object, e.g. <code>rmd_ast</code> or <code>rmd_tibble</code>.</p></td>
     </tr>
     <tr>
-      <th>local</th>
-      <td><p><code>TRUE</code>, <code>FALSE</code> or an environment, determining where the parsed
-expressions are evaluated. <code>FALSE</code> (the default) corresponds to the user's
-workspace (the global environment) and <code>TRUE</code> to the environment from which
-source is called.</p></td>
+      <th>sec_refs</th>
+      <td><p>Section references, TODO - add details.</p></td>
+    </tr>
+    <tr>
+      <th>type_refs</th>
+      <td><p>Node type references, TODO - add details.</p></td>
+    </tr>
+    <tr>
+      <th>name_refs</th>
+      <td><p>Name references, TODO - add details.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='https://rdrr.io/r/base/source.html'>source</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>label_comment</th>
-      <td><p>Attach chunk labels as comment before each code block.</p></td>
-    </tr>
-    <tr>
-      <th>use_eval</th>
-      <td><p>Use the <code>eval</code> chunk option to determine if code is included.</p></td>
+      <td><p>Unused, for extensibility.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns the result of <code><a href='https://rdrr.io/r/base/source.html'>source()</a></code> for any R code chunks.</p>
+    
+<ul>
+<li><p><code>rmd_get_*()</code> functions returns a single Rmd node object (e.g. <code>rmd_heading</code>, <code>rmd_chunk</code>, <code>rmd_markdown</code>, etc.)</p></li>
+<li><p><code>rmd_has_*()</code> functions return <code>TRUE</code> if a matching node exists, <code>FALSE</code> otherwise.</p></li>
+</ul>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>rmd_source</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"minimal.Rmd"</span>, package <span class='op'>=</span> <span class='st'>"parsermd"</span><span class='op'>)</span>, echo<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &gt; knitr::opts_chunk$set(echo = TRUE)
-#&gt; &gt; summary(cars)
-#&gt;      speed           dist       
-#&gt;  Min.   : 4.0   Min.   :  2.00  
-#&gt;  1st Qu.:12.0   1st Qu.: 26.00  
-#&gt;  Median :15.0   Median : 36.00  
-#&gt;  Mean   :15.4   Mean   : 42.98  
-#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  
-#&gt;  Max.   :25.0   Max.   :120.00  
-#&gt; &gt; knitr::knit_patterns$get()
-#&gt; $chunk.begin
-#&gt; NULL
-#&gt; 
-#&gt; $chunk.end
-#&gt; NULL
-#&gt; 
-#&gt; $chunk.code
-#&gt; NULL
-#&gt; 
-#&gt; $inline.code
-#&gt; NULL
-#&gt; 
-#&gt; $global.options
-#&gt; NULL
-#&gt; 
-#&gt; $input.doc
-#&gt; NULL
-#&gt; 
-#&gt; $ref.chunk
-#&gt; NULL
-#&gt; 
-#&gt; $header.begin
-#&gt; NULL
-#&gt; 
-#&gt; $document.begin
-#&gt; NULL
-#&gt; 
-#&gt; &gt; plot(pressure)</div><div class='img'><img src='rmd_source-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

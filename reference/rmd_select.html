@@ -43,7 +43,7 @@
 <meta property="og:description" content="This function is implemented using tidyselect::eval_select() which enables
 a variety of useful syntax for selecting nodes from the ast.
 Additionally, a number of additional parsermd specific selection helpers are available:
-has_type(), by_section(), by_label()" />
+by_section(), has_type(), has_label(), and has_option()." />
 
 
 
@@ -138,7 +138,7 @@ has_type(), by_section(), by_label()" />
     <p>This function is implemented using <code><a href='https://tidyselect.r-lib.org/reference/eval_select.html'>tidyselect::eval_select()</a></code> which enables
 a variety of useful syntax for selecting nodes from the ast.</p>
 <p>Additionally, a number of additional <code>parsermd</code> specific selection helpers are available:
-<code><a href='rmd_select_helpers.html'>has_type()</a></code>, <code><a href='rmd_select_helpers.html'>by_section()</a></code>, <code><a href='rmd_select_helpers.html'>by_label()</a></code></p>
+<code><a href='rmd_select_helpers.html'>by_section()</a></code>, <code><a href='rmd_select_helpers.html'>has_type()</a></code>, <code><a href='rmd_select_helpers.html'>has_label()</a></code>, and <code><a href='rmd_select_helpers.html'>has_option()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rmd_select</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -158,12 +158,18 @@ select a range of nodes.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns a subset Rmd object (either <code>rmd_ast</code> or <code>rmd_tibble</code> depending on input).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>rmd</span> <span class='op'>=</span> <span class='fu'><a href='parse_rmd.html'>parse_rmd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"hw01.Rmd"</span>, package <span class='op'>=</span> <span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>rmd_select</span><span class='op'>(</span><span class='va'>rmd</span>, <span class='st'>"plot-dino"</span>, <span class='st'>"cor-dino"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; ├── Chunk <span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
+#&gt; └── Chunk </span><span style='color: #555555;'>[r, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-dino</span><span></div><div class='input'><span class='fu'>rmd_select</span><span class='op'>(</span><span class='va'>rmd</span>, <span class='st'>"plot-dino"</span><span class='op'>:</span><span class='st'>"cor-dino"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
+#&gt; ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>
 #&gt; └── Chunk </span><span style='color: #555555;'>[r, 2 lines] - </span><span style='color: #555555;font-weight: bold;'>cor-dino</span><span></div><div class='input'><span class='fu'>rmd_select</span><span class='op'>(</span><span class='va'>rmd</span>, <span class='va'>`plot-dino`</span><span class='op'>:</span><span class='va'>`cor-dino`</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; ├── Chunk </span><span style='color: #555555;'>[r, 2 opts, 5 lines] - </span><span style='color: #555555;font-weight: bold;'>plot-dino</span><span>
 #&gt; ├── Markdown </span><span style='color: #555555;'>[2 lines]</span><span>

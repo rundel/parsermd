@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Convert an object into an rmd_ast. — as_ast" />
-<meta property="og:description" content="Currently only supports conversion of rmd_tibble objects." />
+<meta property="og:description" content="Currently only supports conversion of rmd_tibble objects back to rmd_ast." />
 
 
 
@@ -132,7 +132,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Currently only supports conversion of <code>rmd_tibble</code> objects.</p>
+    <p>Currently only supports conversion of <code>rmd_tibble</code> objects back to <code>rmd_ast</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>as_ast</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -150,6 +150,9 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns an <code>rmd_ast</code> object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='parse_rmd.html'>parse_rmd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"hw01.Rmd"</span>, package<span class='op'>=</span><span class='st'>"parsermd"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
