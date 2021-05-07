@@ -139,7 +139,7 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-functions" class="hasAnchor"><a href="#section-functions" class="anchor"></a>Functions</h2>
+          <h2 id="section-document-functions" class="hasAnchor"><a href="#section-document-functions" class="anchor"></a>Document functions</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -154,6 +154,142 @@
           <p><code><a href="parse_rmd.html">parse_rmd()</a></code> </p>
         </td>
         <td><p>Parse an R Markdown document</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as_ast.html">as_ast()</a></code> </p>
+        </td>
+        <td><p>Convert an object into an <code>rmd_ast</code>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as_document.html">as_document()</a></code> </p>
+        </td>
+        <td><p>Convert an <code>rmd_ast</code>, <code>rmd_tibble</code>, or any ast node into text.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="reexports.html">reexports</a></code> </p>
+        </td>
+        <td><p>Objects exported from other packages</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="render.html">render()</a></code> </p>
+        </td>
+        <td><p>Render <code>parsermd</code> objects using <code><a href='https://pkgs.rstudio.com/rmarkdown/reference/render.html'>rmarkdown::render()</a></code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_source.html">rmd_source()</a></code> </p>
+        </td>
+        <td><p>Source the code chunks of an Rmd document</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-subsetting-functions" class="hasAnchor"><a href="#section-subsetting-functions" class="anchor"></a>Subsetting functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rmd_select.html">rmd_select()</a></code> </p>
+        </td>
+        <td><p>Select nodes of an Rmd ast</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_select_helpers.html">has_type()</a></code> <code><a href="rmd_select_helpers.html">by_section()</a></code> <code><a href="rmd_select_helpers.html">has_label()</a></code> <code><a href="rmd_select_helpers.html">has_option()</a></code> </p>
+        </td>
+        <td><p>Rmd selection helper functions</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-node-functions" class="hasAnchor"><a href="#section-node-functions" class="anchor"></a>Node functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rmd_node.html">rmd_node_label()</a></code> <code><a href="rmd_node.html">rmd_node_type()</a></code> <code><a href="rmd_node.html">rmd_node_length()</a></code> <code><a href="rmd_node.html">rmd_node_content()</a></code> <code><a href="rmd_node.html">rmd_node_attr()</a></code> <code><a href="rmd_node.html">rmd_node_engine()</a></code> <code><a href="rmd_node.html">rmd_node_options()</a></code> <code><a href="rmd_node.html">rmd_node_code()</a></code> </p>
+        </td>
+        <td><p>rmd node utility functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_node_sections.html">rmd_node_sections()</a></code> </p>
+        </td>
+        <td><p>Find the sections for each rmd object node</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="chunk_options.html">rmd_set_options()</a></code> <code><a href="chunk_options.html">rmd_get_options()</a></code> </p>
+        </td>
+        <td><p>Get and set code chunk options</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-template-functions" class="hasAnchor"><a href="#section-template-functions" class="anchor"></a>Template functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rmd_template.html">rmd_template()</a></code> </p>
+        </td>
+        <td><p>Create a template from an <code>rmd</code> object.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_check_template.html">rmd_check_template()</a></code> </p>
+        </td>
+        <td><p>Check an Rmd against a template</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-deprecated-functions" class="hasAnchor"><a href="#section-deprecated-functions" class="anchor"></a>Deprecated functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rmd_subset.html">rmd_subset()</a></code> </p>
+        </td>
+        <td><p>Subset the nodes of an rmd object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_subset_util.html">rmd_get_node()</a></code> <code><a href="rmd_subset_util.html">rmd_get_chunk()</a></code> <code><a href="rmd_subset_util.html">rmd_get_markdown()</a></code> <code><a href="rmd_subset_util.html">rmd_has_node()</a></code> <code><a href="rmd_subset_util.html">rmd_has_chunk()</a></code> <code><a href="rmd_subset_util.html">rmd_has_markdown()</a></code> </p>
+        </td>
+        <td><p>rmd_subset utility functions</p></td>
       </tr>
     </tbody>
     </table>
