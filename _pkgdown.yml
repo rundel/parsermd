@@ -26,12 +26,14 @@ reference:
   - render
   - rmd_source
 - title: Subsetting functions
+  contents:
   - rmd_select
   - by_section
   - has_label
   - has_option
   - has_type
 - title: Node functions
+  contents:
   - rmd_node_attr
   - rmd_node_code
   - rmd_node_content
@@ -42,15 +44,17 @@ reference:
   - rmd_node_sections
   - rmd_node_type
   - rmd_set_options
+  - rmd_get_options
 - title: Template functions
+  contents:
   - rmd_template
   - rmd_check_template
 - title: Deprecated functions
+  contents:
   - rmd_subset
   - rmd_get_chunk
   - rmd_get_markdown
   - rmd_get_node
-  - rmd_get_options
   - rmd_has_chunk
   - rmd_has_markdown
   - rmd_has_node
