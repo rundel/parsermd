@@ -15,6 +15,9 @@ as_document(x, padding = "", collapse = NULL, ...)
 
 \item{...}{Unused, for extensibility.}
 }
+\value{
+Returns a character vector.
+}
 \description{
 Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.
 }

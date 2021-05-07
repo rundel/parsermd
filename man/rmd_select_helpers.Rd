@@ -4,7 +4,7 @@
 \alias{rmd_select_helpers}
 \alias{has_type}
 \alias{by_section}
-\alias{by_label}
+\alias{has_label}
 \alias{has_option}
 \title{Rmd selection helper functions}
 \usage{
@@ -12,7 +12,7 @@ has_type(types)
 
 by_section(sec_ref, keep_parents = TRUE)
 
-by_label(label)
+has_label(label)
 
 has_option(...)
 }
@@ -31,12 +31,17 @@ Default: \code{TRUE}}
 \code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example
 \code{eval = TRUE} would check for the option \code{eval} being set to \code{TRUE}.}
 }
+\value{
+All helper functions return an integer vector of selected indexes.
+}
 \description{
 These functions are used in conjunction with \code{\link[=rmd_select]{rmd_select()}} to
 select nodes from an Rmd ast.
 \itemize{
-\item \code{has_type()} - selects all nodes that have the given type(s).
 \item \code{by_section()} - uses section selectors to select nodes.
+\item \code{has_type()} - selects all nodes that have the given type(s).
+\item \code{has_label()} - selects nodes with labels matching the given glob.
+\item \code{has_option()} - selects nodes that have the given option(s) set.
 }
 }
 \details{
@@ -58,4 +63,18 @@ patterns), which may match one or more sections within the document, e.g.
 \href{https://en.wikipedia.org/wiki/Glob_(programming)}{wikipedia}
 for more details on the syntax for these patterns.
 }
+}
+\examples{
+
+rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+
+rmd_select(rmd, has_type("rmd_chunk"))
+
+rmd_select(rmd, has_label("*dino"))
+
+rmd_select(rmd, has_option("message"))
+rmd_select(rmd, has_option(message = FALSE))
+rmd_select(rmd, has_option(message = TRUE))
+
+
 }

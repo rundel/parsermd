@@ -11,8 +11,11 @@ as_ast(x, ...)
 
 \item{...}{Unused, for extensibility.}
 }
+\value{
+Returns an \code{rmd_ast} object.
+}
 \description{
-Currently only supports conversion of \code{rmd_tibble} objects.
+Currently only supports conversion of \code{rmd_tibble} objects back to \code{rmd_ast}.
 }
 \examples{
 parse_rmd(system.file("hw01.Rmd", package="parsermd")) \%>\%

@@ -14,6 +14,9 @@ name of \code{x}.}
 
 \item{...}{Any additional arguments to be passed to \code{\link[rmarkdown:render]{rmarkdown::render()}}}
 }
+\value{
+Returns the results of \code{\link[rmarkdown:render]{rmarkdown::render()}}.
+}
 \description{
 Object contents are converted to a character vector and written to a
 temporary directory before rendering.

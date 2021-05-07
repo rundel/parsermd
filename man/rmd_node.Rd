@@ -35,20 +35,35 @@ rmd_node_code(x, ...)
 
 \item{attr}{Attribute name to extract.}
 }
+\value{
+\itemize{
+\item \code{rmd_node_label()} - returns a character vector of node labels,
+nodes without labels return \code{NA}.
+\item \code{rmd_node_type()} - returns a character vector of node types.
+\item \code{rmd_node_length()} - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
+nodes without a length return \code{NA}.
+\item \code{rmd_node_content()} - returns a character vector of node textual content, nodes without content return \code{NA}.
+\item \code{rmd_node_attr()} - returns a list of node attribute values.
+\item \code{rmd_node_engine()} - returns a character vector of chunk engines,
+\code{NA} for all other node types.
+\item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{MULL} for all other node types.
+\item \code{rmd_node_code()} - returns a list of chunk node code (character vector),
+\code{NULL} for all other node types.
+}
+}
 \description{
-\code{rmd_node_label()} - returns a node(s) labels.
+Functions for extracting information for Rmd nodes.
+}
+\examples{
 
-\code{rmd_node_type()} - returns node(s) type / class.
+rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
 
-\code{rmd_node_length()} - returns node(s) length (i.e. lines of code, lines of text, etc.)
+rmd_node_label(rmd)
+rmd_node_type(rmd)
+rmd_node_content(rmd)
+rmd_node_attr(rmd, "level")
+rmd_node_engine(rmd)
+rmd_node_options(rmd)
+rmd_node_code(rmd)
 
-\code{rmd_node_content()} - returns node(s) text content.
-
-\code{rmd_node_attr()} - returns node(s) attribute value.
-
-\code{rmd_node_engine()} - returns chunk(s) engine, \code{NA} for all other node types.
-
-\code{rmd_node_options()} - returns chunk(s) options, \code{NA} for all other node types.
-
-\code{rmd_node_code()} - returns chunk(s) code, \code{NA} for all other node types.
 }

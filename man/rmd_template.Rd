@@ -26,6 +26,10 @@ rmd_template(
 
 \item{...}{Unused, for extensibility.}
 }
+\value{
+Returns an \code{rmd_template} object, which is a derived tibble containing relevant structural
+details of the document.
+}
 \description{
 Templates are objects which are meant to capture the structure of an R Markdown document and facilitate the
 comparison between the template and new Rmd documents, usually to ensure the structure and/or content matches

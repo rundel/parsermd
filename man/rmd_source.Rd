@@ -20,6 +20,9 @@ source is called.}
 
 \item{use_eval}{Use the \code{eval} chunk option to determine if code is included.}
 }
+\value{
+Returns the result of \code{\link[=source]{source()}} for any R code chunks.
+}
 \description{
 This is the equivalent of the \code{\link[=source]{source()}} function for Rmd files or
 their resulting asts.

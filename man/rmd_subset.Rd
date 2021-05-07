@@ -32,6 +32,9 @@ rmd_subset(
 
 \item{...}{Unused, for extensibility.}
 }
+\value{
+Returns a subset Rmd object (either \code{rmd_ast} or \code{rmd_tibble} depending on input).
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Subset an rmd object based on sections, node types, or names.

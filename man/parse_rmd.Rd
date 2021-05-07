@@ -14,6 +14,9 @@ of a R Markdown document.}
 
 \item{parse_yaml}{Use the \link[yaml:read_yaml]{yaml} package to parse the document's yaml.}
 }
+\value{
+Returns a \code{rmd_ast} object.
+}
 \description{
 Documents are parse into an \code{rmd_ast} object.
 }

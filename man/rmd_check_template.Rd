@@ -14,6 +14,9 @@ that can be handled by \code{parse_rmd}.}
 
 \item{...}{Unused, for extensibility.}
 }
+\value{
+Invisibly returns \code{TRUE} if the rmd matches the template, \code{FALSE} otherwise.
+}
 \description{
 This function compares the provided Rmd against a template and reports on
 discrepancies (e.g. missing or unmodified components).

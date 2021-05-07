@@ -13,17 +13,21 @@ rmd_select(x, ...)
 as if they were positions in the data frame, so expressions like x:y can be used to
 select a range of nodes.}
 }
+\value{
+Returns a subset Rmd object (either \code{rmd_ast} or \code{rmd_tibble} depending on input).
+}
 \description{
 This function is implemented using \code{\link[tidyselect:eval_select]{tidyselect::eval_select()}} which enables
 a variety of useful syntax for selecting nodes from the ast.
 
 Additionally, a number of additional \code{parsermd} specific selection helpers are available:
-\code{\link[=has_type]{has_type()}}, \code{\link[=by_section]{by_section()}}, \code{\link[=by_label]{by_label()}}
+\code{\link[=by_section]{by_section()}}, \code{\link[=has_type]{has_type()}}, \code{\link[=has_label]{has_label()}}, and \code{\link[=has_option]{has_option()}}.
 }
 \examples{
 rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
 
 rmd_select(rmd, "plot-dino", "cor-dino")
+rmd_select(rmd, "plot-dino":"cor-dino")
 rmd_select(rmd, `plot-dino`:`cor-dino`)
 
 rmd_select(rmd, has_type("rmd_chunk"))
