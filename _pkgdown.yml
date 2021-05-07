@@ -17,6 +17,40 @@ navbar:
     href: news/index.html
 
 reference:
-- title: Functions
+- title: Document functions
   contents:
   - parse_rmd
+  - as_ast
+  - as_document
+  - as_tibble
+  - render
+  - rmd_source
+- title: Subsetting functions
+  - rmd_select
+  - by_section
+  - has_label
+  - has_option
+  - has_type
+- title: Node functions
+  - rmd_node_attr
+  - rmd_node_code
+  - rmd_node_content
+  - rmd_node_engine
+  - rmd_node_label
+  - rmd_node_length
+  - rmd_node_options
+  - rmd_node_sections
+  - rmd_node_type
+  - rmd_set_options
+- title: Template functions
+  - rmd_template
+  - rmd_check_template
+- title: Deprecated functions
+  - rmd_subset
+  - rmd_get_chunk
+  - rmd_get_markdown
+  - rmd_get_node
+  - rmd_get_options
+  - rmd_has_chunk
+  - rmd_has_markdown
+  - rmd_has_node
