@@ -6,8 +6,25 @@
 #' @description These functions are used in conjunction with [rmd_select()] to
 #' select nodes from an Rmd ast.
 #'
-#' * `has_type()` - selects all nodes that have the given type(s).
 #' * `by_section()` - uses section selectors to select nodes.
+#' * `has_type()` - selects all nodes that have the given type(s).
+#' * `has_label()` - selects nodes with labels matching the given glob.
+#' * `has_option()` - selects nodes that have the given option(s) set.
+#'
+#' @return All helper functions return an integer vector of selected indexes.
+#'
+#' @examples
+#'
+#' rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+#'
+#' rmd_select(rmd, has_type("rmd_chunk"))
+#'
+#' rmd_select(rmd, has_label("*dino"))
+#'
+#' rmd_select(rmd, has_option("message"))
+#' rmd_select(rmd, has_option(message = FALSE))
+#' rmd_select(rmd, has_option(message = TRUE))
+#'
 #'
 NULL
 
@@ -76,7 +93,7 @@ by_section = function(sec_ref, keep_parents = TRUE) {
 #' @param label character vector, glob patterns for matching chunk labels.
 #'
 #' @export
-by_label = function(label) {
+has_label = function(label) {
   checkmate::assert_character(label, any.missing = FALSE, min.len = 1)
 
   x = tidyselect::peek_data(fn = "by_section")
@@ -99,8 +116,6 @@ by_label = function(label) {
 #' @export
 has_option = function(...) {
   opts = c(...)
-
-  checkmate::assert_character(opts, any.missing = FALSE, min.len = 1)
 
   if (is.null(names(opts))) # missing names will be ""
       names(opts) = rep("", length(opts))

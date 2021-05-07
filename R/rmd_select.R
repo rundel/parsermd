@@ -7,17 +7,20 @@
 #' a variety of useful syntax for selecting nodes from the ast.
 #'
 #' Additionally, a number of additional `parsermd` specific selection helpers are available:
-#' [has_type()], [by_section()], [by_label()]
+#' [by_section()], [has_type()], [has_label()], and [has_option()].
 #'
 #' @param x Rmd object, e.g. `rmd_ast` or `rmd_tibble`.
 #' @param ... One or more unquoted expressions separated by commas. Chunk labels can be used
 #' as if they were positions in the data frame, so expressions like x:y can be used to
 #' select a range of nodes.
 #'
+#' @return Returns a subset Rmd object (either `rmd_ast` or `rmd_tibble` depending on input).
+#'
 #' @examples
 #' rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
 #'
 #' rmd_select(rmd, "plot-dino", "cor-dino")
+#' rmd_select(rmd, "plot-dino":"cor-dino")
 #' rmd_select(rmd, `plot-dino`:`cor-dino`)
 #'
 #' rmd_select(rmd, has_type("rmd_chunk"))
@@ -42,7 +45,7 @@ rmd_select_impl = function(x, ...) {
   names(x) = rmd_node_label(x)
   loc = tidyselect::eval_select(rlang::expr(c(...)), x)
 
-  loc
+  sort(loc) # maintai original order
 }
 
 #' @exportS3Method
