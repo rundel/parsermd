@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/parsermd/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/parsermd)](https://CRAN.R-project.org/package=parsermd)
 <!-- badges: end -->
 
 The goal of parsermd is to extract the content of an R Markdown file to
