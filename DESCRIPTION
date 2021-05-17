@@ -40,5 +40,5 @@ Suggests:
     knitr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/rundel/parsermd
+URL: http://rundel.github.io/parsermd/, https://github.com/rundel/parsermd
 BugReports: https://github.com/rundel/parsermd/issues
