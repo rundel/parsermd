@@ -108,7 +108,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rundel/parsermd"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rundel/parsermd">parsermd</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rundel.github.io/parsermd/">parsermd</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="parsing-rmds" class="section level2">
 <h2 class="hasAnchor">
@@ -157,13 +157,13 @@
 <span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
 <span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [6]&gt;</span>
+<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [6]&gt;</span>
 <span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span></code></pre></div>
+<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span></code></pre></div>
 <p>and it is possible to convert from these data frames back into an <code>rmd_ast</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/as_ast.html">as_ast</a></span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span>
@@ -335,18 +335,18 @@
 <span class="co">#&gt;  2 Load packages &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span>
 <span class="co">#&gt;  3 Load packages &lt;NA&gt;     rmd_chunk     load-packages &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  4 Exercise 1    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span>
+<span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt;  6 Exercise 1    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [5]&gt;</span>
+<span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [5]&gt;</span>
 <span class="co">#&gt;  8 Exercise 2    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span>
-<span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span>
+<span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 10 Exercise 2    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span>
-<span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 12 Exercise 2    Solution rmd_chunk     plot-dino     &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 14 Exercise 2    Solution rmd_chunk     cor-dino      &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt; 15 Exercise 3    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;</span>
-<span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 17 Exercise 3    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;</span>
 <span class="co">#&gt; 18 Exercise 3    Solution rmd_chunk     plot-star     &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt; 19 Exercise 3    Solution rmd_chunk     cor-star      &lt;chunk [r]&gt;</span></code></pre></div>
@@ -358,12 +358,12 @@
 <span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;     </span>
 <span class="co">#&gt;  1 Exercise 1 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
 <span class="co">#&gt;  2 Exercise 1 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  3 Exercise 1 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [5]&gt;</span>
+<span class="co">#&gt;  3 Exercise 1 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [5]&gt;</span>
 <span class="co">#&gt;  4 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
 <span class="co">#&gt;  5 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
-<span class="co">#&gt;  6 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt;  6 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt;  7 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  8 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt;  8 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt;  9 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt; 10 Exercise 3 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;</span>
 <span class="co">#&gt; 11 Exercise 3 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;</span>
@@ -382,18 +382,18 @@
 <span class="co">#&gt;  2 Load packages &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span>
 <span class="co">#&gt;  3 Load packages &lt;NA&gt;     rmd_chunk     load-packages &lt;chunk [r]&gt;        2</span>
 <span class="co">#&gt;  4 Exercise 1    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span>
-<span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt;  5 Exercise 1    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt;  6 Exercise 1    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span>
-<span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [5]&gt;     5</span>
+<span class="co">#&gt;  7 Exercise 1    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [5]&gt;     5</span>
 <span class="co">#&gt;  8 Exercise 2    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span>
-<span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt;  9 Exercise 2    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 10 Exercise 2    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span>
-<span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 11 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 12 Exercise 2    Solution rmd_chunk     plot-dino     &lt;chunk [r]&gt;        5</span>
-<span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 13 Exercise 2    Solution rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 14 Exercise 2    Solution rmd_chunk     cor-dino      &lt;chunk [r]&gt;        2</span>
 <span class="co">#&gt; 15 Exercise 3    &lt;NA&gt;     rmd_heading   &lt;NA&gt;          &lt;heading [h3]&gt;    NA</span>
-<span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 16 Exercise 3    &lt;NA&gt;     rmd_markdown  &lt;NA&gt;          &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 17 Exercise 3    Solution rmd_heading   &lt;NA&gt;          &lt;heading [h4]&gt;    NA</span>
 <span class="co">#&gt; 18 Exercise 3    Solution rmd_chunk     plot-star     &lt;chunk [r]&gt;        5</span>
 <span class="co">#&gt; 19 Exercise 3    Solution rmd_chunk     cor-star      &lt;chunk [r]&gt;        2</span></code></pre></div>
@@ -405,9 +405,9 @@
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span>
 <span class="co">#&gt; 1 Exercise 2 &lt;NA&gt;     rmd_heading  &lt;NA&gt;      &lt;heading [h3]&gt;    NA</span>
 <span class="co">#&gt; 2 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span>
-<span class="co">#&gt; 3 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 3 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 4 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;        5</span>
-<span class="co">#&gt; 5 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 5 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 6 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;        2</span></code></pre></div>
 <p>and see that our new <code>lines</code> column is maintained.</p>
 <p>Note that using the <code>rmd_select</code> function is optional here and we can also accomplish the same task using <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> or any similar approach</p>
@@ -418,9 +418,9 @@
 <span class="co">#&gt;   sec_h3     sec_h4   type         label     ast            lines</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;rmd_ast&gt;      &lt;int&gt;</span>
 <span class="co">#&gt; 1 Exercise 2 Solution rmd_heading  &lt;NA&gt;      &lt;heading [h4]&gt;    NA</span>
-<span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino &lt;chunk [r]&gt;        5</span>
-<span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;markdown [2]&gt;     2</span>
+<span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;     2</span>
 <span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chunk [r]&gt;        2</span></code></pre></div>
 <p>As such, it is possible to mix and match between <code>parsermd</code>’s built-in functions and any of your other preferred data manipulation packages.</p>
 <p>One small note of caution is that when converting back to an ast, <code>as_ast</code>, or document, <code>as_document</code>, only the structure of the <code>ast</code> column matters so changes made to the section columns, <code>type</code> column, or the <code>label</code> column will not affect the output in any way. This is particularly important when headings are filtered out, as their columns may still appear in the tibble while they are no longer in the ast - <code>rmd_select</code> attempts to avoid this by recalculating these specific columns as part of the subsetting process.</p>
