@@ -1,3 +1,7 @@
+# parsermd 0.1.1
+
+* Fix an issue under Linux when using LANG=en_US.iso88591 (`LANG=en_US.iso88591 LC_ALL=en_US.iso88591 R CMD check`)
+
 # parsermd 0.1.0
 
 * Added new parser error reporting system

@@ -167,10 +167,10 @@ print_tree = function(ast, use_headings = TRUE) {
 box_chars = function() {
   if (is_utf8_output()) {
     list(
-      "h" = "\u2500",  # ─   horizontal
-      "v" = "\u2502",  # │   vertical
-      "l" = "\u2514",  # └
-      "j" = "\u251C"   # ├
+      "h" = "\u2500",
+      "v" = "\u2502",
+      "l" = "\u2514",
+      "j" = "\u251C"
     )
   } else {
     list(
