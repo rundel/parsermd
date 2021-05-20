@@ -1,4 +1,4 @@
-# parsermd 0.1.1.1
+# parsermd 0.1.2
 
 * Fix compilation issues with older GCC versions (e.g. GCC@5 on Solaris)
 
