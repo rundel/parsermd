@@ -5,15 +5,15 @@
   * macOS-latest (release)
   * ubuntu-20.04 (release)
   * ubunut-20.04 (devel)
+* rhub::check_on_solaris()
 
 ## Description
 
-This submission is to resolve the issue with the package failing its check under strict Latin-1* locales.
+One last submission to resolve the outstanding issue with compilation on Solaris.
 
 ## R CMD check results
 
 There are no NOTEs, ERRORs, or WARNINGs.
-
 
 ## Downstream dependencies
 
