@@ -25,32 +25,21 @@ namespace client { namespace parser {
   auto start_indent = x3::rule<struct _, std::string, true> {"start indent"}
     = (*indent_pat)
       [([](auto& ctx) {
-        //Rcpp::Rcout << "start_indent:\n"
-        //            << "attr   : " << std::quoted(_attr(ctx)) << "\n"
-        //            << "val    : " << std::quoted(_val(ctx)) << "\n"
-        //            << "indent : " << std::quoted(x3::get<indent>(ctx)) << "\n";
-
-        //if (x3::get<indent>(ctx) == "")
-        //  x3::get<indent>(ctx) = _attr(ctx);
-        //
-        //_val(ctx) = x3::get<indent>(ctx); // Needed to avoid weird concat behavior
-        x3::get<indent>(ctx) = _attr(ctx);
+        x3::get<indent>(ctx) = x3::_attr(ctx);
       })];
 
   auto end_indent = x3::rule<struct _, std::string, true> {"end indent"}
     = (*indent_pat)
       [([](auto& ctx) {
-        //Rcpp::Rcout << "end_indent " << std::quoted(_attr(ctx)) << "\n";
-        _pass(ctx) = (x3::get<indent>(ctx) == _attr(ctx));
+        x3::_pass(ctx) = (x3::get<indent>(ctx) == x3::_attr(ctx));
       })];
 
   auto check_indent = [](auto& ctx) {
-    //Rcpp::Rcout << "check_indent " << x3::get<indent>(ctx).length() << "\n";
     size_t n = x3::get<indent>(ctx).length();
-    _pass(ctx) = (x3::get<indent>(ctx) ==  _attr(ctx).substr(0, n)); // Compare the indents
-    _attr(ctx).erase(0, n);                                          // erase the first n chars
-                                                                     // so code line wont have indent
-    _val(ctx) = _attr(ctx);
+    x3::_pass(ctx) = (x3::get<indent>(ctx) == x3::_attr(ctx).substr(0, n)); // Compare the indents
+    x3::_attr(ctx).erase(0, n);                                             // erase the first n chars
+                                                                            // so code line wont have indent
+    x3::_val(ctx) = x3::_attr(ctx);
   };
 
   // Code stuff
@@ -72,9 +61,6 @@ namespace client { namespace parser {
        (x3::char_("=") > +x3::char_("A-Za-z0-9_")) |  // Pandoc raw attribute chunk
        (+x3::char_("A-Za-z0-9_"))                     // Rmd chunk engine
     ]);
-  //[
-  //  ([](auto& ctx){ _val(ctx) = _attr(ctx); }) //Override the default concat behavior
-  //];
 
   auto const label = x3::rule<struct _, std::string> {"chunk label"}
   = x3::lexeme[ +x3::char_("A-Za-z0-9#+_-") ] >> // Based on Sec 3.2 of the Sweave manual
@@ -117,7 +103,7 @@ namespace client { namespace parser {
   = ( label >>
       ( (-x3::lit(',') >> &(!option))  // no option, comma optional
       | (x3::expect[x3::lit(',')] ) ) // yes option, comma required
-  )[([](auto& ctx) {_val(ctx) = _attr(ctx);})];
+  )[([](auto& ctx) {x3::_val(ctx) = x3::_attr(ctx);})];
 
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
   = x3::lexeme[ start_indent >> x3::lit("```{") ] >>
@@ -147,9 +133,6 @@ namespace client { namespace parser {
 
   auto const chunk_def
     = x3::with<indent>(std::string()) [
-        //x3::eps[ ([](auto& ctx) {
-        //  Rcpp::Rcout << "init :" << x3::get<indent>(ctx)  << "\n";
-        //}) ] >>
         &chunk_template >> // look ahead check of chunk structure
         chunk_start >>
         chunk_code >>

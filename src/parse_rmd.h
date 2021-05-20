@@ -22,8 +22,8 @@ namespace client { namespace parser {
   auto const text = x3::rule<struct _, std::vector<std::string>>{"markdown text"}
   = +(text_line >> x3::eol);
 
-  auto heading_level = ([](auto& ctx) { _val(ctx).level =  _attr(ctx).size(); });
-  auto heading_name = ([](auto& ctx) { _val(ctx).name = _attr(ctx); });
+  auto heading_level = ([](auto& ctx) { x3::_val(ctx).level =  x3::_attr(ctx).size(); });
+  auto heading_name = ([](auto& ctx) { x3::_val(ctx).name = x3::_attr(ctx); });
 
 
   // Heading stuff
