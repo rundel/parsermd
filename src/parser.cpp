@@ -91,7 +91,7 @@ Rcpp::List check_markdown_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_markdown_heading_parser(std::string const& str) {
+Rcpp::List check_heading_parser(std::string const& str) {
   client::ast::heading expr;
   parse_str(str, false, client::parser::heading, expr);
 

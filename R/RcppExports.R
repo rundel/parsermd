@@ -21,8 +21,8 @@ check_markdown_parser <- function(str) {
     .Call(`_parsermd_check_markdown_parser`, str)
 }
 
-check_markdown_heading_parser <- function(str) {
-    .Call(`_parsermd_check_markdown_heading_parser`, str)
+check_heading_parser <- function(str) {
+    .Call(`_parsermd_check_heading_parser`, str)
 }
 
 check_option_parser <- function(str) {
