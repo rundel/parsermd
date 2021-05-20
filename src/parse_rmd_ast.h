@@ -15,6 +15,7 @@ namespace client { namespace ast {
   struct heading {
     int level;
     std::string name;
+    std::vector<std::string> classes;
   };
 
   struct element : x3::variant<chunk, heading, std::vector<std::string>> {
@@ -30,7 +31,7 @@ namespace client { namespace ast {
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::heading,
-  level, name
+  level, name, classes
 )
 
 BOOST_FUSION_ADAPT_STRUCT(

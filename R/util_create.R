@@ -24,11 +24,19 @@ create_markdown = function(...) {
   md
 }
 
-create_heading = function(name, level) {
+create_heading = function(name, level, classes = character()) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE)
   checkmate::assert_int(level, lower = 1, upper = 6, coerce = TRUE)
+  checkmate::assert_character(classes, any.missing = FALSE)
 
-  structure(list(name = name, level = as.integer(level)), class = "rmd_heading")
+  structure(
+    list(
+      name = name,
+      level = as.integer(level),
+      classes = classes
+    ),
+    class = "rmd_heading"
+  )
 }
 
 create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL, indent="") {

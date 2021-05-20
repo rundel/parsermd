@@ -89,10 +89,17 @@ as_document.rmd_raw_chunk = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
-  paste(
+  res = paste(
     paste(rep("#", x$level), collapse=""),
     x$name
   )
+
+  if (length(x$classes) != 0)
+    paste0(
+      res, " {", paste(x$classes, collapse=" "), "}"
+    )
+  else
+    res
 }
 
 #' @exportS3Method

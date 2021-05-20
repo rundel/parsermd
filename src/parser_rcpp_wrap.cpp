@@ -56,7 +56,8 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::heading const& h) {
     Rcpp::List res = Rcpp::List::create(
       Rcpp::Named("name")  = h.name,
-      Rcpp::Named("level") = h.level
+      Rcpp::Named("level") = h.level,
+      Rcpp::Named("classes") = h.classes
     );
     res.attr("class") = "rmd_heading";
 
