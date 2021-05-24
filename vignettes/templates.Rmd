@@ -18,7 +18,7 @@ library(magrittr)
 ```
 
 
-In the getting started vignette we introduced a variety of predicate functions for interrogating the contents of a parsed R Markdown document. The family of `rmd_has_*` functions give a convenient way of checking explicitly for elements of an Rmd, however often we want to check for multiple elements at the same time and provide consistent output for any detected discrepancies. 
+In `vignette("parsermd")` we introduced a variety of predicate functions for interrogating the contents of a parsed R Markdown document. The family of `rmd_has_*` functions give a convenient way of checking explicitly for elements of an Rmd, however often we want to check for multiple elements at the same time and provide consistent output for any detected discrepancies. 
 
 To support this type of workflow, `parsermd` implements the concept of an Rmd template. These are tibble based representations of Rmd elements which can be easily be compared with a parsed document.
 
