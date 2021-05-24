@@ -69,7 +69,7 @@ From the output we can see that there are several issues with the document submi
 
 Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students. 
 
-If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggested workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_select` with the `!` operator to remove these specific markdown elements.
+If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggested workflow and will always work, while the latter approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_select` with the `!` operator to remove these specific markdown elements.
 
 ```{r}
 rmd_sols %>%
