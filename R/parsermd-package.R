@@ -13,3 +13,15 @@ NULL
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 NULL
+
+#' @importFrom rlang .data
+NULL
+
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
+
+`%||%` = function (x, y) {
+  if (is.null(x)) y
+  else            x
+}

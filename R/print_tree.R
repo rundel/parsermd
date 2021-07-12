@@ -4,12 +4,12 @@ pc = function(...) {
   paste(..., collapse="", sep="")
 }
 
-tree_node = function(...) {
+tree_node = function(x) {
   UseMethod("tree_node")
 }
 
-tree_node.default = function(...) {
-  stop("Unsupports type:", class(obj))
+tree_node.default = function(x) {
+  stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
 tree_node.rmd_yaml = function(x) {
@@ -44,6 +44,14 @@ tree_node.rmd_chunk = function(x) {
     label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
   )
 }
+
+tree_node.rmd_raw_chunk = function(x) {
+  list(
+    text = "Raw Attr Chunk",
+    label = paste0("[", x$format, ", ", length(x$code), " lines]")
+  )
+}
+
 
 tree_node.rmd_markdown = function(x) {
   list(
@@ -95,9 +103,9 @@ has_sibling = function(level, remaining) {
     next_cur_level < next_higher_level
 }
 
-#' @export
-print.rmd_ast = function(ast, use_headings = TRUE) {
-  print_tree(ast, use_headings)
+#' @exportS3Method
+print.rmd_ast = function(x, use_headings = TRUE, ...) {
+  print_tree(x, use_headings)
 }
 
 
@@ -159,10 +167,10 @@ print_tree = function(ast, use_headings = TRUE) {
 box_chars = function() {
   if (is_utf8_output()) {
     list(
-      "h" = "\u2500",  # ─   horizontal
-      "v" = "\u2502",  # │   vertical
-      "l" = "\u2514",  # └
-      "j" = "\u251C"   # ├
+      "h" = "\u2500",
+      "v" = "\u2502",
+      "l" = "\u2514",
+      "j" = "\u251C"
     )
   } else {
     list(

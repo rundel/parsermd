@@ -3,7 +3,7 @@
 
 #include <boost/spirit/home/x3.hpp>
 
-#include "parse_qstring.hpp"
+#include "parse_qstring.h"
 
 namespace client { namespace parser {
 
@@ -48,13 +48,29 @@ namespace client { namespace parser {
       ] ]
     ) ];
 
-  auto const expr = x3::rule<struct _, std::string>{"expr"}
+  // Handle possible operators with ='s in them
+  struct op_equal_ : x3::symbols<std::string> {
+    op_equal_() {
+      add("==", "==")
+         ("!=", "!=")
+         ("<=", "<=")
+         (">=", ">=");
+    }
+  } op_equal;
+
+  auto disallowed_char = x3::rule<struct _, char> {"disallowed_char"}
+  = ~x3::char_("()=,}");
+
+  // TODO - handle case of {} in an expression
+
+  auto const expr = x3::rule<struct _, std::string>{"R expression"}
     = x3::raw[
-        *(   client::parser::q_string
-          |  client::parser::paren_expr
-          | ~x3::char_("()=,}")
-        )
-      ];
+        +(  client::parser::q_string
+          | client::parser::paren_expr
+          | op_equal
+          | disallowed_char
+         )
+    ];
 } }
 
 #endif

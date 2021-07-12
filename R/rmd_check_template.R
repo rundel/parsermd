@@ -1,35 +1,58 @@
+#' @title Check an Rmd against a template
+#' @description
+#' This function compares the provided Rmd against a template and reports on
+#' discrepancies (e.g. missing or unmodified components).
+#'
+#' @param rmd The rmd to be check, can be an `rmd_ast`, `rmd_tibble`, or text
+#' that can be handled by `parse_rmd`.
+#' @param template `rmd_template` object from [rmd_template()].
+#' @param ... Unused, for extensibility.
+#'
+#' @return Invisibly returns `TRUE` if the rmd matches the template, `FALSE` otherwise.
+#'
+#' @examples
+#' tmpl = parse_rmd(system.file("hw01.Rmd", package = "parsermd")) %>%
+#'   rmd_select(by_section(c("Exercise *", "Solution"))) %>%
+#'   rmd_template(keep_content = TRUE)
+#'
+#' rmd_check_template(
+#'   system.file("hw01-student.Rmd", package = "parsermd"),
+#'   tmpl
+#' )
+#'
 #' @export
-rmd_check_template = function(rmd, template) {
+rmd_check_template = function(rmd, template, ...) {
   UseMethod("rmd_check_template")
 }
 
-#' @export
-rmd_check_template.default = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.default = function(rmd, template, ...) {
   stop("Unable to check an Rmd template for an object with class: ", class(rmd))
 }
 
-#' @export
-rmd_check_template.character = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.character = function(rmd, template, ...) {
   rmd = as_tibble(parse_rmd(rmd))
   rmd_check_template( rmd = rmd, template = template )
 }
 
-#' @export
-rmd_check_template.rmd_ast = function(rmd, template) {
+#' @exportS3Method
+rmd_check_template.rmd_ast = function(rmd, template, ...) {
   rmd_check_template( rmd = as_tibble(rmd), template = template )
 }
 
 
 
-#' @export
-rmd_check_template.rmd_tibble = function(rmd, template, check_headings = FALSE) {
+#' @exportS3Method
+rmd_check_template.rmd_tibble = function(rmd, template, ...) {
+  keep_headings = any("rmd_heading" %in% template[["type"]])
   keep_content = ("content" %in% names(template))
 
-  if (!check_headings) {
-    template = dplyr::filter(template, type != "rmd_heading")
-  }
+  #if (!keep_headings) {
+  #  template = dplyr::filter(template, type != "rmd_heading")
+  #}
 
-  rmd_tbl = rmd_template(rmd, keep_content = keep_content)
+  rmd_tbl = rmd_template(rmd, keep_content = keep_content, keep_headings = keep_headings)
 
   missing_nodes = check_missing(rmd_tbl, template)
   unmodified_nodes = check_unmodified(rmd_tbl, template)
@@ -92,7 +115,7 @@ check_unmodified = function(rmd_tbl, template) {
     return(tibble::tibble())
 
   # We only care about the content of these node types, others are NA anyway
-  template = dplyr::filter(template, type %in% c("rmd_chunk", "rmd_markdown"))
+  template = dplyr::filter(template, .data[["type"]] %in% c("rmd_chunk", "rmd_markdown"))
 
   suppressMessages(
     dplyr::semi_join(template, rmd_tbl)
@@ -111,16 +134,16 @@ li_missing = function(secs, type, label = NA) {
   ) )
 
   text = if (type == "rmd_yaml" | type == "rmd_yaml_list") {
-    "{.val YAML} is missing"
+    "{.val YAML} cannot be located."
   } else if (type == "rmd_heading") {
-    "Section {sec} is missing"
+    "Section {sec} cannot be located."
   } else if (type == "rmd_markdown") {
-    "Section {sec} is missing required {.val markdown text}"
+    "Section {sec} is missing required {.val markdown text}."
   } else if (type == "rmd_chunk") {
     if (!is.na(label) & label != "") {
-      "Section {sec} is missing a required {.val code chunk} named {.val {label}}"
+      "Section {sec} is missing a required {.val code chunk} named {.val {label}}."
     } else {
-      "Section {sec} is missing a required {.val code chunk}"
+      "Section {sec} is missing a required {.val code chunk}."
     }
   } else {
     stop("Unexpected (unsupported) type.")

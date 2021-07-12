@@ -1,6 +1,6 @@
 test_that("check output - with content", {
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
-  ans = rmd_subset(ast, c("Exercise *", "Answer"))
+  ans = rmd_select(ast, by_section(c("Exercise *", "Answer")))
   template = rmd_template(ans, keep_content = TRUE)
 
   expect_snapshot( rmd_check_template(ast, template) )
@@ -11,7 +11,7 @@ test_that("check output - with content", {
 
 test_that("check output - without content", {
   ast = parse_rmd(system.file("hw02-complex.Rmd", package="parsermd"))
-  ans = rmd_subset(ast, c("Exercise *", "Answer"))
+  ans = rmd_select(ast, by_section(c("Exercise *", "Answer")))
   template = rmd_template(ans, keep_content = FALSE)
 
   expect_snapshot( rmd_check_template(ast, template) )

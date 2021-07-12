@@ -1,3 +1,15 @@
+#' @export
+#'
+`[.rmd_ast` = function(x, i, j, drop=FALSE, ...) {
+  if (!missing(j))
+    stop("incorrect number of dimensions", call. = FALSE)
+
+  x = unclass(x)[i]
+  class(x) = c("rmd_ast", "list")
+
+  x
+}
+
 # Vectorized grepl
 vec_grepl = function(patterns, x) {
   purrr::map2_lgl(patterns, x, grepl)
@@ -78,8 +90,6 @@ node_subset = function(secs, names, types, sec_ref, type_ref, name_ref, inc_pare
 }
 
 
-
-#' @export
 comb_subset = function(ast, sec_refs = NULL, type_refs = NULL, name_refs = NULL,
                        inc_parents = !is.null(sec_refs), combine = NULL) {
 

@@ -14,4 +14,8 @@ test_that("tree printing", {
   expect_snapshot_output(
     parse_rmd(system.file("reverse_sections.Rmd", package = "parsermd"))
   )
+
+  expect_snapshot_output(
+    parse_rmd(system.file("raw_attr.Rmd", package = "parsermd"))
+  )
 })

@@ -20,10 +20,11 @@ library(magrittr)
 # parsermd
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/parsermd/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/parsermd)](https://CRAN.R-project.org/package=parsermd)
 <!-- badges: end -->
 
-The goal of parsermd is to extract the content of an Rmarkdown file to allow for programmatic interactions with the document's cotents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
+The goal of parsermd is to extract the content of an R Markdown file to allow for programmatic interactions with the document's contents (i.e. code chunks and markdown text). The goal is to capture the fundamental structure of the document and as such we do not attempt to parse every detail of the Rmd. Specifically, the yaml front matter, markdown text, and R code are read as text lines allowing them to be processed using other tools.
 
 ## Installation
 
@@ -39,16 +40,19 @@ library(parsermd)
 
 ## Basic Usage
 
-For more details see the getting started vignette or any of the topic specific articles.
+For more details see the getting started [vignette](https://rundel.github.io/parsermd/articles/parsermd.html) or any of the topic specific articles.
 
 ```{r example}
 (rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))
 
 as_tibble(rmd)
 
-rmd_subset(rmd, sec_refs = "hello", type_refs = "rmd_chunk")
+rmd_select(rmd, by_section("Content"))
 
-rmd_subset(rmd, sec_refs = c("hello", "*"), type_refs = "rmd_chunk")
+rmd_select(rmd, by_section(c("Content", "*"))) %>%
+  rmd_select(has_type(c("rmd_chunk", "rmd_heading")))
 
-rmd_get_node(rmd, name_refs = "pressure")
+rmd_select(rmd, "pressure")
+
+rmd_select(rmd, 1:3)
 ```

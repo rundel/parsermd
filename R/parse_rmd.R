@@ -1,3 +1,17 @@
+#' @title Parse an R Markdown document
+#' @description
+#' Documents are parse into an `rmd_ast` object.
+#'
+#' @param rmd Either the path to an `Rmd` file or a character vector containing the contents
+#' of a R Markdown document.
+#' @param allow_incomplete Allow incomplete parsing of the document.
+#' @param parse_yaml Use the [yaml][yaml::read_yaml()] package to parse the document's yaml.
+#'
+#' @return Returns a `rmd_ast` object.
+#'
+#' @examples
+#' parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+#'
 #' @export
 parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
   checkmate::assert_character(rmd, min.len = 1, any.missing = FALSE)
@@ -8,7 +22,7 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
     rmd = readr::read_file(rmd)
   }
 
-  # Make sure file ends with trailing \n
+  # Make sure file ends with trailing newline
   if (!grepl("\n$", rmd))
     rmd = paste0(rmd, "\n")
 

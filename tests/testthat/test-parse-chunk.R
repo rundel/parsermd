@@ -13,6 +13,9 @@ make_chunk_obj = function(
 }
 
 
+
+
+
 test_that("chunk parsing - Basic", {
   expect_equal(
     parsermd:::check_chunk_parser("```{r}\n```\n"),
@@ -226,4 +229,96 @@ test_that("chunk parsing - comma after engine", {
     parsermd:::check_chunk_parser("```{r, bob, include = FALSE}\n```\n"),
     make_chunk_obj(name = "bob", option = list(include="FALSE"))
   )
+})
+
+
+test_that("chunk parsing - variants", {
+  # Cover all possible variants of labels and options
+
+  parse = parsermd:::check_chunk_parser
+
+  # No label, no options
+  expect_equal( parse("```{r}\n```\n"),   make_chunk_obj() )
+  expect_equal( parse("```{r,}\n```\n"),  make_chunk_obj() )
+  expect_equal( parse("```{r,,}\n```\n"), make_chunk_obj() )
+
+  # Label, no options
+  expect_equal( parse("```{r m}\n```\n"),  make_chunk_obj(name = "m") )
+  expect_equal( parse("```{r m,}\n```\n"), make_chunk_obj(name = "m") )
+
+  # No label, options
+  expect_equal( parse("```{r x=1}\n```\n"),   make_chunk_obj(option = list(x = "1")) )
+  expect_equal( parse("```{r x=1,}\n```\n"),  make_chunk_obj(option = list(x = "1")) )
+  expect_equal( parse("```{r, x=1}\n```\n"),  make_chunk_obj(option = list(x = "1")) )
+  expect_equal( parse("```{r, x=1,}\n```\n"), make_chunk_obj(option = list(x = "1")) )
+
+  expect_equal( parse("```{r x=1, y=1}\n```\n"),
+                make_chunk_obj(option = list(x="1", y="1")) )
+  expect_equal( parse("```{r x=1, y=1,}\n```\n"),
+                make_chunk_obj(option = list(x="1", y="1")) )
+  expect_equal( parse("```{r, x=1, y=1}\n```\n"),
+                make_chunk_obj(option = list(x="1", y="1")) )
+  expect_equal( parse("```{r, x=1, y=1,}\n```\n"),
+                make_chunk_obj(option = list(x="1", y="1")) )
+
+  # label, options
+  expect_equal( parse("```{r m, x=1}\n```\n"),
+                make_chunk_obj(name = "m", option = list(x = "1")) )
+  expect_equal( parse("```{r m, x=1,}\n```\n"),
+                make_chunk_obj(name = "m", option = list(x = "1")) )
+  expect_equal( parse("```{r, m, x=1}\n```\n"),
+                make_chunk_obj(name = "m", option = list(x = "1")) )
+  expect_equal( parse("```{r, m, x=1,}\n```\n"),
+                make_chunk_obj(name = "m", option = list(x = "1")) )
+})
+
+test_that("chunk parsing - bad chunks", {
+  parse = parsermd:::check_chunk_parser
+
+  # Basic chunks
+  expect_snapshot_error( parse("```{}\n```\n") )
+  expect_snapshot_error( parse("```{r\n```\n") )
+  expect_snapshot_error( parse("```r}\n```\n") )
+  expect_snapshot_error( parse("```{r}\n``\n") )
+
+  # Bad labels or options
+  expect_snapshot_error( parse("```{r m, m}\n```\n") )
+  expect_snapshot_error( parse("```{r abc.def}\n```\n") )
+  expect_snapshot_error( parse("```{r m x=1}\n```\n") )
+  expect_snapshot_error( parse("```{r x=}\n```\n") )
+  expect_snapshot_error( parse("```{r x=, y=1}\n```\n") )
+  expect_snapshot_error( parse("```{r x=1, y=}\n```\n") )
+})
+
+
+test_that("chunk parsing - raw attribute chunk", {
+  parse = parsermd:::check_chunk_parser
+
+  make_raw_chunk = function(format, code = character(), indent = "") {
+    structure(
+      list(format = format, code = code, indent = indent),
+      class = "rmd_raw_chunk"
+    )
+  }
+
+  expect_equal( parse("```{=html}\n```\n"),   make_raw_chunk("html") )
+  expect_equal( parse("```{=md}\n```\n"),   make_raw_chunk("md") )
+
+  # Check code
+  expect_equal(
+    parse("```{=html}\n<h1>hello</h1>\n```\n"),
+    make_raw_chunk("html", code = "<h1>hello</h1>")
+  )
+
+  # Check indent
+  expect_equal(
+    parse("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
+    make_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
+  )
+
+  # Bad
+  expect_error( parse("```{=}\n```\n"))
+  expect_error( parse("```{==}\n```\n"))
+  expect_error( parse("```{=a=}\n```\n"))
+  expect_error( parse("```{a=}\n```\n"))
 })

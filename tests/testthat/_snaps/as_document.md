@@ -7,22 +7,24 @@
     output: html_document
     ---
     
-    # test
+    # Setup
     
-    ```{rsetup, include = FALSE}
+    ```{r setup, include = FALSE}
     knitr::opts_chunk$set(echo = TRUE)
     ```
     
-    # hello
+    # Content
     
     ## R Markdown
     
-    This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+    This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, 
+    PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
     
-    When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+    When you click the **Knit** button a document will be generated that includes both content as well 
+    as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
     
     
-    ```{rcars}
+    ```{r cars}
     summary(cars)
     ```
     
@@ -35,11 +37,12 @@
     You can also embed plots, for example:
     
     
-    ```{rpressure, echo = FALSE}
+    ```{r pressure, echo = FALSE}
     plot(pressure)
     ```
     
-    Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+    Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code 
+    that generated the plot.
     
 
 ---
@@ -51,14 +54,14 @@
     
     ### Load packages
     
-    ```{rload-packages, message = FALSE}
+    ```{r load-packages, message = FALSE}
     library(tidyverse) 
     library(datasauRus)
     ```
     
     ### Exercise 1
     
-    Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you’re done, commit your changes with the commit message “Added answer for Ex 1”, and push.
+    Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
     
     
     #### Solution
@@ -79,7 +82,7 @@
     First let's plot the data in the dino dataset:
     
     
-    ```{rplot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino, fig.height = 3, fig.width = 6}
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -90,7 +93,7 @@
     And next calculate the correlation between `x` and `y` in this dataset:
     
     
-    ```{rcor-dino}
+    ```{r cor-dino}
     dino_data %>%
       summarize(r = cor(x, y))
     ```
@@ -102,7 +105,7 @@
     
     #### Solution
     
-    ```{rplot-star, fig.height = 3, fig.width = 6}
+    ```{r plot-star, fig.height = 3, fig.width = 6}
     star_data <- datasaurus_dozen %>%
       filter(dataset == "star")
     
@@ -110,7 +113,7 @@
       geom_point()
     ```
     
-    ```{rcor-star}
+    ```{r cor-star}
     star_data %>%
       summarize(r = cor(x, y))
     ```
@@ -119,20 +122,20 @@
 ---
 
     ---
-    title: Lab 01 - Hello R
+    title: Homework 01 - Hello R
     output: html_document
     ---
     
     ### Load packages
     
-    ```{rload-packages, message = FALSE}
+    ```{r load-packages, message = FALSE}
     library(tidyverse) 
     library(datasauRus)
     ```
     
     ### Exercise 1
     
-    Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you’re done, commit your changes with the commit message “Added answer for Ex 1”, and push.
+    Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
     
     
     #### Solution
@@ -152,7 +155,7 @@
     First let's plot the data in the dino dataset:
     
     
-    ```{rplot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino, fig.height = 3, fig.width = 6}
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -163,7 +166,7 @@
     And next calculate the correlation between `x` and `y` in this dataset:
     
     
-    ```{rcor-dino}
+    ```{r cor-dino}
     dino_data %>%
       summarize(r = cor(x, y))
     ```
@@ -180,14 +183,14 @@
     Blah blah blah...
     
     
-    ```{rplot-star}
+    ```{r plot-star}
     
     ```
     
     I'm some text, you should replace me with more meaningful text...
     
     
-    ```{rcor-star}
+    ```{r cor-star}
     
     ```
     
@@ -206,5 +209,36 @@
     ### H3 - Part 2
     
     # H1
+    
+
+---
+
+    ---
+    title: Raw attribute example
+    ---
+    
+    ## R Markdown
+    
+    This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+    
+    When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+    
+    
+    ```{r cars}
+    summary(cars)
+    ```
+    
+    ## Pandoc Raw Attribute Chunk
+    
+    This is more markdown text,
+    
+    
+    ```{=html}
+    Hello, <b>I</b> am some html!
+    
+    <del>Uh oh!</del>
+    
+    <br/>
+    ```
     
 
