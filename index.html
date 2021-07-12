@@ -95,17 +95,20 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version of parsermd from <a href="https://github.com/rundel/parsermd">GitHub</a> with:</p>
+<p><code>parsermd</code> can be installed from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rundel/parsermd"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"parsermd"</span><span class="op">)</span></code></pre></div>
+<p>You can install the latest development version of <code>parsermd</code> from <a href="https://github.com/rundel/parsermd">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rundel/parsermd"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rundel.github.io/parsermd/">parsermd</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic Usage</h2>
 <p>For more details see the getting started <a href="https://rundel.github.io/parsermd/articles/parsermd.html">vignette</a> or any of the topic specific articles.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">rmd</span> <span class="op">=</span> <span class="fu">parsermd</span><span class="fu">::</span><span class="fu"><a href="reference/parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"minimal.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ├── YAML [4 lines]</span>
 <span class="co">#&gt; ├── Heading [h1] - Setup</span>
@@ -129,13 +132,13 @@
 <span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
 <span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;markdown [6]&gt;</span>
+<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [6]&gt;</span>
 <span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span>
 <span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
 <span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;markdown [2]&gt;</span>
+<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
 
 <span class="fu"><a href="reference/rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="st">"Content"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; └── Heading [h1] - Content</span>
