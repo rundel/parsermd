@@ -2,7 +2,7 @@
 
 # parsermd 0.1.2.9000
 
-
+* Unlabeled chunks will now be labeled as unnamed-chunk-n, with n incrementing.
 
 # parsermd 0.1.2
 
