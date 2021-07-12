@@ -126,7 +126,7 @@
 <span class="co">#&gt;     ├── Heading [h2] - R Markdown</span>
 <span class="co">#&gt;     │   ├── Markdown [6 lines]</span>
 <span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span>
-<span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
+<span class="co">#&gt;     │   └── Chunk [r, 1 lines] - unnamed-chunk-1</span>
 <span class="co">#&gt;     └── Heading [h2] - Including Plots</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
@@ -141,7 +141,7 @@
 <span class="co">#&gt; ├── Heading [h2] - R Markdown</span>
 <span class="co">#&gt; ├── Markdown [6 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 1 lines] - cars</span>
-<span class="co">#&gt; ├── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
+<span class="co">#&gt; ├── Chunk [r, 1 lines] - unnamed-chunk-1</span>
 <span class="co">#&gt; ├── Heading [h2] - Including Plots</span>
 <span class="co">#&gt; ├── Markdown [2 lines]</span>
 <span class="co">#&gt; ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
@@ -150,20 +150,20 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 12 x 5</span>
-<span class="co">#&gt;    sec_h1  sec_h2          type          label      ast           </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;      &lt;rmd_ast&gt;     </span>
-<span class="co">#&gt;  1 &lt;NA&gt;    &lt;NA&gt;            rmd_yaml_list  &lt;NA&gt;      &lt;yaml&gt;        </span>
-<span class="co">#&gt;  2 Setup   &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
-<span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span>
-<span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [6]&gt;</span>
-<span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span>
-<span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span>
-<span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span>
-<span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span></code></pre></div>
+<span class="co">#&gt;    sec_h1  sec_h2          type          label           ast           </span>
+<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;           &lt;rmd_ast&gt;     </span>
+<span class="co">#&gt;  1 &lt;NA&gt;    &lt;NA&gt;            rmd_yaml_list &lt;NA&gt;            &lt;yaml&gt;        </span>
+<span class="co">#&gt;  2 Setup   &lt;NA&gt;            rmd_heading   &lt;NA&gt;            &lt;heading [h1]&gt;</span>
+<span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     setup           &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading   &lt;NA&gt;            &lt;heading [h1]&gt;</span>
+<span class="co">#&gt;  5 Content R Markdown      rmd_heading   &lt;NA&gt;            &lt;heading [h2]&gt;</span>
+<span class="co">#&gt;  6 Content R Markdown      rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [6]&gt;</span>
+<span class="co">#&gt;  7 Content R Markdown      rmd_chunk     cars            &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  8 Content R Markdown      rmd_chunk     unnamed-chunk-1 &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt;  9 Content Including Plots rmd_heading   &lt;NA&gt;            &lt;heading [h2]&gt;</span>
+<span class="co">#&gt; 10 Content Including Plots rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [2]&gt;</span>
+<span class="co">#&gt; 11 Content Including Plots rmd_chunk     pressure        &lt;chunk [r]&gt;   </span>
+<span class="co">#&gt; 12 Content Including Plots rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [2]&gt;</span></code></pre></div>
 <p>and it is possible to convert from these data frames back into an <code>rmd_ast</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/as_ast.html">as_ast</a></span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span>
@@ -174,7 +174,7 @@
 <span class="co">#&gt;     ├── Heading [h2] - R Markdown</span>
 <span class="co">#&gt;     │   ├── Markdown [6 lines]</span>
 <span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span>
-<span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span>
+<span class="co">#&gt;     │   └── Chunk [r, 1 lines] - unnamed-chunk-1</span>
 <span class="co">#&gt;     └── Heading [h2] - Including Plots</span>
 <span class="co">#&gt;         ├── Markdown [2 lines]</span>
 <span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span>
@@ -213,7 +213,7 @@
 <span class="co">#&gt; summary(cars)</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ```{r}</span>
+<span class="co">#&gt; ```{r unnamed-chunk-1}</span>
 <span class="co">#&gt; knitr::knit_patterns$get()</span>
 <span class="co">#&gt; ```</span>
 <span class="co">#&gt; </span>
