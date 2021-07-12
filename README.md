@@ -20,7 +20,13 @@ processed using other tools.
 
 ## Installation
 
-You can install the development version of parsermd from
+`parsermd` can be installed from CRAN with:
+
+``` r
+install.packages("parsermd")
+```
+
+You can install the latest development version of `parsermd` from
 [GitHub](https://github.com/rundel/parsermd) with:
 
 ``` r
@@ -61,13 +67,13 @@ as_tibble(rmd)
 #>  3 Setup   <NA>            rmd_chunk     "setup"    <chunk [r]>   
 #>  4 Content <NA>            rmd_heading    <NA>      <heading [h1]>
 #>  5 Content R Markdown      rmd_heading    <NA>      <heading [h2]>
-#>  6 Content R Markdown      rmd_markdown   <NA>      <markdown [6]>
+#>  6 Content R Markdown      rmd_markdown   <NA>      <rmd_mrkd [6]>
 #>  7 Content R Markdown      rmd_chunk     "cars"     <chunk [r]>   
 #>  8 Content R Markdown      rmd_chunk     ""         <chunk [r]>   
 #>  9 Content Including Plots rmd_heading    <NA>      <heading [h2]>
-#> 10 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
+#> 10 Content Including Plots rmd_markdown   <NA>      <rmd_mrkd [2]>
 #> 11 Content Including Plots rmd_chunk     "pressure" <chunk [r]>   
-#> 12 Content Including Plots rmd_markdown   <NA>      <markdown [2]>
+#> 12 Content Including Plots rmd_markdown   <NA>      <rmd_mrkd [2]>
 
 rmd_select(rmd, by_section("Content"))
 #> └── Heading [h1] - Content

@@ -28,7 +28,13 @@ The goal of parsermd is to extract the content of an R Markdown file to allow fo
 
 ## Installation
 
-You can install the development version of parsermd from [GitHub](https://github.com/rundel/parsermd) with:
+`parsermd` can be installed from CRAN with:
+
+```r
+install.packages("parsermd")
+```
+
+You can install the latest development version of `parsermd` from [GitHub](https://github.com/rundel/parsermd) with:
 
 ```r
 remotes::install_github("rundel/parsermd")
