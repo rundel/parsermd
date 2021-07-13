@@ -56,7 +56,7 @@ parse_yaml = function(yaml) {
   if(length(yaml) == 0)
     yaml = list()
   else
-    yaml = yaml::read_yaml(text = paste(yaml, collapse="\n"))
+    yaml = yaml::yaml.load(string = paste(yaml, collapse="\n"))
 
   class(yaml) = "rmd_yaml_list"
 
