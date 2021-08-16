@@ -36,7 +36,7 @@ namespace client { namespace parser {
   // %= weirdness is from https://stackoverflow.com/questions/33929849/boost-spirit-x3-ast-not-working-with-semantic-actions-when-using-separate-rule-d/33937139#33937139
   //
   auto paren_expr = x3::rule<struct _, std::string> {}
-                 %= x3::with<_n_br_open>(std::ref(n_br_open))
+  %= x3::with<_n_br_open>(std::ref(n_br_open))
     [ (
       x3::raw[ x3::lexeme[
         x3::char_('(')[init_paren] >>
