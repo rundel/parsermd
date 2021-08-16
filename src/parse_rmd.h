@@ -7,7 +7,7 @@
 #include "parse_yaml.h"
 #include "parse_indent.h"
 #include "parse_chunk.h"
-
+#include "parse_code_block.h"
 #include "parse_rmd_ast.h"
 
 namespace client { namespace parser {
