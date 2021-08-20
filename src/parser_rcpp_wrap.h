@@ -3,6 +3,7 @@
 
 #include "parse_option_ast.h"
 #include "parse_chunk_ast.h"
+#include "parse_code_block_ast.h"
 #include "parse_rmd_ast.h"
 
 
@@ -19,6 +20,7 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::element const& element);
   template <> SEXP wrap(client::ast::rmd const& rmd);
   template <> SEXP wrap(client::ast::yaml const& yaml);
+  template <> SEXP wrap(client::ast::code_block const& block);
 }
 
 

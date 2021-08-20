@@ -50,6 +50,20 @@ namespace Rcpp {
     return values;
   }
 
+  template <> SEXP wrap(client::ast::code_block const& block) {
+
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("indent")  = block.indent,
+      Rcpp::Named("fence")  = block.fence,
+      Rcpp::Named("info")  = block.info,
+      Rcpp::Named("code")  = block.code
+    );
+
+    res.attr("class") = "rmd_code_block";
+
+    return res;
+  }
+
 
 
   // rmd wrappers

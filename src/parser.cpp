@@ -115,14 +115,9 @@ Rcpp::List check_option_parser(std::string const& str) {
 Rcpp::List check_code_block_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
-  client::ast::code_block expr;
-  auto const parser = client::parser::code_block;
-  parse_str(str, false, parser, expr);
+  client::ast::code_block blk;
+  auto const parser = client::parser::code_block >> -x3::eol;
+  parse_str(str, false, parser, blk);
 
-  return Rcpp::List::create(
-    Rcpp::Named("indent")  = expr.indent,
-    Rcpp::Named("fence")  = expr.fence,
-    Rcpp::Named("info")  = expr.info,
-    Rcpp::Named("code")  = expr.code
-  );
+  return Rcpp::wrap(blk);
 }
