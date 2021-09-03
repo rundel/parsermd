@@ -76,3 +76,20 @@ create_raw_chunk = function(format, code = NULL, indent="") {
     class = "rmd_raw_chunk"
   )
 }
+
+create_code_block = function(code = character(), info = "", indent="", fence="```") {
+  checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_character(info, len = 1, any.missing = FALSE)
+  checkmate::assert_character(indent, len = 1, any.missing = FALSE)
+  checkmate::assert_character(fence, len = 1, any.missing = FALSE)
+
+  structure(
+    list(
+      indent = indent,
+      fence = fence,
+      info = info,
+      code = code
+    ),
+    class = "rmd_code_block"
+  )
+}
