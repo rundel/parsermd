@@ -53,8 +53,8 @@ test_that("knitr examples", {
   )
 
   for(file in files) {
-    if (grepl("065-rmd-chunk\\.Rmd", file))
-      next
+    #if (grepl("065-rmd-chunk\\.Rmd", file))
+    #  next
 
     label = paste("Parsing", basename(file))
     expect_error(parse_rmd(!!file, allow_incomplete = FALSE), regexp = NA, label = label)

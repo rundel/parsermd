@@ -322,3 +322,4 @@ test_that("chunk parsing - raw attribute chunk", {
   expect_error( parse("```{=a=}\n```\n"))
   expect_error( parse("```{a=}\n```\n"))
 })
+

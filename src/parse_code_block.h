@@ -36,10 +36,6 @@ namespace client { namespace parser {
     x3::_pass(ctx) = (x3::get<fence>(ctx) != x3::_attr(ctx));
   };
 
-  //auto const block_start = x3::rule<struct _, std::string> {"block start"}
-  //=
-
-
   auto const block_end = x3::rule<struct _> {"block end"}
   = x3::lexeme[ x3::omit[ end_indent ] >> x3::omit[ end_fence ] ];
   // >> *x3::lit(" ") >> x3::eol
