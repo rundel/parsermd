@@ -157,18 +157,18 @@
 <p>One we have this more limited set of elements we use the <code>rmd_template</code> function to generate our template. Here we have included <code>keep_content  = TRUE</code> in order to keep the scaffolded content for each answer which will then be compared to the student’s answers.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_template.html">rmd_template</a></span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 9 x 5</span>
-<span class="co">#&gt;   sec_h3    sec_h4  type     label   content                                    </span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;                                      </span>
-<span class="co">#&gt; 1 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "(Type your answer to Exercise 1 here. Thi…</span>
-<span class="co">#&gt; 2 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "(The answers for this Exercise are given …</span>
-<span class="co">#&gt; 3 Exercise… Soluti… rmd_chu… plot-d… "dino_data &lt;- datasaurus_dozen %&gt;%\n  filt…</span>
-<span class="co">#&gt; 4 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "And next calculate the correlation betwee…</span>
-<span class="co">#&gt; 5 Exercise… Soluti… rmd_chu… cor-di… "dino_data %&gt;%\n  summarize(r = cor(x, y))"</span>
-<span class="co">#&gt; 6 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "(Add code and narrative as needed. Note t…</span>
-<span class="co">#&gt; 7 Exercise… Soluti… rmd_chu… plot-s… ""                                         </span>
-<span class="co">#&gt; 8 Exercise… Soluti… rmd_mar… &lt;NA&gt;    "I'm some text, you should replace me with…</span>
-<span class="co">#&gt; 9 Exercise… Soluti… rmd_chu… cor-st… ""</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 9 × 5</span>
+<span class="co">#&gt;   sec_h3     sec_h4   type         label     content                            </span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;                              </span>
+<span class="co">#&gt; 1 Exercise 1 Solution rmd_markdown &lt;NA&gt;      "(Type your answer to Exercise 1 h…</span>
+<span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "(The answers for this Exercise ar…</span>
+<span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino "dino_data &lt;- datasaurus_dozen %&gt;%…</span>
+<span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "And next calculate the correlatio…</span>
+<span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  "dino_data %&gt;%\n  summarize(r = co…</span>
+<span class="co">#&gt; 6 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "(Add code and narrative as needed…</span>
+<span class="co">#&gt; 7 Exercise 3 Solution rmd_chunk    plot-star ""                                 </span>
+<span class="co">#&gt; 8 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "I'm some text, you should replace…</span>
+<span class="co">#&gt; 9 Exercise 3 Solution rmd_chunk    cor-star  ""</span></code></pre></div>
 </div>
 <div id="using-a-template" class="section level3">
 <h3 class="hasAnchor">
