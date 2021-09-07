@@ -60,6 +60,14 @@ tree_node.rmd_markdown = function(x) {
   )
 }
 
+tree_node.rmd_code_block = function(x) {
+  list(
+    text = "Code block",
+    label = paste0("[", length(x$code), " lines] - (fence: ", x$fence, " info: ", x$info, ")")
+  )
+}
+
+
 is_heading = function(x) {
   inherits(x, "rmd_heading")
 }

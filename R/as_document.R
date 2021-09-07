@@ -86,6 +86,20 @@ as_document.rmd_raw_chunk = function(x, ...) {
   )
 }
 
+#' @exportS3Method
+as_document.rmd_code_block = function(x, ...) {
+  lines = c(
+    paste0(x$fence, x$info),
+    x$code,
+    x$fence
+  )
+
+  paste0(
+    x$indent,
+    lines
+  )
+}
+
 
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
