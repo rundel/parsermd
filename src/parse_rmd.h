@@ -36,7 +36,8 @@ namespace client { namespace parser {
 
   // Rmd stuff
   auto const element = x3::rule<struct _, client::ast::element> {"rmd element"}
-  = (chunk | heading | text) >> *x3::eol;
+  //= (chunk | heading | text) >> *x3::eol;
+  = (code_block | heading | text) >> *x3::eol;
 
   auto const rmd = x3::rule<struct _, client::ast::rmd> {"rmd"}
   = -(yaml >> *x3::eol) >> *element;

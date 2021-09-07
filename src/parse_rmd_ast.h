@@ -8,6 +8,7 @@
 
 #include "parse_yaml.h"
 #include "parse_chunk_ast.h"
+#include "parse_code_block_ast.h"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
@@ -17,7 +18,8 @@ namespace client { namespace ast {
     std::string name;
   };
 
-  struct element : x3::variant<chunk, heading, std::vector<std::string>> {
+  //struct element : x3::variant<chunk, heading, std::vector<std::string>> {
+  struct element : x3::variant<code_block, heading, std::vector<std::string>> {
     using base_type::base_type;
     using base_type::operator=;
   };

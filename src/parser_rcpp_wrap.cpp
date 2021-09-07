@@ -79,7 +79,8 @@ namespace Rcpp {
 
   template <> SEXP wrap(client::ast::element const& element) {
     struct line_visitor {
-      SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
+      //SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
+      SEXP operator()(client::ast::code_block const& c) { return Rcpp::wrap(c); }
       SEXP operator()(client::ast::heading const& h) { return Rcpp::wrap(h); }
       SEXP operator()(std::vector<std::string> const& s) {
         Rcpp::CharacterVector res = Rcpp::wrap(s);
