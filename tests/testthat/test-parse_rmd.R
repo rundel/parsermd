@@ -52,12 +52,16 @@ test_that("knitr examples", {
     full.names = TRUE
   )
 
-  for(file in files) {
-    #if (grepl("065-rmd-chunk\\.Rmd", file))
-    #  next
+  strip_blanks = function(x) {
+    x[!grepl("^\\s*$", x)]
+  }
 
-    label = paste("Parsing", basename(file))
-    expect_error(parse_rmd(!!file, allow_incomplete = FALSE), regexp = NA, label = label)
+  for(file in files) {
+    rmd = parse_rmd(file)
+    txt = readLines(file)
+
+    expect_true(inherits(rmd, "rmd_ast"), label = paste("Parsing", basename(file)))
+    expect_equal(strip_blanks(rmd), strip_blanks(rmd))
   }
 })
 
