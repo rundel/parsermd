@@ -111,18 +111,24 @@ as_document.rmd_heading = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_yaml = function(x, ...) {
-  c(
-    "---",
-    as.character(x),
-    "---"
-  )
+  if (length(x) != 0)
+    c(
+      "---",
+      as.character(x),
+      "---"
+    )
+  else
+    NULL
 }
 
 #' @exportS3Method
 as_document.rmd_yaml_list = function(x, ...) {
-  as_document.rmd_yaml(
-    strsplit(yaml::as.yaml(x), "\n")[[1]]
-  )
+  if (length(x) != 0)
+    as_document.rmd_yaml(
+      strsplit(yaml::as.yaml(x), "\n")[[1]]
+    )
+  else
+    NULL
 }
 
 
