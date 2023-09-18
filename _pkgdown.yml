@@ -25,6 +25,7 @@ reference:
   - as_tibble
   - render
   - rmd_source
+  - parsermd-package
 - title: Subsetting functions
   contents:
   - rmd_select
