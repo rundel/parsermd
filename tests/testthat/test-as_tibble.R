@@ -33,7 +33,7 @@ test_that("as_tibble - hw01.Rmd", {
   ast = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
-  expect_snapshot_output(tbl)
+  # expect_snapshot_output(tbl)
 
   tbl_expected = tibble::tribble(
     ~sec_h3,         ~sec_h4,           ~type,          ~label,

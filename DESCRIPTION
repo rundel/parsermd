@@ -31,7 +31,6 @@ Imports:
     tidyselect,
     lifecycle
 RoxygenNote: 7.1.1
-SystemRequirements: C++14
 LinkingTo: 
     Rcpp,
     BH

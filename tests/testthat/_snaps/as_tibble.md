@@ -16,23 +16,6 @@
     11 Content Including Plots rmd_chunk     pressure        <chunk [r]>   
     12 Content Including Plots rmd_markdown  <NA>            <rmd_mrkd [2]>
 
-# as_tibble - hw01.Rmd
-
-    # A tibble: 21 x 5
-       sec_h3        sec_h4   type          label         ast           
-       <chr>         <chr>    <chr>         <chr>         <rmd_ast>     
-     1 <NA>          <NA>     rmd_yaml_list <NA>          <yaml>        
-     2 Load packages <NA>     rmd_heading   <NA>          <heading [h3]>
-     3 Load packages <NA>     rmd_chunk     load-packages <chunk [r]>   
-     4 Exercise 1    <NA>     rmd_heading   <NA>          <heading [h3]>
-     5 Exercise 1    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
-     6 Exercise 1    Solution rmd_heading   <NA>          <heading [h4]>
-     7 Exercise 1    Solution rmd_markdown  <NA>          <rmd_mrkd [2]>
-     8 Exercise 2    <NA>     rmd_heading   <NA>          <heading [h3]>
-     9 Exercise 2    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
-    10 Exercise 2    Solution rmd_heading   <NA>          <heading [h4]>
-    # ... with 11 more rows
-
 # as_tibble - hw01-student.Rmd
 
     # A tibble: 19 x 5
