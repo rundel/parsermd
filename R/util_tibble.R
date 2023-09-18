@@ -11,5 +11,5 @@ collapse_sections = function(rmd_tbl, drop_na = TRUE) {
 
   rmd_tbl = dplyr::select(rmd_tbl, -dplyr::starts_with("sec_h"))
 
-  dplyr::relocate(rmd_tbl, .data[["secs"]])
+  dplyr::relocate(rmd_tbl, secs)
 }

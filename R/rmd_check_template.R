@@ -115,7 +115,7 @@ check_unmodified = function(rmd_tbl, template) {
     return(tibble::tibble())
 
   # We only care about the content of these node types, others are NA anyway
-  template = dplyr::filter(template, .data[["type"]] %in% c("rmd_chunk", "rmd_markdown"))
+  template = dplyr::filter(template, type %in% c("rmd_chunk", "rmd_markdown"))
 
   suppressMessages(
     dplyr::semi_join(template, rmd_tbl)
