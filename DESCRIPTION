@@ -28,12 +28,10 @@ Imports:
     pillar,
     rlang,
     magrittr,
-    tidyselect,
     tidyselect (>= 1.2.0),
     lifecycle
-RoxygenNote: 7.1.1
-SystemRequirements: C++14
 RoxygenNote: 7.2.3
+SystemRequirements: C++17
 LinkingTo: 
     Rcpp,
     BH
