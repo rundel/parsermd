@@ -20,7 +20,7 @@ as_tibble.rmd_ast = function(x, include_yaml = TRUE, ...) {
     ast = x
   ) )
 
-  df = tidyr::unnest_wider(df, .data[["sections"]])
+  df = tidyr::unnest_wider(df, tidyselect::all_of("sections"))
   class(df) = c("rmd_tibble", class(df))
 
   df

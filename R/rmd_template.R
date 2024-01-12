@@ -46,7 +46,7 @@ rmd_template.rmd_ast = function(rmd, keep_content = FALSE, keep_labels = TRUE, k
 #' @exportS3Method
 rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE, keep_headings = FALSE, keep_yaml = FALSE, ...) {
   if (!keep_labels)
-    rmd = dplyr::select(rmd, -.data[["label"]])
+    rmd = dplyr::select(rmd, -tidyselect::all_of("label"))
 
   if (keep_content)
     rmd$content = rmd_node_content(rmd)
@@ -58,7 +58,7 @@ rmd_template.rmd_tibble = function(rmd, keep_content = FALSE, keep_labels = TRUE
     rmd = dplyr::filter(rmd, !(.data[["type"]] %in% c("rmd_yaml","rmd_yaml_list")))
 
 
-  rmd = dplyr::select(rmd, -.data[["ast"]])
+  rmd = dplyr::select(rmd, -tidyselect::all_of("ast"))
   class(rmd) = c("rmd_template", "tbl_df", "tbl", "data.frame")
 
   rmd
