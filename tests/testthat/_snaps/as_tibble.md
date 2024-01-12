@@ -31,7 +31,7 @@
      8 Exercise 2    <NA>     rmd_heading   <NA>          <heading [h3]>
      9 Exercise 2    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
     10 Exercise 2    Solution rmd_heading   <NA>          <heading [h4]>
-    # ... with 11 more rows
+    # i 11 more rows
 
 # as_tibble - hw01-student.Rmd
 
