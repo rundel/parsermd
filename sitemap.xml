@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://rundel.github.io/parsermd/404.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/articles/templates.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/authors.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/parsermd/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/news/index.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/as_ast.html</loc>
@@ -11,6 +35,9 @@
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/chunk_options.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/parsermd/reference/index.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/parse_rmd.html</loc>
@@ -50,11 +77,5 @@
   </url>
   <url>
     <loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/articles/templates.html</loc>
   </url>
 </urlset>

@@ -1,10 +1,10 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   parsermd: parsermd.html
   templates: templates.html
-last_built: 2021-09-05T15:59Z
+last_built: 2024-01-14T00:47Z
 urls:
   reference: https://rundel.github.io/parsermd/reference
   article: https://rundel.github.io/parsermd/articles
