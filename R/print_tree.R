@@ -23,7 +23,6 @@ tree_node.rmd_yaml_list = function(x) {
   tree_node.rmd_yaml(unlist(x))
 }
 
-
 tree_node.rmd_heading = function(x) {
   list(
     text = "Heading",
@@ -51,7 +50,6 @@ tree_node.rmd_raw_chunk = function(x) {
     label = paste0("[", x$format, ", ", length(x$code), " lines]")
   )
 }
-
 
 tree_node.rmd_markdown = function(x) {
   list(

@@ -1,4 +1,6 @@
 url: https://rundel.github.io/parsermd
+template:
+  bootstrap: 5
 
 navbar:
   type: default

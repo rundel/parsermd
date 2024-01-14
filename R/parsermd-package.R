@@ -1,23 +1,16 @@
-#' Stuff
-#'
-#' @name parsermd-package
-#' @aliases parsermd
-#' @docType package
-#' @title Stuff
-#' @author Colin Rundel \email{rundel@gmail.com}
-#' @keywords package
-NULL
+#' @keywords internal
+"_PACKAGE"
+
 
 ## usethis namespace: start
 #' @useDynLib parsermd, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
 ## usethis namespace: end
 NULL
 
-#' @importFrom rlang .data
-NULL
 
-#' @importFrom magrittr %>%
 #' @export
 magrittr::`%>%`
 
