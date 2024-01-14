@@ -110,35 +110,35 @@
 <span><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
 <span><span class="co">#&gt;     │   ├── Markdown [6 lines]</span></span>
 <span><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
-<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - unnamed-chunk-1</span></span>
 <span><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
 <span><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
 <span><span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
 <span><span class="co">#&gt;         └── Markdown [2 lines]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 12 x 5</span></span>
-<span><span class="co">#&gt;    sec_h1  sec_h2          type          label      ast           </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;      &lt;rmd_ast&gt;     </span></span>
-<span><span class="co">#&gt;  1 &lt;NA&gt;    &lt;NA&gt;            rmd_yaml_list  &lt;NA&gt;      &lt;yaml&gt;        </span></span>
-<span><span class="co">#&gt;  2 Setup   &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
-<span><span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     "setup"    &lt;chunk [r]&gt;   </span></span>
-<span><span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading    &lt;NA&gt;      &lt;heading [h1]&gt;</span></span>
-<span><span class="co">#&gt;  5 Content R Markdown      rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
-<span><span class="co">#&gt;  6 Content R Markdown      rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [6]&gt;</span></span>
-<span><span class="co">#&gt;  7 Content R Markdown      rmd_chunk     "cars"     &lt;chunk [r]&gt;   </span></span>
-<span><span class="co">#&gt;  8 Content R Markdown      rmd_chunk     ""         &lt;chunk [r]&gt;   </span></span>
-<span><span class="co">#&gt;  9 Content Including Plots rmd_heading    &lt;NA&gt;      &lt;heading [h2]&gt;</span></span>
-<span><span class="co">#&gt; 10 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span></span>
-<span><span class="co">#&gt; 11 Content Including Plots rmd_chunk     "pressure" &lt;chunk [r]&gt;   </span></span>
-<span><span class="co">#&gt; 12 Content Including Plots rmd_markdown   &lt;NA&gt;      &lt;rmd_mrkd [2]&gt;</span></span>
+<span><span class="co">#&gt; # A tibble: 12 × 5</span></span>
+<span><span class="co">#&gt;    sec_h1  sec_h2          type          label           ast           </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;           &lt;rmd_ast&gt;     </span></span>
+<span><span class="co">#&gt;  1 &lt;NA&gt;    &lt;NA&gt;            rmd_yaml_list &lt;NA&gt;            &lt;yaml&gt;        </span></span>
+<span><span class="co">#&gt;  2 Setup   &lt;NA&gt;            rmd_heading   &lt;NA&gt;            &lt;heading [h1]&gt;</span></span>
+<span><span class="co">#&gt;  3 Setup   &lt;NA&gt;            rmd_chunk     setup           &lt;chunk [r]&gt;   </span></span>
+<span><span class="co">#&gt;  4 Content &lt;NA&gt;            rmd_heading   &lt;NA&gt;            &lt;heading [h1]&gt;</span></span>
+<span><span class="co">#&gt;  5 Content R Markdown      rmd_heading   &lt;NA&gt;            &lt;heading [h2]&gt;</span></span>
+<span><span class="co">#&gt;  6 Content R Markdown      rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [6]&gt;</span></span>
+<span><span class="co">#&gt;  7 Content R Markdown      rmd_chunk     cars            &lt;chunk [r]&gt;   </span></span>
+<span><span class="co">#&gt;  8 Content R Markdown      rmd_chunk     unnamed-chunk-1 &lt;chunk [r]&gt;   </span></span>
+<span><span class="co">#&gt;  9 Content Including Plots rmd_heading   &lt;NA&gt;            &lt;heading [h2]&gt;</span></span>
+<span><span class="co">#&gt; 10 Content Including Plots rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [2]&gt;</span></span>
+<span><span class="co">#&gt; 11 Content Including Plots rmd_chunk     pressure        &lt;chunk [r]&gt;   </span></span>
+<span><span class="co">#&gt; 12 Content Including Plots rmd_markdown  &lt;NA&gt;            &lt;rmd_mrkd [2]&gt;</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="st">"Content"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; └── Heading [h1] - Content</span></span>
 <span><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
 <span><span class="co">#&gt;     │   ├── Markdown [6 lines]</span></span>
 <span><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
-<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - unnamed-chunk-1</span></span>
 <span><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
 <span><span class="co">#&gt;         ├── Markdown [2 lines]</span></span>
 <span><span class="co">#&gt;         ├── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
@@ -149,7 +149,7 @@
 <span><span class="co">#&gt; └── Heading [h1] - Content</span></span>
 <span><span class="co">#&gt;     ├── Heading [h2] - R Markdown</span></span>
 <span><span class="co">#&gt;     │   ├── Chunk [r, 1 lines] - cars</span></span>
-<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - &lt;unnamed&gt;</span></span>
+<span><span class="co">#&gt;     │   └── Chunk [r, 1 lines] - unnamed-chunk-1</span></span>
 <span><span class="co">#&gt;     └── Heading [h2] - Including Plots</span></span>
 <span><span class="co">#&gt;         └── Chunk [r, 1 opt, 1 lines] - pressure</span></span>
 <span></span>
@@ -197,8 +197,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rundel/parsermd/actions" class="external-link"><img src="https://github.com/rundel/parsermd/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=parsermd" class="external-link"><img src="https://www.r-pkg.org/badges/version/parsermd" alt="CRAN status"></a></li>
+<li><a href="https://github.com/rundel/parsermd/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/rundel/parsermd/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
