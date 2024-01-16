@@ -11,3 +11,4 @@ src/*.o.tmp
 TODO.md
 check
 CRAN-RELEASE
+revdep/

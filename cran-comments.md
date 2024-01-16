@@ -1,21 +1,23 @@
-## Test environments
-* local R installation - R 4.1.0, MacOS 11.4
-* R CMD check via GitHub actions:
-  * windows-latest (release)
-  * macOS-latest (release)
-  * ubuntu-20.04 (release)
-  * ubunut-20.04 (devel)
-* rhub::check_on_solaris()
-
 ## Description
 
-One last submission to resolve the outstanding issue with compilation on Solaris.
+Small clean up release to resolve CRAN warnings from the latest version of BH. 
 
 ## R CMD check results
 
-There are no NOTEs, ERRORs, or WARNINGs.
+0 errors | 0 warnings | 1 note
 
-## Downstream dependencies
+* checking installed package size ... NOTE
+  installed size is  9.1Mb
+  sub-directories of 1Mb or more:
+    libs   8.6Mb
 
-There are no current downstream dependencies on CRAN.
+  This is a result of using the Boost library and cannot be avoided.
+
+## revdepcheck results
+
+We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
+
 
