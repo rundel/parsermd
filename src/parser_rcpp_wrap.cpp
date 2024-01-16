@@ -22,7 +22,8 @@ namespace Rcpp {
     Rcpp::List res = Rcpp::List::create(
       Rcpp::Named("engine")  = chunk.args.engine,
       Rcpp::Named("name")    = chunk.args.name,
-      Rcpp::Named("options") = Rcpp::wrap(chunk.args.options),
+      Rcpp::Named("options") = Rcpp::wrap(chunk.args.chunk_options),
+      Rcpp::Named("yaml_options") = Rcpp::wrap(chunk.yaml_options),
       Rcpp::Named("code")    = chunk.code,
       Rcpp::Named("indent")  = chunk.args.indent
     );

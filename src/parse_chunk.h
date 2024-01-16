@@ -28,11 +28,19 @@ namespace client { namespace parser {
     ]) [check_indent];
 
   auto const chunk_code = x3::rule<struct _, std::vector<std::string>> {"Chunk code"}
-  = x3::lexeme[ *(code_line >> x3::eol) ];
+  = x3::lexeme[*(code_line >> x3::eol)];
+
+  //auto const yaml_option_line = x3::rule<struct _, ast::option, true> {"Chunk yaml option line"}
+  //= (x3::raw[
+  //     !(*indent_pat >> x3::lit("```")) >>
+  //     yaml_option
+  //]) [check_indent];
+
+  auto const chunk_yaml_options = x3::rule<struct _, std::vector<ast::option>> {"Chunk yaml options"}
+  = x3::lexeme[*(yaml_option >> x3::eol)];
 
 
   // Chunk arg stuff
-
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
   = (x3::lexeme[
        (x3::char_("=") > +x3::char_("A-Za-z0-9_")) |  // Pandoc raw attribute chunk
@@ -78,7 +86,7 @@ namespace client { namespace parser {
   // This is needed otherwise backtracking not cleaning breaks things
   auto const label_chunk = x3::rule<struct _, std::string> {"label chunk"}
   = ( label >>
-      ( (-x3::lit(',') >> &(!option))  // no option, comma optional
+      ( (-x3::lit(',') >> &(!chunk_option))  // no option, comma optional
       | (x3::expect[x3::lit(',')] ) ) // yes option, comma required
   )[([](auto& ctx) {x3::_val(ctx) = x3::_attr(ctx);})];
 
@@ -87,7 +95,7 @@ namespace client { namespace parser {
     x3::skip(x3::blank)[
       x3::expect[engine] >> -x3::lit(",") >>
       -(label_chunk) >>
-      ((option % ',') | x3::attr(std::vector<ast::option>())) >> -x3::lit(",") >>
+      ((chunk_option % ',') | x3::attr(std::vector<ast::option>())) >> -x3::lit(",") >>
       x3::lit("}") >
       x3::eol
     ];
@@ -112,6 +120,7 @@ namespace client { namespace parser {
     = x3::with<indent>(std::string()) [
         &chunk_template >> // look ahead check of chunk structure
         chunk_start >>
+        chunk_yaml_options >>
         chunk_code >>
         chunk_end
       ];
