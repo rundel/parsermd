@@ -20,7 +20,7 @@ namespace client { namespace ast {
 
   struct chunk : x3::position_tagged{
     chunk_args args;
-    std::vector<option> yaml_options;
+    std::vector<std::string> yaml_options;
     std::vector<std::string> code;
   };
 } }

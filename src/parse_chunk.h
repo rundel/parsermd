@@ -36,7 +36,7 @@ namespace client { namespace parser {
   //     yaml_option
   //]) [check_indent];
 
-  auto const chunk_yaml_options = x3::rule<struct _, std::vector<ast::option>> {"Chunk yaml options"}
+  auto const chunk_yaml_options = x3::rule<struct _, std::vector<std::string>> {"Chunk yaml options"}
   = x3::lexeme[*(yaml_option >> x3::eol)];
 
 
