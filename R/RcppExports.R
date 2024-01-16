@@ -29,7 +29,3 @@ check_option_parser <- function(str) {
     .Call(`_parsermd_check_option_parser`, str)
 }
 
-check_code_block_parser <- function(str) {
-    .Call(`_parsermd_check_code_block_parser`, str)
-}
-
