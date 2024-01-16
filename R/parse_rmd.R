@@ -28,8 +28,14 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
 
   ast = parse_rmd_cpp(rmd, allow_incomplete)
 
-  if (parse_yaml && inherits(ast[[1]], "rmd_yaml")) {
-    ast[[1]] = parse_yaml(ast[[1]])
+  if (parse_yaml) {
+    for(i in seq_along(ast)) {
+      if (inherits(ast[[i]], "rmd_yaml")) {
+        ast[[i]] = parse_yaml(ast[[i]])
+      } else if (inherits(ast[[i]], "rmd_chunk")) {
+        ast[[i]][["yaml_options"]] = parse_yaml(ast[[i]][["yaml_options"]])
+      }
+    }
   }
 
   ast = fix_unnamed_chunks(ast)
@@ -51,8 +57,6 @@ fix_unnamed_chunks = function(ast) {
 
 
 parse_yaml = function(yaml) {
-  checkmate::check_class(yaml, "rmd_yaml")
-
   if(length(yaml) == 0)
     yaml = list()
   else
