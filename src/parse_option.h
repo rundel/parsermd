@@ -44,10 +44,10 @@ namespace x3 = boost::spirit::x3;
   // FIXME - Not a great pattern but we're looking for something followed by : followed by something,
   // doesn't handle edge cases with "s and other weird stuff but should be an ok start
   // Actual parsing of the yaml is handled by the yaml package later
-  auto const yaml_option_def = (x3::lit("#| ") >
+  auto const yaml_option_def = (x3::lit("#| ") >>
                                 x3::raw[
-                                  +(x3::char_ - (x3::char_(":") | x3::eol)) >
-                                  x3::char_(":") >
+                                  +(x3::char_ - (x3::char_(":") | x3::eol)) >>
+                                  x3::char_(":") >>
                                   +(x3::char_ - x3::eol)
                                 ]);
 
