@@ -16,6 +16,15 @@ namespace client { namespace ast {
     int level;
     std::string name;
   };
+} }
+
+BOOST_FUSION_ADAPT_STRUCT(
+  client::ast::heading,
+  level, name
+)
+
+namespace client { namespace ast {
+  namespace x3 = boost::spirit::x3;
 
   struct element : x3::variant<chunk, heading, std::vector<std::string>> {
     using base_type::base_type;
@@ -26,12 +35,7 @@ namespace client { namespace ast {
     yaml front_matter;
     std::vector<element> elements;
   };
-} }
-
-BOOST_FUSION_ADAPT_STRUCT(
-  client::ast::heading,
-  level, name
-)
+  } }
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::rmd,
