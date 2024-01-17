@@ -31,10 +31,13 @@ create_heading = function(name, level) {
   structure(list(name = name, level = as.integer(level)), class = "rmd_heading")
 }
 
-create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL, indent="") {
+create_chunk = function(
+    name = NULL, engine = "r", options = list(), yaml_options = list(), code = NULL, indent=""
+) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
   checkmate::assert_list(options, any.missing = FALSE, names = "named")
+  checkmate::assert_list(yaml_options, any.missing = FALSE, names = "named")
   checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(indent, len = 1, any.missing = FALSE)
 
@@ -47,11 +50,19 @@ create_chunk = function(name = NULL, engine = "r", options = list(), code = NULL
   if (length(options) == 0)
     names(options) = character()
 
+  #if (length(yaml_options) == 0)
+  #  names(yaml_options) = character()
+
+  if (!inherits(yaml_options, "rmd_yaml_list"))
+    class(yaml_options) = "rmd_yaml_list"
+
+
   structure(
     list(
       engine = engine,
       name = name,
       options = options,
+      yaml_options = yaml_options,
       code = code,
       indent = indent
     ),
