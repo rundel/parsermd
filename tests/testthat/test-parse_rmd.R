@@ -6,7 +6,8 @@ test_that("minimal.Rmd", {
       'title: "Minimal"',
       'author: "Colin Rundel"',
       'date: "7/21/2020"',
-      'output: html_document'
+      'output: html_document',
+      parse = TRUE
     ),
     create_heading("Setup", 1),
     create_chunk(

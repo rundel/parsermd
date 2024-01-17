@@ -5,13 +5,13 @@ create_ast = function(...) {
   ast
 }
 
-create_yaml = function(..., parse = TRUE) {
-  yaml = c(...)
-  yaml = as.character(yaml)
-  class(yaml) = "rmd_yaml"
+create_yaml = function(..., parse = FALSE) {
+  yaml = list(...)
 
   if (parse)
-    yaml = parse_yaml(yaml)
+    yaml = parse_yaml(as.character(unlist(yaml)))
+  else
+    class(yaml) = "rmd_yaml_list"
 
   yaml
 }
@@ -32,7 +32,7 @@ create_heading = function(name, level) {
 }
 
 create_chunk = function(
-    name = NULL, engine = "r", options = list(), yaml_options = list(), code = NULL, indent=""
+    name = NULL, engine = "r", options = list(), yaml_options = list(), code = character(), indent=""
 ) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
@@ -43,9 +43,6 @@ create_chunk = function(
 
   if (is.null(name))
     name = ""
-
-  if (is.null(code))
-    code = ""
 
   if (length(options) == 0)
     names(options) = character()
