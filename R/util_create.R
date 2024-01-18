@@ -84,3 +84,16 @@ create_raw_chunk = function(format, code = NULL, indent="") {
     class = "rmd_raw_chunk"
   )
 }
+
+create_fenced_div = function(attributes = character(), content = list()) {
+  checkmate::assert_character(attributes, len = 1, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_list(content, any.missing = FALSE)
+
+  structure(
+    list(
+      attributes = attributes,
+      content = content
+    ),
+    class = "rmd_fenced_div"
+  )
+}

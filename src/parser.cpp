@@ -1,7 +1,9 @@
-// [[Rcpp::plugins(cpp14)]]
+// [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
 //#define BOOST_SPIRIT_X3_DEBUG
+
+#include "parse_fenced_div.h"
 
 #include "parse_rmd.h"
 #include "parser_rcpp_wrap.h"
@@ -128,6 +130,18 @@ Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
 
   std::string expr;
   auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
+  parse_str(str, false, parser, expr);
+
+  return Rcpp::wrap(expr);
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List check_fenced_div_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::fdiv expr;
+  auto const parser = x3::skip(x3::blank)[ client::parser::fdiv ];
   parse_str(str, false, parser, expr);
 
   return Rcpp::wrap(expr);

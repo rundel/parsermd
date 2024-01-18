@@ -78,6 +78,27 @@ namespace Rcpp {
     return boost::apply_visitor(v, element);
   };
 
+  template <> SEXP wrap(client::ast::fdiv const& fdiv) {
+    struct fdiv_value_visitor {
+      SEXP operator()(client::ast::fdiv const& f) { return Rcpp::wrap(f); }
+      SEXP operator()(std::string const& s) { return Rcpp::wrap(s); }
+    } v;
+
+    Rcpp::List content;
+    for(auto const& x : fdiv.content) {
+      content.push_back(boost::apply_visitor(v, x));
+    }
+
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("attributes")  = fdiv.attributes,
+      Rcpp::Named("content") = content
+    );
+    res.attr("class") = "rmd_fenced_div";
+
+    return res;
+  }
+
+
   template <> SEXP wrap(client::ast::yaml const& yaml) {
     Rcpp::CharacterVector res = Rcpp::wrap(yaml.lines);
     res.attr("class") = "rmd_yaml";
