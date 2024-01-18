@@ -62,6 +62,10 @@ as_document.rmd_chunk = function(x, ...) {
 
   lines = c(
     paste0("```{", x$engine, details, "}"),
+    if (length(x$yaml_options) > 0)
+      paste("#|", names(x$yaml_options), ":", x$yaml_options)
+    else
+      character(),
     x$code,
     "```"
   )

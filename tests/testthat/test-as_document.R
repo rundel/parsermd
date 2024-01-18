@@ -28,6 +28,12 @@ test_that("ast -> document", {
       parse_rmd(system.file("raw_attr.Rmd", package = "parsermd"))
     ), sep="\n")
   )
+
+  expect_snapshot_output(
+    cat( as_document(
+      parse_rmd(system.file("tests/testthat/knitr-examples/125-dash-options.Rmd", package = "parsermd"))
+    ), sep="\n")
+  )
 })
 
 test_that("raw chunk", {
