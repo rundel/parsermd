@@ -122,3 +122,14 @@ Rcpp::List check_yaml_option_parser(std::string const& str) {
 }
 
 
+// [[Rcpp::export]]
+Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  std::string expr;
+  auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
+  parse_str(str, false, parser, expr);
+
+  return Rcpp::wrap(expr);
+}
+

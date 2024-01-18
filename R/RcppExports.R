@@ -33,3 +33,7 @@ check_yaml_option_parser <- function(str) {
     .Call(`_parsermd_check_yaml_option_parser`, str)
 }
 
+check_cbrace_expr_parser <- function(str) {
+    .Call(`_parsermd_check_cbrace_expr_parser`, str)
+}
+

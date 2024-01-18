@@ -4,6 +4,7 @@
 //#define BOOST_SPIRIT_X3_DEBUG
 #include <boost/spirit/home/x3.hpp>
 
+#include "parse_cbrace.h"
 #include "parse_yaml.h"
 #include "parse_indent.h"
 #include "parse_chunk.h"
