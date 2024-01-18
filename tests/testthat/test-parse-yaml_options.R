@@ -6,6 +6,8 @@ test_that("basic yaml option parsing", {
   }
 
   expect_identical(parse("#| foo: bar"), list(foo = "bar"))
+  expect_identical(parse("  #| foo: bar"), list(foo = "bar"))
+  expect_identical(parse("    #| foo: bar"), list(foo = "bar"))
   expect_identical(parse("#|  foo: bar"), list(foo = "bar"))
   expect_identical(parse("#| foo:  bar"), list(foo = "bar"))
   expect_identical(parse("#| foo : bar"), list(foo = "bar"))
@@ -114,6 +116,22 @@ test_that("yaml options with break", {
     create_chunk(
       engine = "r", code=c("#|", "#| fig-width: 10"),
       yaml_options = list(echo = TRUE)
+    )
+  )
+
+  ## Indented
+
+  expect_identical(
+    parse("  ```{r}\n  #| echo: true\n  ```\n"),
+    create_chunk(
+      engine = "r", code=c("#| echo: true"), indent = "  "
+    )
+  )
+
+  expect_identical(
+    parse("\t```{r}\n\t#| echo: true\n\t```\n"),
+    create_chunk(
+      engine = "r", code=c("#| echo: true"), indent = "\t"
     )
   )
 })
