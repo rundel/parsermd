@@ -6,6 +6,7 @@
 #include "parse_qstring.h"
 
 namespace client { namespace parser {
+  namespace x3 = boost::spirit::x3;
 
   static int n_br_open;
   struct _n_br_open{};
