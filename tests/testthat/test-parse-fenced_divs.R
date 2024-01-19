@@ -116,3 +116,69 @@ This is a warning within a warning.
 
 })
 
+test_that("Utils - fenced_div_depth()", {
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      "::: a\n:::\n"
+    ) ),
+    1
+  )
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      ":::: a\n::: b\n:::\n::::\n"
+    ) ),
+    2
+  )
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      ":::: a\n::: b1\n:::\n::: b2\n:::\n::::\n"
+    ) ),
+    2
+  )
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      ":::: a\n::: b\n::: c\n:::\n:::\n::::\n"
+    ) ),
+    3
+  )
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      ":::: a\n::: b1\n::: c\n:::\n:::\n::: b2\n:::\n::::\n"
+    ) ),
+    3
+  )
+
+  expect_equal(
+    fenced_div_depth( check_fenced_div_parser(
+      ":::: a\n::: b1\n:::\n::: b2\n::: c\n:::\n:::\n::::\n"
+    ) ),
+    3
+  )
+})
+
+
+test_that("Utils - as_document()", {
+  expect_round_trip_identical = function(x) {
+    x = check_fenced_div_parser(x)
+    expect_identical(
+      x,
+      check_fenced_div_parser(
+        paste(c(as_document(x),""), collapse="\n")
+      )
+    )
+  }
+
+  expect_round_trip_identical("::: a\n:::\n")
+  expect_round_trip_identical("::: a\n::: b\n:::\n:::\n")
+  expect_round_trip_identical("::: a\n::: b1\n:::\n::: b2\n:::\n:::\n")
+  expect_round_trip_identical("::: a\n::: b\n::: c\n:::\n:::\n:::\n")
+  expect_round_trip_identical("::: a\n::: b1\n::: c\n:::\n:::\n::: b2\n:::\n:::\n")
+  expect_round_trip_identical("::: a\n::: b1\n:::\n::: b2\n::: c\n:::\n:::\n:::\n")
+})
+
+

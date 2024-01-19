@@ -18,6 +18,11 @@ as_document.default = function(x, ...) {
 }
 
 #' @exportS3Method
+as_document.character = function(x, ...) {
+  x
+}
+
+#' @exportS3Method
 as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
   lines = unlist(
     purrr::map(x, ~ c(as_document(.x), padding))
@@ -114,5 +119,19 @@ as_document.rmd_yaml_list = function(x, ...) {
     strsplit(yaml::as.yaml(x), "\n")[[1]]
   )
 }
+
+#' @exportS3Method
+as_document.rmd_fenced_div = function(x, ...) {
+  n_children = fenced_div_depth(x)
+  fence = paste(rep(":", n_children-1+3), collapse="")
+
+  c(
+    paste0(fence, " {", x$attributes, "}"),
+    unlist(purrr::map(x$content, as_document)),
+    fence
+  )
+}
+
+
 
 

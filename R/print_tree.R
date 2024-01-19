@@ -46,6 +46,13 @@ tree_node.rmd_chunk = function(x) {
 
 tree_node.rmd_raw_chunk = function(x) {
   list(
+    text = "Fenced div",
+    label = paste0("[{", x$attributes, "}, ", length(x$content), " lines]")
+  )
+}
+
+tree_node.rmd_raw_chunk = function(x) {
+  list(
     text = "Raw Attr Chunk",
     label = paste0("[", x$format, ", ", length(x$code), " lines]")
   )
