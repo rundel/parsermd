@@ -1,18 +1,16 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-//#define BOOST_SPIRIT_X3_DEBUG
+// #define BOOST_SPIRIT_X3_DEBUG
 
-#include "parse_fenced_div.h"
+#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+
+#include <Rcpp.h>
+#include <boost/format.hpp>
 
 #include "parse_rmd.h"
 #include "parser_rcpp_wrap.h"
 #include "parser_error_handler.h"
-#include <Rcpp.h>
-#include <boost/format.hpp>
-
-#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
-
 
 
 template <typename Parser, typename Attribute>
@@ -124,26 +122,39 @@ Rcpp::List check_yaml_option_parser(std::string const& str) {
 }
 
 
+
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
+Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
-  std::string expr;
-  auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
-  parse_str(str, false, parser, expr);
+  client::ast::fdiv_open expr;
+  //auto const parser = x3::skip(x3::blank)[  ];
+  parse_str(str, false, client::parser::fdiv_open, expr);
 
-  return Rcpp::wrap(expr);
+  return Rcpp::wrap(expr.attrs);
 }
 
 
-// [[Rcpp::export]]
-Rcpp::List check_fenced_div_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
+//// [[Rcpp::export]]
+//Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
+//  namespace x3 = boost::spirit::x3;
+//
+//  std::string expr;
+//  auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
+//  parse_str(str, false, parser, expr);
+//
+//  return Rcpp::wrap(expr);
+//}
 
-  client::ast::fdiv expr;
-  auto const parser = x3::skip(x3::blank)[ client::parser::fdiv ];
-  parse_str(str, false, parser, expr);
 
-  return Rcpp::wrap(expr);
-}
+//// [[Rcpp::export]]
+//Rcpp::List check_fenced_div_parser(std::string const& str) {
+//  namespace x3 = boost::spirit::x3;
+//
+//  client::ast::fdiv expr;
+//  auto const parser = x3::skip(x3::blank)[ client::parser::fdiv ];
+//  parse_str(str, false, parser, expr);
+//
+//  return Rcpp::wrap(expr);
+//}
 

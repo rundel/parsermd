@@ -6,7 +6,6 @@
 #include "parse_rmd_ast.h"
 #include "parse_fenced_div_ast.h"
 
-
 #include <RcppCommon.h>
 
 namespace Rcpp {
@@ -20,8 +19,8 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::element const& element);
   template <> SEXP wrap(client::ast::rmd const& rmd);
   template <> SEXP wrap(client::ast::yaml const& yaml);
-  template <> SEXP wrap(client::ast::fdiv const& fdiv);
+  template <> SEXP wrap(client::ast::fdiv_open const& fdiv);
+  template <> SEXP wrap(client::ast::fdiv_close const& fdiv);
 }
-
 
 #endif

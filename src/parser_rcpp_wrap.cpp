@@ -66,8 +66,11 @@ namespace Rcpp {
 
   template <> SEXP wrap(client::ast::element const& element) {
     struct line_visitor {
-      SEXP operator()(client::ast::chunk const& c) { return Rcpp::wrap(c); }
-      SEXP operator()(client::ast::heading const& h) { return Rcpp::wrap(h); }
+      SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::fdiv_close const& x ) { return Rcpp::wrap(x); }
       SEXP operator()(std::vector<std::string> const& s) {
         Rcpp::CharacterVector res = Rcpp::wrap(s);
         res.attr("class") = "rmd_markdown";
@@ -78,22 +81,17 @@ namespace Rcpp {
     return boost::apply_visitor(v, element);
   };
 
-  template <> SEXP wrap(client::ast::fdiv const& fdiv) {
-    struct fdiv_value_visitor {
-      SEXP operator()(client::ast::fdiv const& f) { return Rcpp::wrap(f); }
-      SEXP operator()(std::string const& s) { return Rcpp::wrap(s); }
-    } v;
+  template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
+    Rcpp::CharacterVector res = Rcpp::wrap(fdiv.attrs);
+    res.attr("class") = "rmd_fenced_div_open";
 
-    Rcpp::List content;
-    for(auto const& x : fdiv.content) {
-      content.push_back(boost::apply_visitor(v, x));
-    }
+    return res;
+  }
 
+  template <> SEXP wrap(client::ast::fdiv_close const& fdiv) {
     Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("attributes")  = fdiv.attributes,
-      Rcpp::Named("content") = content
     );
-    res.attr("class") = "rmd_fenced_div";
+    res.attr("class") = "rmd_fenced_div_close";
 
     return res;
   }
@@ -108,10 +106,7 @@ namespace Rcpp {
 
 
   template <> SEXP wrap(client::ast::rmd const& rmd) {
-    Rcpp::CharacterVector yaml = Rcpp::wrap(rmd.front_matter);
-
     Rcpp::List res;
-    res.push_back(yaml);
     for(auto const& element : rmd.elements) {
       res.push_back(Rcpp::wrap(element));
     }
