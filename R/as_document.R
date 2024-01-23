@@ -120,16 +120,19 @@ as_document.rmd_yaml_list = function(x, ...) {
   )
 }
 
-#' @exportS3Method
-as_document.rmd_fenced_div = function(x, ...) {
-  n_children = fenced_div_depth(x)
-  fence = paste(rep(":", n_children-1+3), collapse="")
+# FIXME - add depth counting to make :'s match for more readability
 
-  c(
-    paste0(fence, " {", x$attributes, "}"),
-    unlist(purrr::map(x$content, as_document)),
-    fence
+#' @exportS3Method
+as_document.rmd_fenced_div_open = function(x, ...) {
+  paste0(
+    "::: {", paste(x, collapse=" "), "}"
   )
+}
+
+
+#' @exportS3Method
+as_document.rmd_fenced_div_close = function(x, ...) {
+  c(":::")
 }
 
 

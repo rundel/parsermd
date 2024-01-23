@@ -30,7 +30,7 @@ Imports:
     magrittr,
     tidyselect (>= 1.2.0),
     lifecycle
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
 SystemRequirements: C++17
 LinkingTo: 
     Rcpp,
