@@ -10,12 +10,13 @@
 #include "parse_heading.h"
 #include "parse_fenced_div_ast.h"
 #include "parse_chunk_ast.h"
+#include "parse_shortcode_ast.h"
 
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct element : x3::variant<yaml, fdiv_open, fdiv_close, chunk, heading, std::vector<std::string>> {
+  struct element : x3::variant<yaml, shortcode, fdiv_open, fdiv_close, chunk, heading, std::vector<std::string>> {
     using base_type::base_type;
     using base_type::operator=;
   };

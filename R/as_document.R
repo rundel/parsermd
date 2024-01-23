@@ -135,6 +135,13 @@ as_document.rmd_fenced_div_close = function(x, ...) {
   c(":::")
 }
 
-
+#' @exportS3Method
+as_document.rmd_shortcode = function(x, ...) {
+  paste0(
+    "{{< ",
+      paste(c(x$func, paste0(" ", x$args)), collapse="") ,
+    " >}}"
+  )
+}
 
 

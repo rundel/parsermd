@@ -37,3 +37,7 @@ check_fdiv_open_parser <- function(str) {
     .Call(`_parsermd_check_fdiv_open_parser`, str)
 }
 
+check_shortcode_parser <- function(str) {
+    .Call(`_parsermd_check_shortcode_parser`, str)
+}
+

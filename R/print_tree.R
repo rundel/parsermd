@@ -72,6 +72,18 @@ tree_node.rmd_fenced_div_close = function(x) {
   )
 }
 
+tree_node.rmd_shortcode = function(x) {
+  list(
+    text = "Shortcode",
+    label = paste0(
+      "[",
+      cli::style_bold(x$func),
+      paste0(" ", x$args, collapse="") ,
+      "]"
+    )
+  )
+}
+
 is_heading = function(x) {
   inherits(x, "rmd_heading")
 }

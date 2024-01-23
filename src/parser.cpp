@@ -1,7 +1,7 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-// #define BOOST_SPIRIT_X3_DEBUG
+//#define BOOST_SPIRIT_X3_DEBUG
 
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 
@@ -132,6 +132,16 @@ Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
   parse_str(str, false, client::parser::fdiv_open, expr);
 
   return Rcpp::wrap(expr.attrs);
+}
+
+// [[Rcpp::export]]
+Rcpp::List check_shortcode_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::shortcode expr;
+  parse_str(str, false, client::parser::shortcode, expr);
+
+  return Rcpp::wrap(expr);
 }
 
 

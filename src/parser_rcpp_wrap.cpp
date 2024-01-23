@@ -71,6 +71,7 @@ namespace Rcpp {
       SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
       SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }
       SEXP operator()(client::ast::fdiv_close const& x ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::shortcode const& x  ) { return Rcpp::wrap(x); }
       SEXP operator()(std::vector<std::string> const& s) {
         Rcpp::CharacterVector res = Rcpp::wrap(s);
         res.attr("class") = "rmd_markdown";
@@ -111,6 +112,16 @@ namespace Rcpp {
       res.push_back(Rcpp::wrap(element));
     }
     res.attr("class") = Rcpp::CharacterVector({"rmd_ast", "list"});
+
+    return res;
+  };
+
+  template <> SEXP wrap(client::ast::shortcode const& sc) {
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("func")  = Rcpp::wrap(sc.func),
+      Rcpp::Named("args")  = Rcpp::wrap(sc.args)
+    );
+    res.attr("class") = "rmd_shortcode";
 
     return res;
   };
