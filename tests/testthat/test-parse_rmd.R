@@ -69,7 +69,7 @@ test_that("Found issues", {
   # No newline at the end
   expect_equal(
     parse_rmd("```{r}\n1+1\n```"),
-    create_ast(create_yaml(), create_chunk(name = "unnamed-chunk-1", code = "1+1"))
+    create_ast(create_chunk(name = "unnamed-chunk-1", code = "1+1"))
   )
 })
 

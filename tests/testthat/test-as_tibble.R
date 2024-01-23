@@ -115,7 +115,6 @@ test_that("as_tibble - empty_sections.Rmd", {
 
   tbl_expected = tibble::tribble(
     ~sec_h1, ~sec_h2,           ~type,        ~label,
-    NA,           NA, "rmd_yaml_list", NA_character_,
     "H1-1",       NA,   "rmd_heading", NA_character_,
     "H1-1",   "H2-1",   "rmd_heading", NA_character_,
     "H1-1",   "H2-2",   "rmd_heading", NA_character_,

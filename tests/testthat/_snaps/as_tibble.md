@@ -60,14 +60,13 @@
 
 # as_tibble - empty_sections.Rmd
 
-    # A tibble: 5 x 5
-      sec_h1 sec_h2 type          label ast           
-      <chr>  <chr>  <chr>         <chr> <rmd_ast>     
-    1 <NA>   <NA>   rmd_yaml_list <NA>  <yaml>        
-    2 H1-1   <NA>   rmd_heading   <NA>  <heading [h1]>
-    3 H1-1   H2-1   rmd_heading   <NA>  <heading [h2]>
-    4 H1-1   H2-2   rmd_heading   <NA>  <heading [h2]>
-    5 H1-2   <NA>   rmd_heading   <NA>  <heading [h1]>
+    # A tibble: 4 x 5
+      sec_h1 sec_h2 type        label ast           
+      <chr>  <chr>  <chr>       <chr> <rmd_ast>     
+    1 H1-1   <NA>   rmd_heading <NA>  <heading [h1]>
+    2 H1-1   H2-1   rmd_heading <NA>  <heading [h2]>
+    3 H1-1   H2-2   rmd_heading <NA>  <heading [h2]>
+    4 H1-2   <NA>   rmd_heading <NA>  <heading [h1]>
 
 # as_tibble - reverse_sections.Rmd
 

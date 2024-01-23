@@ -37,7 +37,15 @@ check_fdiv_open_parser <- function(str) {
     .Call(`_parsermd_check_fdiv_open_parser`, str)
 }
 
+check_fdiv_close_parser <- function(str) {
+    .Call(`_parsermd_check_fdiv_close_parser`, str)
+}
+
 check_shortcode_parser <- function(str) {
     .Call(`_parsermd_check_shortcode_parser`, str)
+}
+
+check_cbrace_expr_parser <- function(str) {
+    .Call(`_parsermd_check_cbrace_expr_parser`, str)
 }
 
