@@ -111,6 +111,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// check_fdiv_close_parser
+Rcpp::List check_fdiv_close_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_fdiv_close_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_fdiv_close_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_shortcode_parser
 Rcpp::List check_shortcode_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_shortcode_parser(SEXP strSEXP) {
@@ -119,6 +130,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
     rcpp_result_gen = Rcpp::wrap(check_shortcode_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_cbrace_expr_parser
+Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_cbrace_expr_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_cbrace_expr_parser(str));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -133,7 +155,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_check_chunk_option_parser", (DL_FUNC) &_parsermd_check_chunk_option_parser, 1},
     {"_parsermd_check_yaml_option_parser", (DL_FUNC) &_parsermd_check_yaml_option_parser, 1},
     {"_parsermd_check_fdiv_open_parser", (DL_FUNC) &_parsermd_check_fdiv_open_parser, 1},
+    {"_parsermd_check_fdiv_close_parser", (DL_FUNC) &_parsermd_check_fdiv_close_parser, 1},
     {"_parsermd_check_shortcode_parser", (DL_FUNC) &_parsermd_check_shortcode_parser, 1},
+    {"_parsermd_check_cbrace_expr_parser", (DL_FUNC) &_parsermd_check_cbrace_expr_parser, 1},
     {NULL, NULL, 0}
 };
 

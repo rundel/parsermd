@@ -8,6 +8,8 @@
 #include <Rcpp.h>
 #include <boost/format.hpp>
 
+#include "parse_cbrace.h"
+
 #include "parse_rmd.h"
 #include "parser_rcpp_wrap.h"
 #include "parser_error_handler.h"
@@ -131,7 +133,18 @@ Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
   //auto const parser = x3::skip(x3::blank)[  ];
   parse_str(str, false, client::parser::fdiv_open, expr);
 
-  return Rcpp::wrap(expr.attrs);
+  return Rcpp::wrap(expr);
+}
+
+// [[Rcpp::export]]
+Rcpp::List check_fdiv_close_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::fdiv_close expr;
+  //auto const parser = x3::skip(x3::blank)[  ];
+  parse_str(str, false, client::parser::fdiv_close, expr);
+
+  return Rcpp::wrap(expr);
 }
 
 // [[Rcpp::export]]
@@ -145,16 +158,16 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
 }
 
 
-//// [[Rcpp::export]]
-//Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
-//  namespace x3 = boost::spirit::x3;
-//
-//  std::string expr;
-//  auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
-//  parse_str(str, false, parser, expr);
-//
-//  return Rcpp::wrap(expr);
-//}
+// [[Rcpp::export]]
+Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  std::string expr;
+  auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
+  parse_str(str, false, parser, expr);
+
+  return Rcpp::wrap(expr);
+}
 
 
 //// [[Rcpp::export]]

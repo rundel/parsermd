@@ -39,11 +39,11 @@ namespace client { namespace parser {
 
   auto const fdiv_open_def
   = x3::lexeme[x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ]] >
-       x3::skip(x3::blank)[
-        (cbrace_attrs | unbraced_attr) >>
-        x3::omit[ *x3::char_(':') ]   // ignore any trailing :s on the opening line
-       ] >
-       x3::eol;
+    x3::skip(x3::blank)[
+      (cbrace_attrs | unbraced_attr) >>
+      x3::omit[ *x3::char_(':') ]   // ignore any trailing :s on the opening line
+    ] >
+    x3::omit[*x3::blank] >> x3::eol;
 
   BOOST_SPIRIT_DEFINE(fdiv_open);
 
@@ -52,7 +52,7 @@ namespace client { namespace parser {
   x3::rule<fdiv_close_class, client::ast::fdiv_close> const fdiv_close = "fdiv_close";
 
   auto const fdiv_close_def
-  = x3::lexeme[ x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ] ] >> x3::eol;
+  = x3::lexeme[ x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ] ] >> x3::omit[*x3::blank] >> x3::eol;
 
   BOOST_SPIRIT_DEFINE(fdiv_close);
 
