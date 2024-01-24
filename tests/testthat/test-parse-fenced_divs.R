@@ -46,6 +46,20 @@ test_that("Basic parser tests - open", {
     create_fenced_div_open(".test")
   )
 
+  expect_equal(
+    check_fdiv_open_parser("::: {}\n"),
+    create_fenced_div_open()
+  )
+
+  expect_equal(
+    check_fdiv_open_parser(":::{}\n"),
+    create_fenced_div_open()
+  )
+
+  expect_equal(
+    check_fdiv_open_parser("::: {   }\n"),
+    create_fenced_div_open()
+  )
 
   ## Bad inputs
 
@@ -63,10 +77,6 @@ test_that("Basic parser tests - open", {
 
   expect_snapshot( # Incomplete opening fence
     check_fdiv_open_parser(":: \n"), error=TRUE
-  )
-
-  expect_snapshot(
-    check_fdiv_open_parser("::: {}\n"), error=TRUE
   )
 
 })

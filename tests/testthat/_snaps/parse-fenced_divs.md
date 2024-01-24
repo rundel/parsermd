@@ -38,16 +38,6 @@
       :: 
       ^~~
 
----
-
-    Code
-      check_fdiv_open_parser("::: {}\n")
-    Condition
-      Error:
-      ! Failed to parse line 1
-      ::: {}
-           ^
-
 # Basic parser tests - close
 
     Code

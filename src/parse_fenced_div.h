@@ -34,7 +34,7 @@ namespace client { namespace parser {
   = x3::lexeme[ (+(x3::char_ - x3::eol - x3::blank))[add_class] ];
 
   auto cbrace_attrs = x3::rule<struct _, std::vector<std::string> > ("braced attribute(s)")
-  = x3::lit("{") > x3::lexeme[ +(x3::char_ - x3::char_("{} ")) % +x3::blank ] > x3::lit("}");
+  = x3::lit("{") > -x3::lexeme[ +(x3::char_ - x3::char_("{} ")) % +x3::blank ] > x3::lit("}");
 
 
   auto const fdiv_open_def
