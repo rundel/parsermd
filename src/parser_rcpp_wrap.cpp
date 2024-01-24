@@ -25,7 +25,8 @@ namespace Rcpp {
       Rcpp::Named("options") = Rcpp::wrap(chunk.args.chunk_options),
       Rcpp::Named("yaml_options") = Rcpp::wrap(chunk.yaml_options),
       Rcpp::Named("code")    = chunk.code,
-      Rcpp::Named("indent")  = chunk.args.indent
+      Rcpp::Named("indent")  = chunk.args.indent,
+      Rcpp::Named("n_ticks")  = chunk.args.n_ticks
     );
 
     res.attr("class") = "rmd_chunk";

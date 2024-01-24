@@ -149,6 +149,14 @@ test_that("chunk parsing - indented", {
   )
 
   expect_equal(
+    check_chunk_parser_yaml("    ```{r test, include=FALSE}\n    1+1\n    ```\n"),
+    create_chunk(
+      name = "test", options = list(include = "FALSE"),
+      code = "1+1", indent = "    "
+    )
+  )
+
+  expect_equal(
     check_chunk_parser_yaml("\t```{r}\n\tprint('hello indented world')\n\t```\n"),
     create_chunk(
       code = "print('hello indented world')", indent = "\t"
@@ -161,6 +169,8 @@ test_that("chunk parsing - indented", {
       code = "print('hello indented world')", indent = "> "
     )
   )
+
+  ## Bad indents
 
   expect_error(
     check_chunk_parser_yaml("> ```{r}\n  ```\n"),
@@ -277,33 +287,102 @@ test_that("chunk parsing - bad chunks", {
 
 
 test_that("chunk parsing - raw attribute chunk", {
-  parse = check_chunk_parser
+  parse = check_chunk_parser_yaml
 
-  make_raw_chunk = function(format, code = character(), indent = "") {
-    structure(
-      list(format = format, code = code, indent = indent),
-      class = "rmd_raw_chunk"
-    )
-  }
 
-  expect_equal( parse("```{=html}\n```\n"),   make_raw_chunk("html") )
-  expect_equal( parse("```{=md}\n```\n"),   make_raw_chunk("md") )
+  expect_equal( parse("```{=html}\n```\n"), create_raw_chunk("html") )
+  expect_equal( parse("```{=md}\n```\n"),   create_raw_chunk("md") )
 
   # Check code
   expect_equal(
     parse("```{=html}\n<h1>hello</h1>\n```\n"),
-    make_raw_chunk("html", code = "<h1>hello</h1>")
+    create_raw_chunk("html", code = "<h1>hello</h1>")
   )
 
   # Check indent
   expect_equal(
     parse("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
-    make_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
+    create_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
   )
 
   # Bad
-  expect_error( parse("```{=}\n```\n"))
-  expect_error( parse("```{==}\n```\n"))
-  expect_error( parse("```{=a=}\n```\n"))
-  expect_error( parse("```{a=}\n```\n"))
+  expect_snapshot( parse("```{=}\n```\n"),   error=TRUE)
+  expect_snapshot( parse("```{==}\n```\n"),  error=TRUE)
+  expect_snapshot( parse("```{=a=}\n```\n"), error=TRUE)
+  expect_snapshot( parse("```{a=}\n```\n"),  error=TRUE)
+})
+
+
+
+test_that("chunk parsing - more than 3 ticks", {
+  parse = check_chunk_parser_yaml
+
+  expect_equal(
+    parse("```{r}\n```\n"), create_chunk()
+  )
+
+  expect_equal(
+    parse("````{r}\n````\n"), create_chunk(n_ticks = 4)
+  )
+
+  expect_equal(
+    parse("`````{r}\n`````\n"), create_chunk(n_ticks = 5)
+  )
+
+  expect_equal(
+    parse("  ````{r}\n  ````\n"), create_chunk(n_ticks = 4, indent = "  ")
+  )
+
+  expect_equal(
+    parse("\t````{r}\n\t````\n"), create_chunk(n_ticks = 4, indent = "\t")
+  )
+
+  expect_equal(
+    parse("> ````{r}\n> ````\n"), create_chunk(n_ticks = 4, indent = "> ")
+  )
+
+  ## Unbalanced ticks
+
+  expect_snapshot(
+    parse("````{r}\n```"), error=TRUE
+  )
+
+  expect_snapshot(
+    parse("```{r}\n````"), error=TRUE
+  )
+
+  expect_snapshot(
+    parse("````{r}\n`````"), error=TRUE
+  )
+
+  expect_snapshot(
+    parse("`````{r}\n````"), error=TRUE
+  )
+})
+
+
+test_that("chunk parsing - nested ticks", {
+  parse = check_chunk_parser_yaml
+
+  expect_equal(
+    parse("````{r}\n```\n````\n"), create_chunk(code="```", n_ticks = 4)
+  )
+
+  expect_equal(
+    parse("````{r}\n```\n```\n````\n"),
+    create_chunk(code=c("```","```"), n_ticks = 4)
+  )
+
+  expect_equal(
+    parse("````{r}\n```{r}\n```\n````\n"),
+    create_chunk(code=c("```{r}","```"), n_ticks = 4)
+  )
+
+  expect_equal(
+    parse_rmd("````{r}\n````\n````\n````\n"),
+    create_ast(
+      create_chunk(n_ticks = 4, name = "unnamed-chunk-1"),
+      create_markdown("````", "````")
+    )
+  )
 })

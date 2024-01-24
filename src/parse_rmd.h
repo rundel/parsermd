@@ -41,14 +41,14 @@ namespace client { namespace parser {
   };
 
   // Markdown text stuff
-  auto const chunk_start_sig = (*indent_pat >> x3::lit("```{"));
+  //auto const chunk_start_sig = (*indent_pat >> x3::lit("```{"));
   auto const heading_start_sig = x3::lit("#");
   auto const fdiv_start_sig = x3::lit(":::");
   //auto const yaml_start_sig = x3::lit("---");   // Don't need to check since this is valid md
   auto const shortcode_start_sig = x3::lit("{{<");
 
   auto const invalid_start = x3::rule<struct _>{"invalid start"}
-  = chunk_start_sig | heading_start_sig | fdiv_start_sig | shortcode_start_sig;
+  = heading_start_sig | fdiv_start_sig | shortcode_start_sig;
 
   auto const text_line = x3::rule<struct _, std::string>{"markdown text line"}
   = !invalid_start >> x3::lexeme[ *(x3::char_ - x3::eol) ];
