@@ -29,13 +29,7 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
   ast = parse_rmd_cpp(rmd, allow_incomplete)
 
   if (parse_yaml) {
-    for(i in seq_along(ast)) {
-      if (inherits(ast[[i]], "rmd_yaml")) {
-        ast[[i]] = parse_yaml(ast[[i]])
-      } else if (inherits(ast[[i]], "rmd_chunk")) {
-        ast[[i]][["yaml_options"]] = parse_yaml(ast[[i]][["yaml_options"]])
-      }
-    }
+    ast = parse_yaml(ast)
   }
 
   ast = fix_unnamed_chunks(ast)
@@ -55,8 +49,7 @@ fix_unnamed_chunks = function(ast) {
 }
 
 
-
-parse_yaml = function(yaml) {
+as_rmd_yaml_list = function(yaml) {
   if(length(yaml) == 0)
     yaml = list()
   else
@@ -66,3 +59,33 @@ parse_yaml = function(yaml) {
 
   yaml
 }
+
+parse_yaml = function(x) {
+  UseMethod("parse_yaml")
+}
+
+#' @exportS3Method
+parse_yaml.default = function(x) {
+  x
+}
+
+#' @exportS3Method
+parse_yaml.rmd_yaml = function(x) {
+  as_rmd_yaml_list(x)
+}
+
+#' @exportS3Method
+parse_yaml.rmd_chunk = function(x) {
+  x[["yaml_options"]] = as_rmd_yaml_list(x[["yaml_options"]])
+  x
+}
+
+#' @exportS3Method
+parse_yaml.rmd_ast = function(x) {
+  structure(
+    lapply(x, parse_yaml),
+    class = c("rmd_ast", "list")
+  )
+}
+
+
