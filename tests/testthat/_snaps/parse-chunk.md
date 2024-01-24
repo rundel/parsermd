@@ -21,9 +21,9 @@
 
 ---
 
-    Failed to parse line 2
-    ``
-    ~~^
+    Failed to parse line 1
+    ```{r}
+    ^~~~~~
     
 
 ---
@@ -67,4 +67,64 @@
     ```{r x=1, y=}
                  ^
     
+
+# chunk parsing - raw attribute chunk
+
+    Code
+      parse("```{=}\n```\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ```{=}
+           ^
+
+---
+
+    Code
+      parse("```{==}\n```\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ```{==}
+           ^~
+
+---
+
+    Code
+      parse("```{=a=}\n```\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ```{=a=}
+      ^~~~~~~~
+
+---
+
+    Code
+      parse("```{a=}\n```\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ```{a=}
+      ^~~~~~~
+
+# chunk parsing - >3 ticks
+
+    Code
+      parse("````{r}\n```")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ````{r}
+      ^~~~~~~
+
+---
+
+    Code
+      parse("```{r}\n````")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ```{r}
+      ^~~~~~
 
