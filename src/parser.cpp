@@ -113,7 +113,7 @@ Rcpp::List check_chunk_option_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_yaml_option_parser(std::string const& str) {
+Rcpp::CharacterVector check_yaml_option_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<std::string> expr;

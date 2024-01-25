@@ -70,6 +70,11 @@ parse_yaml.default = function(x) {
 }
 
 #' @exportS3Method
+parse_yaml.character = function(x) {
+  as_rmd_yaml_list(x)
+}
+
+#' @exportS3Method
 parse_yaml.rmd_yaml = function(x) {
   as_rmd_yaml_list(x)
 }
