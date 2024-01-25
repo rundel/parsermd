@@ -11,7 +11,8 @@ namespace Rcpp {
       Rcpp::List res = Rcpp::List::create(
         Rcpp::Named("format")  = chunk.args.engine.substr(1, chunk.args.engine.size()-1),
         Rcpp::Named("code")    = chunk.code,
-        Rcpp::Named("indent")  = chunk.args.indent
+        Rcpp::Named("indent")  = chunk.args.indent,
+        Rcpp::Named("n_ticks")  = chunk.args.n_ticks
       );
 
       res.attr("class") = "rmd_raw_chunk";
