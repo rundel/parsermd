@@ -32,7 +32,7 @@ create_heading = function(name, level) {
 }
 
 create_chunk = function(
-    name = NULL, engine = "r", options = list(), yaml_options = list(), code = character(), indent="", n_ticks = 3
+    name = NULL, engine = "r", options = list(), yaml_options = list(), code = character(), indent="", n_ticks = 3L
 ) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
@@ -40,7 +40,7 @@ create_chunk = function(
   checkmate::assert_list(yaml_options, any.missing = FALSE, names = "named")
   checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(indent, len = 1, any.missing = FALSE)
-  checkmate::assert_numeric(n_ticks, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(n_ticks, len = 1, any.missing = FALSE)
 
   if (is.null(name))
     name = ""

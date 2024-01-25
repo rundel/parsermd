@@ -65,14 +65,16 @@ as_document.rmd_chunk = function(x, ...) {
   if (details != "")
     details = paste0(" ", details)
 
+  ticks = paste(rep('`', x$n_ticks), collapse="")
+
   lines = c(
-    paste0("```{", x$engine, details, "}"),
+    paste0(ticks, "{", x$engine, details, "}"),
     if (length(x$yaml_options) > 0)
       paste("#|", names(x$yaml_options), ":", x$yaml_options)
     else
       character(),
     x$code,
-    "```"
+    ticks
   )
 
   paste0(
@@ -83,10 +85,12 @@ as_document.rmd_chunk = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_raw_chunk = function(x, ...) {
+  ticks = paste(rep('`', x$n_ticks), collapse="")
+
   lines = c(
-    paste0("```{=", x$format,"}"),
+    paste0(ticks, "{=", x$format,"}"),
     x$code,
-    "```"
+    ticks
   )
 
   paste0(
