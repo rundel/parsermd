@@ -108,7 +108,7 @@
       ```{a=}
       ^~~~~~~
 
-# chunk parsing - >3 ticks
+# chunk parsing - more than 3 ticks
 
     Code
       parse("````{r}\n```")
@@ -127,4 +127,24 @@
       ! Failed to parse line 1
       ```{r}
       ^~~~~~
+
+---
+
+    Code
+      parse("````{r}\n`````")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ````{r}
+      ^~~~~~~
+
+---
+
+    Code
+      parse("`````{r}\n````")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      `````{r}
+      ^~~~~~~~
 
