@@ -1,8 +1,8 @@
 test_that("basic yaml option parsing", {
   parse = function(x) {
-    yaml::yaml.load(
-      parsermd:::check_yaml_option_parser(x)
-    )
+    unclass( parse_yaml(
+      check_yaml_option_parser(x)
+    ) )
   }
 
   expect_identical(parse("#| foo: bar"), list(foo = "bar"))
@@ -20,9 +20,7 @@ test_that("basic yaml option parsing", {
 
 test_that("chunk with yaml options", {
   parse = function(x) {
-    z = parsermd:::check_chunk_parser(x)
-    z[["yaml_options"]] = parse_yaml(z[["yaml_options"]])
-    z
+    parse_yaml( parsermd:::check_chunk_parser(x) )
   }
 
   expect_identical(
@@ -69,9 +67,7 @@ test_that("chunk with yaml options", {
 
 test_that("yaml options with break", {
   parse = function(x) {
-    z = parsermd:::check_chunk_parser(x)
-    z[["yaml_options"]] = parse_yaml(z[["yaml_options"]])
-    z
+    parse_yaml( parsermd:::check_chunk_parser(x) )
   }
 
   expect_identical(
