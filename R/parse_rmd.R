@@ -17,7 +17,7 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
   checkmate::assert_character(rmd, min.len = 1, any.missing = FALSE)
 
   if (length(rmd) > 1) {               # If multiple lines in a char vec assume
-    rmd = paste(rmd, collapse = "\n")  #   it has been read in already
+    rmd = paste0(rmd, "\n", collapse = "")  #   it has been read in already
   } else if (!grepl("\n", rmd)) {      # If no newlines then assume it is a path or url
     rmd = readr::read_file(rmd)
   }
