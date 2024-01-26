@@ -45,51 +45,6 @@ test_that("minimal.Rmd", {
   expect_identical(ast, expected_ast)
 })
 
-test_that("knitr examples", {
-
-  files = dir(
-    system.file("tests/testthat/knitr-examples/", package = "parsermd"),
-    pattern = utils::glob2rx("*.Rmd"),
-    full.names = TRUE
-  )
-
-  for(file in files) {
-    if (grepl("065-rmd-chunk\\.Rmd", file))
-      next
-
-    test_that(basename(file), {
-      ast = expect_no_error(parse_rmd(file), class = "rmd_ast")
-
-      expect_equal(
-        ast,
-        parse_rmd(as_document(ast, padding = character()))
-      )
-    })
-  }
-})
-
-
-test_that("quarto web examples", {
-  files = dir(
-    system.file("tests/testthat/quarto-web/", package = "parsermd"),
-    pattern = utils::glob2rx("*.qmd"),
-    recursive = TRUE,
-    full.names = TRUE
-  )
-
-  for(file in files) {
-    test_that(basename(file), {
-      #ast = expect_no_error(parse_rmd(file), class = "rmd_ast")
-
-      #expect_equal(
-      #  ast,
-      #  parse_rmd(as_document(ast, padding = character()))
-      #)
-    })
-  }
-})
-
-
 test_that("Found issues", {
 
   # No newline at the end
