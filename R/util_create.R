@@ -8,6 +8,9 @@ create_ast = function(...) {
 create_yaml = function(..., parse = FALSE) {
   yaml = list(...)
 
+  if (length(yaml) == 1 && is.list(yaml[[1]]))
+    yaml = yaml[[1]]
+
   if (parse)
     yaml = parse_yaml(as.character(unlist(yaml)))
   else

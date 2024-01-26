@@ -1,35 +1,50 @@
 # yaml parsing - bad yaml
 
-    Failed to parse line 1
-    --
-    ^~
-    
+    Code
+      check_yaml_parser("--\n---\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      --
+      ^~
 
 ---
 
-    Failed to parse line 2, expected "---"
-    --
-      ^
-    
+    Code
+      check_yaml_parser("---\n--\n")
+    Condition
+      Error:
+      ! Failed to parse line 2, expected eol
+      --
+        ^
 
 ---
 
-    Failed to parse line 1
-    ----
-       ^
-    
+    Code
+      check_yaml_parser("----\n---\n")
+    Condition
+      Error:
+      ! Failed to parse line 1
+      ----
+         ^
 
 ---
 
-    Failed to parse line 2, expected eol
-    ----
-       ^
-    
+    Code
+      check_yaml_parser("---\n----\n")
+    Condition
+      Error:
+      ! Failed to parse line 2, expected eol
+      ----
+         ^
 
 ---
 
-    Failed to parse line 1, expected "---"
-    ---
-       ^
-    
+    Code
+      check_yaml_parser("---\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected eol
+      ---
+         ^
 
