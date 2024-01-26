@@ -133,6 +133,8 @@ namespace client { namespace parser {
       *x3::lit(" ") >>
       x3::eol
     ) | (
+      // Chunk can be ended by a new chunk starting see Yihui's book Sec 5.1.4
+      // look ahead to match but not consume this new chunk
       &x3::lexeme[
         x3::omit[ end_indent ] >>
         x3::repeat(3, x3::inf)[ x3::char_("`") ] >>
@@ -140,26 +142,6 @@ namespace client { namespace parser {
       ]
     )
   ) ];
-
-  // Chunk can be ended by a new chunk starting see Yihui's book Sec 5.1.4
-  // look ahead to match but not consume this new chunk
-
-  // Code stuff
-
-  //auto const code_line = x3::rule<struct _, std::string, true> {"Chunk code line"}
-  //= x3::with<_n_ticks>(std::ref(n_ticks)) [
-  //  (x3::raw[
-  //     !( *indent_pat >>
-  //        x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_close]
-  //      ) >>
-  //     *(x3::char_ - x3::eol)
-  //  ]) [check_indent]
-  //];
-
-  auto const chunk_code = x3::rule<struct _, std::vector<std::string>> {"Chunk code"}
-  = x3::lexeme[*(code_line >> x3::eol)];
-
-
 
   struct chunk_class : error_handler, x3::annotate_on_success {};
   x3::rule<chunk_class, client::ast::chunk> const chunk = "chunk";
@@ -169,7 +151,7 @@ namespace client { namespace parser {
         &chunk_template >> // look ahead check of chunk structure
         chunk_start >
         chunk_yaml_options >
-        chunk_code >
+        code_lines >
         chunk_end
       ];
 
