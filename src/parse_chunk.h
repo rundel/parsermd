@@ -10,20 +10,15 @@
 #include "parse_expr.h"
 #include "parse_option.h"
 #include "parser_error_handler.h"
-
+#include "parse_ticks.h"
 #include "parse_chunk_ast.h"
-
 #include "parse_indent.h"
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
-
-
-
   auto const chunk_yaml_options = x3::rule<struct _, std::vector<std::string>> {"Chunk yaml options"}
   = x3::lexeme[*(yaml_option >> x3::eol)];
-
 
   // Chunk arg stuff
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
@@ -38,9 +33,6 @@ namespace client { namespace parser {
 
 
   // Chunk stuff
-
-  static int n_ticks;
-  struct _n_ticks{};
 
   auto chunk_tmpl_open = [](auto& ctx) {
     x3::get<_n_ticks>(ctx).get() =  x3::_attr(ctx).size();
@@ -117,11 +109,6 @@ namespace client { namespace parser {
     x3::_pass(ctx) = ( x3::_attr(ctx).size() == x3::get<_n_ticks>(ctx).get() );
   };
 
-  auto const open_ticks = x3::rule<struct _, int> {"open ticks"}
-  = x3::with<_n_ticks>(std::ref(n_ticks)) [
-    x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_open]
-  ];
-
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
   = x3::lexeme[
       start_indent >>
@@ -159,19 +146,18 @@ namespace client { namespace parser {
 
   // Code stuff
 
-  auto const code_line = x3::rule<struct _, std::string, true> {"Chunk code line"}
-  = x3::with<_n_ticks>(std::ref(n_ticks)) [
-    (x3::raw[
-       !( *indent_pat >>
-          x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_close]
-        ) >>
-       *(x3::char_ - x3::eol)
-    ]) [check_indent]
-  ];
+  //auto const code_line = x3::rule<struct _, std::string, true> {"Chunk code line"}
+  //= x3::with<_n_ticks>(std::ref(n_ticks)) [
+  //  (x3::raw[
+  //     !( *indent_pat >>
+  //        x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_close]
+  //      ) >>
+  //     *(x3::char_ - x3::eol)
+  //  ]) [check_indent]
+  //];
 
   auto const chunk_code = x3::rule<struct _, std::vector<std::string>> {"Chunk code"}
   = x3::lexeme[*(code_line >> x3::eol)];
-
 
 
 

@@ -1,4 +1,12 @@
-# parsermd (development version)
+# parsermd 0.2.0 (development version)
+
+* Added support for yaml chunk options
+
+* Added support for fenced divs
+
+* Added support for shortcodes
+
+* Added support for markdown code blocks
 
 # parsermd 0.1.3
 

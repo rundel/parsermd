@@ -99,6 +99,22 @@ as_document.rmd_raw_chunk = function(x, ...) {
   )
 }
 
+#' @exportS3Method
+as_document.rmd_code_block = function(x, ...) {
+  ticks = paste(rep('`', x$n_ticks), collapse="")
+
+  lines = c(
+    paste(ticks, x$attr),
+    x$code,
+    ticks
+  )
+
+  paste0(
+    x$indent,
+    lines
+  )
+}
+
 
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {

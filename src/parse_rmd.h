@@ -11,7 +11,7 @@
 #include "parse_indent.h"
 #include "parse_chunk.h"
 #include "parse_shortcode.h"
-
+#include "parse_code_block.h"
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
@@ -60,7 +60,7 @@ namespace client { namespace parser {
   // Rmd stuff
   auto const element = x3::rule<struct _, client::ast::element> {"rmd element"}
   %= x3::with<_n_fdiv_open>(std::ref(n_fdiv_open))[
-    (chunk | heading | yaml | shortcode | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | text) >> *x3::eol
+    (chunk | code_block | heading | yaml | shortcode | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | text) >> *x3::eol
   ];
 
   auto const rmd = x3::rule<struct _, client::ast::rmd> {"rmd"}

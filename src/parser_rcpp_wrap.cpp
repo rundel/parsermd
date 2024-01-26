@@ -3,6 +3,21 @@
 #include <Rcpp.h>
 
 namespace Rcpp {
+  // code block wrappers
+  template <> SEXP wrap(client::ast::code_block const& code_block) {
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("attr")  = code_block.args.attr,
+      Rcpp::Named("code")    = code_block.code,
+      Rcpp::Named("indent")  = code_block.args.indent,
+      Rcpp::Named("n_ticks") = code_block.args.n_ticks
+    );
+
+    res.attr("class") = "rmd_code_block";
+
+    return res;
+  }
+
+
   // chunk wrappers
   template <> SEXP wrap(client::ast::chunk const& chunk) {
 
@@ -69,6 +84,7 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::element const& element) {
     struct line_visitor {
       SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::code_block const& x ) { return Rcpp::wrap(x); }
       SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
       SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
       SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }

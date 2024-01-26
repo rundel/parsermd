@@ -169,6 +169,16 @@ Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+// [[Rcpp::export]]
+Rcpp::List check_code_block_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::code_block expr;
+  parse_str(str, false, client::parser::code_block, expr);
+
+  return Rcpp::wrap(expr);
+}
+
 
 //// [[Rcpp::export]]
 //Rcpp::List check_fenced_div_parser(std::string const& str) {

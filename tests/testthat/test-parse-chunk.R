@@ -322,23 +322,23 @@ test_that("chunk parsing - more than 3 ticks", {
   )
 
   expect_equal(
-    parse("````{r}\n````\n"), create_chunk(n_ticks = 4)
+    parse("````{r}\n````\n"), create_chunk(n_ticks = 4L)
   )
 
   expect_equal(
-    parse("`````{r}\n`````\n"), create_chunk(n_ticks = 5)
+    parse("`````{r}\n`````\n"), create_chunk(n_ticks = 5L)
   )
 
   expect_equal(
-    parse("  ````{r}\n  ````\n"), create_chunk(n_ticks = 4, indent = "  ")
+    parse("  ````{r}\n  ````\n"), create_chunk(n_ticks = 4L, indent = "  ")
   )
 
   expect_equal(
-    parse("\t````{r}\n\t````\n"), create_chunk(n_ticks = 4, indent = "\t")
+    parse("\t````{r}\n\t````\n"), create_chunk(n_ticks = 4L, indent = "\t")
   )
 
   expect_equal(
-    parse("> ````{r}\n> ````\n"), create_chunk(n_ticks = 4, indent = "> ")
+    parse("> ````{r}\n> ````\n"), create_chunk(n_ticks = 4L, indent = "> ")
   )
 
   ## Unbalanced ticks
@@ -365,24 +365,24 @@ test_that("chunk parsing - nested ticks", {
   parse = check_chunk_parser_yaml
 
   expect_equal(
-    parse("````{r}\n```\n````\n"), create_chunk(code="```", n_ticks = 4)
+    parse("````{r}\n```\n````\n"), create_chunk(code="```", n_ticks = 4L)
   )
 
   expect_equal(
     parse("````{r}\n```\n```\n````\n"),
-    create_chunk(code=c("```","```"), n_ticks = 4)
+    create_chunk(code=c("```","```"), n_ticks = 4L)
   )
 
   expect_equal(
     parse("````{r}\n```{r}\n```\n````\n"),
-    create_chunk(code=c("```{r}","```"), n_ticks = 4)
+    create_chunk(code=c("```{r}","```"), n_ticks = 4L)
   )
 
   expect_equal(
     parse_rmd("````{r}\n````\n````\n````\n"),
     create_ast(
-      create_chunk(n_ticks = 4, name = "unnamed-chunk-1"),
-      create_markdown("````", "````")
+      create_chunk(n_ticks = 4L, name = "unnamed-chunk-1"),
+      create_code_block(n_ticks = 4L)
     )
   )
 })

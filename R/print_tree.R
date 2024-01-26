@@ -30,6 +30,16 @@ tree_node.rmd_heading = function(x) {
   )
 }
 
+tree_node.rmd_code_block = function(x) {
+  attr = if (x$attr == "") cli::style_italic("<no attrs>")
+         else x$attr
+
+  list(
+    text = "Code block",
+    label = paste0("[", attr, ", ", length(x$code), " lines]")
+  )
+}
+
 tree_node.rmd_chunk = function(x) {
   name = if (x$name != "") cli::style_bold(x$name)
          else cli::style_italic("<unnamed>")

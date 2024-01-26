@@ -31,8 +31,28 @@ create_heading = function(name, level) {
   structure(list(name = name, level = as.integer(level)), class = "rmd_heading")
 }
 
+create_code_block = function(
+  attr = "", code = character(), indent="", n_ticks = 3L
+) {
+  checkmate::assert_character(attr, len = 1, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
+  checkmate::assert_character(indent, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(n_ticks, len = 1, any.missing = FALSE)
+
+  structure(
+    list(
+      attr = attr,
+      code = code,
+      indent = indent,
+      n_ticks = n_ticks
+    ),
+    class = "rmd_code_block"
+  )
+}
+
+
 create_chunk = function(
-    name = NULL, engine = "r", options = list(), yaml_options = list(), code = character(), indent="", n_ticks = 3L
+  name = NULL, engine = "r", options = list(), yaml_options = list(), code = character(), indent="", n_ticks = 3L
 ) {
   checkmate::assert_character(name, len = 1, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
@@ -69,16 +89,18 @@ create_chunk = function(
   )
 }
 
-create_raw_chunk = function(format, code = character(), indent="") {
+create_raw_chunk = function(format, code = character(), indent="", n_ticks=3L) {
   checkmate::assert_character(format, len = 1, any.missing = FALSE)
   checkmate::assert_character(code, any.missing = FALSE, null.ok = TRUE)
   checkmate::assert_character(indent, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(n_ticks, len = 1, any.missing = FALSE)
 
   structure(
     list(
       format = format,
       code = code,
-      indent = indent
+      indent = indent,
+      n_ticks = n_ticks
     ),
     class = "rmd_raw_chunk"
   )
