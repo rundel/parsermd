@@ -69,10 +69,14 @@ as_document.rmd_chunk = function(x, ...) {
 
   lines = c(
     paste0(ticks, "{", x$engine, details, "}"),
-    if (length(x$yaml_options) > 0)
-      paste("#|", names(x$yaml_options), ":", x$yaml_options)
-    else
-      character(),
+    if (length(x$yaml_options) > 0) {
+      yaml_lines = strsplit( yaml::as.yaml(
+        x$yaml_options, handlers = list(logical = yaml::verbatim_logical)
+      ), "\n")[[1]]
+      paste("#|", yaml_lines)
+    } else {
+      character()
+    },
     x$code,
     ticks
   )
@@ -136,7 +140,10 @@ as_document.rmd_yaml = function(x, ...) {
 #' @exportS3Method
 as_document.rmd_yaml_list = function(x, ...) {
   as_document.rmd_yaml(
-    strsplit(yaml::as.yaml(x), "\n")[[1]]
+    strsplit(
+      yaml::as.yaml(x, handlers = list(logical = yaml::verbatim_logical)),
+      "\n"
+    )[[1]]
   )
 }
 

@@ -254,13 +254,13 @@
     
     
     ```{r unnamed-chunk-1}
-    #| eval : TRUE
-    #| echo : FALSE
-    #| out-width : 850
-    #| sql-max-print : 1000
-    #| fig-cap : caption
-    #| fig-dpi : 750
-    #| fig-format : svg
+    #| eval: true
+    #| echo: false
+    #| out-width: 850
+    #| sql-max-print: 1000
+    #| fig-cap: caption
+    #| fig-dpi: 750
+    #| fig-format: svg
     knitr::opts_current$get(c("echo","out.width", "sql.max.print", "fig.cap", "dpi", "dev"))
     ```
     
