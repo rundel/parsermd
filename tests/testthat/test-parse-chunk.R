@@ -183,6 +183,18 @@ test_that("chunk parsing - indented", {
   expect_error(
     check_chunk_parser_yaml(" ```{r}\n```\n"),
   )
+
+
+  ## Handling of blank lines within indented blocks
+  expect_equal(
+    check_chunk_parser_yaml("  ```{r}\n  1+1\n  \n  2+2\n  ```\n"),
+    check_chunk_parser_yaml("  ```{r}\n  1+1\n\n  2+2\n  ```\n")
+  )
+
+  expect_equal(
+    check_chunk_parser_yaml("  ```{r}\n  1+1\n\n  2+2\n  ```\n"),
+    create_chunk(indent="  ", code=c("1+1","","2+2"))
+  )
 })
 
 test_that("chunk parsing - sequential", {
@@ -386,3 +398,4 @@ test_that("chunk parsing - nested ticks", {
     )
   )
 })
+
