@@ -13,3 +13,4 @@ TODO.md
 ^CRAN-RELEASE$
 ^revdep$
 ^CRAN-SUBMISSION$
+^tests/testthat/quarto-web
