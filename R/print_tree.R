@@ -8,10 +8,12 @@ tree_node = function(x) {
   UseMethod("tree_node")
 }
 
+#' @exportS3Method
 tree_node.default = function(x) {
   stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
@@ -19,10 +21,12 @@ tree_node.rmd_yaml = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml_list = function(x) {
   tree_node.rmd_yaml(unlist(x))
 }
 
+#' @exportS3Method
 tree_node.rmd_heading = function(x) {
   list(
     text = "Heading",
@@ -30,6 +34,7 @@ tree_node.rmd_heading = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_code_block = function(x) {
   attr = if (x$attr == "") cli::style_italic("<no attrs>")
          else x$attr
@@ -40,6 +45,7 @@ tree_node.rmd_code_block = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_chunk = function(x) {
   name = if (x$name != "") cli::style_bold(x$name)
          else cli::style_italic("<unnamed>")
@@ -54,6 +60,7 @@ tree_node.rmd_chunk = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",
@@ -61,6 +68,7 @@ tree_node.rmd_raw_chunk = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
@@ -68,6 +76,7 @@ tree_node.rmd_markdown = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_fenced_div_open = function(x) {
   list(
     text = "Open Fenced div",
@@ -75,6 +84,7 @@ tree_node.rmd_fenced_div_open = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_fenced_div_close = function(x) {
   list(
     text = "Close Fenced div",
@@ -82,6 +92,7 @@ tree_node.rmd_fenced_div_close = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_shortcode = function(x) {
   list(
     text = "Shortcode",
