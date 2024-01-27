@@ -17,8 +17,17 @@
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
+  auto const yaml_option = x3::rule<struct _, std::vector<std::string>> {"Chunk yaml option line"}
+  = (x3::lit("#| ") >>
+     x3::raw[
+       *(x3::char_ - x3::eol)
+     ]);
+
   auto const chunk_yaml_options = x3::rule<struct _, std::vector<std::string>> {"Chunk yaml options"}
-  = x3::lexeme[*(yaml_option >> x3::eol)];
+  = x3::lexeme[
+      *(yaml_option > x3::eol) >>
+      &(!x3::lit("#| "))
+    ];
 
   // Chunk arg stuff
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
@@ -80,19 +89,6 @@ namespace client { namespace parser {
     chunk_template_body >>
     chunk_template_end;
 
-
-  auto chunk_start_wrap = [](auto p) {
-    return (
-      x3::lexeme[ start_indent >> x3::lit("```{") ] >>
-      x3::skip(x3::blank)[
-        x3::expect[engine] >>
-        -x3::lit(",") >>
-        p >>
-        x3::lit("}") >>
-        x3::eol
-      ]
-    );
-  };
 
   // This is needed otherwise backtracking not cleaning breaks things
   auto const label_chunk = x3::rule<struct _, std::string> {"label chunk"}

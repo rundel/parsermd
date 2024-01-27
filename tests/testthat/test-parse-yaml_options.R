@@ -93,25 +93,10 @@ test_that("yaml options with break", {
   )
 
   expect_identical(
-    parse("```{r}\n#| echo\n#| echo: true\n```\n"),
+    parse("```{r}\n#| echo: true\n#| \n#| fig-width: 10\n```\n"),
     create_chunk(
-      engine = "r", code=c("#| echo", "#| echo: true")
-    )
-  )
-
-  expect_identical(
-    parse("```{r}\n#| echo: true\n#| echo\n```\n"),
-    create_chunk(
-      engine = "r", code=c("#| echo"),
-      yaml_options = list(echo = TRUE)
-    )
-  )
-
-  expect_identical(
-    parse("```{r}\n#| echo: true\n#|\n#| fig-width: 10\n```\n"),
-    create_chunk(
-      engine = "r", code=c("#|", "#| fig-width: 10"),
-      yaml_options = list(echo = TRUE)
+      engine = "r",
+      yaml_options = list(echo = TRUE, `fig-width` = 10L)
     )
   )
 
@@ -161,4 +146,27 @@ test_that("parse full document with yaml options", {
   )
 
   expect_identical(ast, expected_ast)
+})
+
+test_that("Array arguments", {
+  parse = function(x) {
+    parse_yaml( parsermd:::check_chunk_parser(x) )
+  }
+
+  expect_equal(
+    parse("```{r}\n#| layout: [[1,1], [1]]\n```\n"),
+    create_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+  )
+
+  expect_equal(
+    parse("```{r}\n#| layout:\n#| - - 1\n#|   - 1\n#| - 1\n```\n"),
+    create_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+  )
+
+  expect_equal(
+    parse("```{r}\n#| layout: [[1,1], [1]]\n```\n"),
+    parse("```{r}\n#| layout:\n#| - - 1\n#|   - 1\n#| - 1\n```\n")
+  )
+
+
 })

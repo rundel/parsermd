@@ -28,31 +28,4 @@ namespace client { namespace parser {
   BOOST_SPIRIT_DEFINE(chunk_option);
 } }
 
-
-namespace client { namespace parser {
-namespace x3 = boost::spirit::x3;
-
-  //auto const yaml_key = x3::rule<struct _, std::string> {"valid yaml key"}
-  //= ( x3::lexeme[ x3::char_("A-Za-z") >> *x3::char_("._A-Za-z0-9-") ] )
-  //  | ( client::parser::any_q_string );
-
-
-  struct yaml_option_class : error_handler, x3::annotate_on_success {};
-  x3::rule<yaml_option_class, std::string> const yaml_option = "yaml option";
-
-
-  // FIXME - Not a great pattern but we're looking for something followed by : followed by something,
-  // doesn't handle edge cases with "s and other weird stuff but should be an ok start
-  // Actual parsing of the yaml is handled by the yaml package later
-  auto const yaml_option_def = (x3::lit("#| ") >>
-                                x3::raw[
-                                  +(x3::char_ - (x3::char_(":") | x3::eol)) >>
-                                  x3::char_(":") >>
-                                  +(x3::char_ - x3::eol)
-                                ]);
-
-
-  BOOST_SPIRIT_DEFINE(yaml_option);
-} }
-
 #endif
