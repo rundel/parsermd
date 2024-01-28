@@ -112,6 +112,7 @@ namespace client { namespace parser {
       x3::lit("{")
     ] >>
     x3::skip(x3::blank)[
+      !x3::lit("#lst-") >> // Code Listings look like chunks but are not - https://quarto.org/docs/authoring/cross-references.html#code-listings
       x3::expect[engine] >> -x3::lit(",") >>
       -(label_chunk) >>
       ((chunk_option % ',') | x3::attr(std::vector<ast::option>())) >> -x3::lit(",") >>

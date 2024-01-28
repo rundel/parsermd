@@ -41,7 +41,9 @@ namespace client { namespace parser {
   };
 
   // Markdown text stuff
+
   auto const chunk_start_sig = (*indent_pat >> x3::lit("```"));
+  //auto const chunk_start_sig = (*indent_pat >> x3::repeat(3, x3::inf)[ x3::lit("`") ] >> x3::lit("{"));
   auto const heading_start_sig = x3::lit("#");
   auto const fdiv_start_sig = x3::lit(":::");
   //auto const yaml_start_sig = x3::lit("---");   // Don't need to check since this is valid md
@@ -60,7 +62,7 @@ namespace client { namespace parser {
   // Rmd stuff
   auto const element = x3::rule<struct _, client::ast::element> {"rmd element"}
   %= x3::with<_n_fdiv_open>(std::ref(n_fdiv_open))[
-    (chunk | code_block | heading | yaml | shortcode | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | text) >> *x3::eol
+    (chunk | code_block | heading | yaml | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | text) >> *x3::eol
   ];
 
   auto const rmd = x3::rule<struct _, client::ast::rmd> {"rmd"}
