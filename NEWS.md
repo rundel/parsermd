@@ -4,9 +4,9 @@
 
 * Added support for fenced divs
 
-* Added support for shortcodes
-
 * Added support for markdown code blocks
+
+* Added support for yaml expressions (`!expr`)
 
 # parsermd 0.1.3
 

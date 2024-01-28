@@ -50,15 +50,37 @@ fix_unnamed_chunks = function(ast) {
 
 
 as_rmd_yaml_list = function(yaml) {
-  if(length(yaml) == 0)
+  if(length(yaml) == 0) {
     yaml = list()
-  else
-    yaml = yaml::yaml.load(string = paste(yaml, collapse="\n"))
+  } else {
+    yaml = yaml::yaml.load(
+      string = paste(yaml, collapse="\n"),
+      handlers = list(expr = function(x) parse(text=x))
+    )
+  }
 
   class(yaml) = "rmd_yaml_list"
 
   yaml
 }
+
+expression_verbatim = function(x) {
+  res = as.character(x)
+  attr(res,"tag") = "!expr"
+
+  res
+}
+
+as_yaml_text = function(list) {
+  strsplit( yaml::as.yaml(
+    list,
+    handlers = list(
+      expression = expression_verbatim,
+      logical = yaml::verbatim_logical
+    )
+  ), split = "\n")[[1]]
+}
+
 
 parse_yaml = function(x) {
   UseMethod("parse_yaml")
