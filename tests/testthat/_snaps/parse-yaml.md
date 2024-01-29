@@ -14,7 +14,7 @@
       check_yaml_parser("---\n--\n")
     Condition
       Error:
-      ! Failed to parse line 2, expected eol
+      ! Failed to parse line 2, expected YAMLs closing fence 
       --
         ^
 
@@ -26,7 +26,7 @@
       Error:
       ! Failed to parse line 1
       ----
-         ^
+      ^~~~
 
 ---
 
@@ -34,9 +34,9 @@
       check_yaml_parser("---\n----\n")
     Condition
       Error:
-      ! Failed to parse line 2, expected eol
+      ! Failed to parse line 2, expected YAMLs closing fence 
       ----
-         ^
+      ^~~~
 
 ---
 
@@ -44,7 +44,7 @@
       check_yaml_parser("---\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected eol
+      ! Failed to parse line 1, expected YAMLs closing fence 
       ---
          ^
 
