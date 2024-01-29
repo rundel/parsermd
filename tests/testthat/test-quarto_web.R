@@ -1,4 +1,5 @@
-path = system.file("tests/testthat/quarto-web/", package = "parsermd")
+root = "tests/testthat/quarto-web/"
+path = system.file(root, package = "parsermd")
 
 if (dir.exists(path)) {
   files = dir(
@@ -9,7 +10,7 @@ if (dir.exists(path)) {
   )
 
   for(file in files) {
-    test_that(basename(file), {
+    test_that(sub(paste0(".*",root), "", file), {
       ast = expect_no_error(parse_rmd(file), class = "rmd_ast")
 
       lines = as_document(ast, padding = character())
