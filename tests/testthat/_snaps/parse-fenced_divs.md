@@ -84,9 +84,9 @@
       parse_rmd_cpp("::: test1\n")
     Condition
       Error:
-      ! Failed to parse line 1
+      ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
       ::: test1
-      ^~~~~~~~~
+      ~~~~~~~~~^
 
 ---
 
@@ -104,9 +104,9 @@
       parse_rmd_cpp("::: test1\n::: test2\n:::\n")
     Condition
       Error:
-      ! Failed to parse line 1
+      ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
       ::: test1
-      ^~~~~~~~~
+      ~~~~~~~~~^
 
 ---
 
