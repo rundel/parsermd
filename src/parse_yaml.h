@@ -26,8 +26,11 @@ namespace client { namespace parser {
 
   namespace x3 = boost::spirit::x3;
 
+  auto const yaml_fence_close = x3::rule<struct _>{"YAML closing fence"}
+  = ((x3::lit("---") | x3::lit("...")) >> *x3::lit(' ')) >> x3::eol;
+
   auto const yaml_line = x3::rule<struct _, std::string>{"yaml line"}
-  = !x3::lit("---") >>
+  = !yaml_fence_close >>
     x3::raw[
       *(x3::char_ - x3::eol)
     ];
@@ -35,20 +38,15 @@ namespace client { namespace parser {
   auto const yaml_lines = x3::rule<struct _, std::vector<std::string>>{"yaml lines"}
   = *(yaml_line >> x3::eol);
 
-  auto const yaml_fence_close = x3::rule<struct _>{"YAMLs closing fence "}
-  = (x3::lit("---") >> *x3::lit(' ')) >> x3::eol;
+  auto const post_fence_blank_line = x3::rule<struct _>{"YAML opening fence to be followed by a non-empty line"}
+  = x3::eol >> &(!(*x3::lit(' ') >> x3::eol)); // Include eol so the error message shows on the fence line
 
   struct yaml_class : error_handler, x3::annotate_on_success {};
-
-  x3::rule<yaml_class, client::ast::yaml> const yaml = "yaml";
-
-  auto const yaml_def
-  = x3::lit("---") >> *x3::lit(' ') >> x3::eol >>
+  auto const yaml = x3::rule<yaml_class, client::ast::yaml> {"yaml"}
+  = x3::lit("---") >> *x3::lit(' ') >> x3::expect[post_fence_blank_line] >>
     x3::lexeme[ yaml_lines ] >>
     x3::expect[yaml_fence_close];
     //x3::lit("---") > *x3::lit(' ') > x3::eol;
-
-  BOOST_SPIRIT_DEFINE(yaml);
 } }
 
 #endif

@@ -1,6 +1,6 @@
-parse = function(x) parse_yaml(check_yaml_parser(x))
-
 test_that("yaml parsing - good yaml", {
+  parse = function(x) parse_yaml(check_yaml_parser(x))
+
   expect_equal(
     parse("---\n---\n"),
     create_yaml()
@@ -52,6 +52,30 @@ test_that("yaml parsing - bad yaml", {
   expect_snapshot(check_yaml_parser("---\n"), error=TRUE)
 })
 
+test_that("yaml parsing - blank lines", {
+  parse = function(x) parse_yaml(check_yaml_parser(x))
+
+  expect_equal(
+    parse("---\nvalue: 1\n\n---\n"),
+    create_yaml(value=1)
+  )
+
+  expect_equal(
+    parse("---\nvalue1: 1\n\nvalue2: 2\n---\n"),
+    create_yaml(value1=1, value2=2)
+  )
+
+  expect_snapshot(
+    parse("---\n\n---\n"),
+    error=TRUE
+  )
+
+  expect_snapshot(
+    parse("---\n\nvalue: 1\n---\n"),
+    error=TRUE
+  )
+})
+
 test_that("GitHub #25 - Unicode + YAML", {
 
   # Failed w/ the following case:
@@ -64,4 +88,46 @@ test_that("GitHub #25 - Unicode + YAML", {
   rmd = "---\nauthor: \"Sébastien Rochette\"\n---\n"
 
   expect_s3_class(parse_rmd(rmd), "rmd_ast")
+})
+
+test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
+  parse = function(x) parse_yaml(check_yaml_parser(x))
+
+  expect_equal(
+    parse("---\n...\n"),
+    create_yaml()
+  )
+
+  expect_equal(
+    parse("---\nvalue: 1\n...\n"),
+    create_yaml(value=1)
+  )
+
+  expect_equal(
+    parse_rmd("---\n---\n---\n...\n"),
+    create_ast(
+      create_yaml(),
+      create_yaml()
+    )
+  )
+
+  expect_equal(
+    parse_rmd("---\nvalue: 1\n---\n---\nvalue: 2\n...\n"),
+    create_ast(
+      create_yaml(value=1),
+      create_yaml(value=2)
+    )
+  )
+
+  expect_snapshot(
+    parse("---\n\n...\n"), error=TRUE
+  )
+
+  expect_snapshot(
+    parse_rmd("---\n\n---\n---\n...\n"), error=TRUE
+  )
+
+  expect_snapshot(
+    parse_rmd("---\n---\n---\n\n...\n"), error=TRUE
+  )
 })
