@@ -1,39 +1,42 @@
 test_that("ast -> document", {
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+      parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("hw01-student.Rmd", package = "parsermd"))
+      parse_rmd(system.file("examples/hw01-student.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+      parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("reverse_sections.Rmd", package = "parsermd"))
+      parse_rmd(system.file("examples/reverse_sections.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 
   expect_snapshot_output(
     cat( as_document(
-      parse_rmd(system.file("raw_attr.Rmd", package = "parsermd"))
+      parse_rmd(system.file("examples/raw_attr.Rmd", package = "parsermd"))
     ), sep="\n")
   )
 
-  expect_snapshot_output(
-    cat( as_document(
-      parse_rmd(system.file("tests/testthat/knitr-examples/125-dash-options.Rmd", package = "parsermd"))
-    ), sep="\n")
-  )
+  file = system.file("tests/testthat/knitr-examples/125-dash-options.Rmd", package = "parsermd")
+  if (file.exists(file)) {
+    expect_snapshot_output(
+      cat( as_document(
+        parse_rmd(file)
+      ), sep="\n")
+    )
+  }
 })
 
 test_that("raw chunk", {

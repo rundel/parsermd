@@ -1,5 +1,5 @@
 test_that("minimal.Rmd", {
-  ast = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
   expected_ast = create_ast(
     create_yaml(

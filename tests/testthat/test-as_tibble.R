@@ -1,5 +1,5 @@
 test_that("as_tibble - minimal.Rmd", {
-  ast = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)
@@ -30,7 +30,7 @@ test_that("as_tibble - minimal.Rmd", {
 
 
 test_that("as_tibble - hw01.Rmd", {
-  ast = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)
@@ -70,7 +70,7 @@ test_that("as_tibble - hw01.Rmd", {
 
 
 test_that("as_tibble - hw01-student.Rmd", {
-  ast = parse_rmd(system.file("hw01-student.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/hw01-student.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)
@@ -108,7 +108,7 @@ test_that("as_tibble - hw01-student.Rmd", {
 })
 
 test_that("as_tibble - empty_sections.Rmd", {
-  ast = parse_rmd(system.file("empty_sections.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/empty_sections.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)
@@ -133,7 +133,7 @@ test_that("as_tibble - empty_sections.Rmd", {
 
 
 test_that("as_tibble - reverse_sections.Rmd", {
-  ast = parse_rmd(system.file("reverse_sections.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/reverse_sections.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
 
   expect_snapshot_output(tbl)
