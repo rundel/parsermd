@@ -43,53 +43,6 @@ namespace client { namespace parser {
 
   // Chunk stuff
 
-  auto chunk_tmpl_open = [](auto& ctx) {
-    x3::get<_n_ticks>(ctx).get() =  x3::_attr(ctx).size();
-  };
-  auto chunk_tmpl_close = [](auto& ctx) {
-    x3::_pass(ctx) = ( x3::_attr(ctx).size() == x3::get<_n_ticks>(ctx).get() );
-  };
-
-  auto const chunk_template_start = x3::rule<struct _> {"chunk template - start"}
-   = x3::with<_n_ticks>(std::ref(n_ticks))[
-    ( x3::skip(indent_pat)[
-        x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_tmpl_open] >>
-        x3::lit("{")
-      ] >>
-      !x3::char_("{.")
-    ) >>
-    x3::skip(x3::blank)[
-      *( // Look ahead to find end of chunk def
-        &(!( (x3::lit('}') >> x3::eol) | x3::eol )) >>
-        x3::char_
-      ) >>
-      x3::lit('}') >> x3::eol
-    ]
-  ];
-
-  auto const chunk_template_body = x3::rule<struct _> {"chunk template - body"}
-  = x3::with<_n_ticks>(std::ref(n_ticks))[ *(
-        x3::skip(indent_pat)[
-          !x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_tmpl_close]
-        ] >>
-        *(x3::char_ - x3::eol) >> x3::eol
-  ) ];
-
-  auto const chunk_template_end = x3::rule<struct _> {"chunk template - end"}
-  = x3::with<_n_ticks>(std::ref(n_ticks))[
-    x3::skip(indent_pat)[
-      (   x3::repeat(3, x3::inf)[ x3::char_("`") ] >> x3::lit("{")
-        | x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_tmpl_close] >> x3::eol
-      )
-    ]
-  ];
-
-  auto const chunk_template = x3::rule<struct _> {"chunk template"}
-  = chunk_template_start >>
-    chunk_template_body >>
-    chunk_template_end;
-
-
   // This is needed otherwise backtracking not cleaning breaks things
   auto const label_chunk = x3::rule<struct _, std::string> {"label chunk"}
   = ( label >>
@@ -148,7 +101,6 @@ namespace client { namespace parser {
 
   auto const chunk_def
     = x3::with<indent>(std::string()) [
-        //&chunk_template >> // look ahead check of chunk structure
         chunk_start >>
         chunk_yaml_options >>
         code_lines >>
