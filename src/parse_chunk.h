@@ -50,14 +50,6 @@ namespace client { namespace parser {
       | (x3::expect[x3::lit(',')] ) ) // yes option, comma required
   )[([](auto& ctx) {x3::_val(ctx) = x3::_attr(ctx);})];
 
-  auto chunk_open = [](auto& ctx) {
-    x3::get<_n_ticks>(ctx).get() =  x3::_attr(ctx).size();
-    x3::_val(ctx) = x3::_attr(ctx).size();
-  };
-  auto chunk_close = [](auto& ctx) {
-    x3::_pass(ctx) = ( x3::_attr(ctx).size() == x3::get<_n_ticks>(ctx).get() );
-  };
-
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
   = x3::lexeme[
       start_indent >>
@@ -67,7 +59,7 @@ namespace client { namespace parser {
     x3::skip(x3::blank)[
       !(  x3::lit("#lst-") // Code Listings look like chunks but are not - https://quarto.org/docs/authoring/cross-references.html#code-listings
         | x3::lit("{") // Same for {{engine}} cases
-        | x3::lit(".")
+        | x3::lit(".") // or .engine case
        ) >>
       engine >> -x3::lit(",") >>
       -(label_chunk) >>
@@ -76,12 +68,10 @@ namespace client { namespace parser {
       x3::eol
     ];
 
-
   auto const chunk_end = x3::rule<struct _> {"chunk end"}
-  = x3::with<_n_ticks>(std::ref(n_ticks)) [ (
-    ( x3::lexeme[
+  = ( x3::lexeme[
         x3::omit[ end_indent ] >>
-          x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_close]
+        close_ticks(3)
       ] >>
       *x3::lit(" ") >>
       x3::eol
@@ -93,8 +83,7 @@ namespace client { namespace parser {
         x3::repeat(3, x3::inf)[ x3::char_("`") ] >>
         x3::lit("{")
       ]
-    )
-  ) ];
+    );
 
   struct chunk_class : error_handler, x3::annotate_on_success {};
   x3::rule<chunk_class, client::ast::chunk> const chunk = "chunk";
