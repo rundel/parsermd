@@ -19,7 +19,7 @@ namespace client { namespace parser {
   auto const block_start = x3::rule<struct _, client::ast::code_block_args> {"code block start"}
   = x3::lexeme[
       start_indent >>
-      open_ticks >>
+      open_ticks(3) >>
       *x3::lit(" ") >>
       *(x3::char_ - (x3::char_('`') | x3::eol))
   ] >>
@@ -28,7 +28,7 @@ namespace client { namespace parser {
   auto const block_end = x3::rule<struct _> {"chunk end"}
   = x3::lexeme[
       x3::omit[ end_indent ] >>
-      close_ticks
+      close_ticks(3)
     ] >>
     x3::eol;
 

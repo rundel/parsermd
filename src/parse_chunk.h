@@ -61,7 +61,7 @@ namespace client { namespace parser {
   auto const chunk_start = x3::rule<struct _, client::ast::chunk_args> {"chunk start"}
   = x3::lexeme[
       start_indent >>
-      open_ticks >>
+      open_ticks(3) >>
       x3::lit("{")
     ] >>
     x3::skip(x3::blank)[

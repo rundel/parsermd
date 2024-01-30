@@ -20,19 +20,23 @@ namespace client { namespace parser {
     x3::_pass(ctx) = ( x3::_attr(ctx).size() == x3::get<_n_ticks>(ctx).get() );
   };
 
-  auto const open_ticks = x3::rule<struct _, int> {"open ticks"}
-  = x3::with<_n_ticks>(std::ref(n_ticks)) [
-      x3::repeat(3, x3::inf)[ x3::char_("`") ][count_ticks]
+  auto const inline open_ticks(int n) {
+    return x3::rule<struct _, int> {"open ticks"}
+    = x3::with<_n_ticks>(std::ref(n_ticks)) [
+      x3::repeat(n, x3::inf)[ x3::char_("`") ][count_ticks]
     ];
+  }
 
-  auto const close_ticks = x3::rule<struct _, int> {"close ticks"}
-  = x3::with<_n_ticks>(std::ref(n_ticks)) [
-      x3::repeat(3, x3::inf)[ x3::char_("`") ][match_ticks]
-  ];
+  auto const inline close_ticks(int n) {
+    return x3::rule<struct _> {"close ticks"}
+    = x3::with<_n_ticks>(std::ref(n_ticks)) [
+        x3::repeat(n, x3::inf)[ x3::char_("`") ][match_ticks]
+    ];
+  }
 
   auto const code_line = x3::rule<struct _, std::string, true> {"code line"}
   = x3::raw[
-      !( *indent_pat >> close_ticks ) >>
+      !( *indent_pat >> close_ticks(3) ) >>
       *(x3::char_ - x3::eol)
     ][check_indent];
 
