@@ -14,3 +14,4 @@ TODO.md
 ^revdep$
 ^CRAN-SUBMISSION$
 ^tests/testthat/quarto-web
+^tests/testthat/quarto-cli
