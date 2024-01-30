@@ -1,15 +1,15 @@
 # chunk parsing - bad chunks
 
-    Failed to parse line 1, expected chunk engine
+    Failed to parse line 1
     ```{}
-        ^
+    ^~~~~
     
 
 ---
 
-    Failed to parse line 1, expected '}'
+    Failed to parse line 1
     ```{r
-    ~~~~~^
+    ^~~~~
     
 
 ---
@@ -76,7 +76,7 @@
       Error:
       ! Failed to parse line 1
       ```{=}
-           ^
+      ^~~~~~
 
 ---
 
@@ -86,7 +86,7 @@
       Error:
       ! Failed to parse line 1
       ```{==}
-           ^~
+      ^~~~~~~
 
 ---
 

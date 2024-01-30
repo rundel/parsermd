@@ -74,23 +74,24 @@ namespace client { namespace parser {
   //auto const chunk_start_sig = (*indent_pat >> x3::repeat(3, x3::inf)[ x3::lit("`") ] >> x3::lit("{"));
   auto const heading_start_sig = x3::lit("#");
   auto const fdiv_start_sig = x3::lit(":::");
-  //auto const yaml_start_sig = x3::lit("---");   // Don't need to check since this is valid md
+  auto const yaml_start_sig = x3::lit(":::") >> *x3::lit(" ") >> x3::eol >> !(*x3::lit(' ') >> x3::eol);
   auto const shortcode_start_sig = x3::lit("{{<");
 
+
   auto const invalid_start = x3::rule<struct _>{"invalid start"}
-  = chunk_start_sig | heading_start_sig | fdiv_start_sig; //| shortcode_start_sig;
+  = !(heading_start_sig | chunk_start | block_start | fdiv_open | fdiv_close | yaml_start); //| shortcode_start_sig;
 
-  auto const text_line = x3::rule<struct _, std::string>{"markdown text line"}
-  = !invalid_start >> x3::lexeme[ *(x3::char_ - x3::eol) ];
+  auto const md_text_line = x3::rule<struct _, std::string>{"markdown text line"}
+  = invalid_start >> x3::lexeme[ *(x3::char_ - x3::eol) ];
 
-  auto const text = x3::rule<struct _, std::vector<std::string>>{"markdown text"}
-  = +(text_line >> x3::eol);
+  auto const md_text = x3::rule<struct _, std::vector<std::string>>{"markdown text"}
+  = +(md_text_line >> x3::eol);
 
 
   // Rmd stuff
   auto const element = x3::rule<struct _, client::ast::element> {"rmd element"}
   %= x3::with<_n_fdiv_open>(std::ref(n_fdiv_open))[
-    (chunk | code_block | heading | yaml | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | text) >> *x3::eol
+    (chunk | code_block | heading | yaml | fdiv_close[close_fdiv] | fdiv_open[open_fdiv] | md_text) >> *x3::eol
   ];
 
   x3::rule<struct rmd, client::ast::rmd> rmd {"rmd"};

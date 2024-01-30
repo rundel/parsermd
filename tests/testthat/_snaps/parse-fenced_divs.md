@@ -6,7 +6,7 @@
       Error:
       ! Failed to parse line 1
       :::
-         ^
+      ^~~
 
 ---
 
@@ -16,7 +16,7 @@
       Error:
       ! Failed to parse line 1
       ::: a x
-            ^
+      ^~~~~~~
 
 ---
 
@@ -81,7 +81,7 @@
 # Bad fdivs
 
     Code
-      parse_rmd_cpp("::: test1\n")
+      parse_rmd("::: test1\n")
     Condition
       Error:
       ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
@@ -91,17 +91,17 @@
 ---
 
     Code
-      parse_rmd_cpp(":::\n")
+      parse_rmd(":::\n")
     Condition
       Error:
       ! Failed to parse line 1
       :::
-         ^
+      ^~~
 
 ---
 
     Code
-      parse_rmd_cpp("::: test1\n::: test2\n:::\n")
+      parse_rmd("::: test1\n::: test2\n:::\n")
     Condition
       Error:
       ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
@@ -111,10 +111,10 @@
 ---
 
     Code
-      parse_rmd_cpp("::: test1\n:::\n:::\n")
+      parse_rmd("::: test1\n:::\n:::\n")
     Condition
       Error:
       ! Failed to parse line 3
       :::
-         ^
+      ^~~
 

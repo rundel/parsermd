@@ -25,14 +25,14 @@ namespace client { namespace parser {
 
   auto const chunk_yaml_options = x3::rule<struct _, std::vector<std::string>> {"Chunk yaml options"}
   = x3::lexeme[
-      *(yaml_option > x3::eol) >>
+      *(yaml_option >> x3::eol) >>
       &(!x3::lit("#| "))
     ];
 
   // Chunk arg stuff
   auto const engine = x3::rule<struct _, std::string> {"chunk engine"}
   = (x3::lexeme[
-       (x3::char_("=") > +x3::char_("A-Za-z0-9_")) |  // Pandoc raw attribute chunk
+       (x3::char_("=") >> +x3::char_("A-Za-z0-9_")) |  // Pandoc raw attribute chunk
        (+x3::char_("A-Za-z0-9_"))                     // Rmd chunk engine
     ]);
 
@@ -57,13 +57,13 @@ namespace client { namespace parser {
         x3::lit("{")
       ] >>
       !x3::char_("{.")
-    ) >
+    ) >>
     x3::skip(x3::blank)[
       *( // Look ahead to find end of chunk def
         &(!( (x3::lit('}') >> x3::eol) | x3::eol )) >>
         x3::char_
-      ) >
-      x3::lit('}') > x3::eol
+      ) >>
+      x3::lit('}') >> x3::eol
     ]
   ];
 
@@ -79,7 +79,7 @@ namespace client { namespace parser {
   = x3::with<_n_ticks>(std::ref(n_ticks))[
     x3::skip(indent_pat)[
       (   x3::repeat(3, x3::inf)[ x3::char_("`") ] >> x3::lit("{")
-        | x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_tmpl_close] > x3::eol
+        | x3::repeat(3, x3::inf)[ x3::char_("`") ][chunk_tmpl_close] >> x3::eol
       )
     ]
   ];
@@ -112,11 +112,14 @@ namespace client { namespace parser {
       x3::lit("{")
     ] >>
     x3::skip(x3::blank)[
-      !x3::lit("#lst-") >> // Code Listings look like chunks but are not - https://quarto.org/docs/authoring/cross-references.html#code-listings
-      x3::expect[engine] >> -x3::lit(",") >>
+      !(  x3::lit("#lst-") // Code Listings look like chunks but are not - https://quarto.org/docs/authoring/cross-references.html#code-listings
+        | x3::lit("{") // Same for {{engine}} cases
+        | x3::lit(".")
+       ) >>
+      engine >> -x3::lit(",") >>
       -(label_chunk) >>
       ((chunk_option % ',') | x3::attr(std::vector<ast::option>())) >> -x3::lit(",") >>
-      x3::lit("}") >
+      x3::lit("}") >>
       x3::eol
     ];
 
@@ -145,10 +148,10 @@ namespace client { namespace parser {
 
   auto const chunk_def
     = x3::with<indent>(std::string()) [
-        &chunk_template >> // look ahead check of chunk structure
-        chunk_start >
-        chunk_yaml_options >
-        code_lines >
+        //&chunk_template >> // look ahead check of chunk structure
+        chunk_start >>
+        chunk_yaml_options >>
+        code_lines >>
         chunk_end
       ];
 

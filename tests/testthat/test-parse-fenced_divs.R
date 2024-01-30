@@ -145,19 +145,19 @@ test_that("Nested inputs", {
 
 test_that("Bad fdivs", {
   expect_snapshot(
-    parse_rmd_cpp("::: test1\n"), error=TRUE
+    parse_rmd("::: test1\n"), error=TRUE
   )
 
   expect_snapshot(
-    parse_rmd_cpp(":::\n"), error=TRUE
+    parse_rmd(":::\n"), error=TRUE
   )
 
   expect_snapshot(
-    parse_rmd_cpp("::: test1\n::: test2\n:::\n"), error=TRUE
+    parse_rmd("::: test1\n::: test2\n:::\n"), error=TRUE
   )
 
   expect_snapshot(
-    parse_rmd_cpp("::: test1\n:::\n:::\n"), error=TRUE
+    parse_rmd("::: test1\n:::\n:::\n"), error=TRUE
   )
 })
 
@@ -170,7 +170,7 @@ And another.
 :::::
 "
   expect_equal(
-    parse_rmd_cpp(ex1),
+    parse_rmd(ex1),
     create_ast(
       create_fenced_div_open(c("#special",".sidebar")),
       create_markdown("Here is a paragraph.","","And another."),
@@ -188,7 +188,7 @@ This is a warning within a warning.
 "
 
   expect_equal(
-    parse_rmd_cpp(ex2),
+    parse_rmd(ex2),
     create_ast(
       create_fenced_div_open(".Warning"),
       create_markdown(c("This is a warning.", "")),

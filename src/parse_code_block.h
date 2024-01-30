@@ -21,15 +21,15 @@ namespace client { namespace parser {
       start_indent >>
       open_ticks >>
       *x3::lit(" ") >>
-      *(x3::char_ - x3::eol)
-  ] >
+      *(x3::char_ - (x3::char_('`') | x3::eol))
+  ] >>
   x3::eol;
 
   auto const block_end = x3::rule<struct _> {"chunk end"}
   = x3::lexeme[
       x3::omit[ end_indent ] >>
       close_ticks
-    ] >
+    ] >>
     x3::eol;
 
   struct code_block_class : error_handler, x3::annotate_on_success {};

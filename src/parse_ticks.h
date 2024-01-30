@@ -39,7 +39,7 @@ namespace client { namespace parser {
   auto const code_lines = x3::rule<struct _, std::vector<std::string>> {"lines of code"}
   = x3::lexeme[ *(
       x3::eol >> x3::attr(std::string()) // Handles the case of a blank line w/in indented code block / chunk
-      | code_line > x3::eol)
+      | code_line >> x3::eol)
   ];
 
 
