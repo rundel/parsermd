@@ -124,3 +124,18 @@ create_fenced_div_close = function() {
     class = "rmd_fenced_div_close"
   )
 }
+
+create_inline_code = function(engine="", code="", n_ticks=1L) {
+  checkmate::assert_character(engine, len = 1, any.missing = FALSE)
+  checkmate::assert_character(code, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(n_ticks, len = 1, any.missing = FALSE)
+
+  structure(
+    list(
+      engine = engine,
+      code = code,
+      n_ticks = n_ticks
+    ),
+    class = "rmd_inline_code"
+  )
+}

@@ -41,15 +41,19 @@ check_fdiv_close_parser <- function(str) {
     .Call(`_parsermd_check_fdiv_close_parser`, str)
 }
 
-check_shortcode_parser <- function(str) {
-    .Call(`_parsermd_check_shortcode_parser`, str)
-}
-
 check_cbrace_expr_parser <- function(str) {
     .Call(`_parsermd_check_cbrace_expr_parser`, str)
 }
 
 check_code_block_parser <- function(str) {
     .Call(`_parsermd_check_code_block_parser`, str)
+}
+
+check_shortcode_parser <- function(str) {
+    .Call(`_parsermd_check_shortcode_parser`, str)
+}
+
+check_inline_code_parser <- function(str) {
+    .Call(`_parsermd_check_inline_code_parser`, str)
 }
 

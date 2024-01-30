@@ -17,6 +17,18 @@ namespace Rcpp {
     return res;
   }
 
+  template <> SEXP wrap(client::ast::inline_code const& ic) {
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("engine")  = ic.engine,
+      Rcpp::Named("code")    = ic.code,
+      Rcpp::Named("n_ticks") = ic.n_ticks
+    );
+
+    res.attr("class") = "rmd_inline_code";
+
+    return res;
+  }
+
 
   // chunk wrappers
   template <> SEXP wrap(client::ast::chunk const& chunk) {

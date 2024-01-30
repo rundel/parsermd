@@ -61,6 +61,14 @@ tree_node.rmd_chunk = function(x) {
 }
 
 #' @exportS3Method
+tree_node.rmd_inline_code = function(x) {
+  list(
+    text = "Inline Code",
+    label = paste0("[", x$engine, "]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",

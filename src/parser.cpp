@@ -1,7 +1,7 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-//#define BOOST_SPIRIT_X3_DEBUG
+//x#define BOOST_SPIRIT_X3_DEBUG
 
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 
@@ -147,15 +147,7 @@ Rcpp::List check_fdiv_close_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
-// [[Rcpp::export]]
-Rcpp::List check_shortcode_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
 
-  client::ast::shortcode expr;
-  parse_str(str, false, client::parser::shortcode, expr);
-
-  return Rcpp::wrap(expr);
-}
 
 
 // [[Rcpp::export]]
@@ -179,6 +171,26 @@ Rcpp::List check_code_block_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+
+// [[Rcpp::export]]
+Rcpp::List check_shortcode_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::shortcode expr;
+  parse_str(str, false, client::parser::shortcode, expr);
+
+  return Rcpp::wrap(expr);
+}
+
+// [[Rcpp::export]]
+Rcpp::List check_inline_code_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::inline_code expr;
+  parse_str(str, false, client::parser::inline_code, expr);
+
+  return Rcpp::wrap(expr);
+}
 
 //// [[Rcpp::export]]
 //Rcpp::List check_fenced_div_parser(std::string const& str) {

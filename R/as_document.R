@@ -166,4 +166,15 @@ as_document.rmd_shortcode = function(x, ...) {
   )
 }
 
+#' @exportS3Method
+as_document.rmd_inline_code = function(x, ...) {
+  ticks = paste(rep("`", x$n_ticks), collapse="")
+  paste0(
+    ticks,
+    "{", x$engine, "} ",
+    x$code,
+    ticks
+  )
+}
+
 

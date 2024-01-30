@@ -11,6 +11,7 @@
 #include "parse_indent.h"
 #include "parse_chunk.h"
 #include "parse_shortcode.h"
+#include "parse_inline_code.h"
 #include "parse_code_block.h"
 
 namespace client { namespace parser {
