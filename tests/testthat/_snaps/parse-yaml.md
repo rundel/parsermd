@@ -24,9 +24,9 @@
       check_yaml_parser("----\n---\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected YAML opening fence to be followed by a non-empty line
+      ! Failed to parse line 1
       ----
-         ^
+      ^~~~
 
 ---
 
@@ -54,9 +54,9 @@
       parse("---\n\n---\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected YAML opening fence to be followed by a non-empty line
+      ! Failed to parse line 1
       ---
-         ^
+      ^~~
 
 ---
 
@@ -64,37 +64,7 @@
       parse("---\n\nvalue: 1\n---\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected YAML opening fence to be followed by a non-empty line
+      ! Failed to parse line 1
       ---
-         ^
-
-# Pandoc - yaml metadata block
-
-    Code
-      parse("---\n\n...\n")
-    Condition
-      Error:
-      ! Failed to parse line 1, expected YAML opening fence to be followed by a non-empty line
-      ---
-         ^
-
----
-
-    Code
-      parse_rmd("---\n\n---\n---\n...\n")
-    Condition
-      Error:
-      ! Failed to parse line 1, expected YAML opening fence to be followed by a non-empty line
-      ---
-         ^
-
----
-
-    Code
-      parse_rmd("---\n---\n---\n\n...\n")
-    Condition
-      Error:
-      ! Failed to parse line 3, expected YAML opening fence to be followed by a non-empty line
-      ---
-         ^
+      ^~~
 

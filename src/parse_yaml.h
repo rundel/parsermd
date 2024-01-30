@@ -41,9 +41,13 @@ namespace client { namespace parser {
   auto const post_fence_blank_line = x3::rule<struct _>{"YAML opening fence to be followed by a non-empty line"}
   = x3::eol >> &(!(*x3::lit(' ') >> x3::eol)); // Include eol so the error message shows on the fence line
 
+  auto const yaml_start = x3::rule<struct _> {"yaml start"}
+  = x3::lit("---") >> *x3::lit(' ') >> x3::eol >>
+    &(!(*x3::lit(' ') >> x3::eol));
+
   struct yaml_class : error_handler, x3::annotate_on_success {};
   auto const yaml = x3::rule<yaml_class, client::ast::yaml> {"yaml"}
-  = x3::lit("---") >> *x3::lit(' ') >> x3::expect[post_fence_blank_line] >>
+  = yaml_start >>
     x3::lexeme[ yaml_lines ] >>
     x3::expect[yaml_fence_close];
     //x3::lit("---") > *x3::lit(' ') > x3::eol;

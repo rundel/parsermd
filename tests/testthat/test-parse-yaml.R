@@ -119,15 +119,27 @@ test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html
     )
   )
 
-  expect_snapshot(
-    parse("---\n\n...\n"), error=TRUE
+  expect_equal(
+    parse_rmd("---\n\n...\n"),
+    create_ast(
+      create_markdown("---","","...")
+    )
   )
 
-  expect_snapshot(
-    parse_rmd("---\n\n---\n---\n...\n"), error=TRUE
+  expect_equal(
+    parse_rmd("---\n\n---\n---\n...\n"),
+    create_ast(
+      create_markdown("---",""),
+      create_yaml(),
+      create_markdown("...")
+    )
   )
 
-  expect_snapshot(
-    parse_rmd("---\n---\n---\n\n...\n"), error=TRUE
+  expect_equal(
+    parse_rmd("---\n---\n---\n\n...\n"),
+    create_ast(
+      create_yaml(),
+      create_markdown("---","","...")
+    )
   )
 })
