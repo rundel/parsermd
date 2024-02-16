@@ -8,9 +8,14 @@
 #include <Rcpp.h>
 #include <boost/format.hpp>
 
-#include "parse_cbrace.h"
+#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 
+#include <Rcpp.h>
+#include <boost/format.hpp>
+
+#include "parse_cbrace.h"
 #include "parse_rmd.h"
+#include "parse_markdown.h"
 #include "parser_rcpp_wrap.h"
 #include "parser_error_handler.h"
 
@@ -84,8 +89,8 @@ Rcpp::List check_multi_chunk_parser(std::string const& str, bool allow_incomplet
 
 // [[Rcpp::export]]
 Rcpp::List check_markdown_parser(std::string const& str) {
-  std::vector<client::ast::element> expr;
-  parse_str(str, false, +(client::parser::element), expr);
+  client::ast::markdown expr;
+  parse_str(str, false, client::parser::markdown, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -192,14 +197,13 @@ Rcpp::List check_inline_code_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
-//// [[Rcpp::export]]
-//Rcpp::List check_fenced_div_parser(std::string const& str) {
-//  namespace x3 = boost::spirit::x3;
-//
-//  client::ast::fdiv expr;
-//  auto const parser = x3::skip(x3::blank)[ client::parser::fdiv ];
-//  parse_str(str, false, parser, expr);
-//
-//  return Rcpp::wrap(expr);
-//}
+// [[Rcpp::export]]
+Rcpp::List check_md_line_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::md_line expr;
+  parse_str(str, false, client::parser::md_line, expr);
+
+  return Rcpp::wrap(expr);
+}
 

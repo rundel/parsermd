@@ -5,7 +5,7 @@
 #include "parse_chunk_ast.h"
 #include "parse_code_block_ast.h"
 #include "parse_rmd_ast.h"
-#include "parse_inline_code_ast.h"
+#include "parse_markdown_ast.h"
 
 #include <RcppCommon.h>
 
@@ -25,7 +25,13 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::fdiv_open const& fdiv);
   template <> SEXP wrap(client::ast::fdiv_close const& fdiv);
   template <> SEXP wrap(client::ast::shortcode const& sc);
-  template <> SEXP wrap(client::ast::inline_code const& ic);
+
+
+  // markdown
+  template <> SEXP wrap(client::ast::inline_code const& x);
+  template <> SEXP wrap(client::ast::md_element const& x);
+  template <> SEXP wrap(client::ast::md_line const& x);
+  template <> SEXP wrap(client::ast::markdown const& x);
 }
 
 #endif

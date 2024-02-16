@@ -41,11 +41,6 @@ as_document.rmd_tibble = function(x, padding = "", collapse = NULL, ...) {
 
 
 #' @exportS3Method
-as_document.rmd_markdown = function(x, ...) {
-  as.character(x)
-}
-
-#' @exportS3Method
 as_document.rmd_chunk = function(x, ...) {
   if (x$name != "") {
     details = x$name
@@ -142,10 +137,11 @@ as_document.rmd_yaml_list = function(x, ...) {
   )
 }
 
-# FIXME - add depth counting to make :'s match for more readability
 
 #' @exportS3Method
 as_document.rmd_fenced_div_open = function(x, ...) {
+  # FIXME - add depth counting to make :'s match for more readability
+
   paste0(
     "::: {", paste(x, collapse=" "), "}"
   )
@@ -157,23 +153,41 @@ as_document.rmd_fenced_div_close = function(x, ...) {
   c(":::")
 }
 
+
+#' @exportS3Method
+as_document.rmd_markdown = function(x, ...) {
+  purrr::map_chr(x, as_document)
+}
+
+
+#' @exportS3Method
+as_document.rmd_markdown_line = function(x, ...) {
+  paste(
+    purrr::map_chr(x, as_document),
+    collapse = ""
+  )
+}
+
+
 #' @exportS3Method
 as_document.rmd_shortcode = function(x, ...) {
   paste0(
     "{{< ",
-      paste(c(x$func, paste0(" ", x$args)), collapse="") ,
+      paste( c(
+        x$func,
+        if (length(x$args) != 0) paste0(" ", x$args) else ""
+      ), collapse=""),
     " >}}"
   )
 }
 
 #' @exportS3Method
 as_document.rmd_inline_code = function(x, ...) {
-  ticks = paste(rep("`", x$n_ticks), collapse="")
   paste0(
-    ticks,
+    "`",
     "{", x$engine, "} ",
     x$code,
-    ticks
+    "`"
   )
 }
 

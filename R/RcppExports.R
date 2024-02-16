@@ -57,3 +57,7 @@ check_inline_code_parser <- function(str) {
     .Call(`_parsermd_check_inline_code_parser`, str)
 }
 
+check_md_line_parser <- function(str) {
+    .Call(`_parsermd_check_md_line_parser`, str)
+}
+

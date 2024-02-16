@@ -17,18 +17,6 @@ namespace Rcpp {
     return res;
   }
 
-  template <> SEXP wrap(client::ast::inline_code const& ic) {
-    Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("engine")  = ic.engine,
-      Rcpp::Named("code")    = ic.code,
-      Rcpp::Named("n_ticks") = ic.n_ticks
-    );
-
-    res.attr("class") = "rmd_inline_code";
-
-    return res;
-  }
-
 
   // chunk wrappers
   template <> SEXP wrap(client::ast::chunk const& chunk) {
@@ -93,24 +81,6 @@ namespace Rcpp {
     return res;
   };
 
-  template <> SEXP wrap(client::ast::element const& element) {
-    struct line_visitor {
-      SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::code_block const& x ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::fdiv_close const& x ) { return Rcpp::wrap(x); }
-      SEXP operator()(client::ast::shortcode const& x  ) { return Rcpp::wrap(x); }
-      SEXP operator()(std::vector<std::string> const& s) {
-        Rcpp::CharacterVector res = Rcpp::wrap(s);
-        res.attr("class") = "rmd_markdown";
-        return res;
-      }
-    } v;
-
-    return boost::apply_visitor(v, element);
-  };
 
   template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
     Rcpp::CharacterVector res = Rcpp::wrap(fdiv.attrs);
@@ -135,6 +105,19 @@ namespace Rcpp {
     return res;
   }
 
+  template <> SEXP wrap(client::ast::element const& element) {
+    struct line_visitor {
+      SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::code_block const& x ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::fdiv_close const& x ) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::markdown const& x   ) { return Rcpp::wrap(x); }
+    } v;
+
+    return boost::apply_visitor(v, element);
+  };
 
   template <> SEXP wrap(client::ast::rmd const& rmd) {
     Rcpp::List res;
@@ -155,4 +138,44 @@ namespace Rcpp {
 
     return res;
   };
+
+  template <> SEXP wrap(client::ast::inline_code const& ic) {
+    Rcpp::List res = Rcpp::List::create(
+      Rcpp::Named("engine")  = ic.engine,
+      Rcpp::Named("code")    = ic.code
+    );
+    res.attr("class") = "rmd_inline_code";
+
+    return res;
+  };
+
+  template <> SEXP wrap(client::ast::md_element const& x) {
+    struct line_visitor {
+      SEXP operator()(client::ast::inline_code const& x) { return Rcpp::wrap(x); }
+      SEXP operator()(client::ast::shortcode const& x) { return Rcpp::wrap(x); }
+      SEXP operator()(std::string const& x) { return Rcpp::wrap(x); }
+    } v;
+
+    return boost::apply_visitor(v, x);
+  };
+
+  template <> SEXP wrap(client::ast::md_line const& x) {
+    Rcpp::List res;
+    for(auto const& e : x.elements) {
+      res.push_back(Rcpp::wrap(e));
+    }
+    res.attr("class") = "rmd_markdown_line";
+
+    return res;
+  }
+
+  template <> SEXP wrap(client::ast::markdown const& x) {
+    Rcpp::List res;
+    for(auto const& l : x.lines) {
+      res.push_back(Rcpp::wrap(l));
+    }
+    res.attr("class") = "rmd_markdown";
+
+    return res;
+  }
 }

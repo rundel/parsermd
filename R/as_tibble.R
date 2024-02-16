@@ -64,12 +64,25 @@ type_sum.rmd_heading = function(x) {
 
 #' @export
 type_sum.rmd_yaml_list = function(x) {
-  paste(
-    cli::style_bold("yaml")
-  )
+  cli::style_bold("yaml")
 }
 
 #' @export
 type_sum.rmd_markdown = function(x) {
   cli::style_bold("markdown")
+}
+
+#' @export
+type_sum.rmd_code_block = function(x) {
+  cli::style_bold("code block")
+}
+
+#' @export
+type_sum.rmd_fenced_div_open = function(x) {
+  cli::style_bold("fenched div [open]")
+}
+
+#' @export
+type_sum.rmd_fenced_div_close = function(x) {
+  cli::style_bold("fenched div [close]")
 }

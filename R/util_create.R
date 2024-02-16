@@ -19,12 +19,34 @@ create_yaml = function(..., parse = FALSE) {
   yaml
 }
 
-create_markdown = function(...) {
-  md = c(...)
-  md = as.character(md)
-  class(md) = "rmd_markdown"
+create_markdown_line = function(...) {
+  args = list(...)
+  if (length(args) == 1 && is.character(args[[1]]) && args[[1]] == '')
+    args = list()
 
-  md
+  structure(
+    args,
+    class = "rmd_markdown_line"
+  )
+}
+
+create_markdown = function(...) {
+  structure(
+    purrr::map(
+      list(...),
+      function(x) {
+        if (inherits(x, "rmd_markdown_line")) {
+          x
+        } else {
+          if (all(class(x) == "list"))
+            do.call(create_markdown_line, x)
+          else
+            create_markdown_line(x)
+        }
+      }
+    ),
+    class = "rmd_markdown"
+  )
 }
 
 create_heading = function(name, level) {
@@ -125,16 +147,14 @@ create_fenced_div_close = function() {
   )
 }
 
-create_inline_code = function(engine="", code="", n_ticks=1L) {
+create_inline_code = function(engine="", code="") {
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
   checkmate::assert_character(code, len = 1, any.missing = FALSE)
-  checkmate::assert_integer(n_ticks, len = 1, any.missing = FALSE)
 
   structure(
     list(
       engine = engine,
-      code = code,
-      n_ticks = n_ticks
+      code = code
     ),
     class = "rmd_inline_code"
   )

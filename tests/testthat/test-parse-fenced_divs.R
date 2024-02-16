@@ -191,7 +191,7 @@ This is a warning within a warning.
     parse_rmd(ex2),
     create_ast(
       create_fenced_div_open(".Warning"),
-      create_markdown(c("This is a warning.", "")),
+      create_markdown("This is a warning.", ""),
       create_fenced_div_open(".Danger"),
       create_markdown("This is a warning within a warning."),
       create_fenced_div_close(),
