@@ -17,7 +17,7 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
   checkmate::assert_character(rmd, min.len = 1, any.missing = FALSE)
 
   if (length(rmd) > 1) {               # If multiple lines in a char vec assume
-    rmd = paste(rmd, collapse = "\n")  #   it has been read in already
+    rmd = paste0(rmd, "\n", collapse = "")  #   it has been read in already
   } else if (!grepl("\n", rmd)) {      # If no newlines then assume it is a path or url
     rmd = readr::read_file(rmd)
   }
@@ -28,8 +28,8 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
 
   ast = parse_rmd_cpp(rmd, allow_incomplete)
 
-  if (parse_yaml && inherits(ast[[1]], "rmd_yaml")) {
-    ast[[1]] = parse_yaml(ast[[1]])
+  if (parse_yaml) {
+    ast = parse_yaml(ast)
   }
 
   ast = fix_unnamed_chunks(ast)
@@ -49,16 +49,70 @@ fix_unnamed_chunks = function(ast) {
 }
 
 
-
-parse_yaml = function(yaml) {
-  checkmate::check_class(yaml, "rmd_yaml")
-
-  if(length(yaml) == 0)
+as_rmd_yaml_list = function(yaml) {
+  if(length(yaml) == 0) {
     yaml = list()
-  else
-    yaml = yaml::yaml.load(string = paste(yaml, collapse="\n"))
+  } else {
+    yaml = yaml::yaml.load(
+      string = paste(yaml, collapse="\n"),
+      handlers = list(expr = function(x) parse(text=x))
+    )
+  }
 
   class(yaml) = "rmd_yaml_list"
 
   yaml
 }
+
+expression_verbatim = function(x) {
+  res = as.character(x)
+  attr(res,"tag") = "!expr"
+
+  res
+}
+
+as_yaml_text = function(list) {
+  strsplit( yaml::as.yaml(
+    list,
+    handlers = list(
+      expression = expression_verbatim,
+      logical = yaml::verbatim_logical
+    )
+  ), split = "\n")[[1]]
+}
+
+
+parse_yaml = function(x) {
+  UseMethod("parse_yaml")
+}
+
+#' @exportS3Method
+parse_yaml.default = function(x) {
+  x
+}
+
+#' @exportS3Method
+parse_yaml.character = function(x) {
+  as_rmd_yaml_list(x)
+}
+
+#' @exportS3Method
+parse_yaml.rmd_yaml = function(x) {
+  as_rmd_yaml_list(x)
+}
+
+#' @exportS3Method
+parse_yaml.rmd_chunk = function(x) {
+  x[["yaml_options"]] = as_rmd_yaml_list(x[["yaml_options"]])
+  x
+}
+
+#' @exportS3Method
+parse_yaml.rmd_ast = function(x) {
+  structure(
+    lapply(x, parse_yaml),
+    class = c("rmd_ast", "list")
+  )
+}
+
+

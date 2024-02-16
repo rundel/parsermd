@@ -12,3 +12,4 @@ TODO.md
 check
 CRAN-RELEASE
 revdep/
+tests/testthat/quarto-web/*

@@ -8,10 +8,12 @@ tree_node = function(x) {
   UseMethod("tree_node")
 }
 
+#' @exportS3Method
 tree_node.default = function(x) {
   stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
@@ -19,10 +21,12 @@ tree_node.rmd_yaml = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml_list = function(x) {
   tree_node.rmd_yaml(unlist(x))
 }
 
+#' @exportS3Method
 tree_node.rmd_heading = function(x) {
   list(
     text = "Heading",
@@ -30,6 +34,18 @@ tree_node.rmd_heading = function(x) {
   )
 }
 
+#' @exportS3Method
+tree_node.rmd_code_block = function(x) {
+  attr = if (x$attr == "") cli::style_italic("<no attrs>")
+         else x$attr
+
+  list(
+    text = "Code block",
+    label = paste0("[", attr, ", ", length(x$code), " lines]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_chunk = function(x) {
   name = if (x$name != "") cli::style_bold(x$name)
          else cli::style_italic("<unnamed>")
@@ -44,6 +60,15 @@ tree_node.rmd_chunk = function(x) {
   )
 }
 
+#' @exportS3Method
+tree_node.rmd_inline_code = function(x) {
+  list(
+    text = "Inline Code",
+    label = paste0("[", x$engine, "]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",
@@ -51,10 +76,40 @@ tree_node.rmd_raw_chunk = function(x) {
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
     label = paste0("[", length(x), " lines]")
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_fenced_div_open = function(x) {
+  list(
+    text = "Open Fenced div",
+    label = paste0("[", paste(x, collapse=", "), "]")
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_fenced_div_close = function(x) {
+  list(
+    text = "Close Fenced div",
+    label = ""
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_shortcode = function(x) {
+  list(
+    text = "Shortcode",
+    label = paste0(
+      "[",
+      cli::style_bold(x$func),
+      paste0(" ", x$args, collapse="") ,
+      "]"
+    )
   )
 }
 
@@ -77,26 +132,35 @@ scale_levels = function(x) {
 get_nesting_levels = function(ast) {
   levels = 0
   node_levels = integer()
+  fdiv_depth = 0
+
 
   for(node in ast) {
     if (is_heading(node)) {
       levels = levels[levels < node$level]
     }
 
-    node_levels = append(node_levels, max(levels))
+    if (inherits(node, "rmd_fenced_div_close")) {
+      fdiv_depth = fdiv_depth - 1
+    }
+
+    node_levels = append(node_levels, max(levels) + fdiv_depth)
 
     if (is_heading(node)) {
       levels = append(levels, node$level)
     }
 
+    if (inherits(node, "rmd_fenced_div_open")) {
+      fdiv_depth = fdiv_depth + 1
+    }
   }
 
   scale_levels(node_levels)
 }
 
 has_sibling = function(level, remaining) {
-    next_cur_level    = min(which(level == remaining), Inf) # next occurance of the same heading level
-    next_higher_level = min(which(level >  remaining), Inf) # next occurance of a higher level heading
+    next_cur_level    = min(which(level == remaining), Inf) # next occurrence of the same heading level
+    next_higher_level = min(which(level >  remaining), Inf) # next occurrence of a higher level heading
 
     next_cur_level < next_higher_level
 }

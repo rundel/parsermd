@@ -78,14 +78,102 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// check_option_parser
-Rcpp::List check_option_parser(std::string const& str);
-RcppExport SEXP _parsermd_check_option_parser(SEXP strSEXP) {
+// check_chunk_option_parser
+Rcpp::List check_chunk_option_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_chunk_option_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_option_parser(str));
+    rcpp_result_gen = Rcpp::wrap(check_chunk_option_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_yaml_option_parser
+Rcpp::CharacterVector check_yaml_option_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_yaml_option_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_yaml_option_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_fdiv_open_parser
+Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_fdiv_open_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_fdiv_open_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_fdiv_close_parser
+Rcpp::List check_fdiv_close_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_fdiv_close_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_fdiv_close_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_cbrace_expr_parser
+Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_cbrace_expr_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_cbrace_expr_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_code_block_parser
+Rcpp::List check_code_block_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_code_block_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_code_block_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_shortcode_parser
+Rcpp::List check_shortcode_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_shortcode_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_shortcode_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_inline_code_parser
+Rcpp::List check_inline_code_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_inline_code_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_inline_code_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_md_line_parser
+Rcpp::List check_md_line_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_md_line_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_md_line_parser(str));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -97,7 +185,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_check_multi_chunk_parser", (DL_FUNC) &_parsermd_check_multi_chunk_parser, 2},
     {"_parsermd_check_markdown_parser", (DL_FUNC) &_parsermd_check_markdown_parser, 1},
     {"_parsermd_check_markdown_heading_parser", (DL_FUNC) &_parsermd_check_markdown_heading_parser, 1},
-    {"_parsermd_check_option_parser", (DL_FUNC) &_parsermd_check_option_parser, 1},
+    {"_parsermd_check_chunk_option_parser", (DL_FUNC) &_parsermd_check_chunk_option_parser, 1},
+    {"_parsermd_check_yaml_option_parser", (DL_FUNC) &_parsermd_check_yaml_option_parser, 1},
+    {"_parsermd_check_fdiv_open_parser", (DL_FUNC) &_parsermd_check_fdiv_open_parser, 1},
+    {"_parsermd_check_fdiv_close_parser", (DL_FUNC) &_parsermd_check_fdiv_close_parser, 1},
+    {"_parsermd_check_cbrace_expr_parser", (DL_FUNC) &_parsermd_check_cbrace_expr_parser, 1},
+    {"_parsermd_check_code_block_parser", (DL_FUNC) &_parsermd_check_code_block_parser, 1},
+    {"_parsermd_check_shortcode_parser", (DL_FUNC) &_parsermd_check_shortcode_parser, 1},
+    {"_parsermd_check_inline_code_parser", (DL_FUNC) &_parsermd_check_inline_code_parser, 1},
+    {"_parsermd_check_md_line_parser", (DL_FUNC) &_parsermd_check_md_line_parser, 1},
     {NULL, NULL, 0}
 };
 

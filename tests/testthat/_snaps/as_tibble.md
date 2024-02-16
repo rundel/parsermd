@@ -8,13 +8,13 @@
      3 Setup   <NA>            rmd_chunk     setup           <chunk [r]>   
      4 Content <NA>            rmd_heading   <NA>            <heading [h1]>
      5 Content R Markdown      rmd_heading   <NA>            <heading [h2]>
-     6 Content R Markdown      rmd_markdown  <NA>            <rmd_mrkd [6]>
+     6 Content R Markdown      rmd_markdown  <NA>            <markdown>    
      7 Content R Markdown      rmd_chunk     cars            <chunk [r]>   
      8 Content R Markdown      rmd_chunk     unnamed-chunk-1 <chunk [r]>   
      9 Content Including Plots rmd_heading   <NA>            <heading [h2]>
-    10 Content Including Plots rmd_markdown  <NA>            <rmd_mrkd [2]>
+    10 Content Including Plots rmd_markdown  <NA>            <markdown>    
     11 Content Including Plots rmd_chunk     pressure        <chunk [r]>   
-    12 Content Including Plots rmd_markdown  <NA>            <rmd_mrkd [2]>
+    12 Content Including Plots rmd_markdown  <NA>            <markdown>    
 
 # as_tibble - hw01.Rmd
 
@@ -25,11 +25,11 @@
      2 Load packages <NA>     rmd_heading   <NA>          <heading [h3]>
      3 Load packages <NA>     rmd_chunk     load-packages <chunk [r]>   
      4 Exercise 1    <NA>     rmd_heading   <NA>          <heading [h3]>
-     5 Exercise 1    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
+     5 Exercise 1    <NA>     rmd_markdown  <NA>          <markdown>    
      6 Exercise 1    Solution rmd_heading   <NA>          <heading [h4]>
-     7 Exercise 1    Solution rmd_markdown  <NA>          <rmd_mrkd [2]>
+     7 Exercise 1    Solution rmd_markdown  <NA>          <markdown>    
      8 Exercise 2    <NA>     rmd_heading   <NA>          <heading [h3]>
-     9 Exercise 2    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
+     9 Exercise 2    <NA>     rmd_markdown  <NA>          <markdown>    
     10 Exercise 2    Solution rmd_heading   <NA>          <heading [h4]>
     # i 11 more rows
 
@@ -42,32 +42,31 @@
      2 Load packages <NA>     rmd_heading   <NA>          <heading [h3]>
      3 Load packages <NA>     rmd_chunk     load-packages <chunk [r]>   
      4 Exercise 1    <NA>     rmd_heading   <NA>          <heading [h3]>
-     5 Exercise 1    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
+     5 Exercise 1    <NA>     rmd_markdown  <NA>          <markdown>    
      6 Exercise 1    Solution rmd_heading   <NA>          <heading [h4]>
-     7 Exercise 1    Solution rmd_markdown  <NA>          <rmd_mrkd [5]>
+     7 Exercise 1    Solution rmd_markdown  <NA>          <markdown>    
      8 Exercise 2    <NA>     rmd_heading   <NA>          <heading [h3]>
-     9 Exercise 2    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
+     9 Exercise 2    <NA>     rmd_markdown  <NA>          <markdown>    
     10 Exercise 2    Solution rmd_heading   <NA>          <heading [h4]>
-    11 Exercise 2    Solution rmd_markdown  <NA>          <rmd_mrkd [2]>
+    11 Exercise 2    Solution rmd_markdown  <NA>          <markdown>    
     12 Exercise 2    Solution rmd_chunk     plot-dino     <chunk [r]>   
-    13 Exercise 2    Solution rmd_markdown  <NA>          <rmd_mrkd [2]>
+    13 Exercise 2    Solution rmd_markdown  <NA>          <markdown>    
     14 Exercise 2    Solution rmd_chunk     cor-dino      <chunk [r]>   
     15 Exercise 3    <NA>     rmd_heading   <NA>          <heading [h3]>
-    16 Exercise 3    <NA>     rmd_markdown  <NA>          <rmd_mrkd [2]>
+    16 Exercise 3    <NA>     rmd_markdown  <NA>          <markdown>    
     17 Exercise 3    Solution rmd_heading   <NA>          <heading [h4]>
     18 Exercise 3    Solution rmd_chunk     plot-star     <chunk [r]>   
     19 Exercise 3    Solution rmd_chunk     cor-star      <chunk [r]>   
 
 # as_tibble - empty_sections.Rmd
 
-    # A tibble: 5 x 5
-      sec_h1 sec_h2 type          label ast           
-      <chr>  <chr>  <chr>         <chr> <rmd_ast>     
-    1 <NA>   <NA>   rmd_yaml_list <NA>  <yaml>        
-    2 H1-1   <NA>   rmd_heading   <NA>  <heading [h1]>
-    3 H1-1   H2-1   rmd_heading   <NA>  <heading [h2]>
-    4 H1-1   H2-2   rmd_heading   <NA>  <heading [h2]>
-    5 H1-2   <NA>   rmd_heading   <NA>  <heading [h1]>
+    # A tibble: 4 x 5
+      sec_h1 sec_h2 type        label ast           
+      <chr>  <chr>  <chr>       <chr> <rmd_ast>     
+    1 H1-1   <NA>   rmd_heading <NA>  <heading [h1]>
+    2 H1-1   H2-1   rmd_heading <NA>  <heading [h2]>
+    3 H1-1   H2-2   rmd_heading <NA>  <heading [h2]>
+    4 H1-2   <NA>   rmd_heading <NA>  <heading [h1]>
 
 # as_tibble - reverse_sections.Rmd
 

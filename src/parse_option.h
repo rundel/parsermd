@@ -20,12 +20,12 @@ namespace client { namespace parser {
     | ( client::parser::any_q_string );
 
 
-  struct option_class : error_handler, x3::annotate_on_success {};
-  x3::rule<option_class, client::ast::option> const option = "chunk option";
+  struct chunk_option_class : error_handler, x3::annotate_on_success {};
+  x3::rule<chunk_option_class, client::ast::option> const chunk_option = "chunk option";
 
-  auto const option_def = r_name > x3::lit("=") > expr;
+  auto const chunk_option_def = r_name > x3::lit("=") > expr;
 
-  BOOST_SPIRIT_DEFINE(option);
+  BOOST_SPIRIT_DEFINE(chunk_option);
 } }
 
 #endif
