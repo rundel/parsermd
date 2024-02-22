@@ -27,9 +27,9 @@ namespace client { namespace parser {
   = *(!x3::lit(" >}}") > +(x3::lit(" ") | x3::eol) > +(x3::char_ - x3::char_(" ")));
 
   auto const shortcode_def
-  = x3::lexeme[
-      "{{< " > func > args >" >}}"
-    ] ;
+  = "{{< " >
+    x3::lexeme[func > args] >
+    " >}}";
 
   BOOST_SPIRIT_DEFINE(shortcode);
 } }
