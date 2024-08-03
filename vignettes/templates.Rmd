@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
 )
 
 library(parsermd)
-library(magrittr)
 ```
 
 
@@ -29,13 +28,17 @@ To support this type of workflow, `parsermd` implements the concept of an Rmd te
 Imagine that a homework assignment has been distributed to students in the form of an Rmd document named `hw01.Rmd`. This document describes all of the necessary tasks for the student to complete and also includes scaffolding in the form of Rmd chunks and markdown that indicates where the students are expected to include their solutions.
 
 ```{r}
-(rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd")))
+(rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd")))
 ```
 
 We can see examples of this templating by extracting the contents of the markdown in the Exercise 1 > Solution section.
 
 ```{r}
-rmd_select(rmd, by_section(c("Exercise 1", "Solution")) & has_type("rmd_markdown")) %>%
+rmd_select(
+  rmd, 
+  by_section(c("Exercise 1", "Solution")) & 
+  has_type("rmd_markdown")
+) |>
   as_document()
 ```
 
@@ -60,7 +63,8 @@ One we have this more limited set of elements we use the `rmd_template` function
 One the template is constructed we can then compare it with a new Rmd document via the `rmd_check_template` function. Note that we can pass in an `rmd_ast` or `rmd_tibble` object directly, or the path to an Rmd which will then be parsed and compared.
 
 ```{r}
-rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), rmd_tmpl)
+file = system.file("examples/hw01-student.Rmd", package = "parsermd")
+rmd_check_template(file, rmd_tmpl)
 ```
 
 From the output we can see that there are several issues with the document submitted by the student, they are missing the two expected markdown text entries for Exercise 3 and it appears that they have not entered any thing new for the chunks or markdown in Exercise 2.
@@ -72,16 +76,23 @@ Let assume that our original template was a bit too strict, and we would like to
 If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from `rmd_sols` or from `rmd_tmpl`. (Generally, the former is the suggested workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use `rmd_select` with the `!` operator to remove these specific markdown elements.
 
 ```{r}
-rmd_sols %>%
-  rmd_select( !(by_section(c("Exercise 3", "Solution")) & has_type("rmd_markdown")) )
+rmd_sols |>
+  rmd_select( 
+    !(by_section(c("Exercise 3", "Solution")) & 
+    has_type("rmd_markdown")) 
+  )
 ```
 
 This new AST can then be passed to `rmd_template` and `rmd_check_template` to provide the revised feedback,
 
 ```{r}
-rmd_sols %>%
-  rmd_select( !(by_section(c("Exercise 3", "Solution")) & has_type("rmd_markdown")) ) %>%
-  rmd_template(keep_content = TRUE) %>%
-  rmd_check_template(system.file("hw01-student.Rmd", package = "parsermd"), .)
+file = system.file("examples/hw01-student.Rmd", package = "parsermd")
+rmd_sols |>
+  rmd_select( 
+    !(by_section(c("Exercise 3", "Solution")) & 
+    has_type("rmd_markdown")) 
+  ) |>
+  rmd_template(keep_content = TRUE) |>
+  rmd_check_template(file, template = _)
 ```
 

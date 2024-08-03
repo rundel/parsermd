@@ -86,7 +86,7 @@ rmd_select(rmd, by_section("Content"))
 #>         ├── Chunk [r, 1 opt, 1 lines] - pressure
 #>         └── Markdown [2 lines]
 
-rmd_select(rmd, by_section(c("Content", "*"))) %>%
+rmd_select(rmd, by_section(c("Content", "*"))) |>
   rmd_select(has_type(c("rmd_chunk", "rmd_heading")))
 #> └── Heading [h1] - Content
 #>     ├── Heading [h2] - R Markdown
