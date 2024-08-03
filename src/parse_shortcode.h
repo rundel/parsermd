@@ -21,10 +21,10 @@ namespace client { namespace parser {
   x3::rule<shortcode_class, client::ast::shortcode> const shortcode = "shortcode";
 
   auto func = x3::rule<struct _, std::string> ("function")
-  = (!x3::lit(" >}}") > +(x3::char_ - x3::char_(" ")) );
+  = ((!x3::lit(" >}}")) > +(x3::char_ - x3::char_(" ")) );
 
   auto args = x3::rule<struct _, std::vector<std::string> > ("arguments")
-  = *(!x3::lit(" >}}") > +(x3::lit(" ") | x3::eol) > +(x3::char_ - x3::char_(" ")));
+  = *((!x3::lit(" >}}")) > +(x3::lit(" ") | x3::eol) > +(x3::char_ - x3::char_(" ")));
 
   auto const shortcode_def
   = "{{< " >
