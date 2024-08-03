@@ -44,7 +44,7 @@ For more details see the getting started
 any of the topic specific articles.
 
 ``` r
-(rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))
+(rmd = parsermd::parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd")))
 #> ├── YAML [4 lines]
 #> ├── Heading [h1] - Setup
 #> │   └── Chunk [r, 1 opt, 1 lines] - setup
@@ -67,13 +67,13 @@ as_tibble(rmd)
 #>  3 Setup   <NA>            rmd_chunk     setup           <chunk [r]>   
 #>  4 Content <NA>            rmd_heading   <NA>            <heading [h1]>
 #>  5 Content R Markdown      rmd_heading   <NA>            <heading [h2]>
-#>  6 Content R Markdown      rmd_markdown  <NA>            <rmd_mrkd [6]>
+#>  6 Content R Markdown      rmd_markdown  <NA>            <markdown>    
 #>  7 Content R Markdown      rmd_chunk     cars            <chunk [r]>   
 #>  8 Content R Markdown      rmd_chunk     unnamed-chunk-1 <chunk [r]>   
 #>  9 Content Including Plots rmd_heading   <NA>            <heading [h2]>
-#> 10 Content Including Plots rmd_markdown  <NA>            <rmd_mrkd [2]>
+#> 10 Content Including Plots rmd_markdown  <NA>            <markdown>    
 #> 11 Content Including Plots rmd_chunk     pressure        <chunk [r]>   
-#> 12 Content Including Plots rmd_markdown  <NA>            <rmd_mrkd [2]>
+#> 12 Content Including Plots rmd_markdown  <NA>            <markdown>
 
 rmd_select(rmd, by_section("Content"))
 #> └── Heading [h1] - Content
