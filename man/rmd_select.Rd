@@ -24,7 +24,7 @@ Additionally, a number of additional \code{parsermd} specific selection helpers 
 \code{\link[=by_section]{by_section()}}, \code{\link[=has_type]{has_type()}}, \code{\link[=has_label]{has_label()}}, and \code{\link[=has_option]{has_option()}}.
 }
 \examples{
-rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 
 rmd_select(rmd, "plot-dino", "cor-dino")
 rmd_select(rmd, "plot-dino":"cor-dino")

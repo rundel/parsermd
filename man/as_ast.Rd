@@ -18,7 +18,7 @@ Returns an \code{rmd_ast} object.
 Currently only supports conversion of \code{rmd_tibble} objects back to \code{rmd_ast}.
 }
 \examples{
-parse_rmd(system.file("hw01.Rmd", package="parsermd")) \%>\%
+parse_rmd(system.file("examples/hw01.Rmd", package="parsermd")) \%>\%
   as_tibble() \%>\%
   as_ast()
 

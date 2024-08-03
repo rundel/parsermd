@@ -56,7 +56,7 @@ Functions for extracting information for Rmd nodes.
 }
 \examples{
 
-rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+rmd = parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 
 rmd_node_label(rmd)
 rmd_node_type(rmd)

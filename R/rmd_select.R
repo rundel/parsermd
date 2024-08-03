@@ -17,7 +17,7 @@
 #' @return Returns a subset Rmd object (either `rmd_ast` or `rmd_tibble` depending on input).
 #'
 #' @examples
-#' rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+#' rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 #'
 #' rmd_select(rmd, "plot-dino", "cor-dino")
 #' rmd_select(rmd, "plot-dino":"cor-dino")

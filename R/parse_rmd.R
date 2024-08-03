@@ -13,7 +13,7 @@
 #' @return Returns a `rmd_ast` object.
 #'
 #' @examples
-#' parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+#' parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 #'
 #' @export
 parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {

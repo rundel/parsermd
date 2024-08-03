@@ -19,7 +19,7 @@
 #'
 #' @examples
 #'
-#' rmd_source(system.file("minimal.Rmd", package = "parsermd"), echo=TRUE)
+#' rmd_source(system.file("examples/minimal.Rmd", package = "parsermd"), echo=TRUE)
 #'
 #' @export
 #'

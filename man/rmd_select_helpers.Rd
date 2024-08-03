@@ -66,7 +66,7 @@ for more details on the syntax for these patterns.
 }
 \examples{
 
-rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+rmd = parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 
 rmd_select(rmd, has_type("rmd_chunk"))
 

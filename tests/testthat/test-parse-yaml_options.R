@@ -118,7 +118,7 @@ test_that("yaml options with break", {
 })
 
 test_that("parse full document with yaml options", {
-  ast = parse_rmd(system.file("tests/testthat/knitr-examples/125-dash-options.Rmd", package = "parsermd"))
+  ast = parse_rmd("knitr-examples/125-dash-options.Rmd")
   expected_ast = create_ast(
     create_yaml(
       title = "Using dash options in YAML options header"

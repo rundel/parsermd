@@ -7,7 +7,7 @@
 #' @param ... Unused, for extensibility.
 #'
 #' @examples
-#' parse_rmd(system.file("hw01.Rmd", package="parsermd")) %>%
+#' parse_rmd(system.file("examples/hw01.Rmd", package="parsermd")) %>%
 #'   as_tibble() %>%
 #'   as_ast()
 #'

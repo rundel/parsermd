@@ -27,6 +27,6 @@ Returns a \code{rmd_ast} object.
 Documents are parse into an \code{rmd_ast} object.
 }
 \examples{
-parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 
 }
