@@ -1,14 +1,7 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-//x#define BOOST_SPIRIT_X3_DEBUG
-
-#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
-
-#include <Rcpp.h>
-#include <boost/format.hpp>
-
-#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+// #define BOOST_SPIRIT_X3_DEBUG
 
 #include <Rcpp.h>
 #include <boost/format.hpp>
