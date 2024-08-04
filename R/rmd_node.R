@@ -68,8 +68,12 @@ rmd_node_label.default = function(x, ...) {
 rmd_node_label.rmd_chunk = function(x, ...) {
   name = x[["name"]]
 
-  if (name == "" & !is.null(x[["options"]][["label"]]))
-    name = x[["options"]][["label"]]
+  if (name == "") {
+    if (!is.null(x[["options"]][["label"]]))
+      name = x[["options"]][["label"]]
+    else if (!is.null(x[["yaml_options"]][["label"]]))
+      name = x[["yaml_options"]][["label"]]
+  }
 
   if (is.null(name))
     name = NA_character_

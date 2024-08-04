@@ -48,18 +48,14 @@ tree_node.rmd_code_block = function(x) {
 
 #' @exportS3Method
 tree_node.rmd_chunk = function(x) {
-  name = if (x$name != "") cli::style_bold(x$name)
-         else cli::style_italic("<unnamed>")
+  name = cli::style_bold(rmd_node_label(x))
 
   n_opt = length(x$options) + length(x$yaml_options)
-  opt = if (n_opt == 1) "1 opt, "
-        else if (n_opt != 0) paste0(length(x$options), " opts, ")
-        else ""
 
   list(
     text = "Chunk",
     #label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
-    label = cli::pluralize("[{x$engine}, {n_opt} {?options/option/options}, {length(x$code)} line{?s}]")
+    label = cli::pluralize("[{x$engine}, {n_opt} {?options/option/options}, {length(x$code)} line{?s}] - {name}")
   )
 }
 
