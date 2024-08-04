@@ -17,7 +17,7 @@ tree_node.default = function(x) {
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
-    label = paste0("[", length(x)," lines]")
+    label = cli::pluralize("[{length(x)} line{?s}]")
   )
 }
 
@@ -41,7 +41,8 @@ tree_node.rmd_code_block = function(x) {
 
   list(
     text = "Code block",
-    label = paste0("[", attr, ", ", length(x$code), " lines]")
+    #label = paste0("[", attr, ", ", length(x$code), " lines]")
+    label = cli::pluralize("[{attr}, {length(x$code)} line{?s}]")
   )
 }
 
@@ -50,13 +51,15 @@ tree_node.rmd_chunk = function(x) {
   name = if (x$name != "") cli::style_bold(x$name)
          else cli::style_italic("<unnamed>")
 
-  opt = if (length(x$options) == 1) "1 opt, "
-        else if (length(x$options) != 0) paste0(length(x$options), " opts, ")
+  n_opt = length(x$options) + length(x$yaml_options)
+  opt = if (n_opt == 1) "1 opt, "
+        else if (n_opt != 0) paste0(length(x$options), " opts, ")
         else ""
 
   list(
     text = "Chunk",
-    label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
+    #label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
+    label = cli::pluralize("[{x$engine}, {n_opt} {?options/option/options}, {length(x$code)} line{?s}]")
   )
 }
 
@@ -72,7 +75,8 @@ tree_node.rmd_inline_code = function(x) {
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",
-    label = paste0("[", x$format, ", ", length(x$code), " lines]")
+    #label = paste0("[", x$format, ", ", length(x$code), " lines]")
+    label = cli::pluralize("[{x$format}, {length(x$code)} line{?s}]")
   )
 }
 
@@ -80,7 +84,8 @@ tree_node.rmd_raw_chunk = function(x) {
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
-    label = paste0("[", length(x), " lines]")
+    #label = paste0("[", length(x), " lines]")
+    label = cli::pluralize("[{length(x)} line{?s}]")
   )
 }
 
