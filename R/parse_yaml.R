@@ -8,6 +8,9 @@ as_rmd_yaml_list = function(yaml) {
     )
   }
 
+  if (!is.list(yaml))
+    yaml = as.list(yaml)
+
   class(yaml) = "rmd_yaml_list"
 
   yaml
