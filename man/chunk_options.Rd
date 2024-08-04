@@ -29,7 +29,7 @@ Helper functions for obtaining or changing chunk options
 within an rmd object.
 }
 \examples{
-rmd = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
 str(rmd_get_options(rmd))
 str(rmd_get_options(rmd), "include")

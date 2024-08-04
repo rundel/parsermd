@@ -56,7 +56,7 @@ test_that("Inverted hierarchy", {
 })
 
 test_that("Test hw01.Rmd", {
-  rmd = parse_rmd(system.file("hw01.Rmd", package = "parsermd"))
+  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 
   expect_sec = list(
     c(sec_h3 = NA_character_,   sec_h4 = NA_character_),

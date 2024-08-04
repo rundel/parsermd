@@ -1,3 +1,19 @@
+# parsermd 0.2.0 (development version)
+
+* Added support for yaml chunk options - e.g. (`#| echo: false`)
+
+* Added support for fenced divs - e.g. (`::: {.class} ... :::`)
+
+* Added support for markdown code blocks
+
+* Added support for yaml expressions - e.g. (`!expr`)
+
+* Improved support for markdown parsing
+
+  * Added support for inline code blocks - e.g. (`` `{r} 1+1` ``)
+  
+  * Added support for quarto shortcodes - e.g. (` {{< meta title >}} `)
+
 # parsermd 0.1.3
 
 * Unlabeled chunks will now be labeled as unnamed-chunk-n, with n incrementing.

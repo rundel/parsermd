@@ -8,21 +8,25 @@ tree_node = function(x) {
   UseMethod("tree_node")
 }
 
+#' @exportS3Method
 tree_node.default = function(x) {
   stop("Unsupported class:", paste(class(x), collapse=", "))
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
-    label = paste0("[", length(x)," lines]")
+    label = cli::pluralize("[{length(x)} line{?s}]")
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_yaml_list = function(x) {
   tree_node.rmd_yaml(unlist(x))
 }
 
+#' @exportS3Method
 tree_node.rmd_heading = function(x) {
   list(
     text = "Heading",
@@ -30,31 +34,87 @@ tree_node.rmd_heading = function(x) {
   )
 }
 
+#' @exportS3Method
+tree_node.rmd_code_block = function(x) {
+  attr = if (x$attr == "") cli::style_italic("<no attrs>")
+         else x$attr
+
+  list(
+    text = "Code block",
+    #label = paste0("[", attr, ", ", length(x$code), " lines]")
+    label = cli::pluralize("[{attr}, {length(x$code)} line{?s}]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_chunk = function(x) {
   name = if (x$name != "") cli::style_bold(x$name)
          else cli::style_italic("<unnamed>")
 
-  opt = if (length(x$options) == 1) "1 opt, "
-        else if (length(x$options) != 0) paste0(length(x$options), " opts, ")
+  n_opt = length(x$options) + length(x$yaml_options)
+  opt = if (n_opt == 1) "1 opt, "
+        else if (n_opt != 0) paste0(length(x$options), " opts, ")
         else ""
 
   list(
     text = "Chunk",
-    label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
+    #label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
+    label = cli::pluralize("[{x$engine}, {n_opt} {?options/option/options}, {length(x$code)} line{?s}]")
   )
 }
 
+#' @exportS3Method
+tree_node.rmd_inline_code = function(x) {
+  list(
+    text = "Inline Code",
+    label = paste0("[", x$engine, "]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",
-    label = paste0("[", x$format, ", ", length(x$code), " lines]")
+    #label = paste0("[", x$format, ", ", length(x$code), " lines]")
+    label = cli::pluralize("[{x$format}, {length(x$code)} line{?s}]")
   )
 }
 
+#' @exportS3Method
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
-    label = paste0("[", length(x), " lines]")
+    #label = paste0("[", length(x), " lines]")
+    label = cli::pluralize("[{length(x)} line{?s}]")
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_fenced_div_open = function(x) {
+  list(
+    text = "Open Fenced div",
+    label = paste0("[", paste(x, collapse=", "), "]")
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_fenced_div_close = function(x) {
+  list(
+    text = "Close Fenced div",
+    label = ""
+  )
+}
+
+#' @exportS3Method
+tree_node.rmd_shortcode = function(x) {
+  list(
+    text = "Shortcode",
+    label = paste0(
+      "[",
+      cli::style_bold(x$func),
+      paste0(" ", x$args, collapse="") ,
+      "]"
+    )
   )
 }
 
@@ -77,37 +137,46 @@ scale_levels = function(x) {
 get_nesting_levels = function(ast) {
   levels = 0
   node_levels = integer()
+  fdiv_depth = 0
+
 
   for(node in ast) {
     if (is_heading(node)) {
       levels = levels[levels < node$level]
     }
 
-    node_levels = append(node_levels, max(levels))
+    if (inherits(node, "rmd_fenced_div_close")) {
+      fdiv_depth = fdiv_depth - 1
+    }
+
+    node_levels = append(node_levels, max(levels) + fdiv_depth)
 
     if (is_heading(node)) {
       levels = append(levels, node$level)
     }
 
+    if (inherits(node, "rmd_fenced_div_open")) {
+      fdiv_depth = fdiv_depth + 1
+    }
   }
 
   scale_levels(node_levels)
 }
 
 has_sibling = function(level, remaining) {
-    next_cur_level    = min(which(level == remaining), Inf) # next occurance of the same heading level
-    next_higher_level = min(which(level >  remaining), Inf) # next occurance of a higher level heading
+    next_cur_level    = min(which(level == remaining), Inf) # next occurrence of the same heading level
+    next_higher_level = min(which(level >  remaining), Inf) # next occurrence of a higher level heading
 
     next_cur_level < next_higher_level
 }
 
 #' @exportS3Method
-print.rmd_ast = function(x, use_headings = TRUE, ...) {
-  print_tree(x, use_headings)
+print.rmd_ast = function(x, flat = FALSE, ...) {
+  print_tree(x, flat)
 }
 
 
-print_tree = function(ast, use_headings = TRUE) {
+print_tree = function(ast, flat = FALSE) {
   ch = box_chars()
 
   indent_width = 4
@@ -117,7 +186,7 @@ print_tree = function(ast, use_headings = TRUE) {
   mid_leaf = pc(ch$j, ch$h, ch$h, " ")
   end_leaf = pc(ch$l, ch$h, ch$h, " ")
 
-  if (use_headings)
+  if (!flat)
     nesting_levels = get_nesting_levels(ast)
   else
     nesting_levels = rep(0, length(ast))

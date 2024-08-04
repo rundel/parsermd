@@ -7,35 +7,29 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 
 #include "parse_yaml.h"
+#include "parse_fenced_div_ast.h"
 #include "parse_chunk_ast.h"
+#include "parse_code_block_ast.h"
+#include "parse_heading.h"
+#include "parse_markdown_ast.h"
+
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct heading {
-    int level;
-    std::string name;
-  };
-
-  struct element : x3::variant<chunk, heading, std::vector<std::string>> {
+  struct element : x3::variant<yaml, fdiv_open, fdiv_close, chunk, code_block, heading, markdown> {
     using base_type::base_type;
     using base_type::operator=;
   };
 
   struct rmd {
-    yaml front_matter;
     std::vector<element> elements;
   };
 } }
 
 BOOST_FUSION_ADAPT_STRUCT(
-  client::ast::heading,
-  level, name
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
   client::ast::rmd,
-  front_matter, elements
+  elements
 )
 
 #endif

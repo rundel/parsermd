@@ -17,7 +17,7 @@
 #' are specified). Non-chunk nodes return `NULL`.
 #'
 #' @examples
-#' rmd = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+#' rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 #'
 #' str(rmd_get_options(rmd))
 #' str(rmd_get_options(rmd), "include")
@@ -84,13 +84,15 @@ rmd_get_options.default = function(x, ..., defaults = list()) {
 rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   opts = unlist(list(...))
 
+  chunk_opts = c(x[["options"]], x[["yaml_options"]])
+
   if (length(opts) == 0) {
-    x[["options"]]
+    chunk_opts
   } else {
     checkmate::assert_character(opts, any.missing = FALSE)
 
     res = purrr::map(
-      opts, ~ x[["options"]][[ .x ]] %||% defaults[[ .x ]]
+      opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
     )
     names(res) = opts
     res

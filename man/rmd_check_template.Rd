@@ -22,12 +22,12 @@ This function compares the provided Rmd against a template and reports on
 discrepancies (e.g. missing or unmodified components).
 }
 \examples{
-tmpl = parse_rmd(system.file("hw01.Rmd", package = "parsermd")) \%>\%
+tmpl = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd")) \%>\%
   rmd_select(by_section(c("Exercise *", "Solution"))) \%>\%
   rmd_template(keep_content = TRUE)
 
 rmd_check_template(
-  system.file("hw01-student.Rmd", package = "parsermd"),
+  system.file("examples/hw01-student.Rmd", package = "parsermd"),
   tmpl
 )
 

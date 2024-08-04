@@ -13,24 +13,26 @@ namespace client { namespace ast {
 
   struct chunk_args : x3::position_tagged {
     std::string indent;
+    int n_ticks;
     std::string engine;
     std::string name;
-    std::vector<option> options;
+    std::vector<option> chunk_options;
   };
 
-  struct chunk : x3::position_tagged{
+  struct chunk : x3::position_tagged {
     chunk_args args;
+    std::vector<std::string> yaml_options;
     std::vector<std::string> code;
   };
 } }
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::chunk_args,
-  indent, engine, name, options
+  indent, n_ticks, engine, name, chunk_options
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::chunk,
-  args, code
+  args, yaml_options, code
 )
 #endif

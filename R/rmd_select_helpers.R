@@ -15,7 +15,7 @@
 #'
 #' @examples
 #'
-#' rmd = parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+#' rmd = parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 #'
 #' rmd_select(rmd, has_type("rmd_chunk"))
 #'
@@ -96,7 +96,7 @@ by_section = function(sec_ref, keep_parents = TRUE) {
 has_label = function(label) {
   checkmate::assert_character(label, any.missing = FALSE, min.len = 1)
 
-  x = tidyselect::peek_data(fn = "by_section")
+  x = tidyselect::peek_data(fn = "has_label")
 
   node_labs = rmd_node_label(x)
   regex = utils::glob2rx(label)

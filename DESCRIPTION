@@ -1,6 +1,6 @@
 Package: parsermd
 Title: Formal Parser and Related Tools for R Markdown Documents
-Version: 0.1.3
+Version: 0.2.0
 Authors@R: 
     person(given = "Colin",
            family = "Rundel",
@@ -30,7 +30,7 @@ Imports:
     magrittr,
     tidyselect (>= 1.2.0),
     lifecycle
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.2
 SystemRequirements: C++17
 LinkingTo: 
     Rcpp,

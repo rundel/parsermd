@@ -1,12 +1,13 @@
 test_that("minimal.Rmd", {
-  ast = parse_rmd(system.file("minimal.Rmd", package = "parsermd"))
+  ast = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
   expected_ast = create_ast(
     create_yaml(
       'title: "Minimal"',
       'author: "Colin Rundel"',
       'date: "7/21/2020"',
-      'output: html_document'
+      'output: html_document',
+      parse = TRUE
     ),
     create_heading("Setup", 1),
     create_chunk(
@@ -44,31 +45,12 @@ test_that("minimal.Rmd", {
   expect_identical(ast, expected_ast)
 })
 
-test_that("knitr examples", {
-
-  files = dir(
-    system.file("tests/testthat/knitr-examples/", package = "parsermd"),
-    pattern = utils::glob2rx("*.Rmd"),
-    full.names = TRUE
-  )
-
-  for(file in files) {
-    if (grepl("065-rmd-chunk\\.Rmd", file))
-      next
-
-    label = paste("Parsing", basename(file))
-    expect_error(parse_rmd(!!file, allow_incomplete = FALSE), regexp = NA, label = label)
-  }
-})
-
-
-
 test_that("Found issues", {
 
   # No newline at the end
   expect_equal(
     parse_rmd("```{r}\n1+1\n```"),
-    create_ast(create_yaml(), create_chunk(name = "unnamed-chunk-1", code = "1+1"))
+    create_ast(create_chunk(name = "unnamed-chunk-1", code = "1+1"))
   )
 })
 

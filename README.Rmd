@@ -13,8 +13,6 @@ knitr::opts_chunk$set(
 )
 
 options(width = 80)
-
-library(magrittr)
 ```
 
 # parsermd
@@ -49,13 +47,13 @@ library(parsermd)
 For more details see the getting started [vignette](https://rundel.github.io/parsermd/articles/parsermd.html) or any of the topic specific articles.
 
 ```{r example}
-(rmd = parsermd::parse_rmd(system.file("minimal.Rmd", package = "parsermd")))
+(rmd = parsermd::parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd")))
 
 as_tibble(rmd)
 
 rmd_select(rmd, by_section("Content"))
 
-rmd_select(rmd, by_section(c("Content", "*"))) %>%
+rmd_select(rmd, by_section(c("Content", "*"))) |>
   rmd_select(has_type(c("rmd_chunk", "rmd_heading")))
 
 rmd_select(rmd, "pressure")

@@ -2,9 +2,12 @@
 % Please edit documentation in R/parse_rmd.R
 \name{parse_rmd}
 \alias{parse_rmd}
-\title{Parse an R Markdown document}
+\alias{parse_qmd}
+\title{Parse an R Markdown or Quarto document}
 \usage{
 parse_rmd(rmd, allow_incomplete = FALSE, parse_yaml = TRUE)
+
+parse_qmd(qmd, allow_incomplete = FALSE, parse_yaml = TRUE)
 }
 \arguments{
 \item{rmd}{Either the path to an \code{Rmd} file or a character vector containing the contents
@@ -13,6 +16,9 @@ of a R Markdown document.}
 \item{allow_incomplete}{Allow incomplete parsing of the document.}
 
 \item{parse_yaml}{Use the \link[yaml:read_yaml]{yaml} package to parse the document's yaml.}
+
+\item{qmd}{Either the path to an \code{qmd} file or a character vector containing the contents
+of a Quarto document.}
 }
 \value{
 Returns a \code{rmd_ast} object.
@@ -21,6 +27,6 @@ Returns a \code{rmd_ast} object.
 Documents are parse into an \code{rmd_ast} object.
 }
 \examples{
-parse_rmd(system.file("hw01.Rmd", package="parsermd"))
+parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 
 }

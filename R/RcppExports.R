@@ -25,7 +25,39 @@ check_markdown_heading_parser <- function(str) {
     .Call(`_parsermd_check_markdown_heading_parser`, str)
 }
 
-check_option_parser <- function(str) {
-    .Call(`_parsermd_check_option_parser`, str)
+check_chunk_option_parser <- function(str) {
+    .Call(`_parsermd_check_chunk_option_parser`, str)
+}
+
+check_yaml_option_parser <- function(str) {
+    .Call(`_parsermd_check_yaml_option_parser`, str)
+}
+
+check_fdiv_open_parser <- function(str) {
+    .Call(`_parsermd_check_fdiv_open_parser`, str)
+}
+
+check_fdiv_close_parser <- function(str) {
+    .Call(`_parsermd_check_fdiv_close_parser`, str)
+}
+
+check_cbrace_expr_parser <- function(str) {
+    .Call(`_parsermd_check_cbrace_expr_parser`, str)
+}
+
+check_code_block_parser <- function(str) {
+    .Call(`_parsermd_check_code_block_parser`, str)
+}
+
+check_shortcode_parser <- function(str) {
+    .Call(`_parsermd_check_shortcode_parser`, str)
+}
+
+check_inline_code_parser <- function(str) {
+    .Call(`_parsermd_check_inline_code_parser`, str)
+}
+
+check_md_line_parser <- function(str) {
+    .Call(`_parsermd_check_md_line_parser`, str)
 }
 
