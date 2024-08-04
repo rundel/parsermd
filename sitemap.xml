@@ -1,81 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://rundel.github.io/parsermd/404.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/articles/templates.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/as_ast.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/as_document.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/chunk_options.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/parse_rmd.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/parsermd-package.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/render.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_check_template.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_node.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_node_sections.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_select.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_select_helpers.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_source.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_subset.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_subset_util.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://rundel.github.io/parsermd/404.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/LICENSE-text.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/LICENSE.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/articles/index.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/articles/templates.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/authors.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/index.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/news/index.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/as_ast.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/as_document.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/chunk_options.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/index.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/parse_rmd.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/parsermd-package.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/reexports.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/render.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_check_template.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_node.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_node_sections.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_select.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_select_helpers.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_source.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_subset.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_subset_util.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc></url>
 </urlset>
+
