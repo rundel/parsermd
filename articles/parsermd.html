@@ -108,15 +108,15 @@ nested within headings, which is shown by the default print method for
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[4 lines]</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Setup</span></span></span>
-<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">setup</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Content</span></span></span>
 <span><span class="co">#&gt;     ├── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">R Markdown</span></span></span>
 <span><span class="co">#&gt;     │   ├── Markdown <span style="color: #555555;">[6 lines]</span></span></span>
-<span><span class="co">#&gt;     │   ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
-<span><span class="co">#&gt;     │   └── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
+<span><span class="co">#&gt;     │   ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cars</span></span></span>
+<span><span class="co">#&gt;     │   └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">unnamed-chunk-1</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">Including Plots</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">pressure</span></span></span>
 <span><span class="co">#&gt;         └── Markdown <span style="color: #555555;">[2 lines]</span></span></span></code></pre></div>
 <p>If you would prefer to see the underlying flat structure, this can be
 printed by setting <code>flat = TRUE</code> with <code>print</code>.</p>
@@ -124,15 +124,15 @@ printed by setting <code>flat = TRUE</code> with <code>print</code>.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rmd</span>, flat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[4 lines]</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Setup</span></span></span>
-<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">setup</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Content</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">R Markdown</span></span></span>
 <span><span class="co">#&gt; ├── Markdown <span style="color: #555555;">[6 lines]</span></span></span>
-<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
-<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
+<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cars</span></span></span>
+<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">unnamed-chunk-1</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">Including Plots</span></span></span>
 <span><span class="co">#&gt; ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">pressure</span></span></span>
 <span><span class="co">#&gt; └── Markdown <span style="color: #555555;">[2 lines]</span></span></span></code></pre></div>
 <p>Additionally, to ease the manipulation of the AST the package
 supports the transformation of the object into a tidy tibble with
@@ -161,15 +161,15 @@ tibble).</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/as_ast.html">as_ast</a></span><span class="op">(</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[4 lines]</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Setup</span></span></span>
-<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">setup</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Content</span></span></span>
 <span><span class="co">#&gt;     ├── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">R Markdown</span></span></span>
 <span><span class="co">#&gt;     │   ├── Markdown <span style="color: #555555;">[6 lines]</span></span></span>
-<span><span class="co">#&gt;     │   ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
-<span><span class="co">#&gt;     │   └── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
+<span><span class="co">#&gt;     │   ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cars</span></span></span>
+<span><span class="co">#&gt;     │   └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">unnamed-chunk-1</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">Including Plots</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line]</span></span></span>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">pressure</span></span></span>
 <span><span class="co">#&gt;         └── Markdown <span style="color: #555555;">[2 lines]</span></span></span></code></pre></div>
 <p>Finally, we can also convert the <code>rmd_ast</code> back into an R
 Markdown document via <code>as_document</code></p>
@@ -235,7 +235,7 @@ check their properties.</p>
 <span><span class="va">rmd</span></span>
 <span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Load packages</span></span></span>
-<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span></span>
 <span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
@@ -244,14 +244,14 @@ check their properties.</p>
 <span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
+<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
 <span><span class="co">#&gt;     ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span></code></pre></div>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
+<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
 <p>Say we were interested in examining the solution a student entered
 for Exercise 1 - we can get access to this using the
 <code>rmd_select</code> function and its selection helper functions,
@@ -319,19 +319,19 @@ solutions from our document:</p>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
+<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span></code></pre></div>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
+<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
 <p>Similarly, if we wanted to just extract the chunks that involve
 plotting we can match for chunk labels with a “plot” prefix,</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="../reference/rmd_select_helpers.html">has_label</a></span><span class="op">(</span><span class="st">"plot*"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
-<span><span class="co">#&gt; └── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span></code></pre></div>
+<span><span class="co">#&gt; ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
+<span><span class="co">#&gt; └── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="ast-as-a-tibble">ast as a tibble<a class="anchor" aria-label="anchor" href="#ast-as-a-tibble"></a>

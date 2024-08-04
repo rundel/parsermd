@@ -90,7 +90,7 @@ solutions.</p>
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd</span> <span class="op">=</span> <span class="fu"><a href="../reference/parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/hw01.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Load packages</span></span></span>
-<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span></span>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span></span>
 <span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
@@ -99,16 +99,16 @@ solutions.</p>
 <span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
+<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
 <span><span class="co">#&gt;     ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span></code></pre></div>
+<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
 <p>We can see examples of this templating by extracting the contents of
 the markdown in the Exercise 1 &gt; Solution section.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -144,15 +144,15 @@ document contained withing a section matching “Exercise *” and
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
+<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
 <span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span></code></pre></div>
+<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
 <p>One we have this more limited set of elements we use the
 <code>rmd_template</code> function to generate our template. Here we
 have included <code>keep_content  = TRUE</code> in order to keep the
@@ -224,13 +224,13 @@ specific markdown elements.</p>
 <span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
 <span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines]</span></span></span>
+<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
 <span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines]</span></span></span>
+<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
 <span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
 <span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line]</span></span></span></code></pre></div>
+<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
+<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
 <p>This new AST can then be passed to <code>rmd_template</code> and
 <code>rmd_check_template</code> to provide the revised feedback,</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
