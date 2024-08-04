@@ -53,10 +53,10 @@ The R Markdown document is parsed and stored in a flat, ordered list object cont
 print(rmd)
 ```
 
-If you would prefer to see the underlying flat structure, this can be printed by setting `use_headings = FALSE` with `print`.
+If you would prefer to see the underlying flat structure, this can be printed by setting `flat = TRUE` with `print`.
 
 ```{r no_headings}
-print(rmd, use_headings = FALSE)
+print(rmd, flat = TRUE)
 ```
 
 Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with `as_tibble` or `as.data.frame` (both return a tibble).

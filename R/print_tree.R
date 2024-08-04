@@ -171,12 +171,12 @@ has_sibling = function(level, remaining) {
 }
 
 #' @exportS3Method
-print.rmd_ast = function(x, use_headings = TRUE, ...) {
-  print_tree(x, use_headings)
+print.rmd_ast = function(x, flat = FALSE, ...) {
+  print_tree(x, flat)
 }
 
 
-print_tree = function(ast, use_headings = TRUE) {
+print_tree = function(ast, flat = FALSE) {
   ch = box_chars()
 
   indent_width = 4
@@ -186,7 +186,7 @@ print_tree = function(ast, use_headings = TRUE) {
   mid_leaf = pc(ch$j, ch$h, ch$h, " ")
   end_leaf = pc(ch$l, ch$h, ch$h, " ")
 
-  if (use_headings)
+  if (!flat)
     nesting_levels = get_nesting_levels(ast)
   else
     nesting_levels = rep(0, length(ast))
