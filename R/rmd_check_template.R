@@ -133,7 +133,7 @@ li_missing = function(secs, type, label = NA) {
     collapse = " > "
   ) )
 
-  text = if (type == "rmd_yaml" | type == "rmd_yaml_list") {
+  text = if (type == "rmd_yaml") {
     "{.val YAML} cannot be located."
   } else if (type == "rmd_heading") {
     "Section {sec} cannot be located."

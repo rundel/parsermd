@@ -6,7 +6,7 @@ test_that("as_tibble - minimal.Rmd", {
 
   tbl_expected = tibble::tribble(
     ~sec_h1,             ~sec_h2,           ~type,             ~label,
-    NA,                       NA, "rmd_yaml_list",                 NA,
+    NA,                       NA,      "rmd_yaml",                 NA,
     "Setup",                  NA,   "rmd_heading",                 NA,
     "Setup",                  NA,     "rmd_chunk",            "setup",
     "Content",                NA,   "rmd_heading",                 NA,
@@ -37,7 +37,7 @@ test_that("as_tibble - hw01.Rmd", {
 
   tbl_expected = tibble::tribble(
     ~sec_h3,         ~sec_h4,           ~type,          ~label,
-    NA,                   NA, "rmd_yaml_list",              NA,
+    NA,                   NA,      "rmd_yaml",              NA,
     "Load packages",      NA,   "rmd_heading",              NA,
     "Load packages",      NA,     "rmd_chunk", "load-packages",
     "Exercise 1",         NA,   "rmd_heading",              NA,
@@ -77,7 +77,7 @@ test_that("as_tibble - hw01-student.Rmd", {
 
   tbl_expected = tibble::tribble(
     ~sec_h3,         ~sec_h4,           ~type,          ~label,
-    NA,                   NA, "rmd_yaml_list",              NA,
+    NA,                   NA,      "rmd_yaml",              NA,
     "Load packages",      NA,   "rmd_heading",              NA,
     "Load packages",      NA,     "rmd_chunk", "load-packages",
     "Exercise 1",         NA,   "rmd_heading",              NA,
@@ -141,7 +141,7 @@ test_that("as_tibble - reverse_sections.Rmd", {
   yaml = rmd_yaml('title: "Reversed Sections"','output: html_document')
   tbl_expected = tibble::tribble(
     ~sec_h1, ~sec_h2,       ~sec_h3,           ~type,        ~label,
-    NA,           NA,            NA, "rmd_yaml_list", NA_character_,
+    NA,           NA,            NA,      "rmd_yaml", NA_character_,
     NA,           NA,          "H3",   "rmd_heading", NA_character_,
     NA,         "H2",            NA,   "rmd_heading", NA_character_,
     NA,         "H2", "H3 - Part 2",   "rmd_heading", NA_character_,

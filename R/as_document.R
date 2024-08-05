@@ -131,19 +131,13 @@ as_document.rmd_heading = function(x, ...) {
   )
 }
 
+
 #' @exportS3Method
 as_document.rmd_yaml = function(x, ...) {
   c(
     "---",
-    as.character(x),
+    as_yaml_text(x),
     "---"
-  )
-}
-
-#' @exportS3Method
-as_document.rmd_yaml_list = function(x, ...) {
-  as_document.rmd_yaml(
-    as_yaml_text(x)
   )
 }
 

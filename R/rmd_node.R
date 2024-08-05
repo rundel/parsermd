@@ -142,11 +142,6 @@ rmd_node_length.rmd_yaml = function(x, ...) {
 }
 
 #' @exportS3Method
-rmd_node_length.rmd_yaml_list = function(x, ...) {
-  length(x)
-}
-
-#' @exportS3Method
 rmd_node_length.default = function(x, ...) {
   NA_integer_
 }

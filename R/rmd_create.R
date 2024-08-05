@@ -52,7 +52,7 @@ rmd_ast = function(...) {
 
   purrr::walk(
     ast, checkmate::assert_multi_class, null.ok = TRUE,
-    classes = c("rmd_markdown", "rmd_chunk", "rmd_raw_chunk", "rmd_yaml_list", "rmd_yaml",
+    classes = c("rmd_markdown", "rmd_chunk", "rmd_raw_chunk", "rmd_yaml",
                 "rmd_code_block", "rmd_fenced_div_open", "rmd_fenced_div_close", "rmd_heading",
                 "rmd_inline_code")
   )
@@ -70,7 +70,7 @@ rmd_yaml = function(...) {
   if (length(yaml) == 1 && is.list(yaml[[1]]))
     yaml = yaml[[1]]
 
-  class(yaml) = "rmd_yaml_list"
+  class(yaml) = "rmd_yaml"
 
   yaml
 }
@@ -132,8 +132,8 @@ rmd_chunk = function(
   #if (length(yaml_options) == 0)
   #  names(yaml_options) = character()
 
-  if (!inherits(yaml_options, "rmd_yaml_list"))
-    class(yaml_options) = "rmd_yaml_list"
+  if (!inherits(yaml_options, "rmd_yaml"))
+    class(yaml_options) = "rmd_yaml"
 
 
   structure(

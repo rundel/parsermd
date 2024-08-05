@@ -5,17 +5,15 @@
 \alias{parse_qmd}
 \title{Parse an R Markdown or Quarto document}
 \usage{
-parse_rmd(rmd, allow_incomplete = FALSE, parse_yaml = TRUE)
+parse_rmd(rmd, allow_incomplete = FALSE)
 
-parse_qmd(qmd, allow_incomplete = FALSE, parse_yaml = TRUE)
+parse_qmd(qmd, allow_incomplete = FALSE)
 }
 \arguments{
 \item{rmd}{Either the path to an \code{Rmd} file or a character vector containing the contents
 of a R Markdown document.}
 
 \item{allow_incomplete}{Allow incomplete parsing of the document.}
-
-\item{parse_yaml}{Use the \link[yaml:read_yaml]{yaml} package to parse the document's yaml.}
 
 \item{qmd}{Either the path to an \code{qmd} file or a character vector containing the contents
 of a Quarto document.}
@@ -24,7 +22,7 @@ of a Quarto document.}
 Returns a \code{rmd_ast} object.
 }
 \description{
-Documents are parse into an \code{rmd_ast} object.
+Documents are parsed into an \code{rmd_ast} object.
 }
 \examples{
 parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))

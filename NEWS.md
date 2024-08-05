@@ -14,6 +14,12 @@
   
   * Added support for quarto shortcodes - e.g. (` {{< meta title >}} `)
 
+* Exported and cleaned up node creation functions - see `?rmd_create` for details
+
+* Added experimental support for parsing collections of Rmd and qmd files - see `parse_qmd_collection()` and `parse_rmd_collection()`
+
+* Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include `rmd_yaml`.
+
 # parsermd 0.1.3
 
 * Unlabeled chunks will now be labeled as unnamed-chunk-n, with n incrementing.

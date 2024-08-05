@@ -47,9 +47,7 @@ type_sum.rmd_raw_chunk = function(x) {
 
 #' @export
 type_sum.rmd_yaml = function(x) {
-  paste(
-    cli::style_bold("yaml"),
-  )
+  cli::style_bold("yaml")
 }
 
 #' @export
@@ -60,10 +58,6 @@ type_sum.rmd_heading = function(x) {
   )
 }
 
-#' @export
-type_sum.rmd_yaml_list = function(x) {
-  cli::style_bold("yaml")
-}
 
 #' @export
 type_sum.rmd_markdown = function(x) {

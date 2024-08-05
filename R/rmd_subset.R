@@ -38,7 +38,7 @@ rmd_subset.rmd_ast = function(x, sec_refs = NULL, type_refs = NULL, name_refs = 
   }
 
   if (keep_yaml) {
-    subset = subset | (rmd_node_type(x) %in% c("rmd_yaml", "rmd_yaml_list"))
+    subset = subset | (rmd_node_type(x) %in% c("rmd_yaml"))
   }
 
   x = x[subset]
@@ -66,7 +66,7 @@ rmd_subset.rmd_tibble = function(x, sec_refs = NULL, type_refs = NULL, name_refs
   }
 
   if (keep_yaml) {
-    subset = subset | (rmd_node_type(x$ast) %in% c("rmd_yaml", "rmd_yaml_list"))
+    subset = subset | (rmd_node_type(x$ast) %in% c("rmd_yaml"))
   }
 
   x = x[subset,]

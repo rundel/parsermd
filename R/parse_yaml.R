@@ -1,4 +1,4 @@
-as_rmd_yaml_list = function(yaml) {
+as_rmd_yaml = function(yaml) {
   if(length(yaml) == 0) {
     yaml = list()
   } else {
@@ -11,7 +11,7 @@ as_rmd_yaml_list = function(yaml) {
   if (!is.list(yaml))
     yaml = as.list(yaml)
 
-  class(yaml) = "rmd_yaml_list"
+  class(yaml) = "rmd_yaml"
 
   yaml
 }
@@ -45,17 +45,17 @@ parse_yaml.default = function(x) {
 
 #' @exportS3Method
 parse_yaml.character = function(x) {
-  as_rmd_yaml_list(x)
+  as_rmd_yaml(x)
 }
 
 #' @exportS3Method
-parse_yaml.rmd_yaml = function(x) {
-  as_rmd_yaml_list(x)
+parse_yaml.rmd_yaml_text = function(x) {
+  as_rmd_yaml(x)
 }
 
 #' @exportS3Method
 parse_yaml.rmd_chunk = function(x) {
-  x[["yaml_options"]] = as_rmd_yaml_list(x[["yaml_options"]])
+  x[["yaml_options"]] = as_rmd_yaml(x[["yaml_options"]])
   x
 }
 

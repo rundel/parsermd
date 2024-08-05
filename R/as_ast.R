@@ -59,7 +59,7 @@ as_ast.rmd_collection = function(
 ) {
 
   if (strip_yaml)
-    x = rmd_select(x, !has_type(c("rmd_yaml_list", "rmd_yaml")))
+    x = rmd_select(x, !has_type("rmd_yaml"))
 
   if (adjust_headings) {
     x[["ast"]] = purrr::map2(

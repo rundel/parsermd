@@ -17,13 +17,8 @@ tree_node.default = function(x) {
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
-    label = cli::pluralize("[{length(x)} line{?s}]")
+    label = cli::pluralize("[{length(x)} field{?s}]")
   )
-}
-
-#' @exportS3Method
-tree_node.rmd_yaml_list = function(x) {
-  tree_node.rmd_yaml(unlist(x))
 }
 
 #' @exportS3Method

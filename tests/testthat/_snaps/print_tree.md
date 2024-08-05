@@ -1,6 +1,6 @@
 # tree printing
 
-    +-- YAML [4 lines]
+    +-- YAML [4 fields]
     +-- Heading [h1] - Setup
     |   \-- Chunk [r, 1 option, 1 line] - setup
     \-- Heading [h1] - Content
@@ -15,7 +15,7 @@
 
 ---
 
-    +-- YAML [2 lines]
+    +-- YAML [2 fields]
     +-- Heading [h3] - Load packages
     |   \-- Chunk [r, 1 option, 2 lines] - load-packages
     +-- Heading [h3] - Exercise 1
@@ -37,7 +37,7 @@
 
 ---
 
-    +-- YAML [2 lines]
+    +-- YAML [2 fields]
     +-- Heading [h3] - Load packages
     |   \-- Chunk [r, 1 option, 2 lines] - load-packages
     +-- Heading [h3] - Exercise 1
@@ -61,7 +61,7 @@
 
 ---
 
-    +-- YAML [2 lines]
+    +-- YAML [2 fields]
     +-- Heading [h3] - H3
     +-- Heading [h2] - H2
     |   \-- Heading [h3] - H3 - Part 2
@@ -69,7 +69,7 @@
 
 ---
 
-    +-- YAML [1 line]
+    +-- YAML [1 field]
     +-- Heading [h2] - R Markdown
     |   +-- Markdown [4 lines]
     |   \-- Chunk [r, 0 options, 1 line] - cars

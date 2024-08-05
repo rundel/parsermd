@@ -3,12 +3,11 @@
 #' @name parse_rmd
 #'
 #' @description
-#' Documents are parse into an `rmd_ast` object.
+#' Documents are parsed into an `rmd_ast` object.
 #'
 #' @param rmd Either the path to an `Rmd` file or a character vector containing the contents
 #' of a R Markdown document.
 #' @param allow_incomplete Allow incomplete parsing of the document.
-#' @param parse_yaml Use the [yaml][yaml::read_yaml()] package to parse the document's yaml.
 #'
 #' @return Returns a `rmd_ast` object.
 #'
@@ -16,7 +15,7 @@
 #' parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 #'
 #' @export
-parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
+parse_rmd = function(rmd, allow_incomplete = FALSE) {
   checkmate::assert_character(rmd, min.len = 1, any.missing = FALSE)
 
   if (length(rmd) > 1) {               # If multiple lines in a char vec assume
@@ -30,11 +29,7 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
     rmd = paste0(rmd, "\n")
 
   ast = parse_rmd_cpp(rmd, allow_incomplete)
-
-  if (parse_yaml) {
-    ast = parse_yaml(ast)
-  }
-
+  ast = parse_yaml(ast)
   ast = fix_unnamed_chunks(ast)
   ast
 }
@@ -46,10 +41,10 @@ parse_rmd = function(rmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
 #' of a Quarto document.
 #'
 #' @export
-parse_qmd = function(qmd, allow_incomplete = FALSE, parse_yaml = TRUE) {
+parse_qmd = function(qmd, allow_incomplete = FALSE) {
   checkmate::assert_character(qmd, min.len = 1, any.missing = FALSE)
 
-  parse_rmd(rmd=qmd, allow_incomplete=allow_incomplete, parse_yaml=parse_yaml)
+  parse_rmd(rmd=qmd, allow_incomplete=allow_incomplete)
 }
 
 fix_unnamed_chunks = function(ast) {

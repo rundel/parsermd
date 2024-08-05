@@ -301,7 +301,7 @@ template <> SEXP wrap(client::ast::fdiv_close const& fdiv) {
 
 template <> SEXP wrap(client::ast::yaml const& yaml) {
   Rcpp::CharacterVector res = Rcpp::wrap(yaml.lines);
-  res.attr("class") = "rmd_yaml";
+  res.attr("class") = "rmd_yaml_text";
 
   return res;
 }
