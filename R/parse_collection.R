@@ -14,10 +14,10 @@ parse_collection = function(dir = "./", pattern, all = FALSE, recurse = TRUE, re
   f = fs::path_filter(f, regexp = paste(pat, collapse = "|"), invert = FALSE)
 
   class = c(class, class(tibble::tibble()))
-
+  path = fs::path(dir, f)
   df = tibble::tibble(
     name = as.character(f),
-    path = fs::path(dir, f),
+    path = path,
     ast = purrr::map(path, parse_func)
   ) %>%
     magrittr::set_class(class)

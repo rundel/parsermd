@@ -29,7 +29,8 @@ Imports:
     rlang,
     magrittr,
     tidyselect (>= 1.2.0),
-    lifecycle
+    lifecycle,
+    fs
 RoxygenNote: 7.3.2
 SystemRequirements: C++17
 LinkingTo: 
