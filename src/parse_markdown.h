@@ -45,7 +45,7 @@ namespace client { namespace parser {
 
 
   auto const md_text = x3::rule<struct _, std::string>{"markdown text"}
-  = x3::lexeme[ +(!inline_code >> (x3::char_ - x3::eol)) ];
+  = x3::lexeme[ +(!(inline_code | shortcode) >> (x3::char_ - x3::eol)) ];
 
   auto const md_element = x3::rule<struct _, client::ast::md_element>{"markdown element"}
   = x3::lexeme[ inline_code | shortcode | md_text ];

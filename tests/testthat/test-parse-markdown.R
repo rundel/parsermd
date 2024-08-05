@@ -40,3 +40,11 @@ test_that("markdown", {
   )
 })
 
+test_that("Mixed" {
+
+  # FIXME - flesh this out and bring inline
+  expect_equal(
+    length( check_markdown_parser("hello {{< test >}} `r 1+1`\n")[[1]] ),
+    4
+  )
+})
