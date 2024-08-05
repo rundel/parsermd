@@ -75,3 +75,14 @@ rmd_select.rmd_ast = function(x, ...) {
   loc = rmd_select_impl(x, ...)
   x[loc]
 }
+
+#' @exportS3Method
+rmd_select.rmd_collection = function(x, ...) {
+  x$ast = purrr::map(x$ast, rmd_select, ...)
+  x
+}
+
+#' @exportS3Method
+rmd_select.qmd_collection = function(x, ...) {
+  rmd_select.rmd_collection(x, ...)
+}
