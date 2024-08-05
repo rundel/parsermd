@@ -2,10 +2,11 @@
 #' @export
 tibble::as_tibble
 
-#' @exportS3Method
-as.data.frame.rmd_ast = function(x, ..., include_yaml = TRUE) {
-  as_tibble.rmd_ast(x, include_yaml)
-}
+# #' @exportS3Method
+# as.data.frame.rmd_ast = function(x, ..., include_yaml = TRUE) {
+#   as_tibble.rmd_ast(x, include_yaml) %>%
+#     as.data.frame()
+# }
 
 #' @exportS3Method
 as_tibble.rmd_ast = function(x, include_yaml = TRUE, ...) {
