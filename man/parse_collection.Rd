@@ -37,6 +37,8 @@ parse_rmd_collection(
 Returns a \code{tibble} object with columns for document \code{name}, \code{path}, and \code{ast}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Recursively searches a directory for R Markdown or Quarto documents and parses them into a collection of
 \code{rmd_ast} objects
 }

@@ -28,6 +28,8 @@ parse_collection = function(dir = "./", pattern, all = FALSE, recurse = TRUE, re
 #' @name parse_collection
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Recursively searches a directory for R Markdown or Quarto documents and parses them into a collection of
 #' `rmd_ast` objects
 #'
