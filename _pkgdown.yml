@@ -48,6 +48,9 @@ reference:
   - rmd_node_type
   - rmd_set_options
   - rmd_get_options
+- title: Node functions
+  contents:
+  - rmd_create
 - title: Template functions
   contents:
   - rmd_template

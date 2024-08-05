@@ -49,6 +49,8 @@ rmd_inline_code(engine = "", code = "")
 rmd_shortcode(func, args = character())
 }
 \arguments{
+\item{...}{Elements within the node.}
+
 \item{name}{Character. Heading or chunk name.}
 
 \item{level}{Integer. Heading level (1-6).}
