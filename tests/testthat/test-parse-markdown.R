@@ -3,39 +3,50 @@ test_that("markdown", {
 
   expect_identical(
     check_markdown_parser("test\n"),
-    rmd_markdown("test")
+    rmd_markdown(
+      rmd_markdown_line("test")
+    )
   )
 
   expect_identical(
     check_markdown_parser("test\ntest\n"),
-    rmd_markdown("test", "test")
+    rmd_markdown(
+      rmd_markdown_line("test"),
+      rmd_markdown_line("test")
+    )
   )
 
   expect_identical(
     check_markdown_parser("`r 1+1`\n"),
     rmd_markdown(
-      rmd_inline_code(engine = "r", code="1+1")
+      rmd_markdown_line(
+        rmd_inline_code(engine = "r", code="1+1")
+      )
     )
   )
 
   expect_identical(
     check_markdown_parser("`{r} 1+1`\n"),
     rmd_markdown(
-      rmd_inline_code(engine = "r", code="1+1")
+      rmd_markdown_line(
+        rmd_inline_code(engine = "r", code="1+1")
+      )
     )
   )
 
   expect_identical(
     check_markdown_parser("``r 1+1``\n"),
     rmd_markdown(
-      list("`", rmd_inline_code(engine = "r", code="1+1"), "`")
+      rmd_markdown_line(
+        "`", rmd_inline_code(engine = "r", code="1+1"), "`"
+      )
     )
   )
 
   expect_identical(
     check_markdown_parser("``{r} 1+1``\n"),
     rmd_markdown(
-      list("`", rmd_inline_code(engine = "r", code="1+1"), "`")
+      rmd_markdown_line("`", rmd_inline_code(engine = "r", code="1+1"), "`")
     )
   )
 })
