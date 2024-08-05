@@ -35,8 +35,18 @@ as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
 }
 
 #' @exportS3Method
+as_document.rmd_collection = function(x, padding = "", collapse = NULL, ...) {
+  as_document(as_ast(x), padding, collapse, ...)
+}
+
+#' @exportS3Method
+as_document.qmd_collection = function(x, padding = "", collapse = NULL, ...) {
+  as_document(as_ast(x), padding, collapse, ...)
+}
+
+#' @exportS3Method
 as_document.rmd_tibble = function(x, padding = "", collapse = NULL, ...) {
-  as_document(x$ast, padding, collapse)
+  as_document(x$ast, padding, collapse, ...)
 }
 
 
