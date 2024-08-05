@@ -6,59 +6,59 @@ test_that("Basic parser tests - open", {
 
   expect_equal(
     check_fdiv_open_parser("::: test\n"),
-    create_fenced_div_open(".test")
+    rmd_fenced_div_open(".test")
   )
 
   expect_equal(
     check_fdiv_open_parser("::: {test}\n"),
-    create_fenced_div_open("test")
+    rmd_fenced_div_open("test")
   )
 
   expect_equal(
     check_fdiv_open_parser("::: {#test}\n"),
-    create_fenced_div_open("#test")
+    rmd_fenced_div_open("#test")
   )
 
 
   expect_equal(
     check_fdiv_open_parser(":::: test\n"),
-    create_fenced_div_open(".test")
+    rmd_fenced_div_open(".test")
   )
 
   expect_equal(
     check_fdiv_open_parser(":::: {test}\n"),
-    create_fenced_div_open("test")
+    rmd_fenced_div_open("test")
   )
 
   ## Trailing : or " "
   expect_equal(
     check_fdiv_open_parser("::: test \n"),
-    create_fenced_div_open(".test")
+    rmd_fenced_div_open(".test")
   )
 
   expect_equal(
     check_fdiv_open_parser("::: test ::::\n"),
-    create_fenced_div_open(".test")
+    rmd_fenced_div_open(".test")
   )
 
   expect_equal(
     check_fdiv_open_parser("::: test :: \n"),
-    create_fenced_div_open(".test")
+    rmd_fenced_div_open(".test")
   )
 
   expect_equal(
     check_fdiv_open_parser("::: {}\n"),
-    create_fenced_div_open()
+    rmd_fenced_div_open()
   )
 
   expect_equal(
     check_fdiv_open_parser(":::{}\n"),
-    create_fenced_div_open()
+    rmd_fenced_div_open()
   )
 
   expect_equal(
     check_fdiv_open_parser("::: {   }\n"),
-    create_fenced_div_open()
+    rmd_fenced_div_open()
   )
 
   ## Bad inputs
@@ -85,17 +85,17 @@ test_that("Basic parser tests - close", {
   # Valid
   expect_equal(
     check_fdiv_close_parser(":::\n"),
-    create_fenced_div_close()
+    rmd_fenced_div_close()
   )
 
   expect_equal(
     check_fdiv_close_parser("::::::\n"),
-    create_fenced_div_close()
+    rmd_fenced_div_close()
   )
 
   expect_equal(
     check_fdiv_close_parser("::: \n"),
-    create_fenced_div_close()
+    rmd_fenced_div_close()
   )
 
   # Invalid
@@ -121,24 +121,24 @@ test_that("Basic parser tests - close", {
 test_that("Nested inputs", {
   expect_equal(
     parse_rmd_cpp("::: test1\n::: test2\n:::\n:::\n"),
-    create_ast(
-      create_fenced_div_open(".test1"),
-      create_fenced_div_open(".test2"),
-      create_fenced_div_close(),
-      create_fenced_div_close()
+    rmd_ast(
+      rmd_fenced_div_open(".test1"),
+      rmd_fenced_div_open(".test2"),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close()
     )
   )
 
 
   expect_equal(
     parse_rmd_cpp("::: test1\n::: test2\n::: test3\n:::\n:::\n:::\n"),
-    create_ast(
-      create_fenced_div_open(".test1"),
-      create_fenced_div_open(".test2"),
-      create_fenced_div_open(".test3"),
-      create_fenced_div_close(),
-      create_fenced_div_close(),
-      create_fenced_div_close()
+    rmd_ast(
+      rmd_fenced_div_open(".test1"),
+      rmd_fenced_div_open(".test2"),
+      rmd_fenced_div_open(".test3"),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close()
     )
   )
 })
@@ -171,10 +171,10 @@ And another.
 "
   expect_equal(
     parse_rmd(ex1),
-    create_ast(
-      create_fenced_div_open(c("#special",".sidebar")),
-      create_markdown("Here is a paragraph.","","And another."),
-      create_fenced_div_close()
+    rmd_ast(
+      rmd_fenced_div_open(c("#special",".sidebar")),
+      rmd_markdown("Here is a paragraph.","","And another."),
+      rmd_fenced_div_close()
     )
   )
 
@@ -189,13 +189,13 @@ This is a warning within a warning.
 
   expect_equal(
     parse_rmd(ex2),
-    create_ast(
-      create_fenced_div_open(".Warning"),
-      create_markdown("This is a warning.", ""),
-      create_fenced_div_open(".Danger"),
-      create_markdown("This is a warning within a warning."),
-      create_fenced_div_close(),
-      create_fenced_div_close()
+    rmd_ast(
+      rmd_fenced_div_open(".Warning"),
+      rmd_markdown("This is a warning.", ""),
+      rmd_fenced_div_open(".Danger"),
+      rmd_markdown("This is a warning within a warning."),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close()
     )
   )
 

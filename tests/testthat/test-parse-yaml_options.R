@@ -25,7 +25,7 @@ test_that("chunk with yaml options", {
 
   expect_identical(
     parse("```{r}\n#| foo: bar\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(foo = "bar")
     )
@@ -33,7 +33,7 @@ test_that("chunk with yaml options", {
 
   expect_identical(
     parse("```{r}\n#| foo: bar\n#| hello: world\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(foo = "bar", hello = "world")
     )
@@ -41,7 +41,7 @@ test_that("chunk with yaml options", {
 
   expect_identical(
     parse("```{r}\n#| echo: true\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(echo = TRUE)
     )
@@ -49,7 +49,7 @@ test_that("chunk with yaml options", {
 
   expect_identical(
     parse("```{r}\n#| fig-width: 100\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(`fig-width` = 100L)
     )
@@ -57,7 +57,7 @@ test_that("chunk with yaml options", {
 
   expect_identical(
     parse("```{r}\n#| fig-width: 0.5\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(`fig-width` = 0.5)
     )
@@ -72,7 +72,7 @@ test_that("yaml options with break", {
 
   expect_identical(
     parse("```{r}\n#| echo: true\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=character(),
       yaml_options = list(echo = TRUE)
     )
@@ -80,21 +80,21 @@ test_that("yaml options with break", {
 
   expect_identical(
     parse("```{r}\n\n#| echo: true\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=c("", "#| echo: true")
     )
   )
 
   expect_identical(
     parse("```{r}\n#|\n#| echo: true\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=c("#|", "#| echo: true")
     )
   )
 
   expect_identical(
     parse("```{r}\n#| echo: true\n#| \n#| fig-width: 10\n```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r",
       yaml_options = list(echo = TRUE, `fig-width` = 10L)
     )
@@ -104,14 +104,14 @@ test_that("yaml options with break", {
 
   expect_identical(
     parse("  ```{r}\n  #| echo: true\n  ```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=c("#| echo: true"), indent = "  "
     )
   )
 
   expect_identical(
     parse("\t```{r}\n\t#| echo: true\n\t```\n"),
-    create_chunk(
+    rmd_chunk(
       engine = "r", code=c("#| echo: true"), indent = "\t"
     )
   )
@@ -119,17 +119,17 @@ test_that("yaml options with break", {
 
 test_that("parse full document with yaml options", {
   ast = parse_rmd("knitr-examples/125-dash-options.Rmd")
-  expected_ast = create_ast(
-    create_yaml(
+  expected_ast = rmd_ast(
+    rmd_yaml(
       title = "Using dash options in YAML options header"
     ),
-    create_markdown(
+    rmd_markdown(
       "In Quarto, it is recommended to use YAML options format with dash in option name instead of dot. In knitr 1.44, any chunk option with dash will be transformed to its dot counterpart. This is because knitr is responsible for engine option parsing in Quarto. ",
       "",
       "This document checks that YAML options are parsed correctly and that dash option are correctly converted when provided in YAML. ",
       ""
     ),
-    create_chunk(
+    rmd_chunk(
       engine = "r",
       name = "unnamed-chunk-1",
       yaml_options = list(
@@ -155,12 +155,12 @@ test_that("Array arguments", {
 
   expect_equal(
     parse("```{r}\n#| layout: [[1,1], [1]]\n```\n"),
-    create_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+    rmd_chunk(yaml_options = list(layout = list(c(1,1), 1)))
   )
 
   expect_equal(
     parse("```{r}\n#| layout:\n#| - - 1\n#|   - 1\n#| - 1\n```\n"),
-    create_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+    rmd_chunk(yaml_options = list(layout = list(c(1,1), 1)))
   )
 
   expect_equal(

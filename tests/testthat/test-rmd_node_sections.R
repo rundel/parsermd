@@ -1,11 +1,11 @@
 test_that("Basic hierarchy", {
-  ast = create_ast(
-    create_heading("H1", 1),
-    create_heading("H2", 2),
-    create_heading("H3", 3),
-    create_heading("H4", 4),
-    create_heading("H5", 5),
-    create_heading("H6", 6)
+  ast = rmd_ast(
+    rmd_heading("H1", 1),
+    rmd_heading("H2", 2),
+    rmd_heading("H3", 3),
+    rmd_heading("H4", 4),
+    rmd_heading("H5", 5),
+    rmd_heading("H6", 6)
   )
 
   expect_sec = list(
@@ -40,10 +40,10 @@ test_that("Basic hierarchy", {
 })
 
 test_that("Inverted hierarchy", {
-  ast = create_ast(
-    create_heading("H4", 4),
-    create_heading("H3", 3),
-    create_heading("H2", 2)
+  ast = rmd_ast(
+    rmd_heading("H4", 4),
+    rmd_heading("H3", 3),
+    rmd_heading("H2", 2)
   )
 
   expect_sec = list(

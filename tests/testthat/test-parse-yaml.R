@@ -3,32 +3,32 @@ test_that("yaml parsing - good yaml", {
 
   expect_equal(
     parse("---\n---\n"),
-    create_yaml()
+    rmd_yaml()
   )
 
   expect_equal( # Trailing spaces are ok
     parse("--- \n---\n"),
-    create_yaml()
+    rmd_yaml()
   )
 
   expect_equal(
     parse("---\n--- \n"),
-    create_yaml()
+    rmd_yaml()
   )
 
   expect_equal(
     parse("---\nvalue: 1\n---\n"),
-    create_yaml(value=1)
+    rmd_yaml(value=1)
   )
 
   expect_equal(
     parse("---\nvalue: 1\nname: bob\n---\n"),
-    create_yaml(value= 1, name= "bob")
+    rmd_yaml(value= 1, name= "bob")
   )
 
   expect_equal(
     parse("---\nvalue: \"---\"\n---\n"),
-    create_yaml(value = "---")
+    rmd_yaml(value = "---")
   )
 
   yaml = '---
@@ -40,7 +40,7 @@ author:
 
   expect_equal(
     parse(yaml),
-    create_yaml( title = "Title", author = c("John Doe", "Jane Doe") )
+    rmd_yaml( title = "Title", author = c("John Doe", "Jane Doe") )
   )
 })
 
@@ -57,12 +57,12 @@ test_that("yaml parsing - blank lines", {
 
   expect_equal(
     parse("---\nvalue: 1\n\n---\n"),
-    create_yaml(value=1)
+    rmd_yaml(value=1)
   )
 
   expect_equal(
     parse("---\nvalue1: 1\n\nvalue2: 2\n---\n"),
-    create_yaml(value1=1, value2=2)
+    rmd_yaml(value1=1, value2=2)
   )
 
   expect_snapshot(
@@ -95,51 +95,51 @@ test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html
 
   expect_equal(
     parse("---\n...\n"),
-    create_yaml()
+    rmd_yaml()
   )
 
   expect_equal(
     parse("---\nvalue: 1\n...\n"),
-    create_yaml(value=1)
+    rmd_yaml(value=1)
   )
 
   expect_equal(
     parse_rmd("---\n---\n---\n...\n"),
-    create_ast(
-      create_yaml(),
-      create_yaml()
+    rmd_ast(
+      rmd_yaml(),
+      rmd_yaml()
     )
   )
 
   expect_equal(
     parse_rmd("---\nvalue: 1\n---\n---\nvalue: 2\n...\n"),
-    create_ast(
-      create_yaml(value=1),
-      create_yaml(value=2)
+    rmd_ast(
+      rmd_yaml(value=1),
+      rmd_yaml(value=2)
     )
   )
 
   expect_equal(
     parse_rmd("---\n\n...\n"),
-    create_ast(
-      create_markdown("---","","...")
+    rmd_ast(
+      rmd_markdown("---","","...")
     )
   )
 
   expect_equal(
     parse_rmd("---\n\n---\n---\n...\n"),
-    create_ast(
-      create_markdown("---",""),
-      create_yaml(),
-      create_markdown("...")
+    rmd_ast(
+      rmd_markdown("---",""),
+      rmd_yaml(),
+      rmd_markdown("...")
     )
   )
 
   expect_equal(
     parse_rmd("---\n---\n---\n\n...\n"),
-    create_ast(
-      create_yaml(),
-      create_markdown("---","","...")
+    rmd_ast(
+      rmd_yaml(),
+      rmd_markdown("---","","...")
     )
   )
 })

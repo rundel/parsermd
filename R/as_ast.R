@@ -72,7 +72,7 @@ as_ast.rmd_collection = function(
     x[["ast"]] = purrr::map2(
       x[["ast"]], x[["name"]],
       function(ast, name) {
-        c(list(create_heading(name, 1)), ast) %>%
+        c(list(rmd_heading(name, 1)), ast) %>%
           magrittr::set_class("rmd_ast")
       }
     )
