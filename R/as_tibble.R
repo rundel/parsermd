@@ -9,10 +9,7 @@ tibble::as_tibble
 # }
 
 #' @exportS3Method
-as_tibble.rmd_ast = function(x, include_yaml = TRUE, ...) {
-
-  if (!include_yaml & inherits(x[[1]], "rmd_yaml"))
-    x = x[-1]
+as_tibble.rmd_ast = function(x, ...) {
 
   df = tibble::as_tibble( list(
     sections = rmd_node_sections(x, drop_na = FALSE),
@@ -80,10 +77,10 @@ type_sum.rmd_code_block = function(x) {
 
 #' @export
 type_sum.rmd_fenced_div_open = function(x) {
-  cli::style_bold("fenched div [open]")
+  cli::style_bold("fdiv [open]")
 }
 
 #' @export
 type_sum.rmd_fenced_div_close = function(x) {
-  cli::style_bold("fenched div [close]")
+  cli::style_bold("fdiv [close]")
 }
