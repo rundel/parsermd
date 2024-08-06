@@ -3,7 +3,7 @@
 #' @param x `rmd_ast`, `rmd_tibble`, or parsermd node object.
 #' @param padding Padding to add between nodes when assembling the text.
 #' @param collapse If not `NULL`, use value to collapse lines.
-#' @param ... Unused, for extensibility.
+#' @param ... Passed to `to_ast()` when converting `rmd_collection` or `qmd_collection`.
 #'
 #' @return Returns a character vector.
 #'
@@ -36,12 +36,12 @@ as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
 
 #' @exportS3Method
 as_document.rmd_collection = function(x, padding = "", collapse = NULL, ...) {
-  as_document(as_ast(x), padding, collapse, ...)
+  as_document(as_ast(x, ...), padding, collapse)
 }
 
 #' @exportS3Method
 as_document.qmd_collection = function(x, padding = "", collapse = NULL, ...) {
-  as_document(as_ast(x), padding, collapse, ...)
+  as_document(as_ast(x, ...), padding, collapse)
 }
 
 #' @exportS3Method

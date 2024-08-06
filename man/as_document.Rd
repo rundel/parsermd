@@ -13,7 +13,7 @@ as_document(x, padding = "", collapse = NULL, ...)
 
 \item{collapse}{If not \code{NULL}, use value to collapse lines.}
 
-\item{...}{Unused, for extensibility.}
+\item{...}{Passed to \code{to_ast()} when converting \code{rmd_collection} or \code{qmd_collection}.}
 }
 \value{
 Returns a character vector.
