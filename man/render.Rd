@@ -2,9 +2,9 @@
 % Please edit documentation in R/render.R
 \name{render}
 \alias{render}
-\title{Render \code{parsermd} objects using \code{\link[rmarkdown:render]{rmarkdown::render()}}}
+\title{Render \code{parsermd} objects}
 \usage{
-render(x, name = NULL, ...)
+render(x, name = NULL, ..., engine = c("quarto", "rmarkdown"))
 }
 \arguments{
 \item{x}{Object to render, e.g. a \code{rmd_ast}, \code{rmd_tibble}, \code{character} vector, etc.}
@@ -12,14 +12,16 @@ render(x, name = NULL, ...)
 \item{name}{Name of the output file, if not given it will be inferred from the
 name of \code{x}.}
 
-\item{...}{Any additional arguments to be passed to \code{\link[rmarkdown:render]{rmarkdown::render()}}}
+\item{...}{Any additional arguments to be passed to \code{\link[quarto:quarto_render]{quarto::quarto_render()}} or \code{\link[rmarkdown:render]{rmarkdown::render()}}}
+
+\item{engine}{The rendering engine to use, either "quarto" or "rmarkdown".}
 }
 \value{
-Returns the results of \code{\link[rmarkdown:render]{rmarkdown::render()}}.
+Returns the results of the render function.
 }
 \description{
 Object contents are converted to a character vector and written to a
-temporary directory before rendering.
+temporary directory before rendering via \code{\link[quarto:quarto_render]{quarto::quarto_render()}} or \code{\link[rmarkdown:render]{rmarkdown::render()}}.
 
 Note that this function has the potential to overwrite existing output
 files (e.g. \code{.html}, \code{.pdf}, etc).
