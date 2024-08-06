@@ -26,7 +26,6 @@ arg_var_name = function(x, default = "Untitled") {
 #'
 #' @export
 render = function(x, name = NULL, ..., engine = c("quarto", "rmarkdown")) {
-  engine = match.arg(engine)
   if (is.null(name))
     render(x, arg_var_name(substitute(x)), ..., engine = engine)
   else
@@ -41,6 +40,8 @@ render.default = function(x, name, ..., engine = c("quarto", "rmarkdown")) {
 
 #' @exportS3Method
 render.character = function(x, name, ..., engine = c("quarto", "rmarkdown")) {
+  engine = match.arg(engine)
+
   # Check if x is a path
   if (length(x) == 1 && !grepl("\n", x) && file.exists(x)) {
     # If no name replace with input name

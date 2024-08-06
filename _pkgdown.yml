@@ -28,6 +28,7 @@ reference:
   - render
   - rmd_source
   - parse_collection
+  - rmd_ast_append
 - title: Subsetting functions
   contents:
   - rmd_select
