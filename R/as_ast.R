@@ -91,6 +91,30 @@ as_ast.rmd_collection = function(
   if (!is.null(front_matter))
     ast = c(list(front_matter), ast)
 
+  # Fix chunk labels
+  lbl_counts = table(rmd_node_label.rmd_ast(ast)) %>%
+    purrr::keep(~ .x > 1)
+
+  lbl_counts = lbl_counts - lbl_counts
+
+  ast = purrr::map(
+    ast,
+    function(node) {
+      if (inherits(node, "rmd_chunk")) {
+        lbl = rmd_node_label(node)
+        if (lbl %in% names(lbl_counts)) {
+          lbl_counts[[lbl]] <<- lbl_counts[[lbl]] + 1
+
+          node[["options"]][["label"]] = NULL
+          node[["yaml_options"]][["label"]] = NULL
+
+          node[["name"]] = paste0(lbl, "_", lbl_counts[[lbl]])
+        }
+      }
+      node
+    }
+  )
+
   magrittr::set_class(ast, "rmd_ast")
 }
 
