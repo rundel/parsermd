@@ -5,6 +5,7 @@
 \alias{has_type}
 \alias{by_section}
 \alias{has_label}
+\alias{has_code}
 \alias{has_option}
 \title{Rmd selection helper functions}
 \usage{
@@ -13,6 +14,8 @@ has_type(types)
 by_section(sec_ref, keep_parents = TRUE)
 
 has_label(label)
+
+has_code(code)
 
 has_option(...)
 }
@@ -26,6 +29,8 @@ for further details on how these are constructed.}
 Default: \code{TRUE}}
 
 \item{label}{character vector, glob patterns for matching chunk labels.}
+
+\item{code}{character vector, regex patterns for matching chunk code line(s)}
 
 \item{...}{Either option names represented by a scalar string or a named argument with the form
 \code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example

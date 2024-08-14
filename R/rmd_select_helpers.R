@@ -106,6 +106,24 @@ has_label = function(label) {
   which(matching)
 }
 
+#' @rdname rmd_select_helpers
+#'
+#' @param code character vector, regex patterns for matching chunk code line(s)
+#'
+#' @export
+has_code = function(code) {
+  checkmate::assert_character(code, any.missing = FALSE, min.len = 1)
+
+  x = tidyselect::peek_data(fn = "has_label")
+
+  node_code = rmd_node_code(x)
+  matching = purrr::map(code, grepl, x = node_code) %>%
+    purrr::reduce(`|`)
+
+  which(matching)
+}
+
+
 
 #' @rdname rmd_select_helpers
 #'
