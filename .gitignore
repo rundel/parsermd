@@ -13,3 +13,7 @@ check
 CRAN-RELEASE
 revdep/
 tests/testthat/quarto-web/*
+.claude/
+CLAUDE.md
+tree_sitter_plan.md
+
