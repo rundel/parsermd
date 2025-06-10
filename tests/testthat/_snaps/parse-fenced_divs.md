@@ -118,3 +118,43 @@
       :::
       ^~~
 
+# Enhanced attribute parsing - error cases
+
+    Code
+      check_fdiv_open_parser("::: {.}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      ::: {.}
+           ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {#}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      ::: {#}
+           ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {key=}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      ::: {key=}
+              ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {.class\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      ::: {.class
+                 ^
+

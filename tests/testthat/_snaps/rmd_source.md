@@ -3,11 +3,7 @@
     Code
       rmd_source(ast, local = TRUE, echo = TRUE)
     Output
-      > ## ---- Chunk 1 ------------------------------
-      > 
       > x = 1
-      > ## ---- Chunk 2 ------------------------------
-      > 
       > y = 2
 
 ---
