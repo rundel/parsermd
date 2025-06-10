@@ -19,7 +19,6 @@
 template <typename Parser, typename Attribute>
 inline void parse_str(
     std::string const& str,
-    bool allow_incomplete,
     Parser const& p,
     Attribute& attr,
     bool use_expect = false
@@ -48,9 +47,9 @@ inline void parse_str(
 
 
 // [[Rcpp::export]]
-Rcpp::List parse_rmd_cpp(std::string const& str, bool allow_incomplete = false) {
+Rcpp::List parse_rmd_cpp(std::string const& str) {
   client::ast::rmd doc;
-  parse_str(str, allow_incomplete, client::parser::rmd, doc);
+  parse_str(str, client::parser::rmd, doc);
 
   return Rcpp::wrap(doc);
 }
@@ -59,7 +58,7 @@ Rcpp::List parse_rmd_cpp(std::string const& str, bool allow_incomplete = false) 
 // [[Rcpp::export]]
 Rcpp::CharacterVector check_yaml_parser(std::string const& str) {
   client::ast::yaml expr;
-  parse_str(str, false, client::parser::yaml, expr);
+  parse_str(str, client::parser::yaml, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -69,15 +68,15 @@ Rcpp::CharacterVector check_yaml_parser(std::string const& str) {
 // [[Rcpp::export]]
 Rcpp::List check_chunk_parser(std::string const& str) {
   client::ast::chunk expr;
-  parse_str(str, false, client::parser::chunk, expr);
+  parse_str(str, client::parser::chunk, expr);
 
   return Rcpp::wrap(expr);
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_multi_chunk_parser(std::string const& str, bool allow_incomplete = false) {
+Rcpp::List check_multi_chunk_parser(std::string const& str) {
   std::vector<client::ast::chunk> expr;
-  parse_str(str, allow_incomplete, +client::parser::chunk, expr);
+  parse_str(str, +client::parser::chunk, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -86,7 +85,7 @@ Rcpp::List check_multi_chunk_parser(std::string const& str, bool allow_incomplet
 // [[Rcpp::export]]
 Rcpp::List check_markdown_parser(std::string const& str) {
   client::ast::markdown expr;
-  parse_str(str, false, client::parser::markdown, expr);
+  parse_str(str, client::parser::markdown, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -96,7 +95,7 @@ Rcpp::List check_markdown_parser(std::string const& str) {
 // [[Rcpp::export]]
 Rcpp::List check_markdown_heading_parser(std::string const& str) {
   client::ast::heading expr;
-  parse_str(str, false, client::parser::heading, expr);
+  parse_str(str, client::parser::heading, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -108,7 +107,7 @@ Rcpp::List check_chunk_option_parser(std::string const& str) {
 
   std::vector<client::ast::option> expr;
   auto const parser = x3::skip(x3::blank)[ client::parser::chunk_option % "," ];
-  parse_str(str, false, parser, expr);
+  parse_str(str, parser, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -119,7 +118,7 @@ Rcpp::CharacterVector check_yaml_option_parser(std::string const& str) {
 
   std::vector<std::string> expr;
   auto const parser = x3::skip(x3::blank)[ client::parser::yaml_option % x3::eol ];
-  parse_str(str, false, parser, expr);
+  parse_str(str, parser, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -132,7 +131,7 @@ Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
 
   client::ast::fdiv_open expr;
   //auto const parser = x3::skip(x3::blank)[  ];
-  parse_str(str, false, client::parser::fdiv_open, expr);
+  parse_str(str, client::parser::fdiv_open, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -143,7 +142,7 @@ Rcpp::List check_fdiv_close_parser(std::string const& str) {
 
   client::ast::fdiv_close expr;
   //auto const parser = x3::skip(x3::blank)[  ];
-  parse_str(str, false, client::parser::fdiv_close, expr);
+  parse_str(str, client::parser::fdiv_close, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -157,7 +156,7 @@ Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
 
   std::string expr;
   auto const parser = x3::skip(x3::blank)[ client::parser::cbrace_expr ];
-  parse_str(str, false, parser, expr);
+  parse_str(str, parser, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -167,7 +166,7 @@ Rcpp::List check_code_block_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   client::ast::code_block expr;
-  parse_str(str, false, client::parser::code_block, expr);
+  parse_str(str, client::parser::code_block, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -178,7 +177,7 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   client::ast::shortcode expr;
-  parse_str(str, false, client::parser::shortcode, expr);
+  parse_str(str, client::parser::shortcode, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -188,7 +187,7 @@ Rcpp::List check_inline_code_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   client::ast::inline_code expr;
-  parse_str(str, false, client::parser::inline_code, expr);
+  parse_str(str, client::parser::inline_code, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -198,7 +197,7 @@ Rcpp::List check_md_line_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   client::ast::md_line expr;
-  parse_str(str, false, client::parser::md_line, expr);
+  parse_str(str, client::parser::md_line, expr);
 
   return Rcpp::wrap(expr);
 }
