@@ -19,7 +19,7 @@ parse_rmd = function(rmd) {
 
   if (length(rmd) > 1) {               # If multiple lines in a char vec assume
     rmd = paste0(rmd, "\n", collapse = "")  #   it has been read in already
-  } else if (!grepl("\n", rmd)) {      # If no newlines then assume it is a path or url
+  } else if (!grepl("\n", rmd) && file.exists(rmd)) { # If no newlines and not empty then assume it is a path or url
     rmd = readr::read_file(rmd)
   }
 
