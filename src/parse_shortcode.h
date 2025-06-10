@@ -32,15 +32,15 @@ namespace client { namespace parser {
   // Shortcode-specific quoted string parsing with proper escape handling
   auto const shortcode_sq_string = x3::rule<struct _, std::string>{"shortcode single quoted string"}
                        = x3::lexeme[ x3::char_('\'') > 
-                         *(
-                           (x3::char_('\\') >> x3::char_('\'')) | 
+                         *( // Look-ahead below checks for at least one more ' to close the quote
+                           (x3::char_('\\') >> x3::char_('\'') >> &(*(x3::char_-'\'') >> x3::char_('\''))) |
                            (x3::char_ - '\'')
                          ) > x3::char_('\'') ];
 
   auto const shortcode_dq_string = x3::rule<struct _, std::string>{"shortcode double quoted string"}
-                       = x3::lexeme[ x3::char_('"') > 
-                         *(
-                           (x3::char_('\\') >> x3::char_('"')) |
+                       = x3::lexeme[ x3::char_('"') >
+                         *( // Same here for " - TODO: make more robust by counting?
+                           (x3::char_('\\') >> x3::char_('"') >> &(*(x3::char_-'"') >> x3::char_('"'))) |
                            (x3::char_ - '"')
                          ) > x3::char_('"') ];
 

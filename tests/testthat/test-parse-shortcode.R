@@ -154,4 +154,16 @@ test_that("Edge cases", {
        'start="116"', 'aspect-ratio="21x9"')
     )
   )
+
+  # Semi-ambiguous edgecase from quarto-cli/tests/docs/smoke-all/2025/04/09/kbd-adoc-bad-input.qmd 
+  expect_equal(
+    check_shortcode_parser('{{< kbd key="\\" >}}'),
+    rmd_shortcode("kbd", 'key="\\"')
+  )
+
+  expect_equal(
+    check_shortcode_parser("{{< kbd key='\\' >}}"),
+    rmd_shortcode("kbd", "key='\\'")
+  )
+
 })
