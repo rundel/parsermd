@@ -29,24 +29,6 @@ namespace client { namespace parser {
   auto func = x3::rule<struct _, std::string> ("function")
   = +(!shortcode_close >> x3::char_ - x3::char_(" "));
 
-  // Shortcode-specific quoted string parsing with proper escape handling
-  auto const shortcode_sq_string = x3::rule<struct _, std::string>{"shortcode single quoted string"}
-                       = x3::lexeme[ x3::char_('\'') > 
-                         *( // Look-ahead below checks for at least one more ' to close the quote
-                           (x3::char_('\\') >> x3::char_('\'') >> &(*(x3::char_-'\'') >> x3::char_('\''))) |
-                           (x3::char_ - '\'')
-                         ) > x3::char_('\'') ];
-
-  auto const shortcode_dq_string = x3::rule<struct _, std::string>{"shortcode double quoted string"}
-                       = x3::lexeme[ x3::char_('"') >
-                         *( // Same here for " - TODO: make more robust by counting?
-                           (x3::char_('\\') >> x3::char_('"') >> &(*(x3::char_-'"') >> x3::char_('"'))) |
-                           (x3::char_ - '"')
-                         ) > x3::char_('"') ];
-
-  auto const shortcode_q_string = x3::rule<struct _, std::string>{"shortcode quoted string"}
-                      = shortcode_sq_string | shortcode_dq_string;
-
   auto const unquoted_arg = x3::rule<struct _, std::string>{"unquoted argument"}
     = +( !shortcode_close >> 
          (  x3::char_ - x3::char_(" '\"") - x3::eol 
@@ -58,12 +40,12 @@ namespace client { namespace parser {
     = x3::raw[
       +(x3::char_("a-zA-Z0-9_.-")) >> // key 
       '=' >> 
-      (unquoted_arg | shortcode_q_string) // value
+      (unquoted_arg | x3::raw[q_string]) // value
     ];
 
   
   auto const arg = x3::rule<struct _, std::string>{"single argument"}
-    = shortcode_q_string | key_value_arg | unquoted_arg;
+    = x3::raw[q_string] | key_value_arg | unquoted_arg;
 
   auto args = x3::rule<struct _, std::vector<std::string> > ("arguments")
   = *(!shortcode_close >> +(x3::lit(" ") | x3::eol) >> arg);
