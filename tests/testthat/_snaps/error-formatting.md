@@ -33,7 +33,7 @@
 # Multiline expression
 
     Failed to parse lines 1-5, expected '"'
-    1 | ... when-format="HTML}
+    1 | :::{.content-visible when-format="HTML}
     2 | ::::{.column-screen}
     3 | Hello
     4 | ::::
