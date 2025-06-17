@@ -61,3 +61,7 @@ check_md_line_parser <- function(str) {
     .Call(`_parsermd_check_md_line_parser`, str)
 }
 
+check_qstring_parser <- function(str, raw = FALSE) {
+    .Call(`_parsermd_check_qstring_parser`, str, raw)
+}
+

@@ -202,6 +202,20 @@ Rcpp::List check_md_line_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+// [[Rcpp::export]]
+Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw = false) {
+  namespace x3 = boost::spirit::x3;
+
+  std::string expr;
+  if (raw)
+    parse_str(str, x3::raw[ client::parser::q_string ], expr);
+  else
+    parse_str(str, client::parser::q_string, expr);
+
+  return Rcpp::wrap(expr);
+}
+
+
 namespace Rcpp {
 // code block wrappers
 template <> SEXP wrap(client::ast::code_block const& code_block) {

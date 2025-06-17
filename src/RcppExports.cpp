@@ -175,6 +175,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// check_qstring_parser
+Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw);
+RcppExport SEXP _parsermd_check_qstring_parser(SEXP strSEXP, SEXP rawSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    Rcpp::traits::input_parameter< bool >::type raw(rawSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_qstring_parser(str, raw));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
@@ -192,6 +204,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_check_shortcode_parser", (DL_FUNC) &_parsermd_check_shortcode_parser, 1},
     {"_parsermd_check_inline_code_parser", (DL_FUNC) &_parsermd_check_inline_code_parser, 1},
     {"_parsermd_check_md_line_parser", (DL_FUNC) &_parsermd_check_md_line_parser, 1},
+    {"_parsermd_check_qstring_parser", (DL_FUNC) &_parsermd_check_qstring_parser, 2},
     {NULL, NULL, 0}
 };
 
