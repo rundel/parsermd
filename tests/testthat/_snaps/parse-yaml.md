@@ -14,7 +14,9 @@
       check_yaml_parser("---\n--\n")
     Condition
       Error:
-      ! Failed to parse lines 3-2, expected YAML closing fence
+      ! Failed to parse line 2, expected YAML closing fence
+      2 | --
+            ^
 
 ---
 
@@ -32,7 +34,9 @@
       check_yaml_parser("---\n----\n")
     Condition
       Error:
-      ! Failed to parse lines 3-2, expected YAML closing fence
+      ! Failed to parse line 2, expected YAML closing fence
+      2 | ----
+              ^
 
 ---
 
@@ -40,7 +44,9 @@
       check_yaml_parser("---\n")
     Condition
       Error:
-      ! Failed to parse lines 2-1, expected YAML closing fence
+      ! Failed to parse line 1, expected YAML closing fence
+      1 | ---
+             ^
 
 # yaml parsing - blank lines
 
