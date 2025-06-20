@@ -5,8 +5,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      --
-      ^~
+      1 | --
+          ^~
 
 ---
 
@@ -15,8 +15,8 @@
     Condition
       Error:
       ! Failed to parse line 2, expected YAML closing fence
-      --
-        ^
+      2 | --
+            ^
 
 ---
 
@@ -25,8 +25,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ----
-      ^~~~
+      1 | ----
+          ^~~~
 
 ---
 
@@ -35,8 +35,8 @@
     Condition
       Error:
       ! Failed to parse line 2, expected YAML closing fence
-      ----
-          ^
+      2 | ----
+              ^
 
 ---
 
@@ -45,8 +45,8 @@
     Condition
       Error:
       ! Failed to parse line 1, expected YAML closing fence
-      ---
-         ^
+      1 | ---
+             ^
 
 # yaml parsing - blank lines
 
@@ -55,8 +55,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ---
-      ^~~
+      1 | ---
+          ^~~
 
 ---
 
@@ -65,6 +65,6 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ---
-      ^~~
+      1 | ---
+          ^~~
 

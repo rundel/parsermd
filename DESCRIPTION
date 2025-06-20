@@ -39,7 +39,8 @@ LinkingTo:
     BH
 Suggests: 
     testthat (>= 3.0.0),
-    knitr
+    knitr,
+    styler
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://rundel.github.io/parsermd/, https://github.com/rundel/parsermd

@@ -5,6 +5,6 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ``r 1+1``
-      ^~~~~~~~~
+      1 | ``r 1+1``
+          ^~~~~~~~~
 

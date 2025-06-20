@@ -13,3 +13,5 @@ check
 CRAN-RELEASE
 revdep/
 tests/testthat/quarto-web/*
+.claude/
+CLAUDE.md

@@ -4,9 +4,11 @@
       check_code_block_parser("````r\n````\n````\n")
     Condition
       Error:
-      ! Failed to parse line 3
-      ````
-      ^~~~
+      ! Failed to parse lines 1-3
+      1 | ````r
+      2 | ````
+      3 | ````
+          ^~~~
 
 # code block parsing - Indents
 
@@ -15,8 +17,8 @@
     Condition
       Error:
       ! Failed to parse line 2, expected chunk end
-      	```
-      ^~~~
+      2 | 	```
+          ^~~~
 
 ---
 
@@ -25,8 +27,8 @@
     Condition
       Error:
       ! Failed to parse line 2, expected chunk end
-      > ```
-      ^~~~~
+      2 | > ```
+          ^~~~~
 
 ---
 
@@ -35,6 +37,6 @@
     Condition
       Error:
       ! Failed to parse line 2, expected chunk end
-         ```
-      ^~~~~~
+      2 |    ```
+          ^~~~~~
 

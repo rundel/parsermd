@@ -5,8 +5,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      :::
-      ^~~
+      1 | :::
+          ^~~
 
 ---
 
@@ -15,8 +15,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ::: a x
-      ^~~~~~~
+      1 | ::: a x
+          ^~~~~~~
 
 ---
 
@@ -25,8 +25,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      :: {}
-      ^~~~~
+      1 | :: {}
+          ^~~~~
 
 ---
 
@@ -35,8 +35,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      :: 
-      ^~~
+      1 | :: 
+          ^~~
 
 # Basic parser tests - close
 
@@ -45,8 +45,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ::: a
-      ^~~~~
+      1 | ::: a
+          ^~~~~
 
 ---
 
@@ -55,8 +55,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ::: {a}
-      ^~~~~~~
+      1 | ::: {a}
+          ^~~~~~~
 
 ---
 
@@ -65,8 +65,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ::: {}
-      ^~~~~~
+      1 | ::: {}
+          ^~~~~~
 
 ---
 
@@ -75,8 +75,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      :: a
-      ^~~~
+      1 | :: a
+          ^~~~
 
 # Bad fdivs
 
@@ -85,8 +85,8 @@
     Condition
       Error:
       ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
-      ::: test1
-      ~~~~~~~~~^
+      1 | ::: test1
+          ~~~~~~~~~^
 
 ---
 
@@ -95,8 +95,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      :::
-      ^~~
+      1 | :::
+          ^~~
 
 ---
 
@@ -105,8 +105,8 @@
     Condition
       Error:
       ! Failed to parse line 1, expected to find closing div fence (:::), end of document reached.
-      ::: test1
-      ~~~~~~~~~^
+      1 | ::: test1
+          ~~~~~~~~~^
 
 ---
 
@@ -114,7 +114,49 @@
       parse_rmd("::: test1\n:::\n:::\n")
     Condition
       Error:
-      ! Failed to parse line 3
-      :::
-      ^~~
+      ! Failed to parse lines 1-3
+      1 | ::: test1
+      2 | :::
+      3 | :::
+          ^~~
+
+# Enhanced attribute parsing - error cases
+
+    Code
+      check_fdiv_open_parser("::: {.}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      1 | ::: {.}
+               ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {#}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      1 | ::: {#}
+               ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {key=}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      1 | ::: {key=}
+                  ^~
+
+---
+
+    Code
+      check_fdiv_open_parser("::: {.class\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      1 | ::: {.class
+                     ^
 

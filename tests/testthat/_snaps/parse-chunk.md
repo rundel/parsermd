@@ -1,71 +1,71 @@
 # chunk parsing - bad chunks
 
     Failed to parse line 1
-    ```{}
-    ^~~~~
+    1 | ```{}
+        ^~~~~
     
 
 ---
 
     Failed to parse line 1
-    ```{r
-    ^~~~~
+    1 | ```{r
+        ^~~~~
     
 
 ---
 
     Failed to parse line 1
-    ```r}
-    ^~~~~
+    1 | ```r}
+        ^~~~~
     
 
 ---
 
     Failed to parse line 1
-    ```{r}
-    ^~~~~~
+    1 | ```{r}
+        ^~~~~~
     
 
 ---
 
     Failed to parse line 1, expected "="
-    ```{r m, m}
-              ^
+    1 | ```{r m, m}
+                  ^
     
 
 ---
 
     Failed to parse line 1, expected "="
-    ```{r abc.def}
-                 ^
+    1 | ```{r abc.def}
+                     ^
     
 
 ---
 
     Failed to parse line 1, expected ','
-    ```{r m x=1}
-            ^~~~
+    1 | ```{r m x=1}
+                ^~~~
     
 
 ---
 
     Failed to parse line 1, expected R expression
-    ```{r x=}
-            ^
+    1 | ```{r x=}
+                ^
     
 
 ---
 
     Failed to parse line 1, expected R expression
-    ```{r x=, y=1}
-            ^~~~~~
+    1 | ```{r x=, y=1}
+                ^~~~~~
     
 
 ---
 
     Failed to parse line 1, expected R expression
-    ```{r x=1, y=}
-                 ^
+    1 | ```{r x=1, y=}
+                     ^
     
 
 # chunk parsing - raw attribute chunk
@@ -75,8 +75,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ```{=}
-      ^~~~~~
+      1 | ```{=}
+          ^~~~~~
 
 ---
 
@@ -85,8 +85,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ```{==}
-      ^~~~~~~
+      1 | ```{==}
+          ^~~~~~~
 
 ---
 
@@ -95,8 +95,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ```{=a=}
-      ^~~~~~~~
+      1 | ```{=a=}
+          ^~~~~~~~
 
 ---
 
@@ -105,8 +105,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ```{a=}
-      ^~~~~~~
+      1 | ```{a=}
+          ^~~~~~~
 
 # chunk parsing - more than 3 ticks
 
@@ -115,8 +115,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ````{r}
-      ^~~~~~~
+      1 | ````{r}
+          ^~~~~~~
 
 ---
 
@@ -125,8 +125,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ```{r}
-      ^~~~~~
+      1 | ```{r}
+          ^~~~~~
 
 ---
 
@@ -135,8 +135,8 @@
     Condition
       Error:
       ! Failed to parse line 1
-      ````{r}
-      ^~~~~~~
+      1 | ````{r}
+          ^~~~~~~
 
 ---
 
@@ -145,6 +145,6 @@
     Condition
       Error:
       ! Failed to parse line 1
-      `````{r}
-      ^~~~~~~~
+      1 | `````{r}
+          ^~~~~~~~
 

@@ -1,7 +1,0 @@
-Does Ruby work with **knitr**?
-
-```{r test-ruby, engine='ruby'}
-x = 'hello, ruby world!'
-p x.split(' ')
-```
-

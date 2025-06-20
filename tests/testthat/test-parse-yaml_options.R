@@ -118,7 +118,11 @@ test_that("yaml options with break", {
 })
 
 test_that("parse full document with yaml options", {
-  ast = parse_rmd("knitr-examples/125-dash-options.Rmd")
+
+  if (!dir.exists('examples'))
+    skip('Additional example files not available')
+
+  ast = parse_rmd("examples/knitr-examples/125-dash-options.Rmd")
   expected_ast = rmd_ast(
     rmd_yaml(
       title = "Using dash options in YAML options header"
