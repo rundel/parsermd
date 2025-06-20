@@ -206,8 +206,8 @@ namespace client { namespace parser {
   public:
     error_message_builder(iter error_pos, iter doc_start, iter doc_end, 
                           iter expr_start, iter expr_end, const std::string& expected)
-      : error_pos_(error_pos), doc_start_(doc_start), doc_end_(doc_end),
-        expr_start_(expr_start), expr_end_(expr_end), expected_(expected) {
+      : doc_start_(doc_start), doc_end_(doc_end), expr_start_(expr_start), 
+        expr_end_(expr_end), error_pos_(error_pos), expected_(expected) {
       if (error_pos_ == doc_end_) {
         error_pos_ = std::prev(error_pos_);
       }
