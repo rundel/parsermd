@@ -5,15 +5,13 @@
 \alias{parse_qmd}
 \title{Parse an R Markdown or Quarto document}
 \usage{
-parse_rmd(rmd, allow_incomplete = FALSE)
+parse_rmd(rmd)
 
-parse_qmd(qmd, allow_incomplete = FALSE)
+parse_qmd(qmd)
 }
 \arguments{
 \item{rmd}{Either the path to an \code{Rmd} file or a character vector containing the contents
 of a R Markdown document.}
-
-\item{allow_incomplete}{Allow incomplete parsing of the document.}
 
 \item{qmd}{Either the path to an \code{qmd} file or a character vector containing the contents
 of a Quarto document.}
