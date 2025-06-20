@@ -143,6 +143,16 @@
 ---
 
     Code
+      check_fdiv_open_parser("::: {key=}\n")
+    Condition
+      Error:
+      ! Failed to parse line 1, expected "}"
+      1 | ::: {key=}
+                  ^~
+
+---
+
+    Code
       check_fdiv_open_parser("::: {.class\n")
     Condition
       Error:
