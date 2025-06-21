@@ -54,20 +54,6 @@ namespace client { namespace parser {
 
   BOOST_SPIRIT_DEFINE(shortcode);
 
-  auto not_shortcode = x3::rule<struct _> ("not shortcode")
-  = x3::raw[*( !x3::lit("{{<") >> (x3::char_ | x3::eol ) )];
-
-
-
-  auto emit_placeholder = [](auto& ctx){
-    _val(ctx) = -1;
-  };
-  auto placeholder = x3::rule<struct _, int> ("placeholder")
-  = x3::eps[emit_placeholder];
-
-
-
-
   static std::string::const_iterator str_start;
   struct _str_start{};
   static std::string::const_iterator expr_start;
@@ -90,6 +76,9 @@ namespace client { namespace parser {
 
     _val(ctx).push_back( _attr(ctx) );
    };
+
+  auto not_shortcode = x3::rule<struct _> ("not shortcode")
+  = x3::raw[*( x3::lit("{{{<") | (!x3::lit("{{<") >> (x3::char_ | x3::eol)) )];
 
   auto string_shortcodes = x3::rule<struct _, std::vector<client::ast::shortcode> > ("String with shortcodes")
   = x3::with<_str_start>(std::ref(str_start))[
