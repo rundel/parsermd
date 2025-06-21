@@ -11,6 +11,7 @@
 #include "parse_cbrace.h"
 #include "parse_rmd.h"
 #include "parse_markdown.h"
+#include "parse_shortcode.h"
 
 #include "rcpp_wrap.h"
 
@@ -172,6 +173,17 @@ Rcpp::List check_code_block_parser(std::string const& str) {
 }
 
 
+
+// [[Rcpp::export]]
+Rcpp::List check_inline_code_parser(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  client::ast::inline_code expr;
+  parse_str(str, client::parser::inline_code, expr);
+
+  return Rcpp::wrap(expr);
+}
+
 // [[Rcpp::export]]
 Rcpp::List check_shortcode_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
@@ -183,14 +195,15 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_inline_code_parser(std::string const& str) {
+Rcpp::List check_string_shortcodes_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
-  client::ast::inline_code expr;
-  parse_str(str, client::parser::inline_code, expr);
+  std::vector<client::ast::shortcode> expr;
+  parse_str(str, client::parser::string_shortcodes, expr);
 
   return Rcpp::wrap(expr);
 }
+
 
 // [[Rcpp::export]]
 Rcpp::List check_md_line_parser(std::string const& str) {
@@ -214,6 +227,7 @@ Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw = fa
 
   return Rcpp::wrap(expr);
 }
+
 
 
 namespace Rcpp {
@@ -343,15 +357,6 @@ template <> SEXP wrap(client::ast::rmd const& rmd) {
   return res;
 };
 
-template <> SEXP wrap(client::ast::shortcode const& sc) {
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("func")  = Rcpp::wrap(sc.func),
-    Rcpp::Named("args")  = Rcpp::wrap(sc.args)
-  );
-  res.attr("class") = "rmd_shortcode";
-
-  return res;
-};
 
 template <> SEXP wrap(client::ast::inline_code const& ic) {
   Rcpp::List res = Rcpp::List::create(
@@ -363,10 +368,30 @@ template <> SEXP wrap(client::ast::inline_code const& ic) {
   return res;
 };
 
+template <> SEXP wrap(client::ast::shortcode const& sc) {
+  Rcpp::List res = Rcpp::List::create(
+    Rcpp::Named("func")   = Rcpp::wrap(sc.func),
+    Rcpp::Named("args")   = Rcpp::wrap(sc.args),
+    Rcpp::Named("start")  = Rcpp::wrap(sc.start),
+    Rcpp::Named("length") = Rcpp::wrap(sc.length)
+  );
+  res.attr("class") = "rmd_shortcode";
+
+  return res;
+};
+
+template <> SEXP wrap(std::vector<client::ast::shortcode> const& v) {
+  Rcpp::List res;
+  for(auto const& sc : v) {
+    res.push_back(Rcpp::wrap(sc));
+  }
+
+  return res;
+};
+
 template <> SEXP wrap(client::ast::md_element const& x) {
   struct line_visitor {
     SEXP operator()(client::ast::inline_code const& x) { return Rcpp::wrap(x); }
-    SEXP operator()(client::ast::shortcode const& x) { return Rcpp::wrap(x); }
     SEXP operator()(std::string const& x) { return Rcpp::wrap(x); }
   } v;
 

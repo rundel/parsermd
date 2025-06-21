@@ -6,7 +6,6 @@
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
-#include "parse_shortcode_ast.h"
 
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
@@ -16,7 +15,7 @@ namespace client { namespace ast {
     std::string code;
   };
 
-  struct md_element : x3::variant<inline_code, shortcode, std::string> {
+  struct md_element : x3::variant<inline_code, std::string> {
     using base_type::base_type;
     using base_type::operator=;
   };

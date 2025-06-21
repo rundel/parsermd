@@ -43,12 +43,9 @@ namespace client { namespace parser {
       (unquoted_arg | x3::raw[q_string]) // value
     ];
 
-  
-  auto const arg = x3::rule<struct _, std::string>{"single argument"}
-    = x3::raw[q_string] | key_value_arg | unquoted_arg;
-
   auto args = x3::rule<struct _, std::vector<std::string> > ("arguments")
-  = *(!shortcode_close >> +(x3::lit(" ") | x3::eol) >> arg);
+  = *(!shortcode_close >> +(x3::lit(" ") | x3::eol) >> (x3::raw[q_string] | key_value_arg | unquoted_arg));
+
 
   auto const shortcode_def
   = shortcode_open >
@@ -56,6 +53,52 @@ namespace client { namespace parser {
     shortcode_close;
 
   BOOST_SPIRIT_DEFINE(shortcode);
+
+  auto not_shortcode = x3::rule<struct _> ("not shortcode")
+  = x3::raw[*( !x3::lit("{{<") >> (x3::char_ | x3::eol ) )];
+
+
+
+  auto emit_placeholder = [](auto& ctx){
+    _val(ctx) = -1;
+  };
+  auto placeholder = x3::rule<struct _, int> ("placeholder")
+  = x3::eps[emit_placeholder];
+
+
+
+
+  static std::string::const_iterator str_start;
+  struct _str_start{};
+  static std::string::const_iterator expr_start;
+  struct _expr_start{};
+
+  auto set_str_start = [](auto& ctx) {
+    x3::get<_str_start>(ctx).get() = _where(ctx).begin();
+  };
+
+  auto set_expr_start = [](auto& ctx) {
+    x3::get<_expr_start>(ctx).get() = _where(ctx).begin();
+  };
+
+  auto find_pos = [](auto& ctx){
+    int length = _where(ctx).begin() - x3::get<_expr_start>(ctx).get();
+    int end = _where(ctx).begin() - x3::get<_str_start>(ctx).get();
+    
+    _attr(ctx).start = end - length;
+    _attr(ctx).length = length;
+
+    _val(ctx).push_back( _attr(ctx) );
+   };
+
+  auto string_shortcodes = x3::rule<struct _, std::vector<client::ast::shortcode> > ("String with shortcodes")
+  = x3::with<_str_start>(std::ref(str_start))[
+    x3::with<_expr_start>(std::ref(expr_start))[
+      x3::eps[set_str_start] >>
+      not_shortcode[set_expr_start] >> 
+      *(shortcode[find_pos] >> not_shortcode[set_expr_start] )
+    ] ];
+
 } }
 
 #endif

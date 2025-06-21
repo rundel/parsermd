@@ -13,7 +13,6 @@
 #include "parse_fenced_div.h"
 #include "parse_yaml.h"
 
-#include "parse_shortcode.h"
 
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
@@ -45,10 +44,10 @@ namespace client { namespace parser {
 
 
   auto const md_text = x3::rule<struct _, std::string>{"markdown text"}
-  = x3::lexeme[ +(!(inline_code | shortcode) >> (x3::char_ - x3::eol)) ];
+  = x3::lexeme[ +(!inline_code >> (x3::char_ - x3::eol)) ];
 
   auto const md_element = x3::rule<struct _, client::ast::md_element>{"markdown element"}
-  = x3::lexeme[ inline_code | shortcode | md_text ];
+  = x3::lexeme[ inline_code | md_text ];
 
   auto const md_line = x3::rule<struct _, client::ast::md_line>{"markdown line"}
   = !(x3::lit("#") | chunk_start | block_start | fdiv_open | fdiv_close | yaml_start) >> // skip invalid starts
