@@ -16,10 +16,6 @@ test_that("Error messages with expected information", {
   expect_snapshot_error(
     check_chunk_parser("```{r x=}")
   )
-  
-  expect_snapshot_error(
-    check_shortcode_parser("{{< myfunc arg1 \"unterminated >}}")
-  )
 })
 
 test_that("Multiline expression", {

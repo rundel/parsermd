@@ -53,9 +53,17 @@ test_that("markdown", {
 
 test_that("Mixed", {
 
-  # FIXME - flesh this out and bring inline
-  expect_equal(
-    length( check_markdown_parser("hello {{< test >}} `r 1+1`\n")[[1]] ),
-    4
-  )
+  # With shortcodes now parsed post-processing, we expect 2 elements:
+  # 1. Text containing the shortcode: "hello {{< test >}} "
+  # 2. Inline code: `r 1+1`
+  result = check_markdown_parser("hello {{< test >}} `r 1+1`\n")
+  expect_equal(length(result[[1]]), 2)
+  
+  # First element should be text with embedded shortcode
+  expect_true(is.character(result[[1]][[1]]))
+  expect_true(grepl("\\{\\{< test >\\}\\}", result[[1]][[1]]))
+  
+  # Second element should be inline code
+  expect_equal(result[[1]][[2]]$engine, "r")
+  expect_equal(result[[1]][[2]]$code, "1+1")
 })

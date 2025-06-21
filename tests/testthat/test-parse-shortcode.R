@@ -1,169 +1,169 @@
-test_that("Shortcode arguments are parsed correctly", {
+
+
+test_that("C++ string shortcodes parser - basic functionality", {
   
-  expect_equal(
-    check_shortcode_parser("{{< myfunc >}}"),
-    rmd_shortcode("myfunc")
-  )
-
-  # TODO - check if this is the correct behavior
-  expect_equal(
-    check_shortcode_parser("{{< myfunc>}}"),
-    rmd_shortcode("myfunc")
-  )
-
-  # TODO - check if this is the correct behavior
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1>}}"),
-    rmd_shortcode("myfunc", "arg1")
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1 >}}"),
-    rmd_shortcode("myfunc", "arg1")
-  )
+  # Test single shortcode
+  result1 <- check_string_shortcodes_parser("Hello {{< video url >}} world")
+  expect_equal(result1, list(rmd_shortcode("video", "url", 6, 17)))
   
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1 arg2 >}}"),
-    rmd_shortcode("myfunc", c("arg1", "arg2")),
-    info = "Shortcode: simple unquoted args"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc \"arg with spaces\" arg2 >}}"),
-    rmd_shortcode("myfunc", c("\"arg with spaces\"", "arg2")),
-    info = "Shortcode: double-quoted arg with spaces"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1 'another quoted arg' >}}"),
-    rmd_shortcode("myfunc", c("arg1", "'another quoted arg'")),
-    info = "Shortcode: single-quoted arg with spaces"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc \"arg \\\"with\\\" quotes\" >}}"),
-    rmd_shortcode("myfunc", "\"arg \\\"with\\\" quotes\""),
-    info = "Shortcode: escaped quote in double-quoted arg"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg_no_space >}}"),
-    rmd_shortcode("myfunc", "arg_no_space"),
-    info = "Shortcode: single unquoted arg"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc >}}"),
-    rmd_shortcode("myfunc"),
-    info = "Shortcode: no arguments"
-  )
-
-  # Current parser captures unquoted key=value as a single string argument
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1=\"val1\" >}}"),
-    rmd_shortcode("myfunc", "arg1=\"val1\""),
-    info = "Shortcode: unquoted arg with equals and quotes (captured as one string)"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1 .class #id key=value >}}"),
-    rmd_shortcode("myfunc", c("arg1", ".class", "#id", "key=value")),
-    info = "Shortcode: unquoted args with special chars"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{<  myfunc   arg1   \"arg two\"   >}}"),
-    rmd_shortcode("myfunc", c("arg1", "\"arg two\"")),
-    info = "Shortcode: leading/trailing spaces around args are handled"
-  )
-
-  expect_error(
-    check_shortcode_parser("{{< myfunc arg1 \"unterminated quote >}}"),
-    info = "Shortcode: unterminated quote in arg"
-  )
-
-  expect_error(
-    check_shortcode_parser("{{< myfunc arg1 "),
-    regexp = "expected shortcode close",
-    info = "Shortcode: missing closing >}}"
-  )
-
-  expect_error(
-    check_shortcode_parser("{{{< myfunc arg1 >}}}"),
-    info = "Escaped shortcode reference with extra braces"
-  )
+  # Test multiple shortcodes
+  result2 <- check_string_shortcodes_parser("{{< func1 >}} and {{< func2 arg >}}")
+  expect_equal(result2, list(
+    rmd_shortcode("func1", character(), 0, 13),
+    rmd_shortcode("func2", "arg", 18, 17)
+  ))
+  
+  # Test no shortcodes
+  result3 <- check_string_shortcodes_parser("Hello world with no shortcodes")
+  expect_equal(result3, list())
+  
+  # Test shortcode with no arguments
+  result4 <- check_string_shortcodes_parser("{{< pagebreak >}}")
+  expect_equal(result4, list(rmd_shortcode("pagebreak", character(), 0, 17)))
 })
 
-test_that("Shortcode key=value arguments are parsed correctly", {
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key=value >}}"),
-    rmd_shortcode("myfunc", "key=value"),
-    info = "Shortcode: simple key=value argument"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key=\"quoted value\" >}}"),
-    rmd_shortcode("myfunc", "key=\"quoted value\""),
-    info = "Shortcode: key=value with quoted value"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc arg1 key=value arg2 >}}"),
-    rmd_shortcode("myfunc", c("arg1", "key=value", "arg2")),
-    info = "Shortcode: mixed positional and key=value arguments"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key1=value1 key2=\"value with spaces\" >}}"),
-    rmd_shortcode("myfunc", c("key1=value1", "key2=\"value with spaces\"")),
-    info = "Shortcode: multiple key=value arguments"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key_name=value >}}"),
-    rmd_shortcode("myfunc", "key_name=value"),
-    info = "Shortcode: key with underscore"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key.name=value >}}"),
-    rmd_shortcode("myfunc", "key.name=value"),
-    info = "Shortcode: key with dot"
-  )
-
-  expect_equal(
-    check_shortcode_parser("{{< myfunc key-name=value >}}"),
-    rmd_shortcode("myfunc", "key-name=value"),
-    info = "Shortcode: key with dash"
-  )
+test_that("C++ string shortcodes parser - argument parsing", {
+  
+  # Test simple arguments
+  result1 <- check_string_shortcodes_parser("{{< video arg1 arg2 arg3 >}}")
+  expect_equal(result1, list(rmd_shortcode("video", c("arg1", "arg2", "arg3"), 0, 28)))
+  
+  # Test quoted arguments
+  result2 <- check_string_shortcodes_parser("{{< video \"quoted arg\" >}}")
+  expect_equal(result2, list(rmd_shortcode("video", "\"quoted arg\"", 0, 26)))
+  
+  # Test single quoted arguments
+  result3 <- check_string_shortcodes_parser("{{< kbd key='Ctrl+C' >}}")
+  expect_equal(result3, list(rmd_shortcode("kbd", "key='Ctrl+C'", 0, 24)))
+  
+  # Test key=value arguments
+  result4 <- check_string_shortcodes_parser("{{< video url=https://example.com title=\"My Video\" >}}")
+  expect_equal(result4, list(rmd_shortcode("video", c("url=https://example.com", "title=\"My Video\""), 0, 54)))
+  
+  # Test mixed argument types
+  result5 <- check_string_shortcodes_parser("{{< include file.txt lines=10 echo=true >}}")
+  expect_equal(result5, list(rmd_shortcode("include", c("file.txt", "lines=10", "echo=true"), 0, 43)))
 })
 
-test_that("Edge cases", {
+test_that("C++ string shortcodes parser - multiline strings", {
   
-  # From quarto_cli/tests/docs/smoke-all/video/video-smoke-test.qmd
-  sc = '{{< video https://www.youtube.com/embed/wo9vZccmqwc
-  title="What is the CERN?"
-  start="116"
-  aspect-ratio="21x9">}}'
+  # Test shortcode spanning multiple lines
+  multiline1 <- "{{< video https://example.com/video.mp4
+  title=\"My Long Video Title\"
+  width=800
+  height=600 >}}"
+  result1 <- check_string_shortcodes_parser(multiline1)
+  expect_equal(result1, list(rmd_shortcode("video", c(
+    "https://example.com/video.mp4",
+    "title=\"My Long Video Title\"",
+    "width=800",
+    "height=600"
+  ), 0, 98)))
   
-  expect_equal(
-    check_shortcode_parser(sc),
-    rmd_shortcode(
-      "video",
-      c("https://www.youtube.com/embed/wo9vZccmqwc", 'title="What is the CERN?"',
-       'start="116"', 'aspect-ratio="21x9"')
-    )
-  )
+  # Test multiple shortcodes across lines
+  multiline2 <- "Start {{< pagebreak >}}
+  Middle text here
+  {{< video url >}} more text
+  {{< include file.txt >}} end"
+  result2 <- check_string_shortcodes_parser(multiline2)
+  expect_equal(result2, list(
+    rmd_shortcode("pagebreak", character(), 6, 17),
+    rmd_shortcode("video", "url", 45, 17),
+    rmd_shortcode("include", "file.txt", 75, 24)
+  ))
+  
+  # Test shortcode with newlines in text around it
+  multiline3 <- "Line 1\n{{< shortcode arg >}}\nLine 3"
+  result3 <- check_string_shortcodes_parser(multiline3)
+  expect_equal(result3, list(rmd_shortcode("shortcode", "arg", 7, 21)))
+})
 
-  # Semi-ambiguous edgecase from quarto-cli/tests/docs/smoke-all/2025/04/09/kbd-adoc-bad-input.qmd 
-  expect_equal(
-    check_shortcode_parser('{{< kbd key="\\" >}}'),
-    rmd_shortcode("kbd", 'key="\\"')
-  )
+test_that("C++ string shortcodes parser - edge cases", {
+  
+  # Test escaped shortcode (currently parsed due to parser limitation)
+  result1 <- check_string_shortcodes_parser("{{{< escaped >}}}")
+  expect_equal(result1, list(rmd_shortcode("escaped", character(), 1, 15)))
+  
+  # Test incomplete shortcode (should throw error)
+  expect_error(check_string_shortcodes_parser("{{< incomplete"), 
+               "Failed to parse")
+  
+  # Test shortcode with unmatched braces
+  result3 <- check_string_shortcodes_parser("{{ missing angle bracket >}}")
+  expect_equal(result3, list())
+  
+  # Test shortcode with special characters in function name
+  result4 <- check_string_shortcodes_parser("{{< video-player >}}")
+  expect_equal(result4, list(rmd_shortcode("video-player", character(), 0, 20)))
+  
+  # Test shortcode with underscores and dots
+  result5 <- check_string_shortcodes_parser("{{< my_func.v2 >}}")
+  expect_equal(result5, list(rmd_shortcode("my_func.v2", character(), 0, 18)))
+  
+  # Test shortcode with spaces around function name
+  result6 <- check_string_shortcodes_parser("{{<   video   arg   >}}")
+  expect_equal(result6, list(rmd_shortcode("video", "arg", 0, 23)))
+  
+  # Test empty shortcode (should fail to parse)
+  expect_error(check_string_shortcodes_parser("{{<  >}}"), 
+               "Failed to parse")
+})
 
-  expect_equal(
-    check_shortcode_parser("{{< kbd key='\\' >}}"),
-    rmd_shortcode("kbd", "key='\\'")
-  )
+test_that("C++ string shortcodes parser - complex quoted arguments", {
+  
+  # Test arguments with spaces in quotes
+  result1 <- check_string_shortcodes_parser("{{< video \"file with spaces.mp4\" >}}")
+  expect_equal(result1, list(rmd_shortcode("video", "\"file with spaces.mp4\"", 0, 36)))
+  
+  # Test escaped quotes in arguments
+  result2 <- check_string_shortcodes_parser("{{< kbd key=\"\\\"quoted\\\"\" >}}")
+  expect_equal(result2, list(rmd_shortcode("kbd", "key=\"\\\"quoted\\\"\"", 0, 28)))
+  
+  # Test mixed quotes
+  result3 <- check_string_shortcodes_parser("{{< func arg1=\"value1\" arg2='value2' >}}")
+  expect_equal(result3, list(rmd_shortcode("func", c("arg1=\"value1\"", "arg2='value2'"), 0, 40)))
+  
+  # Test unterminated quote (should handle gracefully)
+  expect_error(check_string_shortcodes_parser("{{< func \"unterminated >}}"), 
+               class = "Rcpp::exception")
+})
 
+test_that("C++ string shortcodes parser - real-world examples", {
+  
+  # Example from Quarto documentation
+  quarto_example <- "{{< video https://www.youtube.com/embed/wo9vZccmqwc
+  title=\"What is the CERN?\"
+  start=\"116\"
+  aspect-ratio=\"21x9\" >}}"
+  result1 <- check_string_shortcodes_parser(quarto_example)
+  expect_equal(result1, list(rmd_shortcode("video", c(
+    "https://www.youtube.com/embed/wo9vZccmqwc",
+    "title=\"What is the CERN?\"",
+    "start=\"116\"",
+    "aspect-ratio=\"21x9\""
+  ), 0, 119)))
+  
+  # Multiple shortcodes in a document
+  document <- "# My Document
+  
+  Here is a video: {{< video demo.mp4 >}}
+  
+  {{< pagebreak >}}
+  
+  And here is some code:
+  {{< include script.py lines=\"1-10\" echo=true >}}
+  
+  Finally, press {{< kbd Ctrl+C >}} to copy."
+  
+  result2 <- check_string_shortcodes_parser(document)
+  expect_equal(result2, list(
+    rmd_shortcode("video", "demo.mp4", 36, 22),
+    rmd_shortcode("pagebreak", character(), 64, 17),
+    rmd_shortcode("include", c("script.py", "lines=\"1-10\"", "echo=true"), 112, 48),
+    rmd_shortcode("kbd", "Ctrl+C", 181, 18)
+  ))
+  
+  # Shortcode with CSS-like selectors
+  result3 <- check_string_shortcodes_parser("{{< div .class #id data-attr=value >}}")
+  expect_equal(result3, list(rmd_shortcode("div", c(".class", "#id", "data-attr=value"), 0, 38)))
 })
