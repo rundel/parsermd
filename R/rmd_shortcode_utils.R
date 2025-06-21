@@ -73,8 +73,14 @@ rmd_has_shortcode.rmd_chunk = function(x, func_name = NULL) {
 
 #' @export
 rmd_has_shortcode.rmd_yaml = function(x, func_name = NULL) {
-  # YAML blocks cannot contain shortcodes
-  FALSE
+  # Check YAML values for shortcodes (shortcodes can be in quoted values)
+  yaml_values = unlist(x, recursive = TRUE)
+  if (length(yaml_values) == 0) {
+    return(FALSE)
+  }
+  
+  # Check each YAML value for shortcodes
+  any(purrr::map_lgl(yaml_values, rmd_has_shortcode, func_name = func_name))
 }
 
 #' @export

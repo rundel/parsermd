@@ -67,12 +67,19 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   expect_true(rmd_has_shortcode(rmd_chunk_with_shortcode, "include"))
   expect_false(rmd_has_shortcode(rmd_chunk_with_shortcode, "video"))
   
-  # Test rmd_yaml objects (YAML blocks cannot contain shortcodes)
-  rmd_yaml_obj <- parse_rmd(c("---", "title: My Document", "---"))[[1]]
+  # Test rmd_yaml objects (shortcodes must be in quoted values)
+  rmd_yaml_with_shortcode <- parse_rmd(c("---", "title: \"Document with {{< var title >}}\"", "---"))[[1]]
+  rmd_yaml_without_shortcode <- parse_rmd(c("---", "title: My Document", "---"))[[1]]
+  # Test unquoted shortcode (should be treated as regular YAML value, but might still be detected)
+  rmd_yaml_unquoted_shortcode <- parse_rmd(c("---", "title: {{< var title >}}", "---"))[[1]]
   
-  expect_false(rmd_has_shortcode(rmd_yaml_obj))
-  expect_false(rmd_has_shortcode(rmd_yaml_obj, "var"))
-  expect_false(rmd_has_shortcode(rmd_yaml_obj, "video"))
+  expect_true(rmd_has_shortcode(rmd_yaml_with_shortcode))
+  expect_false(rmd_has_shortcode(rmd_yaml_without_shortcode))
+  expect_true(rmd_has_shortcode(rmd_yaml_with_shortcode, "var"))
+  expect_false(rmd_has_shortcode(rmd_yaml_with_shortcode, "video"))
+  
+  # Check if unquoted shortcode is handled (depends on YAML parser behavior)
+  # This tests how the YAML parser treats unquoted shortcode-like syntax
   
   # Test rmd_shortcode objects
   shortcode_obj <- rmd_shortcode("video", "demo.mp4", 0, 20)
@@ -101,7 +108,7 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   # Create a comprehensive test document with various node types and shortcodes
   test_rmd <- parse_rmd(c(
     "---",
-    "title: My Document",
+    "title: \"Document with {{< var title >}}\"",
     "---",
     "",
     "# Section 1",
@@ -126,7 +133,7 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   
   # Test selecting all nodes with shortcodes
   shortcode_nodes <- rmd_select(test_rmd, has_shortcode())
-  expect_length(shortcode_nodes, 3)  # markdown, chunk, and final markdown (no YAML)
+  expect_length(shortcode_nodes, 4)  # YAML, markdown, chunk, and final markdown
   
   # Test selecting nodes with specific shortcode function names
   video_nodes <- rmd_select(test_rmd, has_shortcode("video"))
@@ -141,9 +148,9 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   expect_length(include_nodes, 1)
   expect_true(rmd_has_shortcode(include_nodes[[1]], "include"))
   
-  # Test that var shortcodes don't exist (since we removed them from YAML)
   var_nodes <- rmd_select(test_rmd, has_shortcode("var"))
-  expect_length(var_nodes, 0)
+  expect_length(var_nodes, 1)
+  expect_true(rmd_has_shortcode(var_nodes[[1]], "var"))
   
   # Test glob patterns
   page_nodes <- rmd_select(test_rmd, has_shortcode("page*"))
@@ -169,11 +176,10 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   expect_true(all(rmd_node_type(markdown_with_shortcode) == "rmd_markdown"))
   expect_true(all(purrr::map_lgl(markdown_with_shortcode, rmd_has_shortcode)))
   
-  # Test that YAML blocks cannot contain shortcodes
-  yaml_nodes <- rmd_select(test_rmd, has_type("rmd_yaml"))
   yaml_with_shortcode <- rmd_select(test_rmd, has_type("rmd_yaml") & has_shortcode())
-  expect_length(yaml_nodes, 1)  # YAML exists
-  expect_length(yaml_with_shortcode, 0)  # But no YAML with shortcodes
+  expect_length(yaml_with_shortcode, 1)
+  expect_equal(rmd_node_type(yaml_with_shortcode[[1]]), "rmd_yaml")
+  expect_true(rmd_has_shortcode(yaml_with_shortcode[[1]]))
 })
 
 test_that("has_shortcode() with edge cases", {
@@ -201,6 +207,74 @@ test_that("has_shortcode() with edge cases", {
   expect_length(rmd_select(complex_rmd, has_shortcode("video")), 1)
   expect_length(rmd_select(complex_rmd, has_shortcode("pagebreak")), 1)
   expect_length(rmd_select(complex_rmd, has_shortcode("include")), 1)
+})
+
+test_that("YAML with multiple shortcodes in list values", {
+  
+  # Test complex YAML document with multiple shortcodes in categories list
+  complex_yaml_doc <- c(
+    '---',
+    'title: "ABC"',
+    'categories:',
+    '    - "{{< var kws.ds >}}"',
+    '    - "{{< var kws.ml >}}"',
+    '    -  "{{< var kws.nlp >}}"',
+    '    - "{{< var kws.python_pkg >}}"',
+    '    - AI',
+    '---',
+    '',
+    'Here is the content of the post.'
+  )
+  
+  # Parse the document from text
+  rmd_parsed <- parse_rmd(complex_yaml_doc)
+  expect_length(rmd_parsed, 2)  # YAML node + markdown node
+  
+  yaml_node_parsed <- rmd_parsed[[1]]
+  markdown_node <- rmd_parsed[[2]]
+  
+  # Create equivalent YAML node using rmd_yaml() constructor
+  yaml_node_constructed <- rmd_yaml(
+    title = "ABC",
+    categories = c(
+      "{{< var kws.ds >}}",
+      "{{< var kws.ml >}}",
+      "{{< var kws.nlp >}}",
+      "{{< var kws.python_pkg >}}",
+      "AI"
+    )
+  )
+  
+  # Compare parsed vs constructed YAML nodes
+  expect_equal(yaml_node_parsed, yaml_node_constructed)
+  
+  # Test shortcode detection on parsed YAML
+  expect_true(rmd_has_shortcode(yaml_node_parsed))
+  expect_true(rmd_has_shortcode(yaml_node_parsed, "var"))
+  expect_false(rmd_has_shortcode(yaml_node_parsed, "video"))
+  expect_false(rmd_has_shortcode(yaml_node_parsed, "kws*"))  # kws.ds is argument, not function name
+  
+  # Test markdown node (should not have shortcodes)
+  expect_false(rmd_has_shortcode(markdown_node))
+  
+  # Test selection helpers on parsed document
+  shortcode_nodes = rmd_select(rmd_parsed, has_shortcode())
+  expect_length(shortcode_nodes, 1)  # Only YAML node
+  
+  var_nodes = rmd_select(rmd_parsed, has_shortcode("var"))
+  expect_length(var_nodes, 1)
+  expect_equal(rmd_node_type(var_nodes[[1]]), "rmd_yaml")
+  
+  # Test shortcode extraction from all category values
+  expect_equal(
+    rmd_extract_shortcodes(yaml_node_parsed), 
+    list(
+      rmd_shortcode("var", "kws.ds", 7L, 18L),
+      rmd_shortcode("var", "kws.ml", 29L, 18L),
+      rmd_shortcode("var", "kws.nlp", 51L, 19L),
+      rmd_shortcode("var", "kws.python_pkg", 74L, 26L)
+    )
+  )
 })
 
 test_that("Shortcode extraction functionality", {
