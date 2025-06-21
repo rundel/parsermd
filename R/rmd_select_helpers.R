@@ -10,6 +10,7 @@
 #' * `has_type()` - selects all nodes that have the given type(s).
 #' * `has_label()` - selects nodes with labels matching the given glob.
 #' * `has_option()` - selects nodes that have the given option(s) set.
+#' * `has_shortcode()` - selects nodes containing shortcodes matching the given function name(s).
 #'
 #' @return All helper functions return an integer vector of selected indexes.
 #'
@@ -24,6 +25,9 @@
 #' rmd_select(rmd, has_option("message"))
 #' rmd_select(rmd, has_option(message = FALSE))
 #' rmd_select(rmd, has_option(message = TRUE))
+#'
+#' rmd_select(rmd, has_shortcode())
+#' rmd_select(rmd, has_shortcode("video"))
 #'
 #'
 NULL
@@ -154,4 +158,22 @@ has_option = function(...) {
   ) %>%
     purrr::reduce(`|`) %>%
     which()
+}
+
+#' @rdname rmd_select_helpers
+#'
+#' @param func_name character vector, optional glob patterns for matching shortcode function names.
+#' If NULL (default), matches any shortcode.
+#'
+#' @export
+has_shortcode = function(func_name = NULL) {
+  if (!is.null(func_name)) {
+    checkmate::assert_character(func_name, any.missing = FALSE, min.len = 1)
+  }
+
+  x = tidyselect::peek_data(fn = "has_shortcode")
+
+  contains_shortcode = rmd_has_shortcode(x, func_name)
+  
+  which(contains_shortcode)
 }

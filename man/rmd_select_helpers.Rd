@@ -7,6 +7,7 @@
 \alias{has_label}
 \alias{has_code}
 \alias{has_option}
+\alias{has_shortcode}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
@@ -18,6 +19,8 @@ has_label(label)
 has_code(code)
 
 has_option(...)
+
+has_shortcode(func_name = NULL)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -35,6 +38,9 @@ Default: \code{TRUE}}
 \item{...}{Either option names represented by a scalar string or a named argument with the form
 \code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example
 \code{eval = TRUE} would check for the option \code{eval} being set to \code{TRUE}.}
+
+\item{func_name}{character vector, optional glob patterns for matching shortcode function names.
+If NULL (default), matches any shortcode.}
 }
 \value{
 All helper functions return an integer vector of selected indexes.
@@ -47,6 +53,7 @@ select nodes from an Rmd ast.
 \item \code{has_type()} - selects all nodes that have the given type(s).
 \item \code{has_label()} - selects nodes with labels matching the given glob.
 \item \code{has_option()} - selects nodes that have the given option(s) set.
+\item \code{has_shortcode()} - selects nodes containing shortcodes matching the given function name(s).
 }
 }
 \details{
@@ -80,6 +87,9 @@ rmd_select(rmd, has_label("*dino"))
 rmd_select(rmd, has_option("message"))
 rmd_select(rmd, has_option(message = FALSE))
 rmd_select(rmd, has_option(message = TRUE))
+
+rmd_select(rmd, has_shortcode())
+rmd_select(rmd, has_shortcode("video"))
 
 
 }

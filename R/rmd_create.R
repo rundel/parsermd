@@ -236,14 +236,21 @@ rmd_inline_code = function(engine="", code="") {
 
 #' @name rmd_create
 #' @export
-rmd_shortcode = function(func, args = character()) {
+rmd_shortcode = function(func, args = character(), start = NA_integer_, length = NA_integer_) {
+  start = as.integer(start)
+  length = as.integer(length)
+  
   checkmate::assert_character(func, len = 1, any.missing = FALSE)
   checkmate::assert_character(args, any.missing = FALSE)
+  checkmate::assert_integer(start, len = 1)
+  checkmate::assert_integer(length, len = 1)
 
   structure(
     list(
       func = func,
-      args = args
+      args = args,
+      start = start,
+      length = length
     ),
     class = "rmd_shortcode"
   )
