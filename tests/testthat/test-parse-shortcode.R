@@ -1,5 +1,110 @@
 
 
+test_that("C++ single shortcode parser - basic functionality", {
+  
+  # Test single shortcode with simple arguments
+  expect_equal(
+    check_shortcode_parser("{{< video url >}}"), 
+    rmd_shortcode("video", "url", -1L, -1L)
+  )
+  
+  # Test shortcode with no arguments
+  expect_equal(
+    check_shortcode_parser("{{< pagebreak >}}"), 
+    rmd_shortcode("pagebreak", character(), -1L, -1L)
+  )
+  
+  # Test shortcode with multiple arguments
+  expect_equal(
+    check_shortcode_parser("{{< video arg1 arg2 arg3 >}}"), 
+    rmd_shortcode("video", c("arg1", "arg2", "arg3"), -1L, -1L)
+  )
+  
+  # Test shortcode with quoted arguments
+  expect_equal(
+    check_shortcode_parser("{{< video \"quoted arg\" >}}"), 
+    rmd_shortcode("video", "\"quoted arg\"", -1L, -1L)
+  )
+  
+  # Test shortcode with key=value arguments
+  expect_equal(
+    check_shortcode_parser("{{< video url=https://example.com >}}"), 
+    rmd_shortcode("video", "url=https://example.com", -1L, -1L)
+  )
+  
+  # Test shortcode with mixed argument types
+  expect_equal(
+    check_shortcode_parser("{{< include file.txt lines=10 echo=true >}}"), 
+    rmd_shortcode("include", c("file.txt", "lines=10", "echo=true"), -1L, -1L)
+  )
+  
+  # Test shortcode with function name containing special characters
+  expect_equal(
+    check_shortcode_parser("{{< video-player url >}}"), 
+    rmd_shortcode("video-player", "url", -1L, -1L)
+  )
+  
+  # Test shortcode with underscores and dots in function name
+  expect_equal(
+    check_shortcode_parser("{{< my_func.v2 arg >}}"), 
+    rmd_shortcode("my_func.v2", "arg", -1L, -1L)
+  )
+})
+
+test_that("C++ single shortcode parser - error cases", {
+  
+  # Test incomplete shortcode
+  expect_error(check_shortcode_parser("{{< incomplete"), 
+               "Failed to parse")
+  
+  # Test missing opening delimiter
+  expect_error(check_shortcode_parser("video url >}}"), 
+               "Failed to parse")
+  
+  # Test missing closing delimiter
+  expect_error(check_shortcode_parser("{{< video url"), 
+               "Failed to parse")
+  
+  # Test empty shortcode
+  expect_error(check_shortcode_parser("{{<  >}}"), 
+               "Failed to parse")
+  
+  # Test malformed delimiters
+  expect_error(check_shortcode_parser("{{ video url >}}"), 
+               "Failed to parse")
+  
+  # Test wrong closing delimiter
+  expect_error(check_shortcode_parser("{{< video url }}"), 
+               "Failed to parse")
+})
+
+test_that("C++ single shortcode parser - complex arguments", {
+  
+  # Test arguments with spaces in quotes
+  expect_equal(
+    check_shortcode_parser("{{< video \"file with spaces.mp4\" >}}"), 
+    rmd_shortcode("video", "\"file with spaces.mp4\"", -1L, -1L)
+  )
+  
+  # Test escaped quotes in arguments
+  expect_equal(
+    check_shortcode_parser("{{< kbd key=\"\\\"quoted\\\"\" >}}"), 
+    rmd_shortcode("kbd", "key=\"\\\"quoted\\\"\"", -1L, -1L)
+  )
+  
+  # Test mixed quotes
+  expect_equal(
+    check_shortcode_parser("{{< func arg1=\"value1\" arg2='value2' >}}"), 
+    rmd_shortcode("func", c("arg1=\"value1\"", "arg2='value2'"), -1L, -1L)
+  )
+  
+  # Test complex key=value arguments
+  expect_equal(
+    check_shortcode_parser("{{< video url=https://example.com title=\"My Video\" width=800 >}}"), 
+    rmd_shortcode("video", c("url=https://example.com", "title=\"My Video\"", "width=800"), -1L, -1L)
+  )
+})
+
 test_that("C++ string shortcodes parser - basic functionality", {
   
   # Test single shortcode
@@ -81,8 +186,7 @@ test_that("C++ string shortcodes parser - multiline strings", {
 test_that("C++ string shortcodes parser - edge cases", {
   
   # Test escaped shortcode (currently parsed due to parser limitation)
-  result1 <- check_string_shortcodes_parser("{{{< escaped >}}}")
-  expect_equal(result1, list(rmd_shortcode("escaped", character(), 1, 15)))
+  expect_equal(check_string_shortcodes_parser("{{{< escaped >}}}"), list())
   
   # Test incomplete shortcode (should throw error)
   expect_error(check_string_shortcodes_parser("{{< incomplete"), 
