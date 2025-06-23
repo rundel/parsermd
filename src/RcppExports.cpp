@@ -10,6 +10,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// parse_shortcodes_cpp
+Rcpp::List parse_shortcodes_cpp(std::string const& str);
+RcppExport SEXP _parsermd_parse_shortcodes_cpp(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_shortcodes_cpp(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // parse_rmd_cpp
 Rcpp::List parse_rmd_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_rmd_cpp(SEXP strSEXP) {
@@ -164,17 +175,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// check_string_shortcodes_parser
-Rcpp::List check_string_shortcodes_parser(std::string const& str);
-RcppExport SEXP _parsermd_check_string_shortcodes_parser(SEXP strSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_string_shortcodes_parser(str));
-    return rcpp_result_gen;
-END_RCPP
-}
 // check_md_line_parser
 Rcpp::List check_md_line_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_md_line_parser(SEXP strSEXP) {
@@ -200,6 +200,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_parsermd_parse_shortcodes_cpp", (DL_FUNC) &_parsermd_parse_shortcodes_cpp, 1},
     {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
     {"_parsermd_check_yaml_parser", (DL_FUNC) &_parsermd_check_yaml_parser, 1},
     {"_parsermd_check_chunk_parser", (DL_FUNC) &_parsermd_check_chunk_parser, 1},
@@ -214,7 +215,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_check_code_block_parser", (DL_FUNC) &_parsermd_check_code_block_parser, 1},
     {"_parsermd_check_inline_code_parser", (DL_FUNC) &_parsermd_check_inline_code_parser, 1},
     {"_parsermd_check_shortcode_parser", (DL_FUNC) &_parsermd_check_shortcode_parser, 1},
-    {"_parsermd_check_string_shortcodes_parser", (DL_FUNC) &_parsermd_check_string_shortcodes_parser, 1},
     {"_parsermd_check_md_line_parser", (DL_FUNC) &_parsermd_check_md_line_parser, 1},
     {"_parsermd_check_qstring_parser", (DL_FUNC) &_parsermd_check_qstring_parser, 2},
     {NULL, NULL, 0}

@@ -91,7 +91,7 @@ rmd_extract_shortcodes.numeric = function(x, flatten = FALSE) {
 
 #' @export
 rmd_extract_shortcodes.character = function(x, flatten = FALSE) {
-  res = purrr::map(x, check_string_shortcodes_parser) 
+  res = purrr::map(x, parse_shortcodes_cpp) 
   
   if (flatten) {
     res |> purrr::flatten() 
