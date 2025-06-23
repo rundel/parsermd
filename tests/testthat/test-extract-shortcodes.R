@@ -218,7 +218,7 @@ test_that("YAML with multiple shortcodes in list values", {
     'categories:',
     '    - "{{< var kws.ds >}}"',
     '    - "{{< var kws.ml >}}"',
-    '    -  "{{< var kws.nlp >}}"',
+    '    - "{{< var kws.nlp >}}"',
     '    - "{{< var kws.python_pkg >}}"',
     '    - AI',
     '---',
@@ -266,33 +266,89 @@ test_that("YAML with multiple shortcodes in list values", {
   expect_equal(rmd_node_type(var_nodes[[1]]), "rmd_yaml")
   
   # Test shortcode extraction from all category values
+  # Position information now reflects position within each individual YAML value
   expect_equal(
-    rmd_extract_shortcodes(yaml_node_parsed), 
+    rmd_extract_shortcodes(yaml_node_parsed, flatten = TRUE), 
     list(
-      rmd_shortcode("var", "kws.ds", 7L, 18L),
-      rmd_shortcode("var", "kws.ml", 29L, 18L),
-      rmd_shortcode("var", "kws.nlp", 51L, 19L),
-      rmd_shortcode("var", "kws.python_pkg", 74L, 26L)
+      rmd_shortcode("var", "kws.ds", 0L, 18L),
+      rmd_shortcode("var", "kws.ml", 0L, 18L),
+      rmd_shortcode("var", "kws.nlp", 0L, 19L),
+      rmd_shortcode("var", "kws.python_pkg", 0L, 26L)
+    )
+  )
+  
+  # Test shortcode extraction with flatten=FALSE (default) - returns nested structure
+  expect_equal(
+    rmd_extract_shortcodes(yaml_node_parsed, flatten = FALSE),
+    list(
+      "title" = list(list()),
+      "categories" = list(
+        list(rmd_shortcode("var", "kws.ds", 0L, 18L)),
+        list(rmd_shortcode("var", "kws.ml", 0L, 18L)),
+        list(rmd_shortcode("var", "kws.nlp", 0L, 19L)),
+        list(rmd_shortcode("var", "kws.python_pkg", 0L, 26L)),
+        list()
+      )
     )
   )
 })
 
 test_that("Shortcode extraction functionality", {
   
-  # Test basic extraction
-  shortcodes1 <- rmd_extract_shortcodes("Hello {{< video url >}} world")
-  expect_equal(shortcodes1, list(rmd_shortcode("video", "url", 6L, 17L)))
+  # Test basic extraction with flatten=TRUE
+  expect_equal(
+    rmd_extract_shortcodes("Hello {{< video url >}} world", flatten = TRUE),
+    list(rmd_shortcode("video", "url", 6L, 17L))
+  )
   
-  # Test multiple shortcodes
-  shortcodes2 <- rmd_extract_shortcodes("{{< func1 >}} and {{< func2 arg >}}")
-  expect_equal(shortcodes2, list(
-    rmd_shortcode("func1", character(), 0, 13),
-    rmd_shortcode("func2", "arg", 18, 17)
-  ))
+  # Test multiple shortcodes with flatten=TRUE
+  expect_equal(
+    rmd_extract_shortcodes("{{< func1 >}} and {{< func2 arg >}}", flatten = TRUE),
+    list(
+      rmd_shortcode("func1", character(), 0L, 13L),
+      rmd_shortcode("func2", "arg", 18L, 17L)
+    )
+  )
   
-  # Test no shortcodes
-  shortcodes3 <- rmd_extract_shortcodes("Hello world")
-  expect_equal(shortcodes3, list())
+  # Test no shortcodes with flatten=TRUE
+  expect_equal(rmd_extract_shortcodes("Hello world", flatten = TRUE), list())
+  
+  # Test flatten=FALSE (default behavior) with vector
+  expect_equal(
+    rmd_extract_shortcodes(c("Text with {{< video url >}}", "Another {{< pagebreak >}} text"), flatten = FALSE),
+    list(
+      list(rmd_shortcode("video", "url", 10L, 17L)),
+      list(rmd_shortcode("pagebreak", character(), 8L, 17L))
+    )
+  )
+  
+  # Test flatten=TRUE with vector
+  expect_equal(
+    rmd_extract_shortcodes(c("Text with {{< video url >}}", "Another {{< pagebreak >}} text"), flatten = TRUE),
+    list(
+      rmd_shortcode("video", "url", 10L, 17L),
+      rmd_shortcode("pagebreak", character(), 8L, 17L)
+    )
+  )
+  
+  # Test flatten=TRUE with no shortcodes
+  expect_equal(rmd_extract_shortcodes("No shortcodes here", flatten = TRUE), list())
+  
+  # Test flatten=FALSE (default) with single strings - returns nested structure
+  expect_equal(
+    rmd_extract_shortcodes("Hello {{< video url >}} world", flatten = FALSE),
+    list(list(rmd_shortcode("video", "url", 6L, 17L)))
+  )
+  
+  expect_equal(
+    rmd_extract_shortcodes("{{< func1 >}} and {{< func2 arg >}}", flatten = FALSE),
+    list(list(
+      rmd_shortcode("func1", character(), 0L, 13L),
+      rmd_shortcode("func2", "arg", 18L, 17L)
+    ))
+  )
+  
+  expect_equal(rmd_extract_shortcodes("Hello world", flatten = FALSE), list(list()))
   
   # Test complex shortcode patterns
   expect_true(rmd_has_shortcode("{{< video https://example.com >}}"))

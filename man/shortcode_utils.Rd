@@ -8,17 +8,19 @@
 \usage{
 rmd_has_shortcode(x, func_name = NULL)
 
-rmd_extract_shortcodes(text)
+rmd_extract_shortcodes(x, flatten = FALSE)
 }
 \arguments{
-\item{x}{An AST node or list of nodes}
+\item{x}{An AST node, list of nodes, or character vector}
 
-\item{func_name}{Optional character vector of function names to match (supports glob patterns)}
+\item{func_name}{Optional character vector of function names to match (supports regex patterns)}
+
+\item{flatten}{Return a flat list shortcodes if \code{TRUE}}
 }
 \value{
 \itemize{
 \item \code{rmd_has_shortcode()}: logical vector indicating which nodes contain shortcodes
-\item \code{rmd_get_shortcodes()}: list of shortcode objects found in the text
+\item \code{rmd_extract_shortcodes()}: list of shortcode objects found in the content
 }
 }
 \description{
