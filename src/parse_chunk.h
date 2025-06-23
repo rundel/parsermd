@@ -85,7 +85,7 @@ namespace client { namespace parser {
       ]
     );
 
-  struct chunk_class : error_handler, x3::annotate_on_success {};
+  struct chunk_class : error_handler {};
   x3::rule<chunk_class, client::ast::chunk> const chunk = "chunk";
 
   auto const chunk_def

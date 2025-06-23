@@ -23,7 +23,7 @@ namespace client { namespace parser {
   ];
 
   x3::rule<struct rmd, client::ast::rmd> rmd {"rmd"};
-  struct rmd_class : error_handler, x3::annotate_on_success {};
+  struct rmd_class : error_handler {};
 
   auto const rmd_def = x3::rule<rmd_class, client::ast::rmd> {"rmd"}
   %= x3::with<_n_fdiv_open>(std::ref(n_fdiv_open))[

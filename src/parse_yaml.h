@@ -45,7 +45,7 @@ namespace client { namespace parser {
   = x3::lit("---") >> *x3::lit(' ') >> x3::eol >>
     &(!(*x3::lit(' ') >> x3::eol));
 
-  struct yaml_class : error_handler, x3::annotate_on_success {};
+  struct yaml_class : error_handler {};
   auto const yaml = x3::rule<yaml_class, client::ast::yaml> {"yaml"}
   = yaml_start >>
     x3::lexeme[ yaml_lines ] >>

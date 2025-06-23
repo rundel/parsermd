@@ -15,10 +15,10 @@
 
 #include "rcpp_wrap.h"
 
-
+typedef boost::spirit::x3::error_handler<std::string::const_iterator> error_handler_type;
 
 template <typename Parser, typename Attribute>
-inline void parse_str(
+inline error_handler_type parse_str(
     std::string const& str,
     Parser const& p,
     Attribute& attr,
@@ -29,22 +29,38 @@ inline void parse_str(
   auto iter = str.begin();
   auto const end = str.end();
 
-  using error_handler_type = x3::error_handler<std::string::const_iterator>;
   error_handler_type error_handler(iter, end, Rcpp::Rcout);
-
   auto const parser = x3::with<x3::error_handler_tag>(std::ref(error_handler))[ p ];
 
   bool r = x3::parse(iter, end, parser, attr);
-
-  //if () // fail if we did not get a full match
-  //  Rcpp::stop("Failed to parse.");
 
   if (!r || iter != end) {
     client::parser::throw_parser_error(
       iter, str.begin(), str.end(), str.begin(), str.end()
     );
   }
+
+  return error_handler;
 }
+
+// [[Rcpp::export]]
+Rcpp::List parse_shortcodes_cpp(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  std::vector<client::ast::shortcode> expr;
+  auto error_handler = parse_str(str, client::parser::string_shortcodes2, expr);
+
+  // Using position tags find the position of the shortcodes
+  for (auto& sc : expr) {
+    auto pos = error_handler.position_of(sc);
+    sc.start = pos.begin() - str.begin();
+    sc.length = pos.end() - pos.begin();
+  }
+
+  return Rcpp::wrap(expr);
+}
+
+
 
 
 // [[Rcpp::export]]
@@ -128,10 +144,7 @@ Rcpp::CharacterVector check_yaml_option_parser(std::string const& str) {
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::fdiv_open expr;
-  //auto const parser = x3::skip(x3::blank)[  ];
   parse_str(str, client::parser::fdiv_open, expr);
 
   return Rcpp::wrap(expr);
@@ -139,10 +152,7 @@ Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
 
 // [[Rcpp::export]]
 Rcpp::List check_fdiv_close_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::fdiv_close expr;
-  //auto const parser = x3::skip(x3::blank)[  ];
   parse_str(str, client::parser::fdiv_close, expr);
 
   return Rcpp::wrap(expr);
@@ -164,8 +174,6 @@ Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
 
 // [[Rcpp::export]]
 Rcpp::List check_code_block_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::code_block expr;
   parse_str(str, client::parser::code_block, expr);
 
@@ -176,8 +184,6 @@ Rcpp::List check_code_block_parser(std::string const& str) {
 
 // [[Rcpp::export]]
 Rcpp::List check_inline_code_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::inline_code expr;
   parse_str(str, client::parser::inline_code, expr);
 
@@ -186,8 +192,6 @@ Rcpp::List check_inline_code_parser(std::string const& str) {
 
 // [[Rcpp::export]]
 Rcpp::List check_shortcode_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::shortcode expr;
   parse_str(str, client::parser::shortcode, expr);
 
@@ -195,20 +199,7 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_string_shortcodes_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
-  std::vector<client::ast::shortcode> expr;
-  parse_str(str, client::parser::string_shortcodes, expr);
-
-  return Rcpp::wrap(expr);
-}
-
-
-// [[Rcpp::export]]
 Rcpp::List check_md_line_parser(std::string const& str) {
-  namespace x3 = boost::spirit::x3;
-
   client::ast::md_line expr;
   parse_str(str, client::parser::md_line, expr);
 

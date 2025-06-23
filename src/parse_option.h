@@ -20,7 +20,7 @@ namespace client { namespace parser {
     | ( client::parser::any_q_string );
 
 
-  struct chunk_option_class : error_handler, x3::annotate_on_success {};
+  struct chunk_option_class : error_handler {};
   x3::rule<chunk_option_class, client::ast::option> const chunk_option = "chunk option";
 
   auto const chunk_option_def = r_name > x3::lit("=") > expr;

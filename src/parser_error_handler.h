@@ -289,7 +289,18 @@ namespace client { namespace parser {
 
       return x3::error_handler_result::rethrow;
     }
+    
+    template <typename T, typename Iterator, typename Context>
+    void on_success(
+      Iterator const& first, Iterator const& last, 
+      T& ast, Context const& context
+    ) {
+        auto& error_handler = x3::get<x3::error_handler_tag>(context).get();
+        error_handler.tag(ast, first, last);
+    }
   };
+
+  
 
 } }
 

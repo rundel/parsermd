@@ -17,7 +17,7 @@ namespace client { namespace parser {
 
   // See https://quarto.org/docs/extensions/shortcodes.html
 
-  struct shortcode_class : error_handler, x3::annotate_on_success {};
+  struct shortcode_class : error_handler {};
   x3::rule<shortcode_class, client::ast::shortcode> const shortcode = "shortcode";
 
   auto shortcode_open = x3::rule<struct _> ("shortcode open")
@@ -87,6 +87,23 @@ namespace client { namespace parser {
       not_shortcode[set_expr_start] >> 
       *(shortcode[find_pos] >> not_shortcode[set_expr_start] )
     ] ];
+
+
+  /////////////////////////////////////////////////////////
+
+  struct shortcode2_class : annotate_position {};
+  x3::rule<shortcode2_class, client::ast::shortcode> const shortcode2 = "shortcode2";
+
+  auto const shortcode2_def
+  = shortcode_open >
+    x3::lexeme[func > args] >
+    shortcode_close;
+
+  BOOST_SPIRIT_DEFINE(shortcode2);
+
+
+  //auto string_shortcodes2 = x3::rule<struct _, std::vector<client::ast::shortcode> > ("String with shortcodes")
+  auto const string_shortcodes2 = not_shortcode >> *(shortcode >> not_shortcode);
 
 } }
 
