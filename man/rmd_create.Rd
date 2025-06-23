@@ -46,7 +46,7 @@ rmd_markdown_line(...)
 
 rmd_inline_code(engine = "", code = "")
 
-rmd_shortcode(func, args = character())
+rmd_shortcode(func, args = character(), start = -1L, length = -1L)
 }
 \arguments{
 \item{...}{Elements within the node.}

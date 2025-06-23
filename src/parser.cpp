@@ -371,10 +371,15 @@ template <> SEXP wrap(client::ast::inline_code const& ic) {
 template <> SEXP wrap(client::ast::shortcode const& sc) {
   Rcpp::List res = Rcpp::List::create(
     Rcpp::Named("func")   = Rcpp::wrap(sc.func),
-    Rcpp::Named("args")   = Rcpp::wrap(sc.args),
-    Rcpp::Named("start")  = Rcpp::wrap(sc.start),
-    Rcpp::Named("length") = Rcpp::wrap(sc.length)
+    Rcpp::Named("args")   = Rcpp::wrap(sc.args)
   );
+  
+  // Only add start and length as attributes if either is not -1
+  if (sc.start != -1 || sc.length != -1) {
+    res.attr("start") = Rcpp::wrap(sc.start);
+    res.attr("length") = Rcpp::wrap(sc.length);
+  }
+  
   res.attr("class") = "rmd_shortcode";
 
   return res;

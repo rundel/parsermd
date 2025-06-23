@@ -236,7 +236,7 @@ rmd_inline_code = function(engine="", code="") {
 
 #' @name rmd_create
 #' @export
-rmd_shortcode = function(func, args = character(), start = NA_integer_, length = NA_integer_) {
+rmd_shortcode = function(func, args = character(), start = -1L, length = -1L) {
   start = as.integer(start)
   length = as.integer(length)
   
@@ -245,14 +245,18 @@ rmd_shortcode = function(func, args = character(), start = NA_integer_, length =
   checkmate::assert_integer(start, len = 1)
   checkmate::assert_integer(length, len = 1)
 
-  structure(
-    list(
-      func = func,
-      args = args,
-      start = start,
-      length = length
-    ),
-    class = "rmd_shortcode"
+  # Build the list object conditionally
+  obj = list(
+    func = func,
+    args = args
   )
+  
+  # Only add start and length as named attributes if either is not -1
+  if (start != -1L || length != -1L) {
+    attr(obj, "start") = start
+    attr(obj, "length") = length
+  }
+
+  structure(obj, class = "rmd_shortcode")
 }
 
