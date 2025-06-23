@@ -4,8 +4,9 @@
 #' after the initial parsing phase.
 #'
 #' @param x An AST node, list of nodes, or character vector
-#' @param func_name Optional character vector of function names to match (supports regex patterns)
-#'
+#' @param func_name character vector, optional glob patterns for matching shortcode function names.
+#' If NULL (default), matches any shortcode.
+#' 
 #' @return 
 #' - `rmd_has_shortcode()`: logical vector indicating which nodes contain shortcodes
 #' - `rmd_extract_shortcodes()`: list of shortcode objects found in the content
@@ -15,38 +16,20 @@ NULL
 
 #' @rdname shortcode_utils
 #' @export
-rmd_has_shortcode = function(x, func_name = NULL) {
+rmd_has_shortcode = function(x, func_name = NULL, regex = FALSE) {
   UseMethod("rmd_has_shortcode")
 }
 
 #' @export
-rmd_has_shortcode.rmd_ast = function(x, func_name = NULL) {
-  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name)
+rmd_has_shortcode.rmd_ast = function(x, func_name = NULL, regex = FALSE) {
+  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name, regex = regex)
 }
 
 #' @export
-rmd_has_shortcode.rmd_tibble = function(x, func_name = NULL) {
-  rmd_has_shortcode(as_ast(x), func_name = func_name)
-}
-
-#' @export
-rmd_has_shortcode.rmd_markdown = function(x, func_name = NULL) {
-  # x is a list of rmd_markdown_line objects
-  any(purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name))
-}
-
-#' @export
-rmd_has_shortcode.rmd_markdown_line = function(x, func_name = NULL) {
-  # Check if any element in the markdown line contains shortcodes
-  # x is a list of character strings, inline code, or shortcode objects
-  any(purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name))
-}
-
-#' @export
-rmd_has_shortcode.character = function(x, func_name = NULL) {
+rmd_has_shortcode.default = function(x, func_name = NULL, regex = FALSE) {
   # Search for shortcode patterns in text content using flatten=TRUE to get direct list
   shortcodes = rmd_extract_shortcodes(x, flatten = TRUE)
-  
+
   if (length(shortcodes) == 0) {
     return(FALSE)
   }
@@ -55,50 +38,8 @@ rmd_has_shortcode.character = function(x, func_name = NULL) {
     return(TRUE)
   }
   
-  # Check if any shortcode matches the function name pattern
   shortcode_funcs = purrr::map_chr(shortcodes, "func")
-  regex = utils::glob2rx(func_name)
-  matching = purrr::map(regex, grepl, x = shortcode_funcs) |>
-    purrr::reduce(`|`)
-  
-  any(matching)
-}
-
-#' @export
-rmd_has_shortcode.rmd_chunk = function(x, func_name = NULL) {
-  # Check code content for shortcodes
-  code_text = paste(x$code, collapse = "\n")
-  rmd_has_shortcode(code_text, func_name = func_name)
-}
-
-#' @export
-rmd_has_shortcode.rmd_yaml = function(x, func_name = NULL) {
-  # Check YAML values for shortcodes (shortcodes can be in quoted values)
-  yaml_values = unlist(x, recursive = TRUE)
-  if (length(yaml_values) == 0) {
-    return(FALSE)
-  }
-  
-  # Check each YAML value for shortcodes
-  any(purrr::map_lgl(yaml_values, rmd_has_shortcode, func_name = func_name))
-}
-
-#' @export
-rmd_has_shortcode.rmd_shortcode = function(x, func_name = NULL) {
-  # If the node itself is a shortcode, check if it matches
-  if (is.null(func_name)) {
-    return(TRUE)
-  }
-  
-  regex = utils::glob2rx(func_name)
-  matching = purrr::map_lgl(regex, grepl, x = x$func)
-  any(matching)
-}
-
-#' @export
-rmd_has_shortcode.default = function(x, func_name = NULL) {
-  # Default case - most AST nodes don't contain shortcodes
-  FALSE
+  any(purrr::map_lgl(utils::glob2rx(func_name), ~any( grepl(.x, shortcode_funcs) )))
 }
 
 

@@ -6,14 +6,15 @@
 \alias{rmd_extract_shortcodes}
 \title{Shortcode detection and extraction utilities}
 \usage{
-rmd_has_shortcode(x, func_name = NULL)
+rmd_has_shortcode(x, func_name = NULL, regex = FALSE)
 
 rmd_extract_shortcodes(x, flatten = FALSE)
 }
 \arguments{
 \item{x}{An AST node, list of nodes, or character vector}
 
-\item{func_name}{Optional character vector of function names to match (supports regex patterns)}
+\item{func_name}{character vector, optional glob patterns for matching shortcode function names.
+If NULL (default), matches any shortcode.}
 
 \item{flatten}{Return a flat list shortcodes if \code{TRUE}}
 }

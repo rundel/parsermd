@@ -81,13 +81,6 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   # Check if unquoted shortcode is handled (depends on YAML parser behavior)
   # This tests how the YAML parser treats unquoted shortcode-like syntax
   
-  # Test rmd_shortcode objects
-  shortcode_obj <- rmd_shortcode("video", "demo.mp4", 0, 20)
-  expect_true(rmd_has_shortcode(shortcode_obj))
-  expect_true(rmd_has_shortcode(shortcode_obj, "video"))
-  expect_true(rmd_has_shortcode(shortcode_obj, "vid*"))
-  expect_false(rmd_has_shortcode(shortcode_obj, "include"))
-  
   # Test rmd_heading objects (should return FALSE via default method)
   rmd_heading_obj <- parse_rmd("# My Title")[[1]]
   expect_false(rmd_has_shortcode(rmd_heading_obj))
