@@ -68,7 +68,7 @@ namespace client { namespace parser {
       x3::eol
     ];
 
-  auto const chunk_end = x3::rule<struct _> {"chunk end"}
+  auto const chunk_end = x3::rule<struct _> {"chunk end (```)"}
   = ( x3::lexeme[
         x3::omit[ end_indent ] >>
         close_ticks(3)

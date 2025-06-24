@@ -25,7 +25,7 @@ namespace client { namespace parser {
   ] >>
   x3::eol;
 
-  auto const block_end = x3::rule<struct _> {"chunk end"}
+  auto const block_end = x3::rule<struct _> {"code block end (```)"}
   = x3::lexeme[
       x3::omit[ end_indent ] >>
       close_ticks(3)
