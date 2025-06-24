@@ -8,17 +8,15 @@
 
 * Added support for yaml expressions - e.g. (`!expr`)
 
-* Improved support for markdown parsing
-
-  * Added support for inline code blocks - e.g. (`` `{r} 1+1` ``)
-  
-  * Added support for quarto shortcodes - e.g. (` {{< meta title >}} `)
-
 * Exported and cleaned up node creation functions - see `?rmd_create` for details
 
 * Added experimental support for parsing collections of Rmd and qmd files - see `parse_qmd_collection()` and `parse_rmd_collection()`
 
 * Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include `rmd_yaml`.
+
+* Added support for 2ndary parsing to handle quarto shortcodes and inline code
+  
+  * See helper functions: `rmd_has_shortcode()`, `rmd_extract_shortcodes()`, and `has_shortcode()`
 
 # parsermd 0.1.3
 
