@@ -32,7 +32,7 @@ Hello
 
 test_that("Line number padding works correctly", {
   # Create a document with multiple lines to test padding
-  doc_with_many_lines <- paste(
+  doc_with_many_lines = paste(
     "line 1",
     "line 2", 
     "line 3",

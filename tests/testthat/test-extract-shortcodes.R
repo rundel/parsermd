@@ -22,27 +22,27 @@ test_that("Shortcode detection in text content", {
 
 test_that("Shortcode detection in AST nodes", {
   # Test shortcode detection in markdown
-  rmd1 <- parse_rmd(c("Hello {{< video url >}} world"))
+  rmd1 = parse_rmd(c("Hello {{< video url >}} world"))
   expect_equal(rmd_select(rmd1, has_shortcode()), rmd1[1])
   expect_equal(rmd_select(rmd1, has_shortcode("video")), rmd1[1])
   expect_length(rmd_select(rmd1, has_shortcode("pagebreak")), 0)
   
   # Test shortcode detection in chunk code
-  rmd2 <- parse_rmd(c("```{r}", "print('{{< pagebreak >}}')", "```"))
+  rmd2 = parse_rmd(c("```{r}", "print('{{< pagebreak >}}')", "```"))
   expect_equal(rmd_select(rmd2, has_shortcode()), rmd2[1])
   expect_equal(rmd_select(rmd2, has_shortcode("pagebreak")), rmd2[1])
   expect_length(rmd_select(rmd2, has_shortcode("video")), 0)
   
   # Test no shortcodes
-  rmd3 <- parse_rmd(c("Hello world", "```{r}", "print('hello')", "```"))
+  rmd3 = parse_rmd(c("Hello world", "```{r}", "print('hello')", "```"))
   expect_length(rmd_select(rmd3, has_shortcode()), 0)
 })
 
 test_that("rmd_has_shortcode() with different rmd classes", {
   
   # Test rmd_ast objects
-  rmd_ast_with_shortcode <- parse_rmd(c("# Title", "Text with {{< video url >}} shortcode"))
-  rmd_ast_without_shortcode <- parse_rmd(c("# Title", "Just normal text"))
+  rmd_ast_with_shortcode = parse_rmd(c("# Title", "Text with {{< video url >}} shortcode"))
+  rmd_ast_without_shortcode = parse_rmd(c("# Title", "Just normal text"))
   
   expect_true(any(rmd_has_shortcode(rmd_ast_with_shortcode)))
   expect_false(any(rmd_has_shortcode(rmd_ast_without_shortcode)))
@@ -50,8 +50,8 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   expect_false(any(rmd_has_shortcode(rmd_ast_with_shortcode, "pagebreak")))
   
   # Test rmd_markdown objects
-  rmd_markdown_with_shortcode <- parse_rmd("Text with {{< kbd Ctrl+C >}} shortcode")[[1]]
-  rmd_markdown_without_shortcode <- parse_rmd("Just normal text")[[1]]
+  rmd_markdown_with_shortcode = parse_rmd("Text with {{< kbd Ctrl+C >}} shortcode")[[1]]
+  rmd_markdown_without_shortcode = parse_rmd("Just normal text")[[1]]
   
   expect_true(rmd_has_shortcode(rmd_markdown_with_shortcode))
   expect_false(rmd_has_shortcode(rmd_markdown_without_shortcode))
@@ -59,8 +59,8 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   expect_false(rmd_has_shortcode(rmd_markdown_with_shortcode, "video"))
   
   # Test rmd_chunk objects
-  rmd_chunk_with_shortcode <- parse_rmd(c("```{r}", "# Comment with {{< include file.txt >}}", "x <- 1", "```"))[[1]]
-  rmd_chunk_without_shortcode <- parse_rmd(c("```{r}", "x <- 1", "```"))[[1]]
+  rmd_chunk_with_shortcode = parse_rmd(c("```{r}", "# Comment with {{< include file.txt >}}", "x = 1", "```"))[[1]]
+  rmd_chunk_without_shortcode = parse_rmd(c("```{r}", "x = 1", "```"))[[1]]
   
   expect_true(rmd_has_shortcode(rmd_chunk_with_shortcode))
   expect_false(rmd_has_shortcode(rmd_chunk_without_shortcode))
@@ -68,10 +68,10 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   expect_false(rmd_has_shortcode(rmd_chunk_with_shortcode, "video"))
   
   # Test rmd_yaml objects (shortcodes must be in quoted values)
-  rmd_yaml_with_shortcode <- parse_rmd(c("---", "title: \"Document with {{< var title >}}\"", "---"))[[1]]
-  rmd_yaml_without_shortcode <- parse_rmd(c("---", "title: My Document", "---"))[[1]]
+  rmd_yaml_with_shortcode = parse_rmd(c("---", "title: \"Document with {{< var title >}}\"", "---"))[[1]]
+  rmd_yaml_without_shortcode = parse_rmd(c("---", "title: My Document", "---"))[[1]]
   # Test unquoted shortcode (should be treated as regular YAML value, but might still be detected)
-  rmd_yaml_unquoted_shortcode <- parse_rmd(c("---", "title: {{< var title >}}", "---"))[[1]]
+  rmd_yaml_unquoted_shortcode = parse_rmd(c("---", "title: {{< var title >}}", "---"))[[1]]
   
   expect_true(rmd_has_shortcode(rmd_yaml_with_shortcode))
   expect_false(rmd_has_shortcode(rmd_yaml_without_shortcode))
@@ -82,13 +82,13 @@ test_that("rmd_has_shortcode() with different rmd classes", {
   # This tests how the YAML parser treats unquoted shortcode-like syntax
   
   # Test rmd_heading objects (should return FALSE via default method)
-  rmd_heading_obj <- parse_rmd("# My Title")[[1]]
+  rmd_heading_obj = parse_rmd("# My Title")[[1]]
   expect_false(rmd_has_shortcode(rmd_heading_obj))
   expect_false(rmd_has_shortcode(rmd_heading_obj, "video"))
   
   # Test rmd_tibble objects
-  rmd_tibble_with_shortcode <- as_tibble(parse_rmd("Text with {{< video url >}} shortcode"))
-  rmd_tibble_without_shortcode <- as_tibble(parse_rmd("Just normal text"))
+  rmd_tibble_with_shortcode = as_tibble(parse_rmd("Text with {{< video url >}} shortcode"))
+  rmd_tibble_without_shortcode = as_tibble(parse_rmd("Just normal text"))
   
   expect_true(any(rmd_has_shortcode(rmd_tibble_with_shortcode)))
   expect_false(any(rmd_has_shortcode(rmd_tibble_without_shortcode)))
@@ -99,7 +99,7 @@ test_that("rmd_has_shortcode() with different rmd classes", {
 test_that("has_shortcode() selection helper with different rmd classes", {
   
   # Create a comprehensive test document with various node types and shortcodes
-  test_rmd <- parse_rmd(c(
+  test_rmd = parse_rmd(c(
     "---",
     "title: \"Document with {{< var title >}}\"",
     "---",
@@ -110,7 +110,7 @@ test_that("has_shortcode() selection helper with different rmd classes", {
     "",
     "```{r chunk1}",
     "# Code with {{< include script.R >}} shortcode",
-    "x <- 1",
+    "x = 1",
     "```",
     "",
     "## Subsection", 
@@ -118,58 +118,58 @@ test_that("has_shortcode() selection helper with different rmd classes", {
     "Normal text without shortcodes.",
     "",
     "```{r chunk2}",
-    "y <- 2",
+    "y = 2",
     "```",
     "",
     "Final text with {{< kbd Ctrl+C >}} and {{< pagebreak >}}."
   ))
   
   # Test selecting all nodes with shortcodes
-  shortcode_nodes <- rmd_select(test_rmd, has_shortcode())
+  shortcode_nodes = rmd_select(test_rmd, has_shortcode())
   expect_length(shortcode_nodes, 4)  # YAML, markdown, chunk, and final markdown
   
   # Test selecting nodes with specific shortcode function names
-  video_nodes <- rmd_select(test_rmd, has_shortcode("video"))
+  video_nodes = rmd_select(test_rmd, has_shortcode("video"))
   expect_length(video_nodes, 1)
   expect_true(rmd_has_shortcode(video_nodes[[1]], "video"))
   
-  kbd_nodes <- rmd_select(test_rmd, has_shortcode("kbd"))
+  kbd_nodes = rmd_select(test_rmd, has_shortcode("kbd"))
   expect_length(kbd_nodes, 1)
   expect_true(rmd_has_shortcode(kbd_nodes[[1]], "kbd"))
   
-  include_nodes <- rmd_select(test_rmd, has_shortcode("include"))
+  include_nodes = rmd_select(test_rmd, has_shortcode("include"))
   expect_length(include_nodes, 1)
   expect_true(rmd_has_shortcode(include_nodes[[1]], "include"))
   
-  var_nodes <- rmd_select(test_rmd, has_shortcode("var"))
+  var_nodes = rmd_select(test_rmd, has_shortcode("var"))
   expect_length(var_nodes, 1)
   expect_true(rmd_has_shortcode(var_nodes[[1]], "var"))
   
   # Test glob patterns
-  page_nodes <- rmd_select(test_rmd, has_shortcode("page*"))
+  page_nodes = rmd_select(test_rmd, has_shortcode("page*"))
   expect_length(page_nodes, 1)
   expect_true(rmd_has_shortcode(page_nodes[[1]], "pagebreak"))
   
   # Test non-existent shortcode
-  nonexistent_nodes <- rmd_select(test_rmd, has_shortcode("nonexistent"))
+  nonexistent_nodes = rmd_select(test_rmd, has_shortcode("nonexistent"))
   expect_length(nonexistent_nodes, 0)
   
   # Test multiple function names
-  multi_nodes <- rmd_select(test_rmd, has_shortcode(c("video", "kbd")))
+  multi_nodes = rmd_select(test_rmd, has_shortcode(c("video", "kbd")))
   expect_length(multi_nodes, 2)
   
   # Test combining with other selectors
-  chunk_with_shortcode <- rmd_select(test_rmd, has_type("rmd_chunk") & has_shortcode())
+  chunk_with_shortcode = rmd_select(test_rmd, has_type("rmd_chunk") & has_shortcode())
   expect_length(chunk_with_shortcode, 1)
   expect_equal(rmd_node_type(chunk_with_shortcode[[1]]), "rmd_chunk")
   expect_true(rmd_has_shortcode(chunk_with_shortcode[[1]]))
   
-  markdown_with_shortcode <- rmd_select(test_rmd, has_type("rmd_markdown") & has_shortcode())
+  markdown_with_shortcode = rmd_select(test_rmd, has_type("rmd_markdown") & has_shortcode())
   expect_length(markdown_with_shortcode, 2)
   expect_true(all(rmd_node_type(markdown_with_shortcode) == "rmd_markdown"))
   expect_true(all(purrr::map_lgl(markdown_with_shortcode, rmd_has_shortcode)))
   
-  yaml_with_shortcode <- rmd_select(test_rmd, has_type("rmd_yaml") & has_shortcode())
+  yaml_with_shortcode = rmd_select(test_rmd, has_type("rmd_yaml") & has_shortcode())
   expect_length(yaml_with_shortcode, 1)
   expect_equal(rmd_node_type(yaml_with_shortcode[[1]]), "rmd_yaml")
   expect_true(rmd_has_shortcode(yaml_with_shortcode[[1]]))
@@ -178,20 +178,20 @@ test_that("has_shortcode() selection helper with different rmd classes", {
 test_that("has_shortcode() with edge cases", {
   
   # Test empty document
-  empty_rmd <- parse_rmd("")
+  empty_rmd = parse_rmd("")
   expect_length(rmd_select(empty_rmd, has_shortcode()), 0)
   
   # Test document with no shortcodes
-  no_shortcode_rmd <- parse_rmd(c("# Title", "Just normal text", "```{r}", "x <- 1", "```"))
+  no_shortcode_rmd = parse_rmd(c("# Title", "Just normal text", "```{r}", "x = 1", "```"))
   expect_length(rmd_select(no_shortcode_rmd, has_shortcode()), 0)
   expect_length(rmd_select(no_shortcode_rmd, has_shortcode("video")), 0)
   
   # Test document with only headings (which use default method)
-  headings_only_rmd <- parse_rmd(c("# Title 1", "## Subtitle", "### Subsubtitle"))
+  headings_only_rmd = parse_rmd(c("# Title 1", "## Subtitle", "### Subsubtitle"))
   expect_length(rmd_select(headings_only_rmd, has_shortcode()), 0)
   
   # Test with shortcode in various positions (multiple lines get combined into one markdown node)
-  complex_rmd <- parse_rmd(c(
+  complex_rmd = parse_rmd(c(
     "Start {{< video start >}} text",
     "Middle text {{< pagebreak >}} more text", 
     "End text {{< include end >}}"
@@ -205,7 +205,7 @@ test_that("has_shortcode() with edge cases", {
 test_that("YAML with multiple shortcodes in list values", {
   
   # Test complex YAML document with multiple shortcodes in categories list
-  complex_yaml_doc <- c(
+  complex_yaml_doc = c(
     '---',
     'title: "ABC"',
     'categories:',
@@ -220,14 +220,14 @@ test_that("YAML with multiple shortcodes in list values", {
   )
   
   # Parse the document from text
-  rmd_parsed <- parse_rmd(complex_yaml_doc)
+  rmd_parsed = parse_rmd(complex_yaml_doc)
   expect_length(rmd_parsed, 2)  # YAML node + markdown node
   
-  yaml_node_parsed <- rmd_parsed[[1]]
-  markdown_node <- rmd_parsed[[2]]
+  yaml_node_parsed = rmd_parsed[[1]]
+  markdown_node = rmd_parsed[[2]]
   
   # Create equivalent YAML node using rmd_yaml() constructor
-  yaml_node_constructed <- rmd_yaml(
+  yaml_node_constructed = rmd_yaml(
     title = "ABC",
     categories = c(
       "{{< var kws.ds >}}",
