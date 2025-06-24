@@ -48,7 +48,7 @@ Rcpp::List parse_shortcodes_cpp(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<client::ast::shortcode> expr;
-  auto error_handler = parse_str(str, client::parser::string_shortcodes2, expr);
+  auto error_handler = parse_str(str, client::parser::string_with_shortcodes, expr);
 
   // Using position tags find the position of the shortcodes
   for (auto& sc : expr) {
