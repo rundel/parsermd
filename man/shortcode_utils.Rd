@@ -6,7 +6,7 @@
 \alias{rmd_extract_shortcodes}
 \title{Shortcode detection and extraction utilities}
 \usage{
-rmd_has_shortcode(x, func_name = NULL, regex = FALSE)
+rmd_has_shortcode(x, func_name = NULL)
 
 rmd_extract_shortcodes(x, flatten = FALSE)
 }

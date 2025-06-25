@@ -16,17 +16,17 @@ NULL
 
 #' @rdname shortcode_utils
 #' @export
-rmd_has_shortcode = function(x, func_name = NULL, regex = FALSE) {
+rmd_has_shortcode = function(x, func_name = NULL) {
   UseMethod("rmd_has_shortcode")
 }
 
 #' @export
-rmd_has_shortcode.rmd_ast = function(x, func_name = NULL, regex = FALSE) {
-  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name, regex = regex)
+rmd_has_shortcode.rmd_ast = function(x, func_name = NULL) {
+  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name)
 }
 
 #' @export
-rmd_has_shortcode.default = function(x, func_name = NULL, regex = FALSE) {
+rmd_has_shortcode.default = function(x, func_name = NULL) {
   # Search for shortcode patterns in text content using flatten=TRUE to get direct list
   shortcodes = rmd_extract_shortcodes(x, flatten = TRUE)
 
@@ -44,23 +44,23 @@ rmd_has_shortcode.default = function(x, func_name = NULL, regex = FALSE) {
 
 
 #' @exportS3Method
-print.rmd_shortcode = function(object, ...) {
+print.rmd_shortcode = function(x, ...) {
   # Build the shortcode representation
-  func_name = cli::col_blue(cli::style_bold(object$func))
+  func_name = cli::col_blue(cli::style_bold(x$func))
   
-  if (length(object$args) == 0) {
+  if (length(x$args) == 0) {
     args_text = ""
   } else {
-    args_colored = cli::col_green(object$args)
+    args_colored = cli::col_green(x$args)
     args_text = paste0(" ", paste(args_colored, collapse = " "))
   }
   
   # Check if start/length attributes exist
-  has_position = !is.null(attr(object, "start")) || !is.null(attr(object, "length"))
+  has_position = !is.null(attr(x, "start")) || !is.null(attr(x, "length"))
   
   if (has_position) {
-    start_val = attr(object, "start") %||% "NA"
-    length_val = attr(object, "length") %||% "NA"
+    start_val = attr(x, "start") %||% "NA"
+    length_val = attr(x, "length") %||% "NA"
     position_text = cli::col_grey(paste0("[", start_val, ",", length_val, "]"))
   } else {
     position_text = ""
@@ -69,12 +69,12 @@ print.rmd_shortcode = function(object, ...) {
   # Output the formatted shortcode
   cli::cat_line(" rmd_shortcode", position_text, " {{< ", func_name, args_text, " >}}")
   
-  invisible(object)
+  invisible(x)
 }
 
 #' @exportS3Method
-str.rmd_shortcode = function(x, ...) {
-  print.rmd_shortcode(x, ...)
+str.rmd_shortcode = function(object, ...) {
+  print.rmd_shortcode(object, ...)
 }
 
 #' @rdname shortcode_utils

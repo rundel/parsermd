@@ -12,7 +12,7 @@ Description: An implementation of a formal grammar and parser for R Markdown doc
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 Imports: 
     purrr,
     Rcpp,

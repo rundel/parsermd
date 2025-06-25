@@ -68,9 +68,15 @@ rmd_shortcode(func, args = character(), start = -1L, length = -1L)
 
 \item{format}{Character. Format for raw chunk.}
 
+\item{lines}{Character. Markdown text lines.}
+
 \item{func}{Character. Shortcode function name.}
 
 \item{args}{Character. Shortcode arguments.}
+
+\item{start}{Integer. Shortcode start position.}
+
+\item{length}{Integer. Shortcode length.}
 }
 \value{
 An object with class matching the function name, e.g. \code{rmd_ast()} returns an \code{rmd_ast} object.

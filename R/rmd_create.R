@@ -38,6 +38,9 @@
 #' @param format Character. Format for raw chunk.
 #' @param func Character. Shortcode function name.
 #' @param args Character. Shortcode arguments.
+#' @param start Integer. Shortcode start position.
+#' @param length Integer. Shortcode length.
+#' @param lines Character. Markdown text lines.
 #' @param ... Elements within the node.
 #'
 #' @return An object with class matching the function name, e.g. `rmd_ast()` returns an `rmd_ast` object.
