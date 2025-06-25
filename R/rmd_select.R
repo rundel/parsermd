@@ -6,7 +6,7 @@
 #' @description This function is implemented using [tidyselect::eval_select()] which enables
 #' a variety of useful syntax for selecting nodes from the ast.
 #'
-#' Additionally, a number of additional `parsermd` specific selection helpers are available:
+#' Additionally, a number of `parsermd` helpers are available:
 #' [by_section()], [has_type()], [has_label()], and [has_option()].
 #'
 #' @param x Rmd object, e.g. `rmd_ast` or `rmd_tibble`.

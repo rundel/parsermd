@@ -20,7 +20,7 @@ Returns a subset Rmd object (either \code{rmd_ast} or \code{rmd_tibble} dependin
 This function is implemented using \code{\link[tidyselect:eval_select]{tidyselect::eval_select()}} which enables
 a variety of useful syntax for selecting nodes from the ast.
 
-Additionally, a number of additional \code{parsermd} specific selection helpers are available:
+Additionally, a number of \code{parsermd} helpers are available:
 \code{\link[=by_section]{by_section()}}, \code{\link[=has_type]{has_type()}}, \code{\link[=has_label]{has_label()}}, and \code{\link[=has_option]{has_option()}}.
 }
 \examples{
