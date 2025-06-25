@@ -43,8 +43,8 @@ rmd_markdown(lines = character())
 
 rmd_inline_code(
   engine = "",
-  braced = FALSE,
   code = "",
+  braced = FALSE,
   start = -1L,
   length = -1L
 )

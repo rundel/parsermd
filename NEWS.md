@@ -18,6 +18,11 @@
   
   * See helper functions: `rmd_has_shortcode()`, `rmd_extract_shortcodes()`, and `has_shortcode()`
 
+* Added comprehensive inline code detection and extraction utilities
+  
+  * New functions: `rmd_has_inline_code()`, `rmd_extract_inline_code()`, and `has_inline_code()` for selecting nodes
+  * Support for engine-specific filtering using glob patterns
+
 # parsermd 0.1.3
 
 * Unlabeled chunks will now be labeled as unnamed-chunk-n, with n incrementing.
