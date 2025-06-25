@@ -22,8 +22,6 @@
 #'
 #' * `rmd_markdown()` - Create a markdown container node of `rmd_markdown_line`s
 #'
-#' * `rmd_markdown_line()` - Create a markdown line node
-#'
 #' * `rmd_inline_code()` - Create an inline code node
 #'
 #' * `rmd_shortcode()` - Create a shortcode node
@@ -192,32 +190,16 @@ rmd_fenced_div_close = function() {
 
 #' @name rmd_create
 #' @export
-rmd_markdown = function(...) {
-  args = list(...)
-
-  purrr::walk(args, checkmate::assert_class, classes = "rmd_markdown_line")
+rmd_markdown = function(lines = character()) {
+  checkmate::assert_character(lines, any.missing = FALSE, min.len = 1)
 
   structure(
-    args,
+    list(lines = lines),
     class = "rmd_markdown"
   )
 }
 
-#' @name rmd_create
-#' @export
-rmd_markdown_line = function(...) {
-  args = list(...)
 
-  purrr::walk(args, checkmate::assert_multi_class, classes = c("character", "rmd_inline_code", "rmd_shortcode"))
-
-  if (length(args) == 1 && is.character(args[[1]]) && args[[1]] == '')
-    args = list()
-
-  structure(
-    args,
-    class = "rmd_markdown_line"
-  )
-}
 
 #' @name rmd_create
 #' @export

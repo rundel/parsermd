@@ -11,7 +11,6 @@
 \alias{rmd_fenced_div_open}
 \alias{rmd_fenced_div_close}
 \alias{rmd_markdown}
-\alias{rmd_markdown_line}
 \alias{rmd_inline_code}
 \alias{rmd_shortcode}
 \title{AST node creation}
@@ -40,9 +39,7 @@ rmd_fenced_div_open(attr = character())
 
 rmd_fenced_div_close()
 
-rmd_markdown(...)
-
-rmd_markdown_line(...)
+rmd_markdown(lines = character())
 
 rmd_inline_code(engine = "", code = "")
 
@@ -90,7 +87,6 @@ Functions for creating ast nodes,
 \item \code{rmd_fenced_div_open()} - Create a fenced div open node
 \item \code{rmd_fenced_div_close()} - Create a fenced div close node
 \item \code{rmd_markdown()} - Create a markdown container node of \code{rmd_markdown_line}s
-\item \code{rmd_markdown_line()} - Create a markdown line node
 \item \code{rmd_inline_code()} - Create an inline code node
 \item \code{rmd_shortcode()} - Create a shortcode node
 }

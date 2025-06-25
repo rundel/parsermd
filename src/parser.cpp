@@ -1,7 +1,7 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-// #define BOOST_SPIRIT_X3_DEBUG
+//#define BOOST_SPIRIT_X3_DEBUG
 
 #include <Rcpp.h>
 #include <boost/format.hpp>
@@ -12,6 +12,7 @@
 #include "parse_rmd.h"
 #include "parse_markdown.h"
 #include "parse_shortcode.h"
+#include "parse_inline_code.h"
 
 #include "rcpp_wrap.h"
 
@@ -199,14 +200,6 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_md_line_parser(std::string const& str) {
-  client::ast::md_line expr;
-  parse_str(str, client::parser::md_line, expr);
-
-  return Rcpp::wrap(expr);
-}
-
-// [[Rcpp::export]]
 Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw = false) {
   namespace x3 = boost::spirit::x3;
 
@@ -385,30 +378,29 @@ template <> SEXP wrap(std::vector<client::ast::shortcode> const& v) {
   return res;
 };
 
-template <> SEXP wrap(client::ast::md_element const& x) {
-  struct line_visitor {
-    SEXP operator()(client::ast::inline_code const& x) { return Rcpp::wrap(x); }
-    SEXP operator()(std::string const& x) { return Rcpp::wrap(x); }
-  } v;
+//template <> SEXP wrap(client::ast::md_element const& x) {
+//  struct line_visitor {
+//    SEXP operator()(client::ast::inline_code const& x) { return Rcpp::wrap(x); }
+//    SEXP operator()(std::string const& x) { return Rcpp::wrap(x); }
+//  } v;
+//
+//  return boost::apply_visitor(v, x);
+//};
 
-  return boost::apply_visitor(v, x);
-};
-
-template <> SEXP wrap(client::ast::md_line const& x) {
-  Rcpp::List res;
-  for(auto const& e : x.elements) {
-    res.push_back(Rcpp::wrap(e));
-  }
-  res.attr("class") = "rmd_markdown_line";
-
-  return res;
-}
+//template <> SEXP wrap(client::ast::md_line const& x) {
+//  Rcpp::List res;
+//  for(auto const& e : x.elements) {
+//    res.push_back(Rcpp::wrap(e));
+//  }
+//  res.attr("class") = "rmd_markdown_line";
+//
+//  return res;
+//}
 
 template <> SEXP wrap(client::ast::markdown const& x) {
-  Rcpp::List res;
-  for(auto const& l : x.lines) {
-    res.push_back(Rcpp::wrap(l));
-  }
+  Rcpp::List res =  Rcpp::List::create(
+    Rcpp::Named("lines") = Rcpp::wrap(x.lines)
+  );
   res.attr("class") = "rmd_markdown";
 
   return res;

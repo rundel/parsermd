@@ -173,11 +173,8 @@ And another.
     parse_rmd(ex1),
     rmd_ast(
       rmd_fenced_div_open(c("#special",".sidebar")),
-      rmd_markdown(
-        rmd_markdown_line("Here is a paragraph."),
-        rmd_markdown_line(""),
-        rmd_markdown_line("And another.")
-      ),
+      rmd_markdown("Here is a paragraph."),
+      rmd_markdown("And another."),
       rmd_fenced_div_close()
     )
   )
@@ -195,14 +192,9 @@ This is a warning within a warning.
     parse_rmd(ex2),
     rmd_ast(
       rmd_fenced_div_open(".Warning"),
-      rmd_markdown(
-        rmd_markdown_line("This is a warning."),
-        rmd_markdown_line("")
-      ),
+      rmd_markdown("This is a warning."),
       rmd_fenced_div_open(".Danger"),
-      rmd_markdown(
-        rmd_markdown_line("This is a warning within a warning.")
-      ),
+      rmd_markdown("This is a warning within a warning."),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
     )

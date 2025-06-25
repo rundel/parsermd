@@ -283,6 +283,7 @@ namespace client { namespace parser {
       iter doc_start = error_handler.get_position_cache().first();
       iter doc_end   = error_handler.get_position_cache().last();
 
+      auto test = error_handler.get_position_cache().get_positions();
 
       throw_parser_error(x.where(), doc_start, doc_end,
                          expr_start, expr_end, x.which());

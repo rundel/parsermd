@@ -75,8 +75,7 @@ tree_node.rmd_raw_chunk = function(x) {
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
-    #label = paste0("[", length(x), " lines]")
-    label = cli::pluralize("[{length(x)} line{?s}]")
+    label = cli::pluralize("[{length(x$lines)} line{?s}]")
   )
 }
 

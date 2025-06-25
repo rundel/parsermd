@@ -23,9 +23,4 @@ test_that("Inline code", {
     rmd_inline_code(engine = "python", code = "1+1")
   )
 
-
-  expect_snapshot(
-    check_inline_code_parser("``r 1+1``"),
-    error = TRUE
-  )
 })

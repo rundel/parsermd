@@ -2,12 +2,6 @@
 #' @export
 tibble::as_tibble
 
-# #' @exportS3Method
-# as.data.frame.rmd_ast = function(x, ..., include_yaml = TRUE) {
-#   as_tibble.rmd_ast(x, include_yaml) %>%
-#     as.data.frame()
-# }
-
 #' @exportS3Method
 as_tibble.rmd_ast = function(x, ...) {
 
@@ -28,7 +22,7 @@ as_tibble.rmd_ast = function(x, ...) {
 #' @importFrom pillar type_sum
 pillar::type_sum
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_chunk = function(x) {
   paste(
     cli::style_bold("chunk"),
@@ -37,7 +31,7 @@ type_sum.rmd_chunk = function(x) {
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_raw_chunk = function(x) {
   paste(
     cli::style_bold("raw attr chunk"),
@@ -45,12 +39,12 @@ type_sum.rmd_raw_chunk = function(x) {
   )
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_yaml = function(x) {
   cli::style_bold("yaml")
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_heading = function(x) {
   paste(
     cli::style_bold("heading"),
@@ -58,23 +52,22 @@ type_sum.rmd_heading = function(x) {
   )
 }
 
-
-#' @export
+#' @exportS3Method
 type_sum.rmd_markdown = function(x) {
   cli::style_bold("markdown")
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_code_block = function(x) {
   cli::style_bold("code block")
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_fenced_div_open = function(x) {
   cli::style_bold("fdiv [open]")
 }
 
-#' @export
+#' @exportS3Method
 type_sum.rmd_fenced_div_close = function(x) {
   cli::style_bold("fdiv [close]")
 }

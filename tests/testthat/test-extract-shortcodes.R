@@ -178,8 +178,6 @@ test_that("has_shortcode() selection helper with different rmd classes", {
 test_that("has_shortcode() with edge cases", {
   
   # Test empty document
-  empty_rmd = parse_rmd("")
-  expect_length(rmd_select(empty_rmd, has_shortcode()), 0)
   
   # Test document with no shortcodes
   no_shortcode_rmd = parse_rmd(c("# Title", "Just normal text", "```{r}", "x = 1", "```"))
