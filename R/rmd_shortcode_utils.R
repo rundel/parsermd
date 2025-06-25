@@ -96,7 +96,7 @@ rmd_extract_shortcodes.character = function(x, flatten = FALSE) {
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    res |> setNames(names(x))
+    res |> stats::setNames(names(x))
   }
 }
 
@@ -111,6 +111,6 @@ rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
     if (is.null(nm) && (!inherits(x, "list") || inherits(x, "rmd_ast"))) {
       nm = purrr::map_chr(x, class) 
     }
-    res |> setNames(nm)
+    res |> stats::setNames(nm)
   }
 }
