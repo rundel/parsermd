@@ -61,6 +61,23 @@ Rcpp::List parse_shortcodes_cpp(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+// [[Rcpp::export]]
+Rcpp::List parse_inline_code_cpp(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  std::vector<client::ast::inline_code> expr;
+  auto error_handler = parse_str(str, client::parser::string_with_inline_code, expr);
+
+  for (auto& ic : expr) {
+    auto pos = error_handler.position_of(ic);
+    ic.start = pos.begin() - str.begin();
+    ic.length = pos.end() - pos.begin();
+    ic.braced = *(pos.begin()+1) == '{';
+  }
+
+  return Rcpp::wrap(expr);
+}
+
 
 
 
@@ -345,8 +362,16 @@ template <> SEXP wrap(client::ast::rmd const& rmd) {
 template <> SEXP wrap(client::ast::inline_code const& ic) {
   Rcpp::List res = Rcpp::List::create(
     Rcpp::Named("engine")  = ic.engine,
-    Rcpp::Named("code")    = ic.code
+    Rcpp::Named("code")    = ic.code,
+    Rcpp::Named("braced")  = ic.braced
   );
+  
+  // Only add start and length as attributes if either is not -1
+  if (ic.start != -1 || ic.length != -1) {
+    res.attr("start") = Rcpp::wrap(ic.start);
+    res.attr("length") = Rcpp::wrap(ic.length);
+  }
+  
   res.attr("class") = "rmd_inline_code";
 
   return res;

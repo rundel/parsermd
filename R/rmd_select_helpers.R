@@ -177,3 +177,21 @@ has_shortcode = function(func_name = NULL) {
   
   which(contains_shortcode)
 }
+
+#' @rdname rmd_select_helpers
+#'
+#' @param engine character vector, optional glob patterns for matching inline code engine names.
+#' If NULL (default), matches any inline code.
+#'
+#' @export
+has_inline_code = function(engine = NULL) {
+  if (!is.null(engine)) {
+    checkmate::assert_character(engine, any.missing = FALSE, min.len = 1)
+  }
+
+  x = tidyselect::peek_data(fn = "has_inline_code")
+
+  contains_inline_code = rmd_has_inline_code(x, engine)
+  
+  which(contains_inline_code)
+}

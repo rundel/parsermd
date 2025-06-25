@@ -5,6 +5,10 @@ parse_shortcodes_cpp <- function(str) {
     .Call(`_parsermd_parse_shortcodes_cpp`, str)
 }
 
+parse_inline_code_cpp <- function(str) {
+    .Call(`_parsermd_parse_inline_code_cpp`, str)
+}
+
 parse_rmd_cpp <- function(str) {
     .Call(`_parsermd_parse_rmd_cpp`, str)
 }

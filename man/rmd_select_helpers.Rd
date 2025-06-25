@@ -8,6 +8,7 @@
 \alias{has_code}
 \alias{has_option}
 \alias{has_shortcode}
+\alias{has_inline_code}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
@@ -21,6 +22,8 @@ has_code(code)
 has_option(...)
 
 has_shortcode(func_name = NULL)
+
+has_inline_code(engine = NULL)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -41,6 +44,9 @@ Default: \code{TRUE}}
 
 \item{func_name}{character vector, optional glob patterns for matching shortcode function names.
 If NULL (default), matches any shortcode.}
+
+\item{engine}{character vector, optional glob patterns for matching inline code engine names.
+If NULL (default), matches any inline code.}
 }
 \value{
 All helper functions return an integer vector of selected indexes.

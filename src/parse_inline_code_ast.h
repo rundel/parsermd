@@ -10,15 +10,17 @@ namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
   struct inline_code : x3::position_tagged {
-    int n_ticks;
     std::string engine;
     std::string code;
+    bool braced = false;
+    int start = -1;
+    int length = -1;
   };
 } }
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::inline_code,
-  n_ticks, engine, code
+  engine, code
 )
 
 #endif

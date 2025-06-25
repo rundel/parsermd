@@ -206,15 +206,31 @@ rmd_markdown = function(lines = character()) {
 
 #' @name rmd_create
 #' @export
-rmd_inline_code = function(engine="", code="") {
+rmd_inline_code = function(engine="", code="", braced = FALSE, start = -1L, length = -1L) {
+  start = as.integer(start)
+  length = as.integer(length)
+  
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
   checkmate::assert_character(code, len = 1, any.missing = FALSE)
+  checkmate::assert_logical(braced, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(start, len = 1)
+  checkmate::assert_integer(length, len = 1)
+
+  # Build the list object
+  obj = list(
+    engine = engine,
+    code = code,
+    braced = braced
+  )
+  
+  # Only add start and length as named attributes if either is not -1
+  if (start != -1L || length != -1L) {
+    attr(obj, "start") = start
+    attr(obj, "length") = length
+  }
 
   structure(
-    list(
-      engine = engine,
-      code = code
-    ),
+    obj,
     class = "rmd_inline_code"
   )
 }

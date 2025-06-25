@@ -41,7 +41,13 @@ rmd_fenced_div_close()
 
 rmd_markdown(lines = character())
 
-rmd_inline_code(engine = "", code = "")
+rmd_inline_code(
+  engine = "",
+  braced = FALSE,
+  code = "",
+  start = -1L,
+  length = -1L
+)
 
 rmd_shortcode(func, args = character(), start = -1L, length = -1L)
 }
@@ -70,13 +76,13 @@ rmd_shortcode(func, args = character(), start = -1L, length = -1L)
 
 \item{lines}{Character. Markdown text lines.}
 
-\item{func}{Character. Shortcode function name.}
-
-\item{args}{Character. Shortcode arguments.}
-
 \item{start}{Integer. Shortcode start position.}
 
 \item{length}{Integer. Shortcode length.}
+
+\item{func}{Character. Shortcode function name.}
+
+\item{args}{Character. Shortcode arguments.}
 }
 \value{
 An object with class matching the function name, e.g. \code{rmd_ast()} returns an \code{rmd_ast} object.

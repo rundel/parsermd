@@ -21,7 +21,7 @@ namespace client { namespace ast {
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::shortcode,
-  func, args//, start, length
+  func, args
 )
 
 #endif

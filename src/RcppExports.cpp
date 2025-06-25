@@ -21,6 +21,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// parse_inline_code_cpp
+Rcpp::List parse_inline_code_cpp(std::string const& str);
+RcppExport SEXP _parsermd_parse_inline_code_cpp(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_inline_code_cpp(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // parse_rmd_cpp
 Rcpp::List parse_rmd_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_rmd_cpp(SEXP strSEXP) {
@@ -190,6 +201,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_parse_shortcodes_cpp", (DL_FUNC) &_parsermd_parse_shortcodes_cpp, 1},
+    {"_parsermd_parse_inline_code_cpp", (DL_FUNC) &_parsermd_parse_inline_code_cpp, 1},
     {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
     {"_parsermd_check_yaml_parser", (DL_FUNC) &_parsermd_check_yaml_parser, 1},
     {"_parsermd_check_chunk_parser", (DL_FUNC) &_parsermd_check_chunk_parser, 1},
