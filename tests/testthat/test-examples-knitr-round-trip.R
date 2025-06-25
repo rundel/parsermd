@@ -6,340 +6,352 @@ if (!dir.exists("examples")) {
 
 test_that("examples/knitr-examples/001-minimal.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/001-minimal.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/007-text-output.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/007-text-output.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/009-slides.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/009-slides.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/010-upload.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/010-upload.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/012-line-breaks.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/012-line-breaks.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/022-nothing.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/022-nothing.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/023-engine-python.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/023-engine-python.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/024-engine-awk.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/024-engine-awk.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/025-engine-ruby.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/025-engine-ruby.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/026-engine-haskell.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/026-engine-haskell.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/027-engine-bash.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/027-engine-bash.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/028-engine-perl.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/028-engine-perl.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/029-engine-Rcpp.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/029-engine-Rcpp.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/035-optipng.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/035-optipng.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/039-merge.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/039-merge.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/041-label-i.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/041-label-i.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/045-chunk-hook.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/045-chunk-hook.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/046-ref-chunk.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/046-ref-chunk.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/049-cars-demo.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/049-cars-demo.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/052-suppress-output.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/052-suppress-output.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/054-loop-plots.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/054-loop-plots.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/056-huge-plot.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/056-huge-plot.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/057-engine-dot.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/057-engine-dot.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/058-engine-tikz.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/058-engine-tikz.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/060-engine-sas.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/060-engine-sas.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/061-bash-variable.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/061-bash-variable.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/062-chunk-wrapper.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/062-chunk-wrapper.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/063-html5-figure.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/063-html5-figure.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/065-rmd-chunk.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/065-rmd-chunk.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/070-caption-num.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/070-caption-num.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/077-wrap-output.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/077-wrap-output.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/079-eval-echo.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/079-eval-echo.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/080-engine-coffeescript.Rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/080-engine-coffeescript.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/080-engine-coffeescript.Rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/083-ggplot2-reference.Rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/083-ggplot2-reference.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/083-ggplot2-reference.Rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/084-pandoc.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/084-pandoc.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/088-pandoc-embedded.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/088-pandoc-embedded.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/090-engine-c.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/090-engine-c.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/093-knitr-asy.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/093-knitr-asy.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/094-purl.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/094-purl.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/094-purl.qmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/094-purl.qmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/095-pandoc-header.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/095-pandoc-header.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/096-knit-exit.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/096-knit-exit.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/099-include-graphics.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/099-include-graphics.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/101-cache-levels.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/101-cache-levels.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/106-polyglot.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/106-polyglot.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/107-inline-linebreak.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/107-inline-linebreak.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/108-animation-scianimator.Rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/108-animation-scianimator.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/108-animation-scianimator.Rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/110-rmarkdown-landscape.Rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/110-rmarkdown-landscape.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/110-rmarkdown-landscape.Rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/111-engine-fortran.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/111-engine-fortran.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/112-yaml-in-child-child.rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/112-yaml-in-child-child.rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/112-yaml-in-child-child.rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/112-yaml-in-child.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/112-yaml-in-child.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/113-externalization.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/113-externalization.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/114-load-cache.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/114-load-cache.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/115-engine-sql.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/115-engine-sql.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/116-html-class.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/116-html-class.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/117-messages.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/117-messages.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/118-engine-go.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/118-engine-go.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/120-figure-alt-text.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/120-figure-alt-text.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/121-ref-label.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/121-ref-label.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/122-strip-white.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/122-strip-white.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/123-verbatim-engine.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/123-verbatim-engine.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/124-exec-engine.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/124-exec-engine.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/125-dash-options.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/125-dash-options.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/126-error-backtrace-2.Rmd", {
-  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/126-error-backtrace-2.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/126-error-backtrace-2.Rmd"),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/126-error-backtrace.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/126-error-backtrace.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/127-knit-print-error.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/127-knit-print-error.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/127-rlang-error-2.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/127-rlang-error-2.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
 test_that("examples/knitr-examples/127-rlang-error.Rmd", {
   ast <- testthat::expect_no_error(parse_rmd("examples/knitr-examples/127-rlang-error.Rmd"), class = "rmd_ast")
-  expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })

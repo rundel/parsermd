@@ -15,14 +15,14 @@ test_that("minimal.Rmd", {
     ),
     rmd_heading("Content", 1),
     rmd_heading("R Markdown", 2),
-    rmd_markdown(
-      rmd_markdown_line('This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, '),
-      rmd_markdown_line('PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.'),
-      rmd_markdown_line(''),
-      rmd_markdown_line('When you click the **Knit** button a document will be generated that includes both content as well '),
-      rmd_markdown_line('as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:'),
-      rmd_markdown_line('')
-    ),
+    rmd_markdown( c(
+      'This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, ',
+      'PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.'
+    ) ),
+    rmd_markdown( c(
+      'When you click the **Knit** button a document will be generated that includes both content as well ',
+      'as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:'
+    ) ),
     rmd_chunk(
       name = "cars", code = "summary(cars)"
     ),
@@ -31,17 +31,16 @@ test_that("minimal.Rmd", {
     ),
     rmd_heading("Including Plots", 2),
     rmd_markdown(
-      rmd_markdown_line("You can also embed plots, for example:"),
-      rmd_markdown_line("")
+      "You can also embed plots, for example:"
     ),
     rmd_chunk(
       name = "pressure", options = list(echo = "FALSE"),
       code = "plot(pressure)"
     ),
-    rmd_markdown(
-      rmd_markdown_line("Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code "),
-      rmd_markdown_line("that generated the plot.")
-    )
+    rmd_markdown( c(
+      "Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code ",
+      "that generated the plot."
+    ) )
   )
 
   expect_identical(ast, expected_ast)

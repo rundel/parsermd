@@ -51,13 +51,13 @@ namespace client { namespace parser {
       return;
     }
 
-    auto pos_cache = x3::get<x3::error_handler_tag>(ctx).get().get_position_cache();
+    auto error_handler = x3::get<x3::error_handler_tag>(ctx).get();
 
-    auto doc_start = pos_cache.first();
-    auto doc_end = pos_cache.last();
+    auto doc_start = error_handler.get_position_cache().first();
+    auto doc_end = error_handler.get_position_cache().last();
 
-    client::ast::fdiv_open fdiv = x3::get<_n_fdiv_open>(ctx).get().fdivs.back();
-    auto fdiv_open_pos = pos_cache.position_of(fdiv);
+    client::ast::fdiv_open& fdiv = x3::get<_n_fdiv_open>(ctx).get().fdivs.back();
+    auto fdiv_open_pos = error_handler.position_of(fdiv);
 
     throw_parser_error(
       fdiv_open_pos.end()-1,
@@ -74,7 +74,7 @@ namespace client { namespace parser {
   // Also indenting is not supported so we ignore that as well
   // - See https://github.com/jgm/pandoc/issues/7936
 
-  struct fdiv_open_class : error_handler, x3::annotate_on_success {};
+  struct fdiv_open_class : error_handler {};
   x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
 
   // For unbraced attributes add the css class decorator
@@ -119,7 +119,7 @@ namespace client { namespace parser {
   BOOST_SPIRIT_DEFINE(fdiv_open);
 
 
-  struct fdiv_close_class : error_handler, x3::annotate_on_success {};
+  struct fdiv_close_class : error_handler {};
   x3::rule<fdiv_close_class, client::ast::fdiv_close> const fdiv_close = "fdiv_close";
 
   auto const fdiv_close_def

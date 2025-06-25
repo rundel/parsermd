@@ -17,7 +17,7 @@ namespace client { namespace parser {
 
   // See https://quarto.org/docs/extensions/shortcodes.html
 
-  struct shortcode_class : error_handler, x3::annotate_on_success {};
+  struct shortcode_class : error_handler {};
   x3::rule<shortcode_class, client::ast::shortcode> const shortcode = "shortcode";
 
   auto shortcode_open = x3::rule<struct _> ("shortcode open")
@@ -43,12 +43,9 @@ namespace client { namespace parser {
       (unquoted_arg | x3::raw[q_string]) // value
     ];
 
-  
-  auto const arg = x3::rule<struct _, std::string>{"single argument"}
-    = x3::raw[q_string] | key_value_arg | unquoted_arg;
-
   auto args = x3::rule<struct _, std::vector<std::string> > ("arguments")
-  = *(!shortcode_close >> +(x3::lit(" ") | x3::eol) >> arg);
+  = *(!shortcode_close >> +(x3::lit(" ") | x3::eol) >> (x3::raw[q_string] | key_value_arg | unquoted_arg));
+
 
   auto const shortcode_def
   = shortcode_open >
@@ -56,6 +53,14 @@ namespace client { namespace parser {
     shortcode_close;
 
   BOOST_SPIRIT_DEFINE(shortcode);
+
+
+  auto not_shortcode = x3::rule<struct _> ("not shortcode")
+  = x3::raw[*( x3::lit("{{{<") | (!x3::lit("{{<") >> (x3::char_ | x3::eol)) )];
+
+  auto const string_with_shortcodes = not_shortcode >> *(shortcode >> not_shortcode);
+
+
 } }
 
 #endif

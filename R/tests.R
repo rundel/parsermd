@@ -10,7 +10,7 @@ test_round_trip = function(file) {
     )),
     
     rlang::expr_deparse( rlang::expr(
-      expect_equal(
+      testthat::expect_equal(
         ast,
         parse_rmd(as_document(ast, padding = character()))
       )

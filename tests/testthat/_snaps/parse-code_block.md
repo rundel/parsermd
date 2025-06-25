@@ -16,7 +16,7 @@
       check_code_block_parser("  ```\n\t```\n")
     Condition
       Error:
-      ! Failed to parse line 2, expected chunk end
+      ! Failed to parse line 2, expected code block end (```)
       2 | 	```
           ^~~~
 
@@ -26,7 +26,7 @@
       check_code_block_parser("  ```\n> ```\n")
     Condition
       Error:
-      ! Failed to parse line 2, expected chunk end
+      ! Failed to parse line 2, expected code block end (```)
       2 | > ```
           ^~~~~
 
@@ -36,7 +36,7 @@
       check_code_block_parser("  ```\n   ```\n")
     Condition
       Error:
-      ! Failed to parse line 2, expected chunk end
+      ! Failed to parse line 2, expected code block end (```)
       2 |    ```
           ^~~~~~
 

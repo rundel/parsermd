@@ -22,8 +22,6 @@
 #'
 #' * `rmd_markdown()` - Create a markdown container node of `rmd_markdown_line`s
 #'
-#' * `rmd_markdown_line()` - Create a markdown line node
-#'
 #' * `rmd_inline_code()` - Create an inline code node
 #'
 #' * `rmd_shortcode()` - Create a shortcode node
@@ -40,6 +38,9 @@
 #' @param format Character. Format for raw chunk.
 #' @param func Character. Shortcode function name.
 #' @param args Character. Shortcode arguments.
+#' @param start Integer. Shortcode start position.
+#' @param length Integer. Shortcode length.
+#' @param lines Character. Markdown text lines.
 #' @param ... Elements within the node.
 #'
 #' @return An object with class matching the function name, e.g. `rmd_ast()` returns an `rmd_ast` object.
@@ -192,60 +193,71 @@ rmd_fenced_div_close = function() {
 
 #' @name rmd_create
 #' @export
-rmd_markdown = function(...) {
-  args = list(...)
-
-  purrr::walk(args, checkmate::assert_class, classes = "rmd_markdown_line")
+rmd_markdown = function(lines = character()) {
+  checkmate::assert_character(lines, any.missing = FALSE, min.len = 1)
 
   structure(
-    args,
+    list(lines = lines),
     class = "rmd_markdown"
   )
 }
 
-#' @name rmd_create
-#' @export
-rmd_markdown_line = function(...) {
-  args = list(...)
 
-  purrr::walk(args, checkmate::assert_multi_class, classes = c("character", "rmd_inline_code", "rmd_shortcode"))
-
-  if (length(args) == 1 && is.character(args[[1]]) && args[[1]] == '')
-    args = list()
-
-  structure(
-    args,
-    class = "rmd_markdown_line"
-  )
-}
 
 #' @name rmd_create
 #' @export
-rmd_inline_code = function(engine="", code="") {
+rmd_inline_code = function(engine="", code="", braced = FALSE, start = -1L, length = -1L) {
+  start = as.integer(start)
+  length = as.integer(length)
+  
   checkmate::assert_character(engine, len = 1, any.missing = FALSE)
   checkmate::assert_character(code, len = 1, any.missing = FALSE)
+  checkmate::assert_logical(braced, len = 1, any.missing = FALSE)
+  checkmate::assert_integer(start, len = 1)
+  checkmate::assert_integer(length, len = 1)
+
+  # Build the list object
+  obj = list(
+    engine = engine,
+    code = code,
+    braced = braced
+  )
+  
+  # Only add start and length as named attributes if either is not -1
+  if (start != -1L || length != -1L) {
+    attr(obj, "start") = start
+    attr(obj, "length") = length
+  }
 
   structure(
-    list(
-      engine = engine,
-      code = code
-    ),
+    obj,
     class = "rmd_inline_code"
   )
 }
 
 #' @name rmd_create
 #' @export
-rmd_shortcode = function(func, args = character()) {
+rmd_shortcode = function(func, args = character(), start = -1L, length = -1L) {
+  start = as.integer(start)
+  length = as.integer(length)
+  
   checkmate::assert_character(func, len = 1, any.missing = FALSE)
   checkmate::assert_character(args, any.missing = FALSE)
+  checkmate::assert_integer(start, len = 1)
+  checkmate::assert_integer(length, len = 1)
 
-  structure(
-    list(
-      func = func,
-      args = args
-    ),
-    class = "rmd_shortcode"
+  # Build the list object conditionally
+  obj = list(
+    func = func,
+    args = args
   )
+  
+  # Only add start and length as named attributes if either is not -1
+  if (start != -1L || length != -1L) {
+    attr(obj, "start") = start
+    attr(obj, "length") = length
+  }
+
+  structure(obj, class = "rmd_shortcode")
 }
 

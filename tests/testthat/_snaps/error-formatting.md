@@ -23,13 +23,6 @@
                 ^
     
 
----
-
-    Failed to parse line 1, expected '"'
-    1 | {{< myfunc arg1 "unterminated >}}
-                        ~~~~~~~~~~~~~~~~^
-    
-
 # Multiline expression
 
     Failed to parse lines 1-5, expected '"'

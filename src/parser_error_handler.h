@@ -283,13 +283,25 @@ namespace client { namespace parser {
       iter doc_start = error_handler.get_position_cache().first();
       iter doc_end   = error_handler.get_position_cache().last();
 
+      auto test = error_handler.get_position_cache().get_positions();
 
       throw_parser_error(x.where(), doc_start, doc_end,
                          expr_start, expr_end, x.which());
 
       return x3::error_handler_result::rethrow;
     }
+    
+    template <typename T, typename Iterator, typename Context>
+    void on_success(
+      Iterator const& first, Iterator const& last, 
+      T& ast, Context const& context
+    ) {
+        auto& error_handler = x3::get<x3::error_handler_tag>(context).get();
+        error_handler.tag(ast, first, last);
+    }
   };
+
+  
 
 } }
 

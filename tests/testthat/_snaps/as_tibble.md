@@ -1,6 +1,6 @@
 # as_tibble - minimal.Rmd
 
-    # A tibble: 12 x 5
+    # A tibble: 13 x 5
        sec_h1  sec_h2          type         label           ast           
        <chr>   <chr>           <chr>        <chr>           <rmd_ast>     
      1 <NA>    <NA>            rmd_yaml     <NA>            <yaml>        
@@ -9,16 +9,17 @@
      4 Content <NA>            rmd_heading  <NA>            <heading [h1]>
      5 Content R Markdown      rmd_heading  <NA>            <heading [h2]>
      6 Content R Markdown      rmd_markdown <NA>            <markdown>    
-     7 Content R Markdown      rmd_chunk    cars            <chunk [r]>   
-     8 Content R Markdown      rmd_chunk    unnamed-chunk-1 <chunk [r]>   
-     9 Content Including Plots rmd_heading  <NA>            <heading [h2]>
-    10 Content Including Plots rmd_markdown <NA>            <markdown>    
-    11 Content Including Plots rmd_chunk    pressure        <chunk [r]>   
-    12 Content Including Plots rmd_markdown <NA>            <markdown>    
+     7 Content R Markdown      rmd_markdown <NA>            <markdown>    
+     8 Content R Markdown      rmd_chunk    cars            <chunk [r]>   
+     9 Content R Markdown      rmd_chunk    unnamed-chunk-1 <chunk [r]>   
+    10 Content Including Plots rmd_heading  <NA>            <heading [h2]>
+    11 Content Including Plots rmd_markdown <NA>            <markdown>    
+    12 Content Including Plots rmd_chunk    pressure        <chunk [r]>   
+    13 Content Including Plots rmd_markdown <NA>            <markdown>    
 
 # as_tibble - hw01.Rmd
 
-    # A tibble: 21 x 5
+    # A tibble: 23 x 5
        sec_h3        sec_h4   type         label         ast           
        <chr>         <chr>    <chr>        <chr>         <rmd_ast>     
      1 <NA>          <NA>     rmd_yaml     <NA>          <yaml>        
@@ -31,7 +32,7 @@
      8 Exercise 2    <NA>     rmd_heading  <NA>          <heading [h3]>
      9 Exercise 2    <NA>     rmd_markdown <NA>          <markdown>    
     10 Exercise 2    Solution rmd_heading  <NA>          <heading [h4]>
-    # i 11 more rows
+    # i 13 more rows
 
 # as_tibble - hw01-student.Rmd
 

@@ -25,14 +25,14 @@ namespace client { namespace parser {
   ] >>
   x3::eol;
 
-  auto const block_end = x3::rule<struct _> {"chunk end"}
+  auto const block_end = x3::rule<struct _> {"code block end (```)"}
   = x3::lexeme[
       x3::omit[ end_indent ] >>
       close_ticks(3)
     ] >>
     x3::eol;
 
-  struct code_block_class : error_handler, x3::annotate_on_success {};
+  struct code_block_class : error_handler {};
   x3::rule<code_block_class, client::ast::code_block> const code_block = "code block";
 
   auto const code_block_def

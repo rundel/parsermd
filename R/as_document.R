@@ -24,9 +24,13 @@ as_document.character = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
-  lines = unlist(
-    purrr::map(x, ~ c(as_document(.x), padding))
-  )
+  if (length(x) == 0) {
+    lines = ""
+  } else {
+    lines = unlist(
+      purrr::map(x, ~ c(as_document(.x), padding))
+    )
+  }
 
   if (!is.null(collapse))
     lines = paste(lines, collapse = collapse)
@@ -160,15 +164,9 @@ as_document.rmd_fenced_div_close = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_markdown = function(x, ...) {
-  purrr::map_chr(x, as_document)
-}
-
-
-#' @exportS3Method
-as_document.rmd_markdown_line = function(x, ...) {
-  paste(
-    purrr::map_chr(x, as_document),
-    collapse = ""
+  c(
+    purrr::map_chr(x$lines, as_document),
+    "" # Blank line spacing between markdown blocks
   )
 }
 

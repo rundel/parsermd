@@ -22,17 +22,27 @@ namespace client { namespace parser {
 
   auto const inline_body = x3::rule<struct _, std::string> {"inline code"}
   = x3::lexeme[
-      *(!close_ticks(1)  >> x3::char_ - x3::eol)
+      *(x3::char_ - x3::eol - x3::char_('`'))
     ];
 
-  auto const inline_code = x3::rule<struct _, client::ast::inline_code> {"inline code"}
+  struct inline_code_class : error_handler {};
+  x3::rule<inline_code_class, client::ast::inline_code> const inline_code = "inline code";
+
+  auto const inline_code_def
   = x3::lexeme[
-      open_ticks(1) >>
-      ( inline_engine | br_inline_engine) >>
+      x3::lit("`") >>
+      ( inline_engine | br_inline_engine ) >>
       x3::lit(" ") >>
       inline_body >>
-      close_ticks(1)
+      x3::lit("`")
     ];
+  
+  BOOST_SPIRIT_DEFINE(inline_code);
+
+  auto not_inline_code = x3::rule<struct _> ("not inline code")
+  = x3::raw[*( !inline_code >> (x3::char_ | x3::eol) )];
+
+  auto const string_with_inline_code = not_inline_code >> *(inline_code >> not_inline_code);
 } }
 
 #endif

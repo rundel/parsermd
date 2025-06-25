@@ -13,6 +13,8 @@ namespace client { namespace ast {
   struct shortcode : x3::position_tagged {
     std::string func;
     std::vector<std::string> args;
+    int start = -1;
+    int length = -1;
   };
 
 } }

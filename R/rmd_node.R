@@ -133,7 +133,7 @@ rmd_node_length.rmd_raw_chunk = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_length.rmd_markdown = function(x, ...) {
-  length(x)
+  length(x$lines)
 }
 
 #' @exportS3Method
@@ -182,7 +182,7 @@ rmd_node_content.rmd_raw_chunk = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_content.rmd_markdown = function(x, ...) {
-  paste(x, collapse="\n")
+  paste(x$lines, collapse="\n")
 }
 
 

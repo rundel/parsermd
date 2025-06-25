@@ -11,7 +11,6 @@
 \alias{rmd_fenced_div_open}
 \alias{rmd_fenced_div_close}
 \alias{rmd_markdown}
-\alias{rmd_markdown_line}
 \alias{rmd_inline_code}
 \alias{rmd_shortcode}
 \title{AST node creation}
@@ -40,13 +39,17 @@ rmd_fenced_div_open(attr = character())
 
 rmd_fenced_div_close()
 
-rmd_markdown(...)
+rmd_markdown(lines = character())
 
-rmd_markdown_line(...)
+rmd_inline_code(
+  engine = "",
+  code = "",
+  braced = FALSE,
+  start = -1L,
+  length = -1L
+)
 
-rmd_inline_code(engine = "", code = "")
-
-rmd_shortcode(func, args = character())
+rmd_shortcode(func, args = character(), start = -1L, length = -1L)
 }
 \arguments{
 \item{...}{Elements within the node.}
@@ -71,6 +74,12 @@ rmd_shortcode(func, args = character())
 
 \item{format}{Character. Format for raw chunk.}
 
+\item{lines}{Character. Markdown text lines.}
+
+\item{start}{Integer. Shortcode start position.}
+
+\item{length}{Integer. Shortcode length.}
+
 \item{func}{Character. Shortcode function name.}
 
 \item{args}{Character. Shortcode arguments.}
@@ -90,7 +99,6 @@ Functions for creating ast nodes,
 \item \code{rmd_fenced_div_open()} - Create a fenced div open node
 \item \code{rmd_fenced_div_close()} - Create a fenced div close node
 \item \code{rmd_markdown()} - Create a markdown container node of \code{rmd_markdown_line}s
-\item \code{rmd_markdown_line()} - Create a markdown line node
 \item \code{rmd_inline_code()} - Create an inline code node
 \item \code{rmd_shortcode()} - Create a shortcode node
 }
