@@ -312,7 +312,9 @@ template <> SEXP wrap(client::ast::heading const& h) {
 
 
 template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
-  Rcpp::CharacterVector res = Rcpp::wrap(fdiv.attrs);
+  Rcpp::List res =  Rcpp::List::create(
+    Rcpp::Named("attr") = Rcpp::wrap(fdiv.attrs)
+  );
   res.attr("class") = "rmd_fenced_div_open";
 
   return res;

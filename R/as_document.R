@@ -151,7 +151,7 @@ as_document.rmd_fenced_div_open = function(x, ...) {
   # FIXME - add depth counting to make :'s match for more readability
 
   paste0(
-    "::: {", paste(x, collapse=" "), "}"
+    "::: {", paste(x$attr, collapse=" "), "}"
   )
 }
 

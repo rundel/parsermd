@@ -83,7 +83,7 @@ tree_node.rmd_markdown = function(x) {
 tree_node.rmd_fenced_div_open = function(x) {
   list(
     text = "Open Fenced div",
-    label = paste0("[", paste(x, collapse=", "), "]")
+    label = paste0("[", paste(x$attr, collapse=", "), "]")
   )
 }
 

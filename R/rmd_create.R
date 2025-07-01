@@ -177,7 +177,7 @@ rmd_fenced_div_open = function(attr = character()) {
   checkmate::assert_character(attr, any.missing = FALSE, null.ok = TRUE)
 
   structure(
-    attr,
+    list(attr = attr),
     class = "rmd_fenced_div_open"
   )
 }
