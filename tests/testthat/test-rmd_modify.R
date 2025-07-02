@@ -193,3 +193,111 @@ test_that("rmd_modify error handling", {
     "Unsupported type"
   )
 })
+
+test_that("rmd_modify validates function results", {
+  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  
+  # Test function that returns invalid object
+  expect_error(
+    rmd_modify(rmd, .f = function(x) "not_an_rmd_node"),
+    "Function must return a valid rmd node object"
+  )
+  
+  # Test function that returns NULL
+  expect_error(
+    rmd_modify(rmd, .f = function(x) NULL),
+    "Function must return a valid rmd node object"
+  )
+  
+  # Test function that returns list without proper class
+  expect_error(
+    rmd_modify(rmd, .f = function(x) list(content = "test")),
+    "Function must return a valid rmd node object"
+  )
+  
+  # Test function that returns object with wrong class
+  expect_error(
+    rmd_modify(rmd, .f = function(x) structure(list(), class = "wrong_class")),
+    "Function must return a valid rmd node object"
+  )
+  
+  # Test that valid modifications pass validation
+  expect_no_error({
+    modified = rmd_modify(rmd, .f = function(x) {
+      attr(x, "test_attribute") = "valid"
+      x
+    })
+  })
+})
+
+test_that("rmd_modify validates chunk structure", {
+  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  
+  # Test function that returns incomplete chunk
+  expect_error(
+    rmd_modify(rmd, .f = function(x) {
+      if (inherits(x, "rmd_chunk")) {
+        # Return chunk missing required fields
+        structure(list(engine = "r"), class = "rmd_chunk")
+      } else {
+        x
+      }
+    }, has_type("rmd_chunk")),
+    "rmd_chunk validation failed.*missing required fields"
+  )
+})
+
+test_that("rmd_modify validates heading structure", {
+  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  
+  # Test function that returns incomplete heading
+  expect_error(
+    rmd_modify(rmd, .f = function(x) {
+      if (inherits(x, "rmd_heading")) {
+        # Return heading missing required fields
+        structure(list(name = "test"), class = "rmd_heading")
+      } else {
+        x
+      }
+    }, has_type("rmd_heading")),
+    "rmd_heading validation failed.*missing required fields"
+  )
+})
+
+test_that("rmd_modify reports multiple validation errors", {
+  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  
+  # Test function that returns heading with multiple issues
+  expect_error(
+    rmd_modify(rmd, .f = function(x) {
+      if (inherits(x, "rmd_heading")) {
+        # Return heading with multiple validation issues
+        structure(list(name = 123, level = "invalid"), class = "rmd_heading")
+      } else {
+        x
+      }
+    }, has_type("rmd_heading")),
+    "rmd_heading validation failed"
+  )
+  
+  # Test function that returns chunk with multiple type issues
+  expect_error(
+    rmd_modify(rmd, .f = function(x) {
+      if (inherits(x, "rmd_chunk")) {
+        # Return chunk with wrong field types
+        structure(list(
+          engine = 123,           # should be character
+          name = "test",
+          options = "not_list",   # should be list
+          yaml_options = list(),
+          code = 456,            # should be character
+          indent = "",
+          n_ticks = 3
+        ), class = "rmd_chunk")
+      } else {
+        x
+      }
+    }, has_type("rmd_chunk")),
+    "rmd_chunk validation failed"
+  )
+})

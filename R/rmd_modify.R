@@ -6,9 +6,12 @@
 #' @description This function applies a function to selected nodes of an `rmd_ast` or `rmd_tibble`.
 #' The selection is implemented using the same approach as [rmd_select()] which enables
 #' a variety of useful syntax for selecting nodes from the ast.
+#' 
+#' The function `.f` must return a valid rmd node object (e.g., `rmd_chunk`, `rmd_heading`, etc.).
+#' The results are validated to ensure they maintain the proper structure and class.
 #'
 #' @param x Rmd object, e.g. `rmd_ast` or `rmd_tibble`.
-#' @param .f A function to apply to the selected nodes.
+#' @param .f A function to apply to the selected nodes. Must return a valid rmd node object.
 #' @param ... Selection arguments (unnamed) and function arguments (named). 
 #'   Unnamed arguments are used for node selection using tidyselect syntax.
 #'   Named arguments are passed to the function `.f`.
@@ -66,6 +69,7 @@ selection_locs = function(x, selection_quos) {
   }
 }
 
+
 #' @exportS3Method
 rmd_modify.rmd_ast = function(x, .f, ...) {
   checkmate::assert_function(.f)
@@ -84,7 +88,12 @@ rmd_modify.rmd_ast = function(x, .f, ...) {
   loc = selection_locs(x, selection_quos)
   
   # Apply function to selected nodes with named arguments
-  x[loc] = purrr::map(x[loc], ~do.call(.f, c(list(.x), function_args)))
+  modified_nodes = purrr::map(x[loc], ~do.call(.f, c(list(.x), function_args)))
+  
+  # Validate that all results are valid rmd nodes
+  purrr::iwalk(modified_nodes, ~validate_rmd_node(.x, loc[.y]))
+  
+  x[loc] = modified_nodes
   
   x
 }

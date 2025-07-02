@@ -9,7 +9,7 @@ rmd_modify(x, .f, ...)
 \arguments{
 \item{x}{Rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
 
-\item{.f}{A function to apply to the selected nodes.}
+\item{.f}{A function to apply to the selected nodes. Must return a valid rmd node object.}
 
 \item{...}{Selection arguments (unnamed) and function arguments (named).
 Unnamed arguments are used for node selection using tidyselect syntax.
@@ -23,6 +23,9 @@ Only the selected nodes are modified by applying \code{.f}, while unselected nod
 This function applies a function to selected nodes of an \code{rmd_ast} or \code{rmd_tibble}.
 The selection is implemented using the same approach as \code{\link[=rmd_select]{rmd_select()}} which enables
 a variety of useful syntax for selecting nodes from the ast.
+
+The function \code{.f} must return a valid rmd node object (e.g., \code{rmd_chunk}, \code{rmd_heading}, etc.).
+The results are validated to ensure they maintain the proper structure and class.
 }
 \examples{
 rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
