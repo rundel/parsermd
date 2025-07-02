@@ -141,7 +141,7 @@ test_that("as_tibble - reverse_sections.Rmd", {
 
   expect_snapshot_output(tbl)
 
-  yaml = rmd_yaml('title: "Reversed Sections"','output: html_document')
+  yaml = rmd_yaml(list(title = "Reversed Sections", output = "html_document"))
   tbl_expected = tibble::tribble(
     ~sec_h1, ~sec_h2,       ~sec_h3,           ~type,        ~label,
     NA,           NA,            NA,      "rmd_yaml", NA_character_,

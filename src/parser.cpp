@@ -264,11 +264,14 @@ template <> SEXP wrap(client::ast::chunk const& chunk) {
     return res;
   }
 
+  Rcpp::CharacterVector yaml_options = Rcpp::wrap(chunk.yaml_options);
+  Rcpp::Function parse_yaml("parse_yaml");
+
   Rcpp::List res = Rcpp::List::create(
     Rcpp::Named("engine")  = chunk.args.engine,
     Rcpp::Named("name")    = chunk.args.name,
     Rcpp::Named("options") = Rcpp::wrap(chunk.args.chunk_options),
-    Rcpp::Named("yaml_options") = Rcpp::wrap(chunk.yaml_options),
+    Rcpp::Named("yaml_options") = parse_yaml(yaml_options),
     Rcpp::Named("code")    = chunk.code,
     Rcpp::Named("indent")  = chunk.args.indent,
     Rcpp::Named("n_ticks")  = chunk.args.n_ticks
@@ -329,9 +332,15 @@ template <> SEXP wrap(client::ast::fdiv_close const& fdiv) {
 }
 
 
-template <> SEXP wrap(client::ast::yaml const& yaml) {
-  Rcpp::CharacterVector res = Rcpp::wrap(yaml.lines);
-  res.attr("class") = "rmd_yaml_text";
+template <> SEXP wrap(client::ast::yaml const& x) {
+  Rcpp::CharacterVector yaml = Rcpp::wrap(x.lines);
+  Rcpp::Function parse_yaml("parse_yaml");
+
+  Rcpp::List res =  Rcpp::List::create(
+    Rcpp::Named("yaml") = parse_yaml(yaml)
+  );
+  
+  res.attr("class") = "rmd_yaml";
 
   return res;
 }

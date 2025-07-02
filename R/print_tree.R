@@ -17,7 +17,7 @@ tree_node.default = function(x) {
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
-    label = cli::pluralize("[{length(x)} field{?s}]")
+    label = cli::pluralize("[{length(x$yaml)} field{?s}]")
   )
 }
 

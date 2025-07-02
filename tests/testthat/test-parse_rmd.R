@@ -2,12 +2,12 @@ test_that("minimal.Rmd", {
   ast = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
   expected_ast = rmd_ast(
-    rmd_yaml(
+    rmd_yaml( list(
       title = "Minimal",
       author = "Colin Rundel",
       date = "7/21/2020",
       output = "html_document"
-    ),
+    ) ),
     rmd_heading("Setup", 1),
     rmd_chunk(
       name = "setup", options = list(include = "FALSE"),

@@ -225,7 +225,7 @@ test_that("YAML with multiple shortcodes in list values", {
   markdown_node = rmd_parsed[[2]]
   
   # Create equivalent YAML node using rmd_yaml() constructor
-  yaml_node_constructed = rmd_yaml(
+  yaml_node_constructed = rmd_yaml(list(
     title = "ABC",
     categories = c(
       "{{< var kws.ds >}}",
@@ -234,7 +234,7 @@ test_that("YAML with multiple shortcodes in list values", {
       "{{< var kws.python_pkg >}}",
       "AI"
     )
-  )
+  ))
   
   # Compare parsed vs constructed YAML nodes
   expect_equal(yaml_node_parsed, yaml_node_constructed)
@@ -271,7 +271,7 @@ test_that("YAML with multiple shortcodes in list values", {
   # Test shortcode extraction with flatten=FALSE (default) - returns nested structure
   expect_equal(
     rmd_extract_shortcodes(yaml_node_parsed, flatten = FALSE),
-    list(
+    list(yaml = list(
       "title" = list(list()),
       "categories" = list(
         list(rmd_shortcode("var", "kws.ds", 0L, 18L)),
@@ -280,7 +280,7 @@ test_that("YAML with multiple shortcodes in list values", {
         list(rmd_shortcode("var", "kws.python_pkg", 0L, 26L)),
         list()
       )
-    )
+    ) )
   )
 })
 

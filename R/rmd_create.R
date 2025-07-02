@@ -66,15 +66,13 @@ rmd_ast = function(...) {
 
 #' @name rmd_create
 #' @export
-rmd_yaml = function(...) {
-  yaml = list(...)
-
-  if (length(yaml) == 1 && is.list(yaml[[1]]))
-    yaml = yaml[[1]]
-
-  class(yaml) = "rmd_yaml"
-
-  yaml
+rmd_yaml = function(yaml = list()) {
+  structure(
+    list(
+      yaml = yaml
+    ),
+    class = "rmd_yaml"
+  )
 }
 
 
@@ -133,10 +131,6 @@ rmd_chunk = function(
 
   #if (length(yaml_options) == 0)
   #  names(yaml_options) = character()
-
-  if (!inherits(yaml_options, "rmd_yaml"))
-    class(yaml_options) = "rmd_yaml"
-
 
   structure(
     list(
