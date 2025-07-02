@@ -1,3 +1,36 @@
+test_that("rmd_node_validate.rmd_ast works", {
+  # Valid AST
+  expect_true(rmd_node_validate(rmd_ast(
+    rmd_yaml(title = "Test"),
+    rmd_heading("Section", 1),
+    rmd_markdown(lines = "Some text")
+  )))
+  
+  # Empty AST
+  expect_true(rmd_node_validate(rmd_ast()))
+  
+  # Invalid - not a list
+  expect_snapshot_error(rmd_node_validate(
+    structure("not_a_list", class = "rmd_ast")
+  ))
+  
+  # Invalid node type in AST
+  expect_snapshot_error(rmd_node_validate(
+    structure(list(
+      rmd_yaml(title = "Test"),
+      structure(list(invalid = "node"), class = "invalid_node")
+    ), class = c("rmd_ast", "list"))
+  ))
+  
+  # Invalid node content in AST
+  expect_snapshot_error(rmd_node_validate(
+    structure(list(
+      rmd_yaml(title = "Test"),
+      structure(list(name = "Test", level = 7), class = "rmd_heading")
+    ), class = c("rmd_ast", "list"))
+  ))
+})
+
 test_that("rmd_node_validate.rmd_yaml works", {
   # Valid yaml
   expect_true(rmd_node_validate(rmd_yaml(title = "Test", author = "Me")))

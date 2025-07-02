@@ -56,7 +56,7 @@ rmd_ast = function(...) {
     ast, checkmate::assert_multi_class, null.ok = TRUE,
     classes = c("rmd_markdown", "rmd_chunk", "rmd_raw_chunk", "rmd_yaml",
                 "rmd_code_block", "rmd_fenced_div_open", "rmd_fenced_div_close", "rmd_heading",
-                "rmd_inline_code")
+                "rmd_inline_code", "rmd_shortcode")
   )
 
   class(ast) = c("rmd_ast", "list")
