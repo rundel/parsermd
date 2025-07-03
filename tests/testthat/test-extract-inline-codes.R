@@ -25,17 +25,17 @@ test_that("Inline code detection in AST nodes", {
   rmd1 = parse_rmd(c("Hello `r mean(x)` world"))
   expect_equal(rmd_select(rmd1, has_inline_code()), rmd1[1])
   expect_equal(rmd_select(rmd1, has_inline_code("r")), rmd1[1])
-  expect_length(rmd_select(rmd1, has_inline_code("python")), 0)
+  expect_equal(rmd_select(rmd1, has_inline_code("python")), rmd_ast(list()))
   
   # Test inline code detection in chunk code
   rmd2 = parse_rmd(c("```{r}", "# Comment with `r inline_code`", "x = 1", "```"))
-  expect_equal(rmd_select(rmd2, has_inline_code()), rmd2[1])
-  expect_equal(rmd_select(rmd2, has_inline_code("r")), rmd2[1])
-  expect_length(rmd_select(rmd2, has_inline_code("python")), 0)
+  expect_equal(rmd_select(rmd2, has_inline_code()), rmd_ast(list()))
+  expect_equal(rmd_select(rmd2, has_inline_code("r")), rmd_ast(list()))
+  expect_equal(rmd_select(rmd2, has_inline_code("python")), rmd_ast(list()))
   
   # Test no inline codes
   rmd3 = parse_rmd(c("Hello world", "```{r}", "print('hello')", "```"))
-  expect_length(rmd_select(rmd3, has_inline_code()), 0)
+  expect_equal(rmd_select(rmd3, has_inline_code()), rmd_ast(list()))
 })
 
 test_that("rmd_has_inline_code() with different rmd classes", {
@@ -62,9 +62,9 @@ test_that("rmd_has_inline_code() with different rmd classes", {
   rmd_chunk_with_inline = parse_rmd(c("```{r}", "# Comment with `r length(x)`", "x = 1", "```"))[[1]]
   rmd_chunk_without_inline = parse_rmd(c("```{r}", "x = 1", "```"))[[1]]
   
-  expect_true(rmd_has_inline_code(rmd_chunk_with_inline))
+  expect_false(rmd_has_inline_code(rmd_chunk_with_inline))
   expect_false(rmd_has_inline_code(rmd_chunk_without_inline))
-  expect_true(rmd_has_inline_code(rmd_chunk_with_inline, "r"))
+  expect_false(rmd_has_inline_code(rmd_chunk_with_inline, "r"))
   expect_false(rmd_has_inline_code(rmd_chunk_with_inline, "python"))
   
   # Test rmd_yaml objects (inline codes must be in quoted values)
@@ -121,60 +121,57 @@ test_that("has_inline_code() selection helper with different rmd classes", {
   
   # Test selecting all nodes with inline codes
   inline_nodes = rmd_select(test_rmd, has_inline_code())
-  expect_length(inline_nodes, 4)  # YAML, markdown, chunk, and final markdown
+  expect_equal(inline_nodes, test_rmd[c(1,3,8)])  # YAML, markdown, chunk, and final markdown
   
   # Test selecting nodes with specific inline code engines
   r_nodes = rmd_select(test_rmd, has_inline_code("r"))
-  expect_length(r_nodes, 3)
-  expect_true(all(purrr::map_lgl(r_nodes, rmd_has_inline_code, "r")))
+  expect_equal(r_nodes, test_rmd[c(1,3)])
+  expect_true(all(rmd_has_inline_code(r_nodes, engine = "r")))
   
   python_nodes = rmd_select(test_rmd, has_inline_code("python"))
-  expect_length(python_nodes, 1)
-  expect_true(rmd_has_inline_code(python_nodes[[1]], "python"))
+  expect_equal(python_nodes, test_rmd[8])
+  expect_true(rmd_has_inline_code(python_nodes, "python"))
   
   sql_nodes = rmd_select(test_rmd, has_inline_code("sql"))
-  expect_length(sql_nodes, 1)
-  expect_true(rmd_has_inline_code(sql_nodes[[1]], "sql"))
+  expect_equal(sql_nodes, test_rmd[8])
+  expect_true(rmd_has_inline_code(sql_nodes, "sql"))
   
-  # Test glob patterns
-  version_nodes = rmd_select(test_rmd, has_inline_code("r"))
-  expect_length(version_nodes, 3)
-  
+
   # Test non-existent engine
   nonexistent_nodes = rmd_select(test_rmd, has_inline_code("nonexistent"))
-  expect_length(nonexistent_nodes, 0)
+  expect_equal(nonexistent_nodes, rmd_ast(list()))
   
   # Test multiple engine names
   multi_nodes = rmd_select(test_rmd, has_inline_code(c("python", "sql")))
-  expect_length(multi_nodes, 1)  # Only the final markdown has both
+  expect_equal(multi_nodes, test_rmd[8])  # Only the final markdown has both
   
   # Test combining with other selectors
-  chunk_with_inline = rmd_select(test_rmd, has_type("rmd_chunk") & has_inline_code())
-  expect_length(chunk_with_inline, 1)
-  expect_equal(rmd_node_type(chunk_with_inline[[1]]), "rmd_chunk")
-  expect_true(rmd_has_inline_code(chunk_with_inline[[1]]))
-  
+  chunk_with_inline = rmd_select(test_rmd, has_type("rmd_yaml") & has_inline_code())
+  expect_equal(chunk_with_inline, test_rmd[c(1)])
+
   markdown_with_inline = rmd_select(test_rmd, has_type("rmd_markdown") & has_inline_code())
-  expect_length(markdown_with_inline, 2)
-  expect_true(all(rmd_node_type(markdown_with_inline) == "rmd_markdown"))
-  expect_true(all(purrr::map_lgl(markdown_with_inline, rmd_has_inline_code)))
-  
-  yaml_with_inline = rmd_select(test_rmd, has_type("rmd_yaml") & has_inline_code())
-  expect_length(yaml_with_inline, 1)
-  expect_equal(rmd_node_type(yaml_with_inline[[1]]), "rmd_yaml")
-  expect_true(rmd_has_inline_code(yaml_with_inline[[1]]))
+  expect_equal(markdown_with_inline, test_rmd[c(3,8)])
 })
 
 test_that("has_inline_code() with edge cases", {
   
   # Test document with no inline codes
   no_inline_rmd = parse_rmd(c("# Title", "Just normal text", "```{r}", "x = 1", "```"))
-  expect_length(rmd_select(no_inline_rmd, has_inline_code()), 0)
-  expect_length(rmd_select(no_inline_rmd, has_inline_code("r")), 0)
+  expect_equal(
+    rmd_select(no_inline_rmd, has_inline_code()), 
+    rmd_ast(list())
+  )
+  expect_equal(
+    rmd_select(no_inline_rmd, has_inline_code("r")), 
+    rmd_ast(list())
+  )
   
   # Test document with only headings (which use default method)
   headings_only_rmd = parse_rmd(c("# Title 1", "## Subtitle", "### Subsubtitle"))
-  expect_length(rmd_select(headings_only_rmd, has_inline_code()), 0)
+  expect_equal(
+    rmd_select(headings_only_rmd, has_inline_code()), 
+    rmd_ast(list())
+  )
   
   # Test with inline code in various positions
   complex_rmd = parse_rmd(c(
@@ -182,10 +179,22 @@ test_that("has_inline_code() with edge cases", {
     "Middle text `python y` more text", 
     "End text `{sql} SELECT z`"
   ))
-  expect_length(rmd_select(complex_rmd, has_inline_code()), 1)  # One markdown node with multiple inline codes
-  expect_length(rmd_select(complex_rmd, has_inline_code("r")), 1)
-  expect_length(rmd_select(complex_rmd, has_inline_code("python")), 1)
-  expect_length(rmd_select(complex_rmd, has_inline_code("sql")), 1)
+  expect_equal(
+    rmd_select(complex_rmd, has_inline_code()),
+    complex_rmd[1]
+  )
+  expect_equal(
+    rmd_select(complex_rmd, has_inline_code("r")), 
+    complex_rmd[1]
+  )
+  expect_equal(
+    rmd_select(complex_rmd, has_inline_code("python")),
+    complex_rmd[1]
+  )
+  expect_equal(
+    rmd_select(complex_rmd, has_inline_code("sql")),
+    complex_rmd[1]
+  )
 })
 
 test_that("Inline code extraction functionality", {

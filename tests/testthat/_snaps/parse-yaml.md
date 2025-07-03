@@ -51,7 +51,7 @@
 # yaml parsing - blank lines
 
     Code
-      parse("---\n\n---\n")
+      check_yaml_parser("---\n\n---\n")
     Condition
       Error:
       ! Failed to parse line 1
@@ -61,7 +61,7 @@
 ---
 
     Code
-      parse("---\n\nvalue: 1\n---\n")
+      check_yaml_parser("---\n\nvalue: 1\n---\n")
     Condition
       Error:
       ! Failed to parse line 1

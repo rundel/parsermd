@@ -48,9 +48,9 @@ parse_qmd = function(qmd) {
 
 fix_unnamed_chunks = function(ast) {
   unk_i = 1
-  for(j in seq_along(ast)) {
-    if (inherits(ast[[j]], "rmd_chunk") && ast[[j]][["name"]] == "" && rmd_node_label(ast[[j]]) == "") {
-      ast[[j]][["name"]] = paste0("unnamed-chunk-", unk_i)
+  for(j in seq_along(ast@nodes)) {
+    if (inherits(ast@nodes[[j]], "rmd_chunk") && ast@nodes[[j]]@name == "" && rmd_node_label(ast@nodes[[j]]) == "") {
+      ast@nodes[[j]]@name = paste0("unnamed-chunk-", unk_i)
       unk_i = unk_i + 1
     }
   }

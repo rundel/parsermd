@@ -2,7 +2,7 @@
 
     # A tibble: 13 x 5
        sec_h1  sec_h2          type         label           ast           
-       <chr>   <chr>           <chr>        <chr>           <rmd_ast>     
+       <chr>   <chr>           <chr>        <chr>           <list>        
      1 <NA>    <NA>            rmd_yaml     <NA>            <yaml>        
      2 Setup   <NA>            rmd_heading  <NA>            <heading [h1]>
      3 Setup   <NA>            rmd_chunk    setup           <chunk [r]>   
@@ -21,7 +21,7 @@
 
     # A tibble: 23 x 5
        sec_h3        sec_h4   type         label         ast           
-       <chr>         <chr>    <chr>        <chr>         <rmd_ast>     
+       <chr>         <chr>    <chr>        <chr>         <list>        
      1 <NA>          <NA>     rmd_yaml     <NA>          <yaml>        
      2 Load packages <NA>     rmd_heading  <NA>          <heading [h3]>
      3 Load packages <NA>     rmd_chunk    load-packages <chunk [r]>   
@@ -38,7 +38,7 @@
 
     # A tibble: 19 x 5
        sec_h3        sec_h4   type         label         ast           
-       <chr>         <chr>    <chr>        <chr>         <rmd_ast>     
+       <chr>         <chr>    <chr>        <chr>         <list>        
      1 <NA>          <NA>     rmd_yaml     <NA>          <yaml>        
      2 Load packages <NA>     rmd_heading  <NA>          <heading [h3]>
      3 Load packages <NA>     rmd_chunk    load-packages <chunk [r]>   
@@ -63,7 +63,7 @@
 
     # A tibble: 4 x 5
       sec_h1 sec_h2 type        label ast           
-      <chr>  <chr>  <chr>       <chr> <rmd_ast>     
+      <chr>  <chr>  <chr>       <chr> <list>        
     1 H1-1   <NA>   rmd_heading <NA>  <heading [h1]>
     2 H1-1   H2-1   rmd_heading <NA>  <heading [h2]>
     3 H1-1   H2-2   rmd_heading <NA>  <heading [h2]>
@@ -73,7 +73,7 @@
 
     # A tibble: 5 x 6
       sec_h1 sec_h2 sec_h3      type        label ast           
-      <chr>  <chr>  <chr>       <chr>       <chr> <rmd_ast>     
+      <chr>  <chr>  <chr>       <chr>       <chr> <list>        
     1 <NA>   <NA>   <NA>        rmd_yaml    <NA>  <yaml>        
     2 <NA>   <NA>   H3          rmd_heading <NA>  <heading [h3]>
     3 <NA>   H2     <NA>        rmd_heading <NA>  <heading [h2]>

@@ -24,11 +24,11 @@ as_document.character = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
-  if (length(x) == 0) {
+  if (length(x@nodes) == 0) {
     lines = ""
   } else {
     lines = unlist(
-      purrr::map(x, ~ c(as_document(.x), padding))
+      purrr::map(x@nodes, ~ c(as_document(.x), padding))
     )
   }
 
@@ -56,72 +56,72 @@ as_document.rmd_tibble = function(x, padding = "", collapse = NULL, ...) {
 
 #' @exportS3Method
 as_document.rmd_chunk = function(x, ...) {
-  if (x$name != "") {
-    details = x$name
+  if (x@name != "") {
+    details = x@name
 
-    if (length(x$options) > 0)
+    if (length(x@options) > 0)
       details = paste0(details, ", ")
   } else {
     details = ""
   }
 
-  if (length(x$options) > 0)
+  if (length(x@options) > 0)
     details = paste0(
       details,
-      paste(names(x$options), "=", x$options, collapse=", ")
+      paste(names(x@options), "=", x@options, collapse=", ")
     )
 
   if (details != "")
     details = paste0(" ", details)
 
-  ticks = paste(rep('`', x$n_ticks), collapse="")
+  ticks = paste(rep('`', x@n_ticks), collapse="")
 
   lines = c(
-    paste0(ticks, "{", x$engine, details, "}"),
-    if (length(x$yaml_options) > 0) {
-      yaml_lines = yaml_text(x$yaml_options)
+    paste0(ticks, "{", x@engine, details, "}"),
+    if (length(x@yaml_options) > 0) {
+      yaml_lines = yaml_text(x@yaml_options)
       paste("#|", yaml_lines)
     } else {
       character()
     },
-    x$code,
+    x@code,
     ticks
   )
 
   paste0(
-    x$indent,
+    x@indent,
     lines
   )
 }
 
 #' @exportS3Method
 as_document.rmd_raw_chunk = function(x, ...) {
-  ticks = paste(rep('`', x$n_ticks), collapse="")
+  ticks = paste(rep('`', x@n_ticks), collapse="")
 
   lines = c(
-    paste0(ticks, "{=", x$format,"}"),
-    x$code,
+    paste0(ticks, "{=", x@format,"}"),
+    x@code,
     ticks
   )
 
   paste0(
-    x$indent,
+    x@indent,
     lines
   )
 }
 
 #' @exportS3Method
 as_document.rmd_code_block = function(x, ...) {
-  ticks = paste(rep('`', x$n_ticks), collapse="")
+  ticks = paste(rep('`', x@n_ticks), collapse="")
 
   lines = c(
-    paste(ticks, x$attr),
-    x$code,
+    paste(ticks, x@attr),
+    x@code,
     ticks
   )
 
   paste0(
-    x$indent,
+    x@indent,
     lines
   )
 }
@@ -130,8 +130,8 @@ as_document.rmd_code_block = function(x, ...) {
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
   paste(
-    paste(rep("#", x$level), collapse=""),
-    x$name
+    paste(rep("#", x@level), collapse=""),
+    x@name
   )
 }
 
@@ -140,10 +140,16 @@ as_document.rmd_heading = function(x, ...) {
 as_document.rmd_yaml = function(x, ...) {
   c(
     "---",
-    yaml_text(x$yaml),
+    yaml_text(x@yaml),
     "---"
   )
 }
+
+#' @exportS3Method
+`as_document.parsermd::rmd_yaml` = function(x, ...) {
+  as_document.rmd_yaml(x, ...)
+}
+
 
 
 #' @exportS3Method
@@ -151,7 +157,7 @@ as_document.rmd_fenced_div_open = function(x, ...) {
   # FIXME - add depth counting to make :'s match for more readability
 
   paste0(
-    "::: {", paste(x$attr, collapse=" "), "}"
+    "::: {", paste(x@attr, collapse=" "), "}"
   )
 }
 
@@ -165,7 +171,7 @@ as_document.rmd_fenced_div_close = function(x, ...) {
 #' @exportS3Method
 as_document.rmd_markdown = function(x, ...) {
   c(
-    purrr::map_chr(x$lines, as_document),
+    purrr::map_chr(x@lines, as_document),
     "" # Blank line spacing between markdown blocks
   )
 }
@@ -176,8 +182,8 @@ as_document.rmd_shortcode = function(x, ...) {
   paste0(
     "{{< ",
       paste( c(
-        x$func,
-        if (length(x$args) != 0) paste0(" ", x$args) else ""
+        x@func,
+        if (length(x@args) != 0) paste0(" ", x@args) else ""
       ), collapse=""),
     " >}}"
   )
@@ -187,8 +193,8 @@ as_document.rmd_shortcode = function(x, ...) {
 as_document.rmd_inline_code = function(x, ...) {
   paste0(
     "`",
-    "{", x$engine, "} ",
-    x$code,
+    "{", x@engine, "} ",
+    x@code,
     "`"
   )
 }

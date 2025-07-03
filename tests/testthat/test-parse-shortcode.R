@@ -110,15 +110,15 @@ test_that("C++ string shortcodes parser - basic functionality", {
   # Test single shortcode
   expect_equal(
     parse_shortcodes_cpp("Hello {{< video url >}} world"),
-    list(rmd_shortcode("video", "url", 6, 17))
+    list(rmd_shortcode("video", "url", 6L, 17L))
   )
   
   # Test multiple shortcodes
   expect_equal(
     parse_shortcodes_cpp("{{< func1 >}} and {{< func2 arg >}}"),
     list(
-      rmd_shortcode("func1", character(), 0, 13),
-      rmd_shortcode("func2", "arg", 18, 17)
+      rmd_shortcode("func1", character(), 0L, 13L),
+      rmd_shortcode("func2", "arg", 18L, 17L)
     )
   )
   
@@ -131,7 +131,7 @@ test_that("C++ string shortcodes parser - basic functionality", {
   # Test shortcode with no arguments
   expect_equal(
     parse_shortcodes_cpp("{{< pagebreak >}}"),
-    list(rmd_shortcode("pagebreak", character(), 0, 17))
+    list(rmd_shortcode("pagebreak", character(), 0L, 17L))
   )
 })
 
@@ -140,31 +140,31 @@ test_that("C++ string shortcodes parser - argument parsing", {
   # Test simple arguments
   expect_equal(
     parse_shortcodes_cpp("{{< video arg1 arg2 arg3 >}}"),
-    list(rmd_shortcode("video", c("arg1", "arg2", "arg3"), 0, 28))
+    list(rmd_shortcode("video", c("arg1", "arg2", "arg3"), 0L, 28L))
   )
   
   # Test quoted arguments
   expect_equal(
     parse_shortcodes_cpp("{{< video \"quoted arg\" >}}"),
-    list(rmd_shortcode("video", "\"quoted arg\"", 0, 26))
+    list(rmd_shortcode("video", "\"quoted arg\"", 0L, 26L))
   )
   
   # Test single quoted arguments
   expect_equal(
     parse_shortcodes_cpp("{{< kbd key='Ctrl+C' >}}"),
-    list(rmd_shortcode("kbd", "key='Ctrl+C'", 0, 24))
+    list(rmd_shortcode("kbd", "key='Ctrl+C'", 0L, 24L))
   )
   
   # Test key=value arguments
   expect_equal(
     parse_shortcodes_cpp("{{< video url=https://example.com title=\"My Video\" >}}"),
-    list(rmd_shortcode("video", c("url=https://example.com", "title=\"My Video\""), 0, 54))
+    list(rmd_shortcode("video", c("url=https://example.com", "title=\"My Video\""), 0L, 54L))
   )
   
   # Test mixed argument types
   expect_equal(
     parse_shortcodes_cpp("{{< include file.txt lines=10 echo=true >}}"),
-    list(rmd_shortcode("include", c("file.txt", "lines=10", "echo=true"), 0, 43))
+    list(rmd_shortcode("include", c("file.txt", "lines=10", "echo=true"), 0L, 43L))
   )
 })
 
@@ -181,7 +181,7 @@ test_that("C++ string shortcodes parser - multiline strings", {
       "title=\"My Long Video Title\"",
       "width=800",
       "height=600"
-    ), 0, 98))
+    ), 0L, 98L))
   )
   
   # Test multiple shortcodes across lines
@@ -191,16 +191,16 @@ test_that("C++ string shortcodes parser - multiline strings", {
   {{< video url >}} more text
   {{< include file.txt >}} end"),
     list(
-      rmd_shortcode("pagebreak", character(), 6, 17),
-      rmd_shortcode("video", "url", 45, 17),
-      rmd_shortcode("include", "file.txt", 75, 24)
+      rmd_shortcode("pagebreak", character(), 6L, 17L),
+      rmd_shortcode("video", "url", 45L, 17L),
+      rmd_shortcode("include", "file.txt", 75L, 24L)
     )
   )
   
   # Test shortcode with newlines in text around it
   expect_equal(
     parse_shortcodes_cpp("Line 1\n{{< shortcode arg >}}\nLine 3"),
-    list(rmd_shortcode("shortcode", "arg", 7, 21))
+    list(rmd_shortcode("shortcode", "arg", 7L, 21L))
   )
 })
 
@@ -227,19 +227,19 @@ test_that("C++ string shortcodes parser - edge cases", {
   # Test shortcode with special characters in function name
   expect_equal(
     parse_shortcodes_cpp("{{< video-player >}}"),
-    list(rmd_shortcode("video-player", character(), 0, 20))
+    list(rmd_shortcode("video-player", character(), 0L, 20L))
   )
   
   # Test shortcode with underscores and dots
   expect_equal(
     parse_shortcodes_cpp("{{< my_func.v2 >}}"),
-    list(rmd_shortcode("my_func.v2", character(), 0, 18))
+    list(rmd_shortcode("my_func.v2", character(), 0L, 18L))
   )
   
   # Test shortcode with spaces around function name
   expect_equal(
     parse_shortcodes_cpp("{{<   video   arg   >}}"),
-    list(rmd_shortcode("video", "arg", 0, 23))
+    list(rmd_shortcode("video", "arg", 0L, 23L))
   )
   
   # Test empty shortcode (should fail to parse)
@@ -254,19 +254,19 @@ test_that("C++ string shortcodes parser - complex quoted arguments", {
   # Test arguments with spaces in quotes
   expect_equal(
     parse_shortcodes_cpp("{{< video \"file with spaces.mp4\" >}}"),
-    list(rmd_shortcode("video", "\"file with spaces.mp4\"", 0, 36))
+    list(rmd_shortcode("video", "\"file with spaces.mp4\"", 0L, 36L))
   )
   
   # Test escaped quotes in arguments
   expect_equal(
     parse_shortcodes_cpp("{{< kbd key=\"\\\"quoted\\\"\" >}}"),
-    list(rmd_shortcode("kbd", "key=\"\\\"quoted\\\"\"", 0, 28))
+    list(rmd_shortcode("kbd", "key=\"\\\"quoted\\\"\"", 0L, 28L))
   )
   
   # Test mixed quotes
   expect_equal(
     parse_shortcodes_cpp("{{< func arg1=\"value1\" arg2='value2' >}}"),
-    list(rmd_shortcode("func", c("arg1=\"value1\"", "arg2='value2'"), 0, 40))
+    list(rmd_shortcode("func", c("arg1=\"value1\"", "arg2='value2'"), 0L, 40L))
   )
   
   # Test unterminated quote (should handle gracefully)
@@ -289,7 +289,7 @@ test_that("C++ string shortcodes parser - real-world examples", {
       "title=\"What is the CERN?\"",
       "start=\"116\"",
       "aspect-ratio=\"21x9\""
-    ), 0, 119))
+    ), 0L, 119L))
   )
   
   # Multiple shortcodes in a document
@@ -305,16 +305,16 @@ test_that("C++ string shortcodes parser - real-world examples", {
   
   Finally, press {{< kbd Ctrl+C >}} to copy."),
     list(
-      rmd_shortcode("video", "demo.mp4", 36, 22),
-      rmd_shortcode("pagebreak", character(), 64, 17),
-      rmd_shortcode("include", c("script.py", "lines=\"1-10\"", "echo=true"), 112, 48),
-      rmd_shortcode("kbd", "Ctrl+C", 181, 18)
+      rmd_shortcode("video", "demo.mp4", 36L, 22L),
+      rmd_shortcode("pagebreak", character(), 64L, 17L),
+      rmd_shortcode("include", c("script.py", "lines=\"1-10\"", "echo=true"), 112L, 48L),
+      rmd_shortcode("kbd", "Ctrl+C", 181L, 18L)
     )
   )
   
   # Shortcode with CSS-like selectors
   expect_equal(
     parse_shortcodes_cpp("{{< div .class #id data-attr=value >}}"),
-    list(rmd_shortcode("div", c(".class", "#id", "data-attr=value"), 0, 38))
+    list(rmd_shortcode("div", c(".class", "#id", "data-attr=value"), 0L, 38L))
   )
 })

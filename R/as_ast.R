@@ -25,7 +25,7 @@ as_ast.default = function(x, ...) {
 
 #' @exportS3Method
 as_ast.rmd_tibble = function(x, ...) {
-  x[["ast"]]
+  rmd_ast(x[["ast"]])
 }
 
 fix_heading_level = function(ast, name) {

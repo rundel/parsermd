@@ -42,10 +42,10 @@ rmd_select.default = function(x, ...) {
 rmd_select_impl = function(x, ...) {
   checkmate::assert_class(x, "rmd_ast")
 
-  names(x) = rmd_node_label(x)
-  loc = tidyselect::eval_select(rlang::expr(c(...)), x)
+  nodes = setNames(x@nodes, rmd_node_label(x))
+  loc = tidyselect::eval_select(rlang::expr(c(...)), nodes)
 
-  sort(loc) # maintai original order
+  sort(loc) # maintain original order
 }
 
 #' @exportS3Method
@@ -56,13 +56,13 @@ rmd_select.rmd_tibble = function(x, ...) {
   if (length(bad_cols) != 0)
     stop("The following columns must be renamed: ", bad_cols, call. = FALSE)
 
-
-  loc = rmd_select_impl(x$ast, ...)
+  x_ast = as_ast(x)
+  loc = rmd_select_impl(x_ast, ...)
 
   x = x[loc,]
 
   x = dplyr::bind_cols(
-    dplyr::bind_rows(rmd_node_sections(x$ast)),  # add new sec_h* columns
+    dplyr::bind_rows(rmd_node_sections(x_ast)),  # add new sec_h* columns
     dplyr::select(x, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
   class(x) = c("rmd_tibble", class(x))
@@ -73,7 +73,9 @@ rmd_select.rmd_tibble = function(x, ...) {
 #' @exportS3Method
 rmd_select.rmd_ast = function(x, ...) {
   loc = rmd_select_impl(x, ...)
-  x[loc]
+  x@nodes = x@nodes[loc]
+
+  x
 }
 
 #' @exportS3Method

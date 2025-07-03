@@ -27,8 +27,8 @@ rmd_ast_append.default = function(x, ...) {
 #' @exportS3Method
 rmd_ast_append.rmd_ast = function(x, ...) {
   # TODO - at checkmate checks
-  c(x, list(...)) %>%
-    magrittr::set_class(c("rmd_ast", "list"))
+  x@nodes = c(x@nodes, list(...))
+  x
 }
 
 #' @exportS3Method
@@ -66,8 +66,8 @@ rmd_ast_prepend.default = function(x, ...) {
 #' @exportS3Method
 rmd_ast_prepend.rmd_ast = function(x, ...) {
   # TODO - at checkmate checks
-  c(list(...), x) %>%
-    magrittr::set_class(c("rmd_ast", "list"))
+  x@nodes = c(list(...), x@nodes) 
+  x
 }
 
 #' @exportS3Method

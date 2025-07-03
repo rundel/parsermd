@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // parse_shortcodes_cpp
-Rcpp::List parse_shortcodes_cpp(std::string const& str);
+SEXP parse_shortcodes_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_shortcodes_cpp(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // parse_inline_code_cpp
-Rcpp::List parse_inline_code_cpp(std::string const& str);
+SEXP parse_inline_code_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_inline_code_cpp(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -33,7 +33,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // parse_rmd_cpp
-Rcpp::List parse_rmd_cpp(std::string const& str);
+SEXP parse_rmd_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_rmd_cpp(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -44,7 +44,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_yaml_parser
-Rcpp::CharacterVector check_yaml_parser(std::string const& str);
+SEXP check_yaml_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_yaml_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -55,7 +55,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_chunk_parser
-Rcpp::List check_chunk_parser(std::string const& str);
+SEXP check_chunk_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_chunk_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -66,7 +66,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_multi_chunk_parser
-Rcpp::List check_multi_chunk_parser(std::string const& str);
+SEXP check_multi_chunk_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_multi_chunk_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -77,7 +77,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_markdown_parser
-Rcpp::List check_markdown_parser(std::string const& str);
+SEXP check_markdown_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_markdown_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -88,7 +88,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_markdown_heading_parser
-Rcpp::List check_markdown_heading_parser(std::string const& str);
+SEXP check_markdown_heading_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_markdown_heading_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -99,7 +99,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_chunk_option_parser
-Rcpp::List check_chunk_option_parser(std::string const& str);
+SEXP check_chunk_option_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_chunk_option_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -110,7 +110,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_yaml_option_parser
-Rcpp::CharacterVector check_yaml_option_parser(std::string const& str);
+SEXP check_yaml_option_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_yaml_option_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -121,7 +121,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_fdiv_open_parser
-Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str);
+SEXP check_fdiv_open_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_fdiv_open_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -132,7 +132,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_fdiv_close_parser
-Rcpp::List check_fdiv_close_parser(std::string const& str);
+SEXP check_fdiv_close_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_fdiv_close_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -143,7 +143,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_cbrace_expr_parser
-Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str);
+SEXP check_cbrace_expr_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_cbrace_expr_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -154,7 +154,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_code_block_parser
-Rcpp::List check_code_block_parser(std::string const& str);
+SEXP check_code_block_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_code_block_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -165,7 +165,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_inline_code_parser
-Rcpp::List check_inline_code_parser(std::string const& str);
+SEXP check_inline_code_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_inline_code_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -176,7 +176,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_shortcode_parser
-Rcpp::List check_shortcode_parser(std::string const& str);
+SEXP check_shortcode_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_shortcode_parser(SEXP strSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -187,7 +187,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // check_qstring_parser
-Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw);
+SEXP check_qstring_parser(std::string const& str, bool raw);
 RcppExport SEXP _parsermd_check_qstring_parser(SEXP strSEXP, SEXP rawSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

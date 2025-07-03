@@ -84,7 +84,7 @@ rmd_get_options.default = function(x, ..., defaults = list()) {
 rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   opts = unlist(list(...))
 
-  chunk_opts = c(x[["options"]], x[["yaml_options"]])
+  chunk_opts = c(x@options, x@yaml_options)
 
   if (length(opts) == 0) {
     chunk_opts
@@ -101,7 +101,7 @@ rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
 
 #' @exportS3Method
 rmd_get_options.rmd_ast = function(x, ..., defaults = list()) {
-  purrr::map(x, rmd_get_options, ..., defaults = defaults)
+  purrr::map(x@nodes, rmd_get_options, ..., defaults = defaults)
 }
 
 #' @exportS3Method

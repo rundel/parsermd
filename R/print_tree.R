@@ -17,7 +17,7 @@ tree_node.default = function(x) {
 tree_node.rmd_yaml = function(x) {
   list(
     text = "YAML",
-    label = cli::pluralize("[{length(x$yaml)} field{?s}]")
+    label = cli::pluralize("[{length(x@yaml)} field{?s}]")
   )
 }
 
@@ -25,19 +25,19 @@ tree_node.rmd_yaml = function(x) {
 tree_node.rmd_heading = function(x) {
   list(
     text = "Heading",
-    label = paste0("[h", x$level, "] - ",  cli::style_bold(x$name))
+    label = paste0("[h", x@level, "] - ",  cli::style_bold(x@name))
   )
 }
 
 #' @exportS3Method
 tree_node.rmd_code_block = function(x) {
-  attr = if (x$attr == "") cli::style_italic("<no attrs>")
-         else x$attr
+  attr = if (x@attr == "") cli::style_italic("<no attrs>")
+         else x@attr
 
   list(
     text = "Code block",
-    #label = paste0("[", attr, ", ", length(x$code), " lines]")
-    label = cli::pluralize("[{attr}, {length(x$code)} line{?s}]")
+    #label = paste0("[", attr, ", ", length(x@code), " lines]")
+    label = cli::pluralize("[{attr}, {length(x@code)} line{?s}]")
   )
 }
 
@@ -45,12 +45,12 @@ tree_node.rmd_code_block = function(x) {
 tree_node.rmd_chunk = function(x) {
   name = cli::style_bold(rmd_node_label(x))
 
-  n_opt = length(x$options) + length(x$yaml_options)
+  n_opt = length(x@options) + length(x@yaml_options)
 
   list(
     text = "Chunk",
-    #label = paste0("[", x$engine, ", ", opt, length(x$code), " lines] - ", name)
-    label = cli::pluralize("[{x$engine}, {n_opt} {?options/option/options}, {length(x$code)} line{?s}] - {name}")
+    #label = paste0("[", x@engine, ", ", opt, length(x@code), " lines] - ", name)
+    label = cli::pluralize("[{x@engine}, {n_opt} {?options/option/options}, {length(x@code)} line{?s}] - {name}")
   )
 }
 
@@ -58,7 +58,7 @@ tree_node.rmd_chunk = function(x) {
 tree_node.rmd_inline_code = function(x) {
   list(
     text = "Inline Code",
-    label = paste0("[", x$engine, "]")
+    label = paste0("[", x@engine, "]")
   )
 }
 
@@ -66,8 +66,8 @@ tree_node.rmd_inline_code = function(x) {
 tree_node.rmd_raw_chunk = function(x) {
   list(
     text = "Raw Attr Chunk",
-    #label = paste0("[", x$format, ", ", length(x$code), " lines]")
-    label = cli::pluralize("[{x$format}, {length(x$code)} line{?s}]")
+    #label = paste0("[", x@format, ", ", length(x@code), " lines]")
+    label = cli::pluralize("[{x@format}, {length(x@code)} line{?s}]")
   )
 }
 
@@ -75,7 +75,7 @@ tree_node.rmd_raw_chunk = function(x) {
 tree_node.rmd_markdown = function(x) {
   list(
     text = "Markdown",
-    label = cli::pluralize("[{length(x$lines)} line{?s}]")
+    label = cli::pluralize("[{length(x@lines)} line{?s}]")
   )
 }
 
@@ -83,7 +83,7 @@ tree_node.rmd_markdown = function(x) {
 tree_node.rmd_fenced_div_open = function(x) {
   list(
     text = "Open Fenced div",
-    label = paste0("[", paste(x$attr, collapse=", "), "]")
+    label = paste0("[", paste(x@attr, collapse=", "), "]")
   )
 }
 
@@ -101,8 +101,8 @@ tree_node.rmd_shortcode = function(x) {
     text = "Shortcode",
     label = paste0(
       "[",
-      cli::style_bold(x$func),
-      paste0(" ", x$args, collapse="") ,
+      cli::style_bold(x@func),
+      paste0(" ", x@args, collapse="") ,
       "]"
     )
   )
@@ -129,10 +129,9 @@ get_nesting_levels = function(ast) {
   node_levels = integer()
   fdiv_depth = 0
 
-
-  for(node in ast) {
+  for(node in ast@nodes) {
     if (is_heading(node)) {
-      levels = levels[levels < node$level]
+      levels = levels[levels < node@level]
     }
 
     if (inherits(node, "rmd_fenced_div_close")) {
@@ -142,7 +141,7 @@ get_nesting_levels = function(ast) {
     node_levels = append(node_levels, max(levels) + fdiv_depth)
 
     if (is_heading(node)) {
-      levels = append(levels, node$level)
+      levels = append(levels, node@level)
     }
 
     if (inherits(node, "rmd_fenced_div_open")) {
@@ -185,9 +184,9 @@ print_tree = function(ast, flat = FALSE) {
   indent = ""
   prev_sibs = FALSE
 
-  for(j in seq_along(ast)) {
-    cur_node = ast[[j]]
-    next_node = ast[j+1][[1]]
+  for(j in seq_along(ast@nodes)) {
+    cur_node = ast@nodes[[j]]
+    next_node = ast@nodes[j+1][[1]]
 
     details = tree_node(cur_node)
 

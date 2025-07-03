@@ -296,103 +296,111 @@ test_that("chunk parsing - bad chunks", {
 
 
 test_that("chunk parsing - raw attribute chunk", {
-  parse = check_chunk_parser
 
-
-  expect_equal( parse("```{=html}\n```\n"), rmd_raw_chunk("html") )
-  expect_equal( parse("```{=md}\n```\n"),   rmd_raw_chunk("md") )
+  expect_equal( 
+    check_chunk_parser("```{=html}\n```\n"), 
+    rmd_raw_chunk("html")
+  )
+  expect_equal( 
+    check_chunk_parser("```{=md}\n```\n"),   
+    rmd_raw_chunk("md") 
+  )
 
   # Check code
   expect_equal(
-    parse("```{=html}\n<h1>hello</h1>\n```\n"),
+    check_chunk_parser("```{=html}\n<h1>hello</h1>\n```\n"),
     rmd_raw_chunk("html", code = "<h1>hello</h1>")
   )
 
   # Check indent
   expect_equal(
-    parse("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
+    check_chunk_parser("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
     rmd_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
   )
 
   # Bad
-  expect_snapshot( parse("```{=}\n```\n"),   error=TRUE)
-  expect_snapshot( parse("```{==}\n```\n"),  error=TRUE)
-  expect_snapshot( parse("```{=a=}\n```\n"), error=TRUE)
-  expect_snapshot( parse("```{a=}\n```\n"),  error=TRUE)
+  expect_snapshot( check_chunk_parser("```{=}\n```\n"),   error=TRUE)
+  expect_snapshot( check_chunk_parser("```{==}\n```\n"),  error=TRUE)
+  expect_snapshot( check_chunk_parser("```{=a=}\n```\n"), error=TRUE)
+  expect_snapshot( check_chunk_parser("```{a=}\n```\n"),  error=TRUE)
 })
 
 
 
 test_that("chunk parsing - more than 3 ticks", {
-  parse = check_chunk_parser
-
   expect_equal(
-    parse("```{r}\n```\n"), rmd_chunk()
+    check_chunk_parser("```{r}\n```\n"), 
+    rmd_chunk()
   )
 
   expect_equal(
-    parse("````{r}\n````\n"), rmd_chunk(n_ticks = 4L)
+    check_chunk_parser("````{r}\n````\n"), 
+    rmd_chunk(n_ticks = 4L)
   )
 
   expect_equal(
-    parse("`````{r}\n`````\n"), rmd_chunk(n_ticks = 5L)
+    check_chunk_parser("`````{r}\n`````\n"), 
+    rmd_chunk(n_ticks = 5L)
   )
 
   expect_equal(
-    parse("  ````{r}\n  ````\n"), rmd_chunk(n_ticks = 4L, indent = "  ")
+    check_chunk_parser("  ````{r}\n  ````\n"), 
+    rmd_chunk(n_ticks = 4L, indent = "  ")
   )
 
   expect_equal(
-    parse("\t````{r}\n\t````\n"), rmd_chunk(n_ticks = 4L, indent = "\t")
+    check_chunk_parser("\t````{r}\n\t````\n"), 
+    rmd_chunk(n_ticks = 4L, indent = "\t")
   )
 
   expect_equal(
-    parse("> ````{r}\n> ````\n"), rmd_chunk(n_ticks = 4L, indent = "> ")
+    check_chunk_parser("> ````{r}\n> ````\n"), 
+    rmd_chunk(n_ticks = 4L, indent = "> ")
   )
 
   ## Unbalanced ticks
 
   expect_snapshot(
-    parse("````{r}\n```"), error=TRUE
+    check_chunk_parser("````{r}\n```"), error=TRUE
   )
 
   expect_snapshot(
-    parse("```{r}\n````"), error=TRUE
+    check_chunk_parser("```{r}\n````"), error=TRUE
   )
 
   expect_snapshot(
-    parse("````{r}\n`````"), error=TRUE
+    check_chunk_parser("````{r}\n`````"), error=TRUE
   )
 
   expect_snapshot(
-    parse("`````{r}\n````"), error=TRUE
+    check_chunk_parser("`````{r}\n````"), error=TRUE
   )
 })
 
 
 test_that("chunk parsing - nested ticks", {
-  parse = check_chunk_parser
-
+  
   expect_equal(
-    parse("````{r}\n```\n````\n"), rmd_chunk(code="```", n_ticks = 4L)
+    check_chunk_parser("````{r}\n```\n````\n"), 
+    rmd_chunk(code="```", n_ticks = 4L)
   )
 
   expect_equal(
-    parse("````{r}\n```\n```\n````\n"),
+    check_chunk_parser("````{r}\n```\n```\n````\n"),
     rmd_chunk(code=c("```","```"), n_ticks = 4L)
   )
 
   expect_equal(
-    parse("````{r}\n```{r}\n```\n````\n"),
+    check_chunk_parser("````{r}\n```{r}\n```\n````\n"),
     rmd_chunk(code=c("```{r}","```"), n_ticks = 4L)
   )
 
   expect_equal(
     parse_rmd("````{r}\n````\n````\n````\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_chunk(n_ticks = 4L, name = "unnamed-chunk-1"),
       rmd_code_block(n_ticks = 4L)
-    )
+    ) )
   )
 })
 

@@ -51,7 +51,7 @@ rmd_node_label = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_label.rmd_ast = function(x, ...) {
-  purrr::map_chr(x, rmd_node_label)
+  purrr::map_chr(x@nodes, rmd_node_label)
 }
 
 #' @exportS3Method
@@ -66,13 +66,13 @@ rmd_node_label.default = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_label.rmd_chunk = function(x, ...) {
-  name = x[["name"]]
+  name = x@name
 
   if (name == "") {
-    if (!is.null(x[["options"]][["label"]]))
-      name = x[["options"]][["label"]]
-    else if (!is.null(x[["yaml_options"]][["label"]]))
-      name = x[["yaml_options"]][["label"]]
+    if (!is.null(x@options[["label"]]))
+      name = x@options[["label"]]
+    else if (!is.null(x@yaml_options[["label"]]))
+      name = x@yaml_options[["label"]]
   }
 
   if (is.null(name))
@@ -91,7 +91,7 @@ rmd_node_type = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_type.rmd_ast = function(x, ...) {
-  purrr::map_chr(x, rmd_node_type)
+  purrr::map_chr(x@nodes, rmd_node_type)
 }
 
 #' @exportS3Method
@@ -101,7 +101,7 @@ rmd_node_type.rmd_tibble = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_type.default = function(x, ...) {
-  class(x)
+  class(x)[1]
 }
 
 
@@ -123,22 +123,22 @@ rmd_node_length.rmd_tibble = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_length.rmd_chunk = function(x, ...) {
-  length(x$code)
+  length(x@code)
 }
 
 #' @exportS3Method
 rmd_node_length.rmd_raw_chunk = function(x, ...) {
-  length(x$code)
+  length(x@code)
 }
 
 #' @exportS3Method
 rmd_node_length.rmd_markdown = function(x, ...) {
-  length(x$lines)
+  length(x@lines)
 }
 
 #' @exportS3Method
 rmd_node_length.rmd_yaml = function(x, ...) {
-  length(x)
+  length(x@yaml)
 }
 
 #' @exportS3Method
@@ -162,7 +162,7 @@ rmd_node_content.default = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_content.rmd_ast = function(x, ...) {
-  purrr::map_chr(x, rmd_node_content)
+  purrr::map_chr(x@nodes, rmd_node_content)
 }
 
 #' @exportS3Method
@@ -172,17 +172,17 @@ rmd_node_content.rmd_tibble = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_content.rmd_chunk = function(x, ...) {
-  paste(x$code, collapse="\n")
+  paste(x@code, collapse="\n")
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_raw_chunk = function(x, ...) {
-  paste(x$code, collapse="\n")
+  paste(x@code, collapse="\n")
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_markdown = function(x, ...) {
-  paste(x$lines, collapse="\n")
+  paste(x@lines, collapse="\n")
 }
 
 
@@ -194,27 +194,28 @@ rmd_node_content.rmd_markdown = function(x, ...) {
 
 #' @rdname rmd_node
 #' @export
-rmd_node_attr = function(x, attr, ...) {
+rmd_node_attr = function(x, attr) {
+  checkmate::assert_character(attr, len = 1)
   UseMethod("rmd_node_attr")
 }
 
 #' @exportS3Method
-rmd_node_attr.default = function(x, attr, ...) {
-  checkmate::assert_character(attr, len = 1)
-
-  if (is.list(x))
-    x[[attr]]
-  else
-    NULL
+rmd_node_attr.default = function(x, attr) {
+  NULL
 }
 
 #' @exportS3Method
-rmd_node_attr.rmd_ast = function(x, attr, ...) {
-  purrr::map(x, rmd_node_attr, attr = attr)
+rmd_node_attr.rmd_node = function(x, attr) {
+  S7::prop(x, attr)
 }
 
 #' @exportS3Method
-rmd_node_attr.rmd_tibble = function(x, attr, ...) {
+rmd_node_attr.rmd_ast = function(x, attr) {
+  purrr::map(x@nodes, rmd_node_attr, attr = attr)
+}
+
+#' @exportS3Method
+rmd_node_attr.rmd_tibble = function(x, attr) {
   rmd_node_attr(as_ast(x))
 }
 

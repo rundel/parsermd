@@ -32,7 +32,7 @@ rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 
 # Modify specific chunks by label
 f = function(node) { # Add a comment to the chunk
-  node$code = c("# Modified chunk", node$code)
+  node@code = c("# Modified chunk", node@code)
   node
 }
 rmd_modify(rmd, .f = f, "plot-dino") |>
@@ -42,7 +42,7 @@ rmd_modify(rmd, .f = f, "plot-dino") |>
 
 # Modify all chunks with named arguments passed to function
 f = function(node, prefix = "## ") {
-  node$code = paste0(prefix, node$code)
+  node@code = paste0(prefix, node@code)
   node
 }
 rmd_modify(rmd, f, has_type("rmd_chunk"), prefix = "# ") |>

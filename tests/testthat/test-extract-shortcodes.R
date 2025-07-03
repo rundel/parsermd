@@ -126,53 +126,43 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   
   # Test selecting all nodes with shortcodes
   shortcode_nodes = rmd_select(test_rmd, has_shortcode())
-  expect_length(shortcode_nodes, 4)  # YAML, markdown, chunk, and final markdown
+  expect_equal(shortcode_nodes, test_rmd[c(1,3,4,8)])  # YAML, markdown, chunk, and final markdown
   
   # Test selecting nodes with specific shortcode function names
   video_nodes = rmd_select(test_rmd, has_shortcode("video"))
-  expect_length(video_nodes, 1)
-  expect_true(rmd_has_shortcode(video_nodes[[1]], "video"))
+  expect_equal(video_nodes, test_rmd[3])
   
   kbd_nodes = rmd_select(test_rmd, has_shortcode("kbd"))
-  expect_length(kbd_nodes, 1)
-  expect_true(rmd_has_shortcode(kbd_nodes[[1]], "kbd"))
+  expect_equal(kbd_nodes, test_rmd[8])
   
   include_nodes = rmd_select(test_rmd, has_shortcode("include"))
-  expect_length(include_nodes, 1)
-  expect_true(rmd_has_shortcode(include_nodes[[1]], "include"))
+  expect_equal(include_nodes, test_rmd[4])
   
   var_nodes = rmd_select(test_rmd, has_shortcode("var"))
-  expect_length(var_nodes, 1)
-  expect_true(rmd_has_shortcode(var_nodes[[1]], "var"))
+  expect_equal(var_nodes, test_rmd[1])
   
   # Test glob patterns
   page_nodes = rmd_select(test_rmd, has_shortcode("page*"))
-  expect_length(page_nodes, 1)
-  expect_true(rmd_has_shortcode(page_nodes[[1]], "pagebreak"))
+  expect_equal(page_nodes, test_rmd[8])
   
   # Test non-existent shortcode
   nonexistent_nodes = rmd_select(test_rmd, has_shortcode("nonexistent"))
-  expect_length(nonexistent_nodes, 0)
+  expect_equal(nonexistent_nodes, rmd_ast(list()))
   
   # Test multiple function names
   multi_nodes = rmd_select(test_rmd, has_shortcode(c("video", "kbd")))
-  expect_length(multi_nodes, 2)
+  expect_equal(multi_nodes, test_rmd[c(3,8)])
   
   # Test combining with other selectors
   chunk_with_shortcode = rmd_select(test_rmd, has_type("rmd_chunk") & has_shortcode())
-  expect_length(chunk_with_shortcode, 1)
-  expect_equal(rmd_node_type(chunk_with_shortcode[[1]]), "rmd_chunk")
-  expect_true(rmd_has_shortcode(chunk_with_shortcode[[1]]))
+  expect_equal(chunk_with_shortcode, test_rmd[4])
+
   
   markdown_with_shortcode = rmd_select(test_rmd, has_type("rmd_markdown") & has_shortcode())
-  expect_length(markdown_with_shortcode, 2)
-  expect_true(all(rmd_node_type(markdown_with_shortcode) == "rmd_markdown"))
-  expect_true(all(purrr::map_lgl(markdown_with_shortcode, rmd_has_shortcode)))
+  expect_equal(markdown_with_shortcode, test_rmd[c(3,8)])
   
   yaml_with_shortcode = rmd_select(test_rmd, has_type("rmd_yaml") & has_shortcode())
-  expect_length(yaml_with_shortcode, 1)
-  expect_equal(rmd_node_type(yaml_with_shortcode[[1]]), "rmd_yaml")
-  expect_true(rmd_has_shortcode(yaml_with_shortcode[[1]]))
+  expect_equal(yaml_with_shortcode, test_rmd[1])
 })
 
 test_that("has_shortcode() with edge cases", {

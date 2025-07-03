@@ -1,9 +1,9 @@
 test_that("Basic sourcing", {
-  ast = rmd_ast(
+  ast = rmd_ast( list(
     rmd_chunk(code = "x = 1"),
     rmd_chunk(code = "y = 2"),
     rmd_chunk(code = "z = 3")
-  )
+  ) )
 
   rmd_source(ast, local=TRUE)
 
@@ -11,12 +11,12 @@ test_that("Basic sourcing", {
   expect_equal(y, 2)
   expect_equal(z, 3)
 
-  ast = rmd_ast(
+  ast = rmd_ast( list(
     rmd_chunk(code = "x = 1"),
     rmd_chunk(code = "y = 2"),
     rmd_chunk(code = "z = 3"),
     rmd_chunk(code = "x = 4")
-  )
+  ) )
 
   rmd_source(ast, local=TRUE)
 
@@ -27,10 +27,10 @@ test_that("Basic sourcing", {
 
 
 test_that("eval stuff", {
-  ast = rmd_ast(
+  ast = rmd_ast( list(
     rmd_chunk(code = "x = 1", options = list(eval = TRUE)),
     rmd_chunk(code = "y = 2", options = list(eval = FALSE))
-  )
+  ) )
 
   rmd_source(ast, local=TRUE, use_eval = TRUE)
   expect_equal(x, 1)
@@ -44,10 +44,11 @@ test_that("eval stuff", {
 
 
 test_that("function scope", {
-  ast = rmd_ast(
+  ast = rmd_ast( list(
     rmd_chunk(code = "x = 1"),
     rmd_chunk(code = "y = 2")
-  )
+  ) )
+
   f = function() {
     rmd_source(ast, local = TRUE)
     list(x, y)
@@ -71,10 +72,10 @@ test_that("function scope", {
 
 
 test_that("echo", {
-  ast = rmd_ast(
+  ast = rmd_ast( list(
     rmd_chunk(name = "Chunk 1", code = "x = 1"),
     rmd_chunk(name = "Chunk 2", code = "y = 2")
-  )
+  ) )
 
   expect_snapshot(rmd_source(ast, local=TRUE, echo=TRUE))
 

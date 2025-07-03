@@ -40,7 +40,8 @@ NULL
 has_type = function(types) {
   checkmate::assert_character(types, any.missing = FALSE)
 
-  x = tidyselect::peek_data(fn = "has_type")
+  x = tidyselect::peek_data(fn = "has_type") |>
+    rmd_ast()
 
   which(rmd_node_type(x) %in% types)
 }
@@ -76,7 +77,8 @@ by_section = function(sec_ref, keep_parents = TRUE) {
   checkmate::assert_character(sec_ref, any.missing = FALSE, min.len = 1)
   checkmate::assert_logical(keep_parents, any.missing = FALSE, len = 1)
 
-  x = tidyselect::peek_data(fn = "by_section")
+  x = tidyselect::peek_data(fn = "by_section") |>
+    rmd_ast()
 
   types = rmd_node_type(x)
   secs = rmd_node_sections(x, drop_na = TRUE)
@@ -100,7 +102,8 @@ by_section = function(sec_ref, keep_parents = TRUE) {
 has_label = function(label) {
   checkmate::assert_character(label, any.missing = FALSE, min.len = 1)
 
-  x = tidyselect::peek_data(fn = "has_label")
+  x = tidyselect::peek_data(fn = "has_label") |>
+    rmd_ast()
 
   node_labs = rmd_node_label(x)
   regex = utils::glob2rx(label)
@@ -118,7 +121,8 @@ has_label = function(label) {
 has_code = function(code) {
   checkmate::assert_character(code, any.missing = FALSE, min.len = 1)
 
-  x = tidyselect::peek_data(fn = "has_label")
+  x = tidyselect::peek_data(fn = "has_code") |>
+    rmd_ast()
 
   node_code = rmd_node_code(x)
   matching = purrr::map(code, grepl, x = node_code) %>%
@@ -142,7 +146,8 @@ has_option = function(...) {
   if (is.null(names(opts))) # missing names will be ""
       names(opts) = rep("", length(opts))
 
-  x = tidyselect::peek_data(fn = "has_option")
+  x = tidyselect::peek_data(fn = "has_option") |>
+    rmd_ast()
 
   purrr::map2(
     opts, names(opts),
@@ -167,11 +172,10 @@ has_option = function(...) {
 #'
 #' @export
 has_shortcode = function(func_name = NULL) {
-  if (!is.null(func_name)) {
-    checkmate::assert_character(func_name, any.missing = FALSE, min.len = 1)
-  }
+  checkmate::assert_character(func_name, any.missing = FALSE, min.len = 1, null.ok = TRUE)
 
-  x = tidyselect::peek_data(fn = "has_shortcode")
+  x = tidyselect::peek_data(fn = "has_shortcode") |>
+    rmd_ast()
 
   contains_shortcode = rmd_has_shortcode(x, func_name)
   
@@ -185,11 +189,10 @@ has_shortcode = function(func_name = NULL) {
 #'
 #' @export
 has_inline_code = function(engine = NULL) {
-  if (!is.null(engine)) {
-    checkmate::assert_character(engine, any.missing = FALSE, min.len = 1)
-  }
+  checkmate::assert_character(engine, any.missing = FALSE, min.len = 1, null.ok = TRUE)
 
-  x = tidyselect::peek_data(fn = "has_inline_code")
+  x = tidyselect::peek_data(fn = "has_inline_code") |>
+    rmd_ast()
 
   contains_inline_code = rmd_has_inline_code(x, engine)
   

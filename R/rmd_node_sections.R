@@ -26,14 +26,14 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
   min_level = 6
   max_level = 1
 
-  for(j in seq_along(x)) {
-    node = x[[j]]
+  for(j in seq_along(x@nodes)) {
+    node = x@nodes[[j]]
     if (inherits(node, "rmd_heading")) {
-      labels[node$level:6] = NA_character_
-      labels[node$level] = node$name
+      labels[node@level:6] = NA_character_
+      labels[node@level] = node@name
 
-      max_level = max(max_level, node$level)
-      min_level = min(min_level, node$level)
+      max_level = max(max_level, node@level)
+      min_level = min(min_level, node@level)
     }
 
     sections[[length(sections)+1]] = labels

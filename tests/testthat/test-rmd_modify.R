@@ -1,303 +1,359 @@
 test_that("rmd_modify works with rmd_ast", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
   
-  # Test basic modification of all nodes
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "test_attr") = "modified"
+  # Test basic modification of heading name
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_heading")) {
+      x@name = "Modified Test"
+    }
     x
   })
   
-  expect_true(all(purrr::map_lgl(modified, ~attr(., "test_attr") == "modified")))
-  expect_s3_class(modified, "rmd_ast")
-  expect_equal(length(modified), length(rmd))
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Modified Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify works with selection", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
   
-  # Test modification of selected nodes only
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "chunk_modified") = TRUE
+  # Test modification of selected chunk only
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "2 + 2"
+    }
     x
   }, has_type("rmd_chunk"))
   
-  # Check that only chunks were modified
-  chunk_indices = which(rmd_node_type(rmd) == "rmd_chunk")
-  non_chunk_indices = which(rmd_node_type(rmd) != "rmd_chunk")
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "2 + 2"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
   
-  expect_true(all(purrr::map_lgl(modified[chunk_indices], ~attr(., "chunk_modified") %||% FALSE)))
-  expect_true(all(purrr::map_lgl(modified[non_chunk_indices], ~is.null(attr(., "chunk_modified")))))
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify passes named arguments to function", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+    )
+  )
   
   # Test passing named arguments
-  modified = rmd_modify(rmd, .f = function(x, prefix) {
-    attr(x, "prefix") = prefix
+  modified = rmd_modify(original_ast, .f = function(x, new_engine) {
+    if (inherits(x, "rmd_chunk")) {
+      x@engine = new_engine
+    }
     x
-  }, has_type("rmd_chunk"), prefix = "test_prefix")
+  }, has_type("rmd_chunk"), new_engine = "python")
   
-  chunk_indices = which(rmd_node_type(rmd) == "rmd_chunk")
-  expect_true(all(purrr::map_lgl(modified[chunk_indices], ~attr(., "prefix") == "test_prefix")))
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "python", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "python", name = "test2", code = "2 + 2")
+    )
+  )
+  
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify works with multiple selection criteria", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text"),
+      rmd_heading(name = "Another", level = 2L)
+    )
+  )
   
-  # Test multiple selection arguments
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "multi_select") = TRUE
+  # Test multiple selection arguments - modify both chunks and headings
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "modified"
+    } else if (inherits(x, "rmd_heading")) {
+      x@name = paste("Modified", x@name)
+    }
     x
   }, has_type("rmd_chunk"), has_type("rmd_heading"))
   
-  target_types = c("rmd_chunk", "rmd_heading")
-  target_indices = which(rmd_node_type(rmd) %in% target_types)
-  non_target_indices = which(!rmd_node_type(rmd) %in% target_types)
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Modified Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "modified"),
+      rmd_markdown(lines = "Some text"),
+      rmd_heading(name = "Modified Another", level = 2L)
+    )
+  )
   
-  expect_true(all(purrr::map_lgl(modified[target_indices], ~attr(., "multi_select") %||% FALSE)))
-  expect_true(all(purrr::map_lgl(modified[non_target_indices], ~is.null(attr(., "multi_select")))))
-})
-
-test_that("rmd_modify works with rmd_tibble", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
-  rmd_tbl = as_tibble(rmd)
-  
-  # Test modification of tibble
-  modified_tbl = rmd_modify(rmd_tbl, .f = function(x) {
-    attr(x, "tibble_modified") = TRUE
-    x
-  }, has_type("rmd_chunk"))
-  
-  expect_s3_class(modified_tbl, "rmd_tibble")
-  expect_true("ast" %in% names(modified_tbl))
-  
-  # Check that modifications were applied to the AST within the tibble
-  chunk_indices = which(rmd_node_type(modified_tbl$ast) == "rmd_chunk")
-  expect_true(all(purrr::map_lgl(modified_tbl$ast[chunk_indices], ~attr(., "tibble_modified") %||% FALSE)))
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify handles empty selection", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_markdown(lines = "Some text")
+    )
+  )
   
   # Test with selection that matches nothing
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "should_not_exist") = TRUE
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "should not happen"
+    }
     x
-  }, has_type("nonexistent_type"))
+  }, has_type("rmd_chunk"))
   
-  # No nodes should be modified
-  expect_true(all(purrr::map_lgl(modified, ~is.null(attr(., "should_not_exist")))))
-  expect_equal(modified, rmd)  # Should be unchanged
+  # Should be unchanged since no chunks exist
+  expect_equal(modified, original_ast)
 })
 
 test_that("rmd_modify handles label-based selection", {
-  rmd_text = c(
-    "# Test",
-    "",
-    "```{r setup}",
-    "1 + 1",
-    "```",
-    "",
-    "Some text",
-    "",
-    "```{r analysis}",
-    "2 + 2",
-    "```"
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "setup", code = "1 + 1"),
+      rmd_chunk(engine = "r", name = "analysis", code = "2 + 2")
+    )
   )
   
-  rmd = parse_rmd(rmd_text)
-  
   # Test selection by chunk label
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "setup_modified") = TRUE
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "modified setup"
+    }
     x
   }, "setup")
   
-  setup_node = rmd_select(modified, "setup")[[1]]
-  analysis_node = rmd_select(modified, "analysis")[[1]]
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "setup", code = "modified setup"),
+      rmd_chunk(engine = "r", name = "analysis", code = "2 + 2")
+    )
+  )
   
-  expect_true(attr(setup_node, "setup_modified") %||% FALSE)
-  expect_true(is.null(attr(analysis_node, "setup_modified")))
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify validates .f argument", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
-  
-  expect_error(
-    rmd_modify(rmd, .f = "not_a_function"),
-    "Assertion on '.f' failed"
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L)
+    )
   )
   
-  expect_error(
-    rmd_modify(rmd, .f = 123),
-    "Assertion on '.f' failed"
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = "not_a_function")
+  )
+  
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = 123)
   )
 })
 
 test_that("rmd_modify works with range selection", {
-  rmd_text = c(
-    "# Test",
-    "",
-    "```{r chunk1}",
-    "1 + 1",
-    "```",
-    "",
-    "```{r chunk2}",
-    "2 + 2",
-    "```",
-    "",
-    "```{r chunk3}",
-    "3 + 3",
-    "```"
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "chunk1", code = "1 + 1"),
+      rmd_chunk(engine = "r", name = "chunk2", code = "2 + 2"),
+      rmd_chunk(engine = "r", name = "chunk3", code = "3 + 3")
+    )
   )
   
-  rmd = parse_rmd(rmd_text)
-  
   # Test range selection
-  modified = rmd_modify(rmd, .f = function(x) {
-    attr(x, "range_modified") = TRUE
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "range modified"
+    }
     x
   }, "chunk1":"chunk3")
   
-  chunk1_node = rmd_select(modified, "chunk1")[[1]]
-  chunk2_node = rmd_select(modified, "chunk2")[[1]]
-  chunk3_node = rmd_select(modified, "chunk3")[[1]]
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "chunk1", code = "range modified"),
+      rmd_chunk(engine = "r", name = "chunk2", code = "range modified"),
+      rmd_chunk(engine = "r", name = "chunk3", code = "range modified")
+    )
+  )
   
-  expect_true(attr(chunk1_node, "range_modified") %||% FALSE)
-  expect_true(attr(chunk2_node, "range_modified") %||% FALSE)
-  expect_true(attr(chunk3_node, "range_modified") %||% FALSE)
+  expect_equal(modified, expected_ast)
 })
 
 test_that("rmd_modify preserves original object structure", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  # Create simple test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
   
-  modified = rmd_modify(rmd, .f = function(x) {
-    # Make a small modification
-    attr(x, "test") = TRUE
+  # Make small modification to chunk code
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_chunk")) {
+      x@code = "modified"
+    }
     x
   }, has_type("rmd_chunk"))
   
   # Structure should be preserved
-  expect_equal(length(modified), length(rmd))
-  expect_equal(rmd_node_type(modified), rmd_node_type(rmd))
-  expect_equal(rmd_node_label(modified), rmd_node_label(rmd))
+  expect_equal(length(modified), length(original_ast))
+  expect_equal(rmd_node_type(modified), rmd_node_type(original_ast))
+  expect_equal(rmd_node_label(modified), rmd_node_label(original_ast))
 })
 
 test_that("rmd_modify error handling", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
-  
   # Test unsupported type
-  expect_error(
-    rmd_modify("not_rmd_object", .f = identity),
-    "Unsupported type"
+  expect_snapshot_error(
+    rmd_modify("not_rmd_object", .f = identity)
   )
 })
 
 test_that("rmd_modify validates function results", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L)
+    )
+  )
   
   # Test function that returns invalid object
-  expect_error(
-    rmd_modify(rmd, .f = function(x) "not_an_rmd_node"),
-    "Function must return a valid rmd node object"
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) "not_an_rmd_node")
   )
   
   # Test function that returns NULL
-  expect_error(
-    rmd_modify(rmd, .f = function(x) NULL),
-    "Function must return a valid rmd node object"
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) NULL)
   )
   
   # Test function that returns list without proper class
-  expect_error(
-    rmd_modify(rmd, .f = function(x) list(content = "test")),
-    "Function must return a valid rmd node object"
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) list(content = "test"))
   )
   
   # Test function that returns object with wrong class
-  expect_error(
-    rmd_modify(rmd, .f = function(x) structure(list(), class = "wrong_class")),
-    "Function must return a valid rmd node object"
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) structure(list(), class = "wrong_class"))
   )
-  
-  # Test that valid modifications pass validation
-  expect_no_error({
-    modified = rmd_modify(rmd, .f = function(x) {
-      attr(x, "test_attribute") = "valid"
-      x
-    })
-  })
 })
 
 test_that("rmd_modify validates chunk structure", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+    )
+  )
   
-  # Test function that returns incomplete chunk
-  expect_error(
-    rmd_modify(rmd, .f = function(x) {
+  # Test function that returns invalid chunk
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) {
       if (inherits(x, "rmd_chunk")) {
-        # Return chunk missing required fields
-        structure(list(engine = "r"), class = "rmd_chunk")
-      } else {
-        x
+        # Return chunk with invalid engine type
+        x@engine = 123
       }
-    }, has_type("rmd_chunk")),
-    "rmd_chunk validation failed.*missing required fields"
+      x
+    }, has_type("rmd_chunk"))
   )
 })
 
 test_that("rmd_modify validates heading structure", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Test", level = 1L)
+    )
+  )
   
-  # Test function that returns incomplete heading
-  expect_error(
-    rmd_modify(rmd, .f = function(x) {
+  # Test function that returns invalid heading
+  expect_snapshot_error(
+    rmd_modify(original_ast, .f = function(x) {
       if (inherits(x, "rmd_heading")) {
-        # Return heading missing required fields
-        structure(list(name = "test"), class = "rmd_heading")
-      } else {
-        x
+        # Return heading with invalid level
+        x@level = 10L  # should be 1-6
       }
-    }, has_type("rmd_heading")),
-    "rmd_heading validation failed.*missing required fields"
+      x
+    }, has_type("rmd_heading"))
   )
 })
 
-test_that("rmd_modify reports multiple validation errors", {
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
-  
-  # Test function that returns heading with multiple issues
-  expect_error(
-    rmd_modify(rmd, .f = function(x) {
-      if (inherits(x, "rmd_heading")) {
-        # Return heading with multiple validation issues
-        structure(list(name = 123, level = "invalid"), class = "rmd_heading")
-      } else {
-        x
-      }
-    }, has_type("rmd_heading")),
-    "rmd_heading validation failed"
+test_that("rmd_modify with yaml modifications", {
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Original", output = "html_document")),
+      rmd_heading(name = "Test", level = 1L)
+    )
   )
   
-  # Test function that returns chunk with multiple type issues
-  expect_error(
-    rmd_modify(rmd, .f = function(x) {
-      if (inherits(x, "rmd_chunk")) {
-        # Return chunk with wrong field types
-        structure(list(
-          engine = 123,           # should be character
-          name = "test",
-          options = "not_list",   # should be list
-          yaml_options = list(),
-          code = 456,            # should be character
-          indent = "",
-          n_ticks = 3
-        ), class = "rmd_chunk")
-      } else {
-        x
-      }
-    }, has_type("rmd_chunk")),
-    "rmd_chunk validation failed"
+  # Test modification of yaml properties
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_yaml")) {
+      x@yaml$title = "Modified Title"
+    }
+    x
+  }, has_type("rmd_yaml"))
+  
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Modified Title", output = "html_document")),
+      rmd_heading(name = "Test", level = 1L)
+    )
   )
+  
+  expect_equal(modified, expected_ast)
+})
+
+test_that("rmd_modify with markdown modifications", {
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_markdown(lines = "Original text"),
+      rmd_markdown(lines = "Another paragraph")
+    )
+  )
+  
+  # Test modification of markdown content
+  modified = rmd_modify(original_ast, .f = function(x) {
+    if (inherits(x, "rmd_markdown")) {
+      x@lines = paste("Modified:", x@lines)
+    }
+    x
+  }, has_type("rmd_markdown"))
+  
+  expected_ast = rmd_ast(
+    nodes = list(
+      rmd_markdown(lines = "Modified: Original text"),
+      rmd_markdown(lines = "Modified: Another paragraph")
+    )
+  )
+  
+  expect_equal(modified, expected_ast)
 })

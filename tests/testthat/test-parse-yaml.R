@@ -1,34 +1,33 @@
 test_that("yaml parsing - good yaml", {
-  parse = function(x) parse_yaml(check_yaml_parser(x))
 
   expect_equal(
-    parse("---\n---\n"),
+    check_yaml_parser("---\n---\n"),
     rmd_yaml()
   )
 
   expect_equal( # Trailing spaces are ok
-    parse("--- \n---\n"),
+    check_yaml_parser("--- \n---\n"),
     rmd_yaml()
   )
 
   expect_equal(
-    parse("---\n--- \n"),
+    check_yaml_parser("---\n--- \n"),
     rmd_yaml()
   )
 
   expect_equal(
-    parse("---\nvalue: 1\n---\n"),
-    rmd_yaml(value=1)
+    check_yaml_parser("---\nvalue: 1\n---\n"),
+    rmd_yaml( list(value=1) )
   )
 
   expect_equal(
-    parse("---\nvalue: 1\nname: bob\n---\n"),
-    rmd_yaml(value= 1, name= "bob")
+    check_yaml_parser("---\nvalue: 1\nname: bob\n---\n"),
+    rmd_yaml( list(value= 1, name= "bob") )
   )
 
   expect_equal(
-    parse("---\nvalue: \"---\"\n---\n"),
-    rmd_yaml(value = "---")
+    check_yaml_parser("---\nvalue: \"---\"\n---\n"),
+    rmd_yaml( list(value = "---") )
   )
 
   yaml = '---
@@ -39,8 +38,8 @@ author:
 ---\n'
 
   expect_equal(
-    parse(yaml),
-    rmd_yaml( title = "Title", author = c("John Doe", "Jane Doe") )
+    check_yaml_parser(yaml),
+    rmd_yaml( list(title = "Title", author = c("John Doe", "Jane Doe")) )
   )
 })
 
@@ -53,25 +52,24 @@ test_that("yaml parsing - bad yaml", {
 })
 
 test_that("yaml parsing - blank lines", {
-  parse = function(x) parse_yaml(check_yaml_parser(x))
 
   expect_equal(
-    parse("---\nvalue: 1\n\n---\n"),
-    rmd_yaml(value=1)
+    check_yaml_parser("---\nvalue: 1\n\n---\n"),
+    rmd_yaml( list(value=1) )
   )
 
   expect_equal(
-    parse("---\nvalue1: 1\n\nvalue2: 2\n---\n"),
-    rmd_yaml(value1=1, value2=2)
+    check_yaml_parser("---\nvalue1: 1\n\nvalue2: 2\n---\n"),
+    rmd_yaml( list(value1=1, value2=2) )
   )
 
   expect_snapshot(
-    parse("---\n\n---\n"),
+    check_yaml_parser("---\n\n---\n"),
     error=TRUE
   )
 
   expect_snapshot(
-    parse("---\n\nvalue: 1\n---\n"),
+    check_yaml_parser("---\n\nvalue: 1\n---\n"),
     error=TRUE
   )
 })
@@ -91,57 +89,56 @@ test_that("GitHub #25 - Unicode + YAML", {
 })
 
 test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
-  parse = function(x) parse_yaml(check_yaml_parser(x))
 
   expect_equal(
-    parse("---\n...\n"),
+    check_yaml_parser("---\n...\n"),
     rmd_yaml()
   )
 
   expect_equal(
-    parse("---\nvalue: 1\n...\n"),
-    rmd_yaml(value=1)
+    check_yaml_parser("---\nvalue: 1\n...\n"),
+    rmd_yaml( list(value=1) )
   )
 
   expect_equal(
     parse_rmd("---\n---\n---\n...\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_yaml(),
       rmd_yaml()
-    )
+    ) )
   )
 
   expect_equal(
     parse_rmd("---\nvalue: 1\n---\n---\nvalue: 2\n...\n"),
-    rmd_ast(
-      rmd_yaml(value=1),
-      rmd_yaml(value=2)
-    )
+    rmd_ast( list(
+      rmd_yaml( list(value=1) ),
+      rmd_yaml( list(value=2) )
+    ) )
   )
 
   expect_equal(
     parse_rmd("---\n\n...\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_markdown("---"),
       rmd_markdown("...")
-    )
+    ) )
   )
 
   expect_equal(
     parse_rmd("---\n\n---\n---\n...\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_markdown("---"),
       rmd_yaml(),
       rmd_markdown("...")
-    )
+    ) )
   )
 
   expect_equal(
     parse_rmd("---\n---\n---\n\n...\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_yaml(),
       rmd_markdown("---"),
       rmd_markdown("...")
-    )
+    ) )
   )
 })

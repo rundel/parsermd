@@ -1,20 +1,20 @@
 test_that("minimal.Rmd", {
   ast = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
-  expected_ast = rmd_ast(
+  expected_ast = rmd_ast( list(
     rmd_yaml( list(
       title = "Minimal",
       author = "Colin Rundel",
       date = "7/21/2020",
       output = "html_document"
     ) ),
-    rmd_heading("Setup", 1),
+    rmd_heading("Setup", 1L),
     rmd_chunk(
       name = "setup", options = list(include = "FALSE"),
       code = "knitr::opts_chunk$set(echo = TRUE)"
     ),
-    rmd_heading("Content", 1),
-    rmd_heading("R Markdown", 2),
+    rmd_heading("Content", 1L),
+    rmd_heading("R Markdown", 2L),
     rmd_markdown( c(
       'This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, ',
       'PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.'
@@ -29,7 +29,7 @@ test_that("minimal.Rmd", {
     rmd_chunk(
       name = "unnamed-chunk-1", code = "knitr::knit_patterns$get()"
     ),
-    rmd_heading("Including Plots", 2),
+    rmd_heading("Including Plots", 2L),
     rmd_markdown(
       "You can also embed plots, for example:"
     ),
@@ -41,7 +41,7 @@ test_that("minimal.Rmd", {
       "Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code ",
       "that generated the plot."
     ) )
-  )
+  ) )
 
   expect_identical(ast, expected_ast)
 })
@@ -51,7 +51,9 @@ test_that("Found issues", {
   # No newline at the end
   expect_equal(
     parse_rmd("```{r}\n1+1\n```"),
-    rmd_ast(rmd_chunk(name = "unnamed-chunk-1", code = "1+1"))
+    rmd_ast( list(
+      rmd_chunk(name = "unnamed-chunk-1", code = "1+1")
+    ) )
   )
 })
 

@@ -22,7 +22,7 @@ rmd_has_shortcode = function(x, func_name = NULL) {
 
 #' @export
 rmd_has_shortcode.rmd_ast = function(x, func_name = NULL) {
-  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name)
+  purrr::map_lgl(x@nodes, rmd_has_shortcode, func_name = func_name)
 }
 
 #' @export
@@ -46,12 +46,12 @@ rmd_has_shortcode.default = function(x, func_name = NULL) {
 #' @exportS3Method
 print.rmd_shortcode = function(x, ...) {
   # Build the shortcode representation
-  func_name = cli::col_blue(cli::style_bold(x$func))
+  func_name = cli::col_blue(cli::style_bold(x@func))
   
-  if (length(x$args) == 0) {
+  if (length(x@args) == 0) {
     args_text = ""
   } else {
-    args_colored = cli::col_green(x$args)
+    args_colored = cli::col_green(x@args)
     args_text = paste0(" ", paste(args_colored, collapse = " "))
   }
   
@@ -112,5 +112,18 @@ rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
       nm = purrr::map_chr(x, class) 
     }
     res |> stats::setNames(nm)
+  }
+}
+
+#' @export
+rmd_extract_shortcodes.S7_object = function(x, flatten = FALSE) {
+  props = S7::prop_names(x)
+
+  res = purrr::map(props, ~rmd_extract_shortcodes(S7::prop(x, .x), flatten = flatten)) 
+  
+  if (flatten) {
+    res |> purrr::flatten() 
+  } else {
+    setNames(res, props)
   }
 }

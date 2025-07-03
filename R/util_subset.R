@@ -1,13 +1,17 @@
 #' @export
-#'
-`[.rmd_ast` = function(x, i, j, drop=FALSE, ...) {
+`[.rmd_ast` = function(x, i, j) {
   if (!missing(j))
     stop("incorrect number of dimensions", call. = FALSE)
 
-  x = unclass(x)[i]
-  class(x) = c("rmd_ast", "list")
+  rmd_ast(x@nodes[i])
+}
 
-  x
+#' @export
+`[[.rmd_ast` = function (x, i, j) {
+  if (!missing(j))
+    stop("incorrect number of dimensions", call. = FALSE)
+
+  x@nodes[[i]]
 }
 
 # Vectorized grepl

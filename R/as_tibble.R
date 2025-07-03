@@ -9,7 +9,7 @@ as_tibble.rmd_ast = function(x, ...) {
     sections = rmd_node_sections(x, drop_na = FALSE),
     type = rmd_node_type(x),
     label = rmd_node_label(x),
-    ast = x
+    ast = x@nodes
   ) )
 
   df = tidyr::unnest_wider(df, tidyselect::all_of("sections"))
@@ -26,8 +26,8 @@ pillar::type_sum
 type_sum.rmd_chunk = function(x) {
   paste(
     cli::style_bold("chunk"),
-    #cli::style_italic('"', x$name, '"')
-    paste0("[", x$engine, "]")
+    #cli::style_italic('"', x@name, '"')
+    paste0("[", x@engine, "]")
   )
 }
 
@@ -35,7 +35,7 @@ type_sum.rmd_chunk = function(x) {
 type_sum.rmd_raw_chunk = function(x) {
   paste(
     cli::style_bold("raw attr chunk"),
-    paste0("[", x$format, "]")
+    paste0("[", x@format, "]")
   )
 }
 
@@ -48,7 +48,7 @@ type_sum.rmd_yaml = function(x) {
 type_sum.rmd_heading = function(x) {
   paste(
     cli::style_bold("heading"),
-    paste0("[h", x$level, "]")
+    paste0("[h", x@level, "]")
   )
 }
 

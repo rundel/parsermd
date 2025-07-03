@@ -24,7 +24,7 @@
 #'
 #' # Modify specific chunks by label
 #' f = function(node) { # Add a comment to the chunk
-#'   node$code = c("# Modified chunk", node$code)
+#'   node@code = c("# Modified chunk", node@code)
 #'   node
 #' }
 #' rmd_modify(rmd, .f = f, "plot-dino") |>
@@ -34,7 +34,7 @@
 #'
 #' # Modify all chunks with named arguments passed to function
 #' f = function(node, prefix = "## ") {
-#'   node$code = paste0(prefix, node$code)
+#'   node@code = paste0(prefix, node@code)
 #'   node
 #' }
 #' rmd_modify(rmd, f, has_type("rmd_chunk"), prefix = "# ") |>
@@ -57,14 +57,13 @@ rmd_modify.default = function(x, .f, ...) {
 selection_locs = function(x, selection_quos) {
   checkmate::assert_class(x, "rmd_ast")
   
-  # Use tidyselect for node selection
-  names(x) = rmd_node_label(x)
-  
   if (length(selection_quos) == 0) {
     # If no selection arguments, select all nodes
-    seq_along(x)
+    seq_along(x@nodes)
   } else {
-    loc = tidyselect::eval_select(rlang::expr(c(!!!selection_quos)), x)
+    # Use tidyselect for node selection
+    nodes = setNames(x@nodes, rmd_node_label(x))
+    loc = tidyselect::eval_select(rlang::expr(c(!!!selection_quos)), nodes)
     sort(loc) # maintain original order
   }
 }
@@ -88,12 +87,17 @@ rmd_modify.rmd_ast = function(x, .f, ...) {
   loc = selection_locs(x, selection_quos)
   
   # Apply function to selected nodes with named arguments
-  modified_nodes = purrr::map(x[loc], ~do.call(.f, c(list(.x), function_args)))
+  modified_nodes = purrr::map(x@nodes[loc], ~do.call(.f, c(list(.x), function_args)))
   
   # Validate that all results are valid rmd nodes
-  purrr::iwalk(modified_nodes, ~validate_rmd_node(.x, loc[.y]))
+  purrr::iwalk(modified_nodes, function(node, i) {
+    if (!S7::S7_inherits(node, rmd_node)) {
+      stop("Function must return a valid rmd node object at position ", loc[i], call. = FALSE)
+    }
+    # S7 validation is automatic when the object is created
+  })
   
-  x[loc] = modified_nodes
+  x@nodes[loc] = modified_nodes
   
   x
 }
