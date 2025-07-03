@@ -45,10 +45,10 @@ nodes without labels return \code{NA}.
 \item \code{rmd_node_length()} - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
 nodes without a length return \code{NA}.
 \item \code{rmd_node_content()} - returns a character vector of node textual content, nodes without content return \code{NA}.
-\item \code{rmd_node_attr()} - returns a list of node attribute values.
+\item \code{rmd_node_attr()} - returns the value of a given node attribute (S7 property), returns \code{NULL} if the attribute does not exist.
 \item \code{rmd_node_engine()} - returns a character vector of chunk engines,
 \code{NA} for all other node types.
-\item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{MULL} for all other node types.
+\item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{NULL} for all other node types.
 \item \code{rmd_node_code()} - returns a list of chunk node code (character vector),
 \code{NULL} for all other node types.
 }

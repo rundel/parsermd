@@ -15,12 +15,12 @@
 #'
 #' * `rmd_node_content()` - returns a character vector of node textual content, nodes without content return `NA`.
 #'
-#' * `rmd_node_attr()` - returns a list of node attribute values.
+#' * `rmd_node_attr()` - returns the value of a given node attribute (S7 property), returns `NULL` if the attribute does not exist.
 #'
 #' * `rmd_node_engine()` - returns a character vector of chunk engines,
 #' `NA` for all other node types.
 #'
-#' * `rmd_node_options()` - returns a list of chunk node options (named list), `MULL` for all other node types.
+#' * `rmd_node_options()` - returns a list of chunk node options (named list), `NULL` for all other node types.
 #'
 #' * `rmd_node_code()` - returns a list of chunk node code (character vector),
 #' `NULL` for all other node types.
@@ -113,7 +113,7 @@ rmd_node_length = function(x, ...) {
 
 #' @exportS3Method
 rmd_node_length.rmd_ast = function(x, ...) {
-  purrr::map_int(x, rmd_node_length)
+  purrr::map_int(x@nodes, rmd_node_length)
 }
 
 #' @exportS3Method
@@ -206,7 +206,10 @@ rmd_node_attr.default = function(x, attr) {
 
 #' @exportS3Method
 rmd_node_attr.rmd_node = function(x, attr) {
-  S7::prop(x, attr)
+  tryCatch(
+    S7::prop(x, attr),
+    error = function(e) NULL
+  )
 }
 
 #' @exportS3Method
