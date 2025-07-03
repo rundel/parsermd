@@ -111,8 +111,10 @@ test_that("has_type preserves node order", {
   expect_equal(chunk_subset, expected_chunks)
   
   # Verify order by checking chunk names
-  chunk_names = sapply(chunk_subset@nodes, function(x) x@name)
-  expect_equal(chunk_names, c("chunk1", "chunk2", "chunk3"))
+  expect_equal(
+    rmd_node_attr(chunk_subset, "name"),
+    list("chunk1", "chunk2", "chunk3")
+  )
 })
 
 test_that("has_type works with complex node properties", {
@@ -142,8 +144,10 @@ test_that("has_type works with complex node properties", {
   expect_equal(chunk_subset, expected_chunks)
   
   # Verify different engines are both included
-  engines = sapply(chunk_subset@nodes, function(x) x@engine)
-  expect_equal(engines, c("r", "python"))
+  expect_equal(
+    rmd_node_attr(chunk_subset, "engine"), 
+    list("r", "python")
+  )
 })
 
 test_that("has_type works with empty AST", {
