@@ -1,5 +1,9 @@
 # parsermd 0.2.0 (development version)
 
+* **Breaking Change**: Migrated from S3/S4 classes to S7 classes for all AST node types (`rmd_ast`, `rmd_chunk`, `rmd_heading`, etc.)
+
+* **Breaking Change**: Removed deprecated `rmd_subset()` and related helper functions (`rmd_get_node()`, `rmd_get_chunk()`, `rmd_get_markdown()`, `rmd_has_node()`, `rmd_has_chunk()`, `rmd_has_markdown()`). Use `rmd_select()` with tidyselect syntax instead.
+
 * Added support for yaml chunk options - e.g. (`#| echo: false`)
 
 * Added support for fenced divs - e.g. (`::: {.class} ... :::`)
