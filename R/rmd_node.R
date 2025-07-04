@@ -8,6 +8,8 @@
 #' * `rmd_node_label()` - returns a character vector of node labels,
 #' nodes without labels return `NA`.
 #'
+#' * `rmd_node_label<-()` - assigns new labels to chunk nodes. For the setter, returns the modified object.
+#'
 #' * `rmd_node_type()` - returns a character vector of node types.
 #'
 #' * `rmd_node_length()` - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
@@ -22,11 +24,16 @@
 #'
 #' * `rmd_node_options()` - returns a list of chunk node options (named list), `NULL` for all other node types.
 #'
+#' * `rmd_node_options<-()` - assigns new options to chunk nodes by merging with existing options. Takes a named list of options. For the setter, returns the modified object.
+#'
+#' * `rmd_node_attr<-()` - assigns new attribute values to nodes. For the setter, returns the modified object.
+#'
 #' * `rmd_node_code()` - returns a list of chunk node code (character vector),
 #' `NULL` for all other node types.
 #'
 #' @param x An rmd object, e.g. `rmd_ast` or `rmd_tibble`.
 #' @param attr Attribute name to extract.
+#' @param value The new value to assign (for assignment functions).
 #' @param ... Unused, for extensibility.
 #'
 #' @examples
@@ -40,6 +47,20 @@
 #' rmd_node_engine(rmd)
 #' rmd_node_options(rmd)
 #' rmd_node_code(rmd)
+#'
+#' # Assignment examples
+#' chunk = rmd_chunk("r", "example", code = "1 + 1")
+#' rmd_node_label(chunk)  # "example"
+#' rmd_node_label(chunk) = "new_name"
+#' rmd_node_label(chunk)  # "new_name"
+#'
+#' # Setting options
+#' rmd_node_options(chunk) = list(eval = FALSE, echo = TRUE)
+#' rmd_node_options(chunk)  # List with eval=FALSE, echo=TRUE
+#'
+#' # Setting attributes
+#' rmd_node_attr(chunk, "engine") = "python"
+#' rmd_node_attr(chunk, "engine")  # "python"
 #'
 NULL
 
@@ -79,6 +100,28 @@ rmd_node_label.rmd_chunk = function(x, ...) {
     name = NA_character_
 
   name
+}
+
+#' @rdname rmd_node_label
+#' @export
+`rmd_node_label<-` = function(x, value) {
+  UseMethod("rmd_node_label<-")
+}
+
+#' @rdname rmd_node_label
+#' @export
+`rmd_node_label<-.default` = function(x, value) {
+  cli::cli_abort(
+    "Setting labels is not supported for objects of type {.cls {class(x)}}."
+  )
+}
+
+#' @rdname rmd_node_label  
+#' @export
+`rmd_node_label<-.rmd_chunk` = function(x, value) {
+  checkmate::assert_string(value, na.ok = FALSE)
+  x@name = value
+  x
 }
 
 
@@ -245,5 +288,50 @@ rmd_node_code = function(x, ...) {
   rmd_node_attr(x, "code")
 }
 
+#' @rdname rmd_node
+#' @export
+`rmd_node_options<-` = function(x, value) {
+  UseMethod("rmd_node_options<-")
+}
+
+#' @rdname rmd_node
+#' @export
+`rmd_node_options<-.default` = function(x, value) {
+  cli::cli_abort(
+    "Setting options is only supported for objects of type {.cls rmd_chunk} this object has class {.cls {class(x)}}."
+  )
+}
+
+#' @rdname rmd_node
+#' @export
+`rmd_node_options<-.rmd_chunk` = function(x, value) {
+  checkmate::assert_list(value, names = "named")
+  
+  # Merge new options with existing options
+  x@options = utils::modifyList(x@options, value)
+  x
+}
+
+#' @rdname rmd_node
+#' @export
+`rmd_node_attr<-` = function(x, attr, value) {
+  UseMethod("rmd_node_attr<-")
+}
+
+#' @rdname rmd_node
+#' @export
+`rmd_node_attr<-.default` = function(x, attr, value) {
+  cli::cli_abort(
+    "Setting attributes is not supported for objects of type {.cls {class(x)}}."
+  )
+}
+
+#' @rdname rmd_node
+#' @export
+`rmd_node_attr<-.rmd_node` = function(x, attr, value) {
+  # Validation and existance handled by S7
+  S7::prop(x, attr) = value
+  x
+}
 
 

@@ -10,6 +10,12 @@
 \alias{rmd_node_engine}
 \alias{rmd_node_options}
 \alias{rmd_node_code}
+\alias{rmd_node_options<-}
+\alias{rmd_node_options<-.default}
+\alias{rmd_node_options<-.rmd_chunk}
+\alias{rmd_node_attr<-}
+\alias{rmd_node_attr<-.default}
+\alias{rmd_node_attr<-.rmd_node}
 \title{Base S7 class for all RMD nodes}
 \usage{
 rmd_node()
@@ -29,6 +35,18 @@ rmd_node_engine(x, ...)
 rmd_node_options(x, ...)
 
 rmd_node_code(x, ...)
+
+rmd_node_options(x) <- value
+
+\method{rmd_node_options}{default}(x) <- value
+
+\method{rmd_node_options}{rmd_chunk}(x) <- value
+
+rmd_node_attr(x, attr) <- value
+
+\method{rmd_node_attr}{default}(x, attr) <- value
+
+\method{rmd_node_attr}{rmd_node}(x, attr) <- value
 }
 \arguments{
 \item{x}{An rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
@@ -36,11 +54,14 @@ rmd_node_code(x, ...)
 \item{...}{Unused, for extensibility.}
 
 \item{attr}{Attribute name to extract.}
+
+\item{value}{The new value to assign (for assignment functions).}
 }
 \value{
 \itemize{
 \item \code{rmd_node_label()} - returns a character vector of node labels,
 nodes without labels return \code{NA}.
+\item \verb{rmd_node_label<-()} - assigns new labels to chunk nodes. For the setter, returns the modified object.
 \item \code{rmd_node_type()} - returns a character vector of node types.
 \item \code{rmd_node_length()} - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
 nodes without a length return \code{NA}.
@@ -49,6 +70,8 @@ nodes without a length return \code{NA}.
 \item \code{rmd_node_engine()} - returns a character vector of chunk engines,
 \code{NA} for all other node types.
 \item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{NULL} for all other node types.
+\item \verb{rmd_node_options<-()} - assigns new options to chunk nodes by merging with existing options. Takes a named list of options. For the setter, returns the modified object.
+\item \verb{rmd_node_attr<-()} - assigns new attribute values to nodes. For the setter, returns the modified object.
 \item \code{rmd_node_code()} - returns a list of chunk node code (character vector),
 \code{NULL} for all other node types.
 }
@@ -69,5 +92,19 @@ rmd_node_attr(rmd, "level")
 rmd_node_engine(rmd)
 rmd_node_options(rmd)
 rmd_node_code(rmd)
+
+# Assignment examples
+chunk = rmd_chunk("r", "example", code = "1 + 1")
+rmd_node_label(chunk)  # "example"
+rmd_node_label(chunk) = "new_name"
+rmd_node_label(chunk)  # "new_name"
+
+# Setting options
+rmd_node_options(chunk) = list(eval = FALSE, echo = TRUE)
+rmd_node_options(chunk)  # List with eval=FALSE, echo=TRUE
+
+# Setting attributes
+rmd_node_attr(chunk, "engine") = "python"
+rmd_node_attr(chunk, "engine")  # "python"
 
 }

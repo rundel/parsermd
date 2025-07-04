@@ -281,3 +281,62 @@ test_that("rmd_node functions handle complex chunk labels correctly", {
   
   expect_equal(labels, expected_labels)
 })
+
+test_that("rmd_node_label assignment works", {
+  # Test assignment for rmd_chunk
+  chunk = rmd_chunk("r", "original_name", code = "1 + 1")
+  expect_equal(rmd_node_label(chunk), "original_name")
+  
+  rmd_node_label(chunk) = "new_name"
+  expect_equal(rmd_node_label(chunk), "new_name")
+  
+  # Test error for unsupported types
+  expect_snapshot_error({x = list(); rmd_node_label(x) <- "test"})
+  expect_snapshot_error({x = data.frame(); rmd_node_label(x) <- "test"})
+  
+  # Test validation
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) <- NA_character_})
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) <- c("a", "b")})
+})
+
+test_that("rmd_node_options assignment works", {
+  # Test assignment for rmd_chunk
+  chunk = rmd_chunk("r", "test", code = "1 + 1", options = list(eval = TRUE))
+  expect_equal(rmd_node_options(chunk), list(eval = TRUE))
+  
+  # Test setting new options
+  rmd_node_options(chunk) = list(echo = FALSE, fig.width = 8)
+  expected_options = list(eval = TRUE, echo = FALSE, fig.width = 8)
+  expect_equal(rmd_node_options(chunk), expected_options)
+  
+  # Test overwriting existing options
+  rmd_node_options(chunk) = list(eval = FALSE)
+  expected_options = list(eval = FALSE, echo = FALSE, fig.width = 8)
+  expect_equal(rmd_node_options(chunk), expected_options)
+  
+  # Test error for unsupported types
+  expect_snapshot_error({x = list(); rmd_node_options(x) <- list(test = TRUE)})
+  expect_snapshot_error({x = data.frame(); rmd_node_options(x) <- list(test = TRUE)})
+  
+  # Test validation
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) <- "not a list"})
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) <- list(1, 2, 3)})  # unnamed list
+})
+
+test_that("rmd_node_attr assignment works", {
+  # Test assignment for rmd_chunk
+  chunk = rmd_chunk("r", "test", code = "1 + 1")
+  expect_equal(rmd_node_attr(chunk, "engine"), "r")
+  
+  # Test setting engine
+  rmd_node_attr(chunk, "engine") = "python"
+  expect_equal(rmd_node_attr(chunk, "engine"), "python")
+  
+  # Test setting name
+  rmd_node_attr(chunk, "name") = "new_name"
+  expect_equal(rmd_node_attr(chunk, "name"), "new_name")
+  
+  # Test error for unsupported types
+  expect_snapshot_error({x = list(); rmd_node_attr(x, "test") <- "value"})
+  expect_snapshot_error({x = data.frame(); rmd_node_attr(x, "test") <- "value"})
+})
