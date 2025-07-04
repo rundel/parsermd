@@ -261,7 +261,9 @@ template <> SEXP wrap(client::ast::chunk const& chunk) {
   }
 
   Rcpp::CharacterVector yaml_options = Rcpp::wrap(chunk.yaml_options);
-  Rcpp::Function parse_yaml("parse_yaml");
+  
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function parse_yaml = pkg["parse_yaml"];
   Rcpp::Function rmd_chunk("rmd_chunk");
 
   return rmd_chunk(
@@ -325,7 +327,9 @@ template <> SEXP wrap(client::ast::fdiv_close const& fdiv) {
 
 template <> SEXP wrap(client::ast::yaml const& x) {
   Rcpp::CharacterVector yaml = Rcpp::wrap(x.lines);
-  Rcpp::Function parse_yaml("parse_yaml");
+  
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function parse_yaml = pkg["parse_yaml"];
   Rcpp::Function rmd_yaml("rmd_yaml");
 
   return rmd_yaml(
