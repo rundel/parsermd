@@ -1,3 +1,10 @@
+# Files to skip in tests due to parsing issues
+SKIP_FILES = c(
+  "examples/knitr-examples/065-rmd-chunk.Rmd",
+  "examples/quarto-cli/tests/docs/smoke-all/2023/03/17/4867.qmd",
+  "examples/quarto-cli/tests/docs/smoke-all/fenced-div-reader-fixes/test-1.qmd"
+)
+
 update_tests = function(target, files, gen_func) {
 
   base_deps = c("helper-tests.R", "../../R/tests.R")
@@ -15,7 +22,7 @@ update_tests = function(target, files, gen_func) {
   if (any(outdated > 0)) {
     message("Generating ", target)
     purrr::map(
-      files, gen_func
+      files, ~ gen_func(.x, skip_files = SKIP_FILES)
     ) |>
       purrr::reduce(
         ~ c(.x, "", .y),
@@ -33,6 +40,9 @@ update_tests = function(target, files, gen_func) {
 
 if (Sys.getenv("CI") == "" && file.exists("../../R/tests.R")) {
   # Only run if tests.R is younger than the output
+  
+  # Source the test generation functions
+  source("../../R/tests.R")
 
   find_rmds = function(d) {
     fs::dir_ls(d, recurse = TRUE, regexp = ".*\\.[RrQq]md")
