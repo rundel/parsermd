@@ -5,6 +5,7 @@
 \alias{has_type}
 \alias{by_section}
 \alias{has_label}
+\alias{has_heading}
 \alias{has_code}
 \alias{has_option}
 \alias{has_shortcode}
@@ -16,6 +17,8 @@ has_type(types)
 by_section(sec_ref, keep_parents = TRUE)
 
 has_label(label)
+
+has_heading(heading)
 
 has_code(code)
 
@@ -35,6 +38,8 @@ for further details on how these are constructed.}
 Default: \code{TRUE}}
 
 \item{label}{character vector, glob patterns for matching chunk labels.}
+
+\item{heading}{character vector, glob patterns for matching heading titles.}
 
 \item{code}{character vector, regex patterns for matching chunk code line(s)}
 
@@ -58,6 +63,7 @@ select nodes from an Rmd ast.
 \item \code{by_section()} - uses section selectors to select nodes.
 \item \code{has_type()} - selects all nodes that have the given type(s).
 \item \code{has_label()} - selects nodes with labels matching the given glob.
+\item \code{has_heading()} - selects heading nodes with titles matching the given glob pattern(s).
 \item \code{has_option()} - selects nodes that have the given option(s) set.
 \item \code{has_shortcode()} - selects nodes containing shortcodes matching the given function name(s).
 }
@@ -89,6 +95,8 @@ rmd = parse_rmd(system.file("examples/hw01.Rmd", package="parsermd"))
 rmd_select(rmd, has_type("rmd_chunk"))
 
 rmd_select(rmd, has_label("*dino"))
+
+rmd_select(rmd, has_heading("Exercise *"))
 
 rmd_select(rmd, has_option("message"))
 rmd_select(rmd, has_option(message = FALSE))

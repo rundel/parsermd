@@ -9,6 +9,7 @@
 #' * `by_section()` - uses section selectors to select nodes.
 #' * `has_type()` - selects all nodes that have the given type(s).
 #' * `has_label()` - selects nodes with labels matching the given glob.
+#' * `has_heading()` - selects heading nodes with titles matching the given glob pattern(s).
 #' * `has_option()` - selects nodes that have the given option(s) set.
 #' * `has_shortcode()` - selects nodes containing shortcodes matching the given function name(s).
 #'
@@ -21,6 +22,8 @@
 #' rmd_select(rmd, has_type("rmd_chunk"))
 #'
 #' rmd_select(rmd, has_label("*dino"))
+#'
+#' rmd_select(rmd, has_heading("Exercise *"))
 #'
 #' rmd_select(rmd, has_option("message"))
 #' rmd_select(rmd, has_option(message = FALSE))
@@ -111,6 +114,34 @@ has_label = function(label) {
     purrr::reduce(`|`)
 
   which(matching)
+}
+
+#' @rdname rmd_select_helpers
+#'
+#' @param heading character vector, glob patterns for matching heading titles.
+#'
+#' @export
+has_heading = function(heading) {
+  checkmate::assert_character(heading, any.missing = FALSE, min.len = 1)
+
+  x = tidyselect::peek_data(fn = "has_heading") |>
+    rmd_ast()
+
+  # Only consider heading nodes
+  is_heading = rmd_node_type(x) == "rmd_heading"
+  heading_names = rmd_node_attr(x, "name")
+  
+  # Convert to character vector, replacing NULL with empty string
+  heading_titles = purrr::map_chr(heading_names, function(name) {
+    if (is.null(name)) "" else as.character(name)
+  })
+  
+  regex = utils::glob2rx(heading)
+  matching = purrr::map(regex, grepl, x = heading_titles) |>
+    purrr::reduce(`|`)
+  
+  # Only return headings that match
+  which(is_heading & matching)
 }
 
 #' @rdname rmd_select_helpers

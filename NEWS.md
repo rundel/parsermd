@@ -27,6 +27,10 @@
   * New functions: `rmd_has_inline_code()`, `rmd_extract_inline_code()`, and `has_inline_code()` for selecting nodes
   * Support for engine-specific filtering using glob patterns
 
+* Enhanced `rmd_select()` functionality and node manipulation
+
+  * Added `has_heading()` helper function for selecting heading nodes using glob patterns
+
 # parsermd 0.1.3
 
 * Unlabeled chunks will now be labeled as unnamed-chunk-n, with n incrementing.
