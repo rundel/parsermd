@@ -28,7 +28,6 @@ parse_rmd = function(rmd) {
     rmd = paste0(rmd, "\n")
 
   ast = parse_rmd_cpp(rmd)
-  #ast = parse_yaml(ast)
   ast = fix_unnamed_chunks(ast)
   ast
 }
