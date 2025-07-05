@@ -16,11 +16,11 @@
 
 # rmd_node_options assignment works
 
-    Setting options is not supported for objects of type <list>.
+    Setting options is only supported for objects of type <rmd_chunk> this object has class <list>.
 
 ---
 
-    Setting options is not supported for objects of type <data.frame>.
+    Setting options is only supported for objects of type <rmd_chunk> this object has class <data.frame>.
 
 ---
 

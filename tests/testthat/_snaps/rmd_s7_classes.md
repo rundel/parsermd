@@ -76,25 +76,25 @@
 # rmd_ast unbalanced fenced div validation fails
 
     <rmd_ast> object is invalid:
-    - Unbalanced fenced divs: 1 open div node(s) without matching close div node(s)
+    - Unbalanced fenced divs: 1 <rmd_fenced_div_open> without matching <rmd_fenced_div_close>
 
 ---
 
     <rmd_ast> object is invalid:
-    - Unbalanced fenced divs: 2 open div node(s) without matching close div node(s)
+    - Unbalanced fenced divs: 2 <rmd_fenced_div_open>s without matching <rmd_fenced_div_close>s
 
 ---
 
     <rmd_ast> object is invalid:
-    - Unbalanced fenced divs: close div node at [[1]] occurs before matching open div node
+    - Unbalanced fenced divs: <rmd_fenced_div_close> at [[1]] does not have a matching <rmd_fenced_div_open>
 
 ---
 
     <rmd_ast> object is invalid:
-    - Unbalanced fenced divs: close div node at [[3]] occurs before matching open div node
+    - Unbalanced fenced divs: <rmd_fenced_div_close> at [[3]] does not have a matching <rmd_fenced_div_open>
 
 ---
 
     <rmd_ast> object is invalid:
-    - Unbalanced fenced divs: 1 open div node(s) without matching close div node(s)
+    - Unbalanced fenced divs: 1 <rmd_fenced_div_open> without matching <rmd_fenced_div_close>
 

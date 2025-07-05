@@ -1,21 +1,30 @@
 # by_fdiv validates input correctly
 
-    Assertion on 'patterns' failed: Must be of type 'character', not 'double'.
+    i In argument: `by_fdiv(123)`.
+    Caused by error in `by_fdiv()`:
+    ! All patterns must be character vectors, pattern 1 is <numeric>
 
 ---
 
-    Assertion on 'patterns' failed: Must have length >= 1, but has length 0.
+    i In argument: `by_fdiv(character(0))`.
+    Caused by error in `by_fdiv()`:
+    ! All patterns must be length 1 character vectors, pattern 1 has length 0
 
 ---
 
-    Assertion on 'patterns' failed: Contains missing values (element 2).
+    i In argument: `by_fdiv(c("valid", NA))`.
+    Caused by error in `by_fdiv()`:
+    ! All patterns must be length 1 character vectors, pattern 1 has length 2
 
 ---
 
-    `by_fdiv()` must be used within a *selecting* function.
-    i See <https://tidyselect.r-lib.org/reference/faq-selection-context.html> for details.
+    i In argument: `by_fdiv(c("a", "b"))`.
+    Caused by error in `by_fdiv()`:
+    ! All patterns must be length 1 character vectors, pattern 1 has length 2
 
 ---
 
-    Assertion on 'regexp' failed: Must be of type 'logical', not 'character'.
+    i In argument: `by_fdiv("note", regexp = "invalid")`.
+    Caused by error in `by_fdiv()`:
+    ! Assertion on 'regexp' failed: Must be of type 'logical', not 'character'.
 
