@@ -12,6 +12,7 @@
 #' * `has_heading()` - selects heading nodes with titles matching the given glob pattern(s).
 #' * `has_option()` - selects nodes that have the given option(s) set.
 #' * `has_shortcode()` - selects nodes containing shortcodes matching the given function name(s).
+#' * `by_fdiv()` - selects fenced div sections where all provided patterns match the div attributes.
 #'
 #' @return All helper functions return an integer vector of selected indexes.
 #'
@@ -31,6 +32,9 @@
 #'
 #' rmd_select(rmd, has_shortcode())
 #' rmd_select(rmd, has_shortcode("video"))
+#'
+#' rmd_select(rmd, by_fdiv("note"))
+#' rmd_select(rmd, by_fdiv(".warning", "important"))
 #'
 #'
 NULL
@@ -228,4 +232,132 @@ has_inline_code = function(engine = NULL) {
   contains_inline_code = rmd_has_inline_code(x, engine)
   
   which(contains_inline_code)
+}
+
+#' @rdname rmd_select_helpers
+#'
+#' @param ... Character vector patterns to match against fenced div attributes.
+#' All provided patterns must match at least one attribute in the div's attr property.
+#' @param regexp Logical, use regular expressions for pattern matching instead of glob patterns.
+#' Default: FALSE (uses glob patterns).
+#'
+#' @export
+by_fdiv = function(..., regexp = FALSE) {
+  # Capture arguments before combining them
+  dots = list(...)
+  
+  # Input validation - check each argument is length 1 character
+  for (i in seq_along(dots)) {
+    arg = dots[[i]]
+    if (!is.character(arg)) {
+      cli::cli_abort("All patterns must be character vectors, pattern {i} is {.cls {class(arg)}}")
+    }
+    if (length(arg) != 1) {
+      cli::cli_abort("All patterns must be length 1 character vectors, pattern {i} has length {length(arg)}")
+    }
+    if (is.na(arg)) {
+      cli::cli_abort("All patterns must be non-missing, pattern {i} is NA")
+    }
+  }
+  
+  if (length(dots) < 1) {
+    cli::cli_abort("At least one pattern must be provided")
+  }
+  
+  checkmate::assert_logical(regexp, len = 1)
+  
+  # Now combine the validated arguments
+  patterns = c(...)
+  
+  x = tidyselect::peek_data(fn = "by_fdiv") |>
+    rmd_ast()
+  
+  fdiv_find_matching_ranges(x, patterns, regexp)
+}
+
+#' Find matching fenced div ranges
+#' @param ast rmd_ast object
+#' @param patterns Character vector of patterns to match
+#' @param regexp Logical, use regexp instead of glob
+#' @return Integer vector of matching node indices
+#' @noRd
+fdiv_find_matching_ranges = function(ast, patterns, regexp) {
+  nodes = ast@nodes
+  if (length(nodes) == 0) return(integer(0))
+  
+  # Find all fenced div open nodes and their positions
+  is_fdiv_open = purrr::map_lgl(nodes, ~ S7::S7_inherits(.x, rmd_fenced_div_open))
+  fdiv_open_positions = which(is_fdiv_open)
+  
+  if (length(fdiv_open_positions) == 0) return(integer(0))
+  
+  # Check which open nodes match all patterns
+  matching_positions = c()
+  
+  for (pos in fdiv_open_positions) {
+    node = nodes[[pos]]
+    attrs = node@attr
+    
+    # Check if all patterns match at least one attribute
+    if (fdiv_all_patterns_match(attrs, patterns, regexp)) {
+      # Find the corresponding close position for this open
+      close_pos = fdiv_find_matching_close(nodes, pos)
+      if (!is.na(close_pos)) {
+        # Include all nodes from open to close (inclusive)
+        matching_positions = c(matching_positions, pos:close_pos)
+      }
+    }
+  }
+  
+  # Return unique sorted positions
+  sort(unique(matching_positions))
+}
+
+#' Check if all patterns match at least one attribute
+#' @param attrs Character vector of attributes
+#' @param patterns Character vector of patterns
+#' @param regexp Logical, use regexp instead of glob
+#' @return Logical, TRUE if all patterns match
+#' @noRd
+fdiv_all_patterns_match = function(attrs, patterns, regexp) {
+  if (length(attrs) == 0) return(FALSE)
+  
+  # Convert patterns to regex
+  if (regexp) {
+    regex_patterns = patterns
+  } else {
+    regex_patterns = utils::glob2rx(patterns)
+  }
+  
+  # Check that every pattern matches at least one attribute
+  purrr::every(regex_patterns, function(pattern) {
+    any(grepl(pattern, attrs))
+  })
+}
+
+#' Find the matching close position for an open fenced div
+#' @param nodes List of rmd nodes
+#' @param open_pos Integer position of the open node
+#' @return Integer position of matching close, or NA if not found
+#' @noRd
+fdiv_find_matching_close = function(nodes, open_pos) {
+  balance = 1  # We start with 1 because we're at an open
+  
+  for (i in (open_pos + 1):length(nodes)) {
+    node = nodes[[i]]
+    
+    if (S7::S7_inherits(node, rmd_fenced_div_open)) {
+      balance = balance + 1
+    } else if (S7::S7_inherits(node, rmd_fenced_div_close)) {
+      balance = balance - 1
+      
+      # Found our matching close
+      if (balance == 0) {
+        return(i)
+      }
+    }
+  }
+  
+  # No matching close found
+  NA_integer_
 }
