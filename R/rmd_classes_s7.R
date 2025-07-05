@@ -29,10 +29,17 @@ rmd_ast = S7::new_class(
     # Validate each node is a valid rmd node type or NULL
     for (i in seq_along(self@nodes)) {
       node = self@nodes[[i]]
-      if (!is.null(node) && !S7::S7_inherits(node, rmd_node)) {
+      if (!S7::S7_inherits(node, rmd_node)) {
         return(paste0("Node [[", i, "]] is not a valid rmd node type"))
       }
     }
+    
+    # Validate balanced fenced divs
+    fdiv_balance_error = validate_fdiv_balance(self)
+    if (!is.null(fdiv_balance_error)) {
+      return(fdiv_balance_error)
+    }
+    
     NULL
   },
   package = NULL
@@ -293,3 +300,33 @@ rmd_shortcode = S7::new_class(
   },
   package = NULL
 )
+
+validate_fdiv_balance = function(ast) {
+  nodes = ast@nodes
+
+  if (length(nodes) == 0) return(NULL)
+  
+  # Track the balance with a stack-like counter
+  balance = 0
+  
+  for (i in seq_along(nodes)) {
+    if (S7::S7_inherits(nodes[[i]], rmd_fenced_div_open)) {
+      balance = balance + 1
+    } else if (S7::S7_inherits(nodes[[i]], rmd_fenced_div_close)) {
+      balance = balance - 1
+    }
+
+    if (balance < 0) { # Close without matching open
+      return(cli::format_inline("Unbalanced fenced divs: {.cls rmd_fenced_div_close} at [[{i}]] does not have a matching {.cls rmd_fenced_div_open}"))
+    }
+  }
+  
+  # Check if we have unmatched opens
+  if (balance > 0) {
+    return(
+      cli::format_inline("Unbalanced fenced divs: {cli::no(balance)} {.cls rmd_fenced_div_open}{?s} without matching {.cls rmd_fenced_div_close}{?s}")
+    )
+  }
+  
+  NULL
+}

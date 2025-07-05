@@ -279,3 +279,87 @@ test_that("S7 inheritance works", {
   ), rmd_node))
   expect_true(S7::S7_inherits(rmd_markdown(lines = "test"), rmd_node))
 })
+
+test_that("rmd_ast balanced fenced div validation works", {
+  # Valid: balanced fenced divs
+  expect_s3_class(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "note"),
+      rmd_markdown(lines = "Content"),
+      rmd_fenced_div_close()
+    )),
+    "rmd_ast"
+  )
+  
+  # Valid: nested balanced fenced divs
+  expect_s3_class(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "outer"),
+      rmd_fenced_div_open(attr = "inner"),
+      rmd_markdown(lines = "Content"),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close()
+    )),
+    "rmd_ast"
+  )
+  
+  # Valid: no fenced divs
+  expect_s3_class(
+    rmd_ast(nodes = list(
+      rmd_heading(name = "Title", level = 1L),
+      rmd_markdown(lines = "Content")
+    )),
+    "rmd_ast"
+  )
+  
+  # Valid: empty AST
+  expect_s3_class(
+    rmd_ast(nodes = list()),
+    "rmd_ast"
+  )
+})
+
+test_that("rmd_ast unbalanced fenced div validation fails", {
+  # Invalid: unclosed fenced div
+  expect_snapshot_error(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "note"),
+      rmd_markdown(lines = "Content")
+    ))
+  )
+  
+  # Invalid: multiple unclosed fenced divs
+  expect_snapshot_error(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "outer"),
+      rmd_fenced_div_open(attr = "inner"),
+      rmd_markdown(lines = "Content")
+    ))
+  )
+  
+  # Invalid: close before open
+  expect_snapshot_error(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_close(),
+      rmd_markdown(lines = "Content")
+    ))
+  )
+  
+  # Invalid: more closes than opens
+  expect_snapshot_error(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_close(),
+      rmd_fenced_div_close()
+    ))
+  )
+  
+  # Invalid: unbalanced nested divs
+  expect_snapshot_error(
+    rmd_ast(nodes = list(
+      rmd_fenced_div_open(attr = "outer"),
+      rmd_fenced_div_open(attr = "inner"),
+      rmd_fenced_div_close()
+    ))
+  )
+})

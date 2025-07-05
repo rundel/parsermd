@@ -73,3 +73,28 @@
     <rmd_shortcode> object is invalid:
     - func must be a single character string
 
+# rmd_ast unbalanced fenced div validation fails
+
+    <rmd_ast> object is invalid:
+    - Unbalanced fenced divs: 1 open div node(s) without matching close div node(s)
+
+---
+
+    <rmd_ast> object is invalid:
+    - Unbalanced fenced divs: 2 open div node(s) without matching close div node(s)
+
+---
+
+    <rmd_ast> object is invalid:
+    - Unbalanced fenced divs: close div node at [[1]] occurs before matching open div node
+
+---
+
+    <rmd_ast> object is invalid:
+    - Unbalanced fenced divs: close div node at [[3]] occurs before matching open div node
+
+---
+
+    <rmd_ast> object is invalid:
+    - Unbalanced fenced divs: 1 open div node(s) without matching close div node(s)
+
