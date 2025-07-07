@@ -4,7 +4,7 @@
 \alias{as_document}
 \title{Convert an \code{rmd_ast}, \code{rmd_tibble}, or any ast node into text.}
 \usage{
-as_document(x, padding = "", collapse = NULL, ...)
+as_document(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{rmd_ast}, \code{rmd_tibble}, or parsermd node object.}
@@ -12,6 +12,8 @@ as_document(x, padding = "", collapse = NULL, ...)
 \item{padding}{Padding to add between nodes when assembling the text.}
 
 \item{collapse}{If not \code{NULL}, use value to collapse lines.}
+
+\item{use_yaml_opts}{Logical. Whether to use YAML format for chunk options (default TRUE).}
 
 \item{...}{Passed to \code{to_ast()} when converting \code{rmd_collection} or \code{qmd_collection}.}
 }

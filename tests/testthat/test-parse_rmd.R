@@ -10,7 +10,7 @@ test_that("minimal.Rmd", {
     ) ),
     rmd_heading("Setup", 1L),
     rmd_chunk(
-      name = "setup", options = list(include = "FALSE"),
+      name = "setup", options = list(include = FALSE),
       code = "knitr::opts_chunk$set(echo = TRUE)"
     ),
     rmd_heading("Content", 1L),
@@ -34,7 +34,7 @@ test_that("minimal.Rmd", {
       "You can also embed plots, for example:"
     ),
     rmd_chunk(
-      name = "pressure", options = list(echo = "FALSE"),
+      name = "pressure", options = list(echo = FALSE),
       code = "plot(pressure)"
     ),
     rmd_markdown( c(

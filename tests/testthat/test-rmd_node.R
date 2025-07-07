@@ -20,19 +20,19 @@ test_that("rmd_node_label works with different node types", {
   expect_equal(labels, expected_labels)
 })
 
-test_that("rmd_node_label handles chunk yaml_options", {
-  # Create test AST with yaml_options label
+test_that("rmd_node_label handles chunk options", {
+  # Create test AST with combined options (from both traditional and YAML sources)
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "", code = "x <- 1", yaml_options = list(label = "yaml-label")),
-      rmd_chunk(engine = "r", name = "", code = "y <- 2", options = list(label = "opt-label"), yaml_options = list(label = "yaml-label"))
+      rmd_chunk(engine = "r", name = "", code = "x <- 1", options = list(label = "from-yaml")),
+      rmd_chunk(engine = "r", name = "", code = "y <- 2", options = list(label = "combined-label"))
     )
   )
   
-  # Test label extraction - options should take precedence over yaml_options
+  # Test label extraction
   labels = rmd_node_label(original_ast)
   
-  expected_labels = c("yaml-label", "opt-label")
+  expected_labels = c("from-yaml", "combined-label")
   
   expect_equal(labels, expected_labels)
 })
@@ -269,7 +269,7 @@ test_that("rmd_node functions handle complex chunk labels correctly", {
       # Options label when name is empty
       rmd_chunk(engine = "r", name = "", code = "y <- 2", options = list(label = "from-options")),
       # YAML options label when name and options are empty/missing
-      rmd_chunk(engine = "r", name = "", code = "z <- 3", yaml_options = list(label = "from-yaml")),
+      rmd_chunk(engine = "r", name = "", code = "z <- 3", options = list(label = "from-yaml")),
       # No label anywhere
       rmd_chunk(engine = "r", name = "", code = "w <- 4")
     )

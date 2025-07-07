@@ -3,12 +3,13 @@
 #' @param x `rmd_ast`, `rmd_tibble`, or parsermd node object.
 #' @param padding Padding to add between nodes when assembling the text.
 #' @param collapse If not `NULL`, use value to collapse lines.
+#' @param use_yaml_opts Logical. Whether to use YAML format for chunk options (default TRUE).
 #' @param ... Passed to `to_ast()` when converting `rmd_collection` or `qmd_collection`.
 #'
 #' @return Returns a character vector.
 #'
 #' @export
-as_document = function(x, padding = "", collapse = NULL, ...) {
+as_document = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
   UseMethod("as_document")
 }
 
@@ -23,12 +24,12 @@ as_document.character = function(x, ...) {
 }
 
 #' @exportS3Method
-as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
+as_document.rmd_ast = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
   if (length(x@nodes) == 0) {
     lines = ""
   } else {
     lines = unlist(
-      purrr::map(x@nodes, ~ c(as_document(.x), padding))
+      purrr::map(x@nodes, ~ c(as_document(.x, use_yaml_opts = use_yaml_opts, ...), padding))
     )
   }
 
@@ -39,54 +40,63 @@ as_document.rmd_ast = function(x, padding = "", collapse = NULL, ...) {
 }
 
 #' @exportS3Method
-as_document.rmd_collection = function(x, padding = "", collapse = NULL, ...) {
-  as_document(as_ast(x, ...), padding, collapse)
+as_document.rmd_collection = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
+  as_document(as_ast(x, ...), padding, collapse, use_yaml_opts = use_yaml_opts)
 }
 
 #' @exportS3Method
-as_document.qmd_collection = function(x, padding = "", collapse = NULL, ...) {
-  as_document(as_ast(x, ...), padding, collapse)
+as_document.qmd_collection = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
+  as_document(as_ast(x, ...), padding, collapse, use_yaml_opts = use_yaml_opts)
 }
 
 #' @exportS3Method
-as_document.rmd_tibble = function(x, padding = "", collapse = NULL, ...) {
-  as_document(x$ast, padding, collapse, ...)
+as_document.rmd_tibble = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
+  as_document(x$ast, padding, collapse, use_yaml_opts = use_yaml_opts, ...)
 }
 
 
 #' @exportS3Method
-as_document.rmd_chunk = function(x, ...) {
-  if (x@name != "") {
-    details = x@name
+as_document.rmd_chunk = function(x, ..., use_yaml_opts = TRUE) {
+  ticks = paste(rep('`', x@n_ticks), collapse="")
+  
+  if (use_yaml_opts && length(x@options) > 0) {
+    # Use YAML format for options
+    details = if (x@name != "") x@name else ""
+    if (details != "") details = paste0(" ", details)
+    
+    yaml_lines = yaml_text(x@options)
+    
+    lines = c(
+      paste0(ticks, "{", x@engine, details, "}"),
+      paste("#|", yaml_lines),
+      x@code,
+      ticks
+    )
+  } else {
+    # Use traditional R format for options
+    if (x@name != "") {
+      details = x@name
+      if (length(x@options) > 0)
+        details = paste0(details, ", ")
+    } else {
+      details = ""
+    }
 
     if (length(x@options) > 0)
-      details = paste0(details, ", ")
-  } else {
-    details = ""
-  }
+      details = paste0(
+        details,
+        paste(names(x@options), "=", x@options, collapse=", ")
+      )
 
-  if (length(x@options) > 0)
-    details = paste0(
-      details,
-      paste(names(x@options), "=", x@options, collapse=", ")
+    if (details != "")
+      details = paste0(" ", details)
+
+    lines = c(
+      paste0(ticks, "{", x@engine, details, "}"),
+      x@code,
+      ticks
     )
-
-  if (details != "")
-    details = paste0(" ", details)
-
-  ticks = paste(rep('`', x@n_ticks), collapse="")
-
-  lines = c(
-    paste0(ticks, "{", x@engine, details, "}"),
-    if (length(x@yaml_options) > 0) {
-      yaml_lines = yaml_text(x@yaml_options)
-      paste("#|", yaml_lines)
-    } else {
-      character()
-    },
-    x@code,
-    ticks
-  )
+  }
 
   paste0(
     x@indent,

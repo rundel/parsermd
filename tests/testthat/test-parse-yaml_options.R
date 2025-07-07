@@ -24,7 +24,7 @@ test_that("chunk with yaml options", {
     check_chunk_parser("```{r}\n#| foo: bar\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(foo = "bar")
+      options = list(foo = "bar")
     )
   )
 
@@ -32,7 +32,7 @@ test_that("chunk with yaml options", {
     check_chunk_parser("```{r}\n#| foo: bar\n#| hello: world\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(foo = "bar", hello = "world")
+      options = list(foo = "bar", hello = "world")
     )
   )
 
@@ -40,7 +40,7 @@ test_that("chunk with yaml options", {
     check_chunk_parser("```{r}\n#| echo: true\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(echo = TRUE)
+      options = list(echo = TRUE)
     )
   )
 
@@ -48,7 +48,7 @@ test_that("chunk with yaml options", {
     check_chunk_parser("```{r}\n#| fig-width: 100\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(`fig-width` = 100L)
+      options = list(`fig-width` = 100L)
     )
   )
 
@@ -56,7 +56,7 @@ test_that("chunk with yaml options", {
     check_chunk_parser("```{r}\n#| fig-width: 0.5\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(`fig-width` = 0.5)
+      options = list(`fig-width` = 0.5)
     )
   )
 })
@@ -68,7 +68,7 @@ test_that("yaml options with break", {
     check_chunk_parser("```{r}\n#| echo: true\n```\n"),
     rmd_chunk(
       engine = "r", code=character(),
-      yaml_options = list(echo = TRUE)
+      options = list(echo = TRUE)
     )
   )
 
@@ -90,7 +90,7 @@ test_that("yaml options with break", {
     check_chunk_parser("```{r}\n#| echo: true\n#| \n#| fig-width: 10\n```\n"),
     rmd_chunk(
       engine = "r",
-      yaml_options = list(echo = TRUE, `fig-width` = 10L)
+      options = list(echo = TRUE, `fig-width` = 10L)
     )
   )
 
@@ -130,7 +130,7 @@ test_that("parse full document with yaml options", {
     rmd_chunk(
       engine = "r",
       name = "unnamed-chunk-1",
-      yaml_options = list(
+      options = list(
         eval = TRUE,
         echo = FALSE,
         `out-width` = 850L,
@@ -150,12 +150,12 @@ test_that("Array arguments", {
   
   expect_equal(
     check_chunk_parser("```{r}\n#| layout: [[1,1], [1]]\n```\n"),
-    rmd_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+    rmd_chunk(options = list(layout = list(c(1,1), 1)))
   )
 
   expect_equal(
     check_chunk_parser("```{r}\n#| layout:\n#| - - 1\n#|   - 1\n#| - 1\n```\n"),
-    rmd_chunk(yaml_options = list(layout = list(c(1,1), 1)))
+    rmd_chunk(options = list(layout = list(c(1,1), 1)))
   )
 
   expect_equal(

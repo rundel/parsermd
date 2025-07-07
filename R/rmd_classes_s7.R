@@ -96,8 +96,7 @@ rmd_heading = S7::new_class(
 #' @description S7 class representing an executable code chunk
 #' @param engine Character. Language engine
 #' @param name Character. Chunk name
-#' @param options List. Chunk options
-#' @param yaml_options List. YAML-style chunk options
+#' @param options List. Combined chunk options (traditional and YAML)
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
 #' @param n_ticks Integer. Number of backticks
@@ -109,7 +108,6 @@ rmd_chunk = S7::new_class(
     engine       = S7::new_property(S7::class_character, default = quote("r")),
     name         = S7::new_property(S7::class_character, default = quote("")),
     options      = S7::new_property(S7::class_list, default = quote(list())),
-    yaml_options = S7::new_property(S7::class_list, default = quote(list())),
     code         = S7::new_property(S7::class_character, default = quote(character())),
     indent       = S7::new_property(S7::class_character, default = quote("")),
     n_ticks      = S7::new_property(S7::class_integer, default = quote(3L))

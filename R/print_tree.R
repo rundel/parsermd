@@ -45,7 +45,7 @@ tree_node.rmd_code_block = function(x) {
 tree_node.rmd_chunk = function(x) {
   name = cli::style_bold(rmd_node_label(x))
 
-  n_opt = length(x@options) + length(x@yaml_options)
+  n_opt = length(x@options)
 
   list(
     text = "Chunk",

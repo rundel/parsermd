@@ -92,8 +92,6 @@ rmd_node_label.rmd_chunk = function(x, ...) {
   if (name == "") {
     if (!is.null(x@options[["label"]]))
       name = x@options[["label"]]
-    else if (!is.null(x@yaml_options[["label"]]))
-      name = x@yaml_options[["label"]]
   }
 
   if (is.null(name))

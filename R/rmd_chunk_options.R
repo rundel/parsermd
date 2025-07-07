@@ -84,7 +84,7 @@ rmd_get_options.default = function(x, ..., defaults = list()) {
 rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   opts = unlist(list(...))
 
-  chunk_opts = c(x@options, x@yaml_options)
+  chunk_opts = x@options
 
   if (length(opts) == 0) {
     chunk_opts

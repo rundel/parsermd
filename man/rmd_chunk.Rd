@@ -8,7 +8,6 @@ rmd_chunk(
   engine = "r",
   name = "",
   options = list(),
-  yaml_options = list(),
   code = character(),
   indent = "",
   n_ticks = 3L
@@ -19,9 +18,7 @@ rmd_chunk(
 
 \item{name}{Character. Chunk name}
 
-\item{options}{List. Chunk options}
-
-\item{yaml_options}{List. YAML-style chunk options}
+\item{options}{List. Combined chunk options (traditional and YAML)}
 
 \item{code}{Character vector. Code lines}
 

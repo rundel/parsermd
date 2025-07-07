@@ -64,7 +64,6 @@ test_that("rmd_chunk S7 class works", {
     engine = "r",
     name = "test",
     options = list(),
-    yaml_options = list(),
     code = c("x = 1", "y = 2"),
     indent = "",
     n_ticks = 3L
@@ -79,7 +78,6 @@ test_that("rmd_chunk S7 class works", {
       engine = c("r", "python"),
       name = "test",
       options = list(),
-      yaml_options = list(),
       code = character(),
       indent = "",
       n_ticks = 3L
@@ -92,7 +90,6 @@ test_that("rmd_chunk S7 class works", {
       engine = "r",
       name = "test",
       options = list(),
-      yaml_options = list(),
       code = character(),
       indent = "",
       n_ticks = 2L
@@ -274,7 +271,7 @@ test_that("S7 inheritance works", {
   expect_true(S7::S7_inherits(rmd_yaml(yaml = list()), rmd_node))
   expect_true(S7::S7_inherits(rmd_heading(name = "Test", level = 1L), rmd_node))
   expect_true(S7::S7_inherits(rmd_chunk(
-    engine = "r", name = "", options = list(), yaml_options = list(),
+    engine = "r", name = "", options = list(),
     code = character(), indent = "", n_ticks = 3L
   ), rmd_node))
   expect_true(S7::S7_inherits(rmd_markdown(lines = "test"), rmd_node))

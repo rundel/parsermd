@@ -5,6 +5,7 @@
 
 #include <Rcpp.h>
 #include <boost/format.hpp>
+#include <algorithm>
 
 #include "parser_error_handler.h"
 
@@ -78,8 +79,6 @@ SEXP parse_inline_code_cpp(std::string const& str) {
 
   return Rcpp::wrap(expr);
 }
-
-
 
 
 // [[Rcpp::export]]
@@ -270,17 +269,49 @@ template <> SEXP wrap(client::ast::chunk const& chunk) {
     );
   }
 
-  Rcpp::CharacterVector yaml_options = Rcpp::wrap(chunk.yaml_options);
-  
-  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
-  Rcpp::Function parse_yaml = pkg["parse_yaml"];
-  Rcpp::Function rmd_chunk("rmd_chunk");
+  Rcpp::List options = Rcpp::wrap(chunk.args.chunk_options);
 
+  Rcpp::CharacterVector yaml_options = Rcpp::wrap(chunk.yaml_options);
+  //Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function parse_yaml = Rcpp::Environment::namespace_env("parsermd")["parse_yaml"];
+  Rcpp::List parsed_yaml_options = parse_yaml(yaml_options);
+
+  std::vector<std::string> yaml_names = Rcpp::as<std::vector<std::string>>(
+    parsed_yaml_options.hasAttribute("names") 
+    ? parsed_yaml_options.names()
+    : Rcpp::CharacterVector()
+  );
+
+  Rcpp::CharacterVector option_names = options.hasAttribute("names")
+    ? options.names()
+    : Rcpp::CharacterVector();
+  
+  std::string conflicts = "";
+  
+  for (auto yaml_name : yaml_names) {
+    //std::string yaml_name = Rcpp::as<std::string>(yaml_names[i]);
+    
+    // Check for conflicts
+    if (std::find(option_names.begin(), option_names.end(), yaml_name) != option_names.end()) {
+      if (conflicts != "") 
+        conflicts += ", ";
+      conflicts += yaml_name;
+    }
+    
+    // Add YAML option (overriding any conflicts)
+    options[yaml_name] = parsed_yaml_options[yaml_name];
+  }
+
+  // Warn about conflicts if any
+  if (conflicts != "") {
+    Rcpp::warning("YAML options override traditional options for: " + conflicts);
+  }
+
+  Rcpp::Function rmd_chunk("rmd_chunk");
   return rmd_chunk(
     Rcpp::Named("engine") = chunk.args.engine,
     Rcpp::Named("name") = chunk.args.name,
-    Rcpp::Named("options") = Rcpp::wrap(chunk.args.chunk_options),
-    Rcpp::Named("yaml_options") = parse_yaml(yaml_options),
+    Rcpp::Named("options") = options,
     Rcpp::Named("code") = chunk.code,
     Rcpp::Named("indent") = chunk.args.indent,
     Rcpp::Named("n_ticks") = chunk.args.n_ticks
@@ -296,7 +327,8 @@ template <> SEXP wrap(std::vector<client::ast::option> const& opts) {
   Rcpp::CharacterVector names;
 
   for(auto opt : opts) {
-    values.push_back(opt.value);
+    SEXP R_val = parse_R_value_cpp(opt.value); 
+    values.push_back(R_val);
     names.push_back(opt.name);
   }
 
