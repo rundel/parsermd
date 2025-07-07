@@ -24,8 +24,8 @@ test_that("rmd_node_label handles chunk options", {
   # Create test AST with combined options (from both traditional and YAML sources)
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "", code = "x <- 1", options = list(label = "from-yaml")),
-      rmd_chunk(engine = "r", name = "", code = "y <- 2", options = list(label = "combined-label"))
+      rmd_chunk(engine = "r", name = "", code = "x = 1", options = list(label = "from-yaml")),
+      rmd_chunk(engine = "r", name = "", code = "y = 2", options = list(label = "combined-label"))
     )
   )
   
@@ -43,8 +43,8 @@ test_that("rmd_node_type works with all node types", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section", level = 1L),
-      rmd_chunk(engine = "r", name = "code", code = "x <- 1"),
-      rmd_raw_chunk(format = "r", code = "y <- 2"),
+      rmd_chunk(engine = "r", name = "code", code = "x = 1"),
+      rmd_raw_chunk(format = "r", code = "y = 2"),
       rmd_code_block(attr = "python", code = "print('hello')"),
       rmd_markdown(lines = "Some text"),
       rmd_shortcode(func = "video", args = "demo.mp4"),
@@ -68,7 +68,7 @@ test_that("rmd_node_length works with different node types", {
   # Create test AST with nodes of different lengths
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "code", code = c("x <- 1", "y <- 2", "z <- 3")),
+      rmd_chunk(engine = "r", name = "code", code = c("x = 1", "y = 2", "z = 3")),
       rmd_raw_chunk(format = "r", code = c("a", "b")),
       rmd_markdown(lines = c("Line 1", "Line 2", "Line 3", "Line 4")),
       rmd_yaml(yaml = list(title = "Test", author = "Me", date = "2023-01-01")),
@@ -116,7 +116,7 @@ test_that("rmd_node_attr works with different attributes", {
   # Create test AST with just chunks and headings to test specific attributes
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test", code = "x <- 1", options = list(eval = TRUE)),
+      rmd_chunk(engine = "r", name = "test", code = "x = 1", options = list(eval = TRUE)),
       rmd_heading(name = "Introduction", level = 2L)
     )
   )
@@ -145,7 +145,7 @@ test_that("rmd_node_engine extracts engines correctly", {
   # Create test AST with different engines
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "r-code", code = "x <- 1"),
+      rmd_chunk(engine = "r", name = "r-code", code = "x = 1"),
       rmd_chunk(engine = "python", name = "py-code", code = "x = 1"),
       rmd_raw_chunk(format = "bash", code = "echo 'hello'"),
       rmd_heading(name = "Section", level = 1L),  # no engine
@@ -165,8 +165,8 @@ test_that("rmd_node_options extracts chunk options correctly", {
   # Create test AST with only chunks (since only chunks have options)
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "code1", code = "x <- 1", options = list(eval = TRUE, echo = FALSE)),
-      rmd_chunk(engine = "r", name = "code2", code = "y <- 2"),  # no options
+      rmd_chunk(engine = "r", name = "code1", code = "x = 1", options = list(eval = TRUE, echo = FALSE)),
+      rmd_chunk(engine = "r", name = "code2", code = "y = 2"),  # no options
       rmd_chunk(engine = "python", name = "code3", code = "z = 3", options = list(fig.width = 8))
     )
   )
@@ -176,7 +176,7 @@ test_that("rmd_node_options extracts chunk options correctly", {
   
   expected_options = list(
     list(eval = TRUE, echo = FALSE),
-    list(),
+    list() |> setNames(character()),
     list(fig.width = 8)
   )
   
@@ -187,7 +187,7 @@ test_that("rmd_node_code extracts code correctly", {
   # Create test AST with different code content
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "single", code = "x <- 1"),
+      rmd_chunk(engine = "r", name = "single", code = "x = 1"),
       rmd_chunk(engine = "r", name = "multi", code = c("library(dplyr)", "data %>% summarise(n())")),
       rmd_raw_chunk(format = "bash", code = c("#!/bin/bash", "echo 'hello'")),
       rmd_heading(name = "Section", level = 1L),  # no code
@@ -199,7 +199,7 @@ test_that("rmd_node_code extracts code correctly", {
   codes = rmd_node_code(original_ast)
   
   expected_codes = list(
-    "x <- 1",
+    "x = 1",
     c("library(dplyr)", "data %>% summarise(n())"),
     c("#!/bin/bash", "echo 'hello'"),
     NULL,
@@ -226,7 +226,7 @@ test_that("rmd_node functions work with empty AST", {
 
 test_that("rmd_node functions work with single nodes", {
   # Test with individual node objects
-  chunk_node = rmd_chunk(engine = "r", name = "test", code = c("x <- 1", "y <- 2"), options = list(eval = TRUE))
+  chunk_node = rmd_chunk(engine = "r", name = "test", code = c("x = 1", "y = 2"), options = list(eval = TRUE))
   heading_node = rmd_heading(name = "Introduction", level = 2L)
   markdown_node = rmd_markdown(lines = c("Some text", "More text"))
   
@@ -243,7 +243,7 @@ test_that("rmd_node functions work with single nodes", {
   expect_equal(rmd_node_length(heading_node), NA_integer_)
   expect_equal(rmd_node_length(markdown_node), 2L)
   
-  expect_equal(rmd_node_content(chunk_node), "x <- 1\ny <- 2")
+  expect_equal(rmd_node_content(chunk_node), "x = 1\ny = 2")
   expect_equal(rmd_node_content(heading_node), NA_character_)
   expect_equal(rmd_node_content(markdown_node), "Some text\nMore text")
 })
@@ -251,7 +251,7 @@ test_that("rmd_node functions work with single nodes", {
 test_that("rmd_node_attr validates input", {
   # Create simple AST
   test_ast = rmd_ast(
-    nodes = list(rmd_chunk(engine = "r", name = "test", code = "x <- 1"))
+    nodes = list(rmd_chunk(engine = "r", name = "test", code = "x = 1"))
   )
   
   # Test input validation
@@ -265,13 +265,13 @@ test_that("rmd_node functions handle complex chunk labels correctly", {
   original_ast = rmd_ast(
     nodes = list(
       # Name takes precedence over options
-      rmd_chunk(engine = "r", name = "chunk-name", code = "x <- 1", options = list(label = "option-label")),
+      rmd_chunk(engine = "r", name = "chunk-name", code = "x = 1", options = list(label = "option-label")),
       # Options label when name is empty
-      rmd_chunk(engine = "r", name = "", code = "y <- 2", options = list(label = "from-options")),
+      rmd_chunk(engine = "r", name = "", code = "y = 2", options = list(label = "from-options")),
       # YAML options label when name and options are empty/missing
-      rmd_chunk(engine = "r", name = "", code = "z <- 3", options = list(label = "from-yaml")),
+      rmd_chunk(engine = "r", name = "", code = "z = 3", options = list(label = "from-yaml")),
       # No label anywhere
-      rmd_chunk(engine = "r", name = "", code = "w <- 4")
+      rmd_chunk(engine = "r", name = "", code = "w = 4")
     )
   )
   
@@ -291,12 +291,12 @@ test_that("rmd_node_label assignment works", {
   expect_equal(rmd_node_label(chunk), "new_name")
   
   # Test error for unsupported types
-  expect_snapshot_error({x = list(); rmd_node_label(x) <- "test"})
-  expect_snapshot_error({x = data.frame(); rmd_node_label(x) <- "test"})
+  expect_snapshot_error({x = list(); rmd_node_label(x) = "test"})
+  expect_snapshot_error({x = data.frame(); rmd_node_label(x) = "test"})
   
   # Test validation
-  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) <- NA_character_})
-  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) <- c("a", "b")})
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) = NA_character_})
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_label(chunk) = c("a", "b")})
 })
 
 test_that("rmd_node_options assignment works", {
@@ -315,12 +315,12 @@ test_that("rmd_node_options assignment works", {
   expect_equal(rmd_node_options(chunk), expected_options)
   
   # Test error for unsupported types
-  expect_snapshot_error({x = list(); rmd_node_options(x) <- list(test = TRUE)})
-  expect_snapshot_error({x = data.frame(); rmd_node_options(x) <- list(test = TRUE)})
+  expect_snapshot_error({x = list(); rmd_node_options(x) = list(test = TRUE)})
+  expect_snapshot_error({x = data.frame(); rmd_node_options(x) = list(test = TRUE)})
   
   # Test validation
-  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) <- "not a list"})
-  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) <- list(1, 2, 3)})  # unnamed list
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) = "not a list"})
+  expect_snapshot_error({chunk = rmd_chunk("r", "test", code = "1"); rmd_node_options(chunk) = list(1, 2, 3)})  # unnamed list
 })
 
 test_that("rmd_node_attr assignment works", {
@@ -337,6 +337,6 @@ test_that("rmd_node_attr assignment works", {
   expect_equal(rmd_node_attr(chunk, "name"), "new_name")
   
   # Test error for unsupported types
-  expect_snapshot_error({x = list(); rmd_node_attr(x, "test") <- "value"})
-  expect_snapshot_error({x = data.frame(); rmd_node_attr(x, "test") <- "value"})
+  expect_snapshot_error({x = list(); rmd_node_attr(x, "test") = "value"})
+  expect_snapshot_error({x = data.frame(); rmd_node_attr(x, "test") = "value"})
 })

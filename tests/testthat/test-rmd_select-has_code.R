@@ -22,15 +22,15 @@ test_that("has_code works with regex patterns", {
   # Create test AST with various code patterns
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "data", code = "data <- read.csv('file.csv')"),
-      rmd_chunk(engine = "r", name = "analysis", code = "result <- analyze(data)"),
+      rmd_chunk(engine = "r", name = "data", code = "data = read.csv('file.csv')"),
+      rmd_chunk(engine = "r", name = "analysis", code = "result = analyze(data)"),
       rmd_chunk(engine = "r", name = "plot", code = "ggplot(data, aes(x, y)) + geom_point()"),
       rmd_chunk(engine = "r", name = "summary", code = "summary(result)")
     )
   )
   
   # Test selecting chunks with assignment operator using regex
-  assign_subset = rmd_select(original_ast, has_code("<-"))
+  assign_subset = rmd_select(original_ast, has_code("="))
   
   # Expected result: chunks with assignment (positions 1, 2)
   expected_subset = original_ast[c(1, 2)]
@@ -43,7 +43,7 @@ test_that("has_code works with multiple patterns", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_chunk(engine = "r", name = "setup", code = "library(dplyr)"),
-      rmd_chunk(engine = "r", name = "data", code = "data <- read_csv('file.csv')"),
+      rmd_chunk(engine = "r", name = "data", code = "data = read_csv('file.csv')"),
       rmd_chunk(engine = "r", name = "plot", code = "ggplot(data) + geom_histogram()"),
       rmd_chunk(engine = "r", name = "test", code = "summary(data)")
     )
@@ -84,7 +84,7 @@ test_that("has_code returns empty when no matches", {
     nodes = list(
       rmd_chunk(engine = "r", name = "simple", code = "print('hello')"),
       rmd_markdown(lines = "Text content"),
-      rmd_chunk(engine = "r", name = "basic", code = "x <- 1")
+      rmd_chunk(engine = "r", name = "basic", code = "x = 1")
     )
   )
   
@@ -135,8 +135,8 @@ test_that("has_code works with multiline code", {
         name = "complex", 
         code = c(
           "library(ggplot2)",
-          "data <- read.csv('file.csv')",
-          "plot <- ggplot(data, aes(x, y)) +",
+          "data = read.csv('file.csv')",
+          "plot = ggplot(data, aes(x, y)) +",
           "  geom_point() +",
           "  theme_minimal()"
         )
@@ -150,7 +150,7 @@ test_that("has_code works with multiline code", {
         engine = "r", 
         name = "analysis", 
         code = c(
-          "model <- lm(y ~ x, data)",
+          "model = lm(y ~ x, data)",
           "summary(model)"
         )
       )
