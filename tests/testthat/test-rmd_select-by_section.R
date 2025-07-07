@@ -12,7 +12,7 @@ test_that("by_section works with simple section", {
   )
   
   # Test selecting "Methods" section
-  methods_subset = rmd_select(original_ast, by_section("Methods"))
+  methods_subset = rmd_select(original_ast, by_section("Methods"), keep_yaml = FALSE)
   
   # Expected result: Methods heading and its content (positions 4, 5, 6)
   expected_subset = original_ast[c(4, 5, 6)]

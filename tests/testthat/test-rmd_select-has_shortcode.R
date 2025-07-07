@@ -111,7 +111,7 @@ test_that("has_shortcode works across different node types", {
   )
   
   # Test selecting nodes with any shortcodes
-  shortcode_subset = rmd_select(original_ast, has_shortcode())
+  shortcode_subset = rmd_select(original_ast, has_shortcode(), keep_yaml = FALSE)
   
   # Expected result: markdown and chunk nodes with shortcodes (positions 1, 2)
   expected_subset = original_ast[c(1, 2)]

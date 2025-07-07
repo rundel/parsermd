@@ -30,6 +30,8 @@
 * Enhanced `rmd_select()` functionality and node manipulation
 
   * Added `has_heading()` helper function for selecting heading nodes using glob patterns
+  * Added `by_fdiv()` helper function for selecting fenced div sections using attribute patterns
+  * Added `keep_yaml` argument to `rmd_select()` (defaults to `TRUE`) to automatically include YAML nodes in selections
 
 # parsermd 0.1.3
 

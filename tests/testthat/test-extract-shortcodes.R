@@ -129,36 +129,36 @@ test_that("has_shortcode() selection helper with different rmd classes", {
   expect_equal(shortcode_nodes, test_rmd[c(1,3,4,8)])  # YAML, markdown, chunk, and final markdown
   
   # Test selecting nodes with specific shortcode function names
-  video_nodes = rmd_select(test_rmd, has_shortcode("video"))
+  video_nodes = rmd_select(test_rmd, has_shortcode("video"), keep_yaml = FALSE)
   expect_equal(video_nodes, test_rmd[3])
   
-  kbd_nodes = rmd_select(test_rmd, has_shortcode("kbd"))
+  kbd_nodes = rmd_select(test_rmd, has_shortcode("kbd"), keep_yaml = FALSE)
   expect_equal(kbd_nodes, test_rmd[8])
   
-  include_nodes = rmd_select(test_rmd, has_shortcode("include"))
+  include_nodes = rmd_select(test_rmd, has_shortcode("include"), keep_yaml = FALSE)
   expect_equal(include_nodes, test_rmd[4])
   
   var_nodes = rmd_select(test_rmd, has_shortcode("var"))
   expect_equal(var_nodes, test_rmd[1])
   
   # Test glob patterns
-  page_nodes = rmd_select(test_rmd, has_shortcode("page*"))
+  page_nodes = rmd_select(test_rmd, has_shortcode("page*"), keep_yaml = FALSE)
   expect_equal(page_nodes, test_rmd[8])
   
   # Test non-existent shortcode
-  nonexistent_nodes = rmd_select(test_rmd, has_shortcode("nonexistent"))
+  nonexistent_nodes = rmd_select(test_rmd, has_shortcode("nonexistent"), keep_yaml = FALSE)
   expect_equal(nonexistent_nodes, rmd_ast(list()))
   
   # Test multiple function names
-  multi_nodes = rmd_select(test_rmd, has_shortcode(c("video", "kbd")))
+  multi_nodes = rmd_select(test_rmd, has_shortcode(c("video", "kbd")), keep_yaml = FALSE)
   expect_equal(multi_nodes, test_rmd[c(3,8)])
   
   # Test combining with other selectors
-  chunk_with_shortcode = rmd_select(test_rmd, has_type("rmd_chunk") & has_shortcode())
+  chunk_with_shortcode = rmd_select(test_rmd, has_type("rmd_chunk") & has_shortcode(), keep_yaml = FALSE)
   expect_equal(chunk_with_shortcode, test_rmd[4])
 
   
-  markdown_with_shortcode = rmd_select(test_rmd, has_type("rmd_markdown") & has_shortcode())
+  markdown_with_shortcode = rmd_select(test_rmd, has_type("rmd_markdown") & has_shortcode(), keep_yaml = FALSE)
   expect_equal(markdown_with_shortcode, test_rmd[c(3,8)])
   
   yaml_with_shortcode = rmd_select(test_rmd, has_type("rmd_yaml") & has_shortcode())

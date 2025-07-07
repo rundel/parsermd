@@ -10,8 +10,8 @@ test_that("has_type works with single type", {
     )
   )
   
-  # Test selecting rmd_chunk nodes
-  chunk_subset = rmd_select(original_ast, has_type("rmd_chunk"))
+  # Test selecting rmd_chunk nodes (without YAML for this test)
+  chunk_subset = rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = FALSE)
   
   # Expected result: chunks at positions 3 and 5
   expected_subset = original_ast[c(3, 5)]
@@ -31,8 +31,8 @@ test_that("has_type works with multiple types", {
     )
   )
   
-  # Test selecting both rmd_chunk and rmd_heading nodes
-  selected_subset = rmd_select(original_ast, has_type(c("rmd_chunk", "rmd_heading")))
+  # Test selecting both rmd_chunk and rmd_heading nodes (without YAML for this test)
+  selected_subset = rmd_select(original_ast, has_type(c("rmd_chunk", "rmd_heading")), keep_yaml = FALSE)
   
   # Expected result: headings at 2, 5 and chunk at 3
   expected_subset = original_ast[c(2, 3, 5)]
@@ -75,12 +75,12 @@ test_that("has_type works with specific node types", {
   yaml_subset = rmd_select(original_ast, has_type("rmd_yaml"))
   expect_equal(yaml_subset, original_ast[1])
   
-  # Test rmd_heading nodes
-  heading_subset = rmd_select(original_ast, has_type("rmd_heading"))
+  # Test rmd_heading nodes (without YAML for this test)
+  heading_subset = rmd_select(original_ast, has_type("rmd_heading"), keep_yaml = FALSE)
   expect_equal(heading_subset, original_ast[c(2, 5)])
   
-  # Test rmd_markdown nodes
-  markdown_subset = rmd_select(original_ast, has_type("rmd_markdown"))
+  # Test rmd_markdown nodes (without YAML for this test)
+  markdown_subset = rmd_select(original_ast, has_type("rmd_markdown"), keep_yaml = FALSE)
   expect_equal(markdown_subset, original_ast[c(4, 6)])
 })
 
@@ -158,4 +158,139 @@ test_that("has_type works with empty AST", {
   result = rmd_select(empty_ast, has_type("rmd_chunk"))
   
   expect_equal(result, empty_ast)
+})
+
+test_that("keep_yaml defaults to TRUE", {
+  # Create test AST with YAML and other nodes
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  # Test default behavior (should include YAML)
+  result = rmd_select(original_ast, has_type("rmd_chunk"))
+  
+  # Expected result: YAML at position 1 and chunk at position 3
+  expected = original_ast[c(1, 3)]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml = TRUE includes YAML nodes", {
+  # Create test AST with YAML and other nodes
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  # Test explicit keep_yaml = TRUE
+  result = rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = TRUE)
+  
+  # Expected result: YAML at position 1 and chunk at position 3
+  expected = original_ast[c(1, 3)]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml = FALSE excludes YAML nodes", {
+  # Create test AST with YAML and other nodes
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  # Test keep_yaml = FALSE
+  result = rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = FALSE)
+  
+  # Expected result: only chunk at position 3
+  expected = original_ast[3]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml works with multiple YAML nodes", {
+  # Create test AST with multiple YAML nodes
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_yaml(yaml = list(output = "html_document")),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  # Test keep_yaml = TRUE with multiple YAML nodes
+  result = rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = TRUE)
+  
+  # Expected result: both YAML nodes (1, 3) and chunk (4)
+  expected = original_ast[c(1, 3, 4)]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml works when no YAML nodes exist", {
+  # Create test AST without YAML nodes
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_markdown(lines = "Some text")
+    )
+  )
+  
+  # Test keep_yaml = TRUE when no YAML exists
+  result = rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = TRUE)
+  
+  # Expected result: only chunk at position 2
+  expected = original_ast[2]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml removes duplicates when YAML explicitly selected", {
+  # Create test AST with YAML
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+    )
+  )
+  
+  # Test selecting YAML explicitly with keep_yaml = TRUE
+  result = rmd_select(original_ast, has_type("rmd_yaml"), keep_yaml = TRUE)
+  
+  # Expected result: only YAML at position 1 (no duplicates)
+  expected = original_ast[1]
+  
+  expect_equal(result, expected)
+})
+
+test_that("keep_yaml validates input", {
+  # Create test AST
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+    )
+  )
+  
+  # Test invalid keep_yaml values
+  expect_snapshot_error(rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = "true"))
+  expect_snapshot_error(rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = 1))
+  expect_snapshot_error(rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = NA))
+  expect_snapshot_error(rmd_select(original_ast, has_type("rmd_chunk"), keep_yaml = c(TRUE, FALSE)))
 })

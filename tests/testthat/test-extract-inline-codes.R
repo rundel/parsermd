@@ -128,28 +128,28 @@ test_that("has_inline_code() selection helper with different rmd classes", {
   expect_equal(r_nodes, test_rmd[c(1,3)])
   expect_true(all(rmd_has_inline_code(r_nodes, engine = "r")))
   
-  python_nodes = rmd_select(test_rmd, has_inline_code("python"))
+  python_nodes = rmd_select(test_rmd, has_inline_code("python"), keep_yaml = FALSE)
   expect_equal(python_nodes, test_rmd[8])
   expect_true(rmd_has_inline_code(python_nodes, "python"))
   
-  sql_nodes = rmd_select(test_rmd, has_inline_code("sql"))
+  sql_nodes = rmd_select(test_rmd, has_inline_code("sql"), keep_yaml = FALSE)
   expect_equal(sql_nodes, test_rmd[8])
   expect_true(rmd_has_inline_code(sql_nodes, "sql"))
   
 
   # Test non-existent engine
-  nonexistent_nodes = rmd_select(test_rmd, has_inline_code("nonexistent"))
+  nonexistent_nodes = rmd_select(test_rmd, has_inline_code("nonexistent"), keep_yaml = FALSE)
   expect_equal(nonexistent_nodes, rmd_ast(list()))
   
   # Test multiple engine names
-  multi_nodes = rmd_select(test_rmd, has_inline_code(c("python", "sql")))
+  multi_nodes = rmd_select(test_rmd, has_inline_code(c("python", "sql")), keep_yaml = FALSE)
   expect_equal(multi_nodes, test_rmd[8])  # Only the final markdown has both
   
   # Test combining with other selectors
   chunk_with_inline = rmd_select(test_rmd, has_type("rmd_yaml") & has_inline_code())
   expect_equal(chunk_with_inline, test_rmd[c(1)])
 
-  markdown_with_inline = rmd_select(test_rmd, has_type("rmd_markdown") & has_inline_code())
+  markdown_with_inline = rmd_select(test_rmd, has_type("rmd_markdown") & has_inline_code(), keep_yaml = FALSE)
   expect_equal(markdown_with_inline, test_rmd[c(3,8)])
 })
 

@@ -110,7 +110,7 @@ test_that("has_code only matches code chunks", {
   )
   
   # Test selecting nodes with "plot" code
-  plot_subset = rmd_select(original_ast, has_code("plot"))
+  plot_subset = rmd_select(original_ast, has_code("plot"), keep_yaml = FALSE)
   
   # Expected result: only the chunk and code block with plot (positions 4, 5)
   expected_subset = original_ast[c(4, 5)]

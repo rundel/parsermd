@@ -175,7 +175,7 @@ test_that("has_option ignores non-chunk nodes", {
   )
   
   # Test selecting with echo option
-  echo_subset = rmd_select(original_ast, has_option("echo"))
+  echo_subset = rmd_select(original_ast, has_option("echo"), keep_yaml = FALSE)
   
   # Expected result: only the chunk at position 3
   expected_subset = original_ast[3]

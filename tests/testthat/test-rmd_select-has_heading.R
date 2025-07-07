@@ -13,22 +13,22 @@ test_that("has_heading selects headings by title pattern", {
   )
   
   # Test exact heading match
-  intro_match = rmd_select(original_ast, has_heading("Introduction"))
+  intro_match = rmd_select(original_ast, has_heading("Introduction"), keep_yaml = FALSE)
   expect_equal(length(intro_match@nodes), 1)
   expect_equal(rmd_node_type(intro_match@nodes[[1]]), "rmd_heading")
   expect_equal(rmd_node_attr(intro_match@nodes[[1]], "name"), "Introduction")
   
   # Test glob pattern matching
-  exercise_match = rmd_select(original_ast, has_heading("Exercise *"))
+  exercise_match = rmd_select(original_ast, has_heading("Exercise *"), keep_yaml = FALSE)
   expect_equal(length(exercise_match@nodes), 2)
   expect_true(all(rmd_node_type(exercise_match) == "rmd_heading"))
   
   # Test no matches
-  no_match = rmd_select(original_ast, has_heading("Nonexistent"))
+  no_match = rmd_select(original_ast, has_heading("Nonexistent"), keep_yaml = FALSE)
   expect_equal(length(no_match@nodes), 0)
   
   # Test multiple patterns
-  multi_match = rmd_select(original_ast, has_heading(c("Introduction", "Conclusion")))
+  multi_match = rmd_select(original_ast, has_heading(c("Introduction", "Conclusion")), keep_yaml = FALSE)
   expect_equal(length(multi_match@nodes), 2)
 })
 

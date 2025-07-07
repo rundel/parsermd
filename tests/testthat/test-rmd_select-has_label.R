@@ -11,7 +11,7 @@ test_that("has_label works with single label", {
   )
   
   # Test selecting chunk with specific label
-  setup_subset = rmd_select(original_ast, has_label("setup"))
+  setup_subset = rmd_select(original_ast, has_label("setup"), keep_yaml = FALSE)
   
   # Expected result: setup chunk at position 2
   expected_subset = original_ast[2]

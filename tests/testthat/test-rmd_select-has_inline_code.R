@@ -111,7 +111,7 @@ test_that("has_inline_code works across different node types", {
   )
   
   # Test selecting nodes with R inline code
-  r_subset = rmd_select(original_ast, has_inline_code("r"))
+  r_subset = rmd_select(original_ast, has_inline_code("r"), keep_yaml = FALSE)
   
   # Expected result: only markdown node with R inline code (position 1)
   expected_subset = original_ast[1]
