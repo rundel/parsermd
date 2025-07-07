@@ -1,4 +1,3 @@
-# Files to skip in tests due to parsing issues
 SKIP_FILES = c(
   "examples/knitr-examples/065-rmd-chunk.Rmd",
   "examples/quarto-cli/tests/docs/smoke-all/2023/03/17/4867.qmd",
@@ -39,9 +38,6 @@ update_tests = function(target, files, gen_func) {
 }
 
 if (Sys.getenv("CI") == "" && file.exists("../../R/tests.R")) {
-  # Only run if tests.R is younger than the output
-  
-  # Source the test generation functions
   source("../../R/tests.R")
 
   find_rmds = function(d) {

@@ -1,5 +1,4 @@
 test_that("by_section works with simple section", {
-  # Create test AST with hierarchical sections
   original_ast = rmd_ast(
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
@@ -11,17 +10,13 @@ test_that("by_section works with simple section", {
     )
   )
   
-  # Test selecting "Methods" section
   methods_subset = rmd_select(original_ast, by_section("Methods"), keep_yaml = FALSE)
-  
-  # Expected result: Methods heading and its content (positions 4, 5, 6)
   expected_subset = original_ast[c(4, 5, 6)]
   
   expect_equal(methods_subset, expected_subset)
 })
 
 test_that("by_section works with nested sections", {
-  # Create test AST with nested section hierarchy
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Analysis", level = 1L),
@@ -35,17 +30,13 @@ test_that("by_section works with nested sections", {
     )
   )
   
-  # Test selecting nested "Data Preparation" section
   prep_subset = rmd_select(original_ast, by_section(c("Analysis", "Data Preparation")))
-  
-  # Expected result: Analysis heading (parent), Data Preparation heading and its content
   expected_subset = original_ast[c(1, 3, 4)]
   
   expect_equal(prep_subset, expected_subset)
 })
 
 test_that("by_section works with glob patterns", {
-  # Create test AST with pattern-matching section names
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Exercise 1", level = 1L),
@@ -57,17 +48,13 @@ test_that("by_section works with glob patterns", {
     )
   )
   
-  # Test selecting all exercise sections with "Exercise *" pattern
   exercise_subset = rmd_select(original_ast, by_section("Exercise *"))
-  
-  # Expected result: both Exercise sections and their content (positions 1, 2, 3, 4)
   expected_subset = original_ast[c(1, 2, 3, 4)]
   
   expect_equal(exercise_subset, expected_subset)
 })
 
 test_that("by_section with keep_parents = FALSE", {
-  # Create test AST with nested sections
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Main Section", level = 1L),
@@ -78,17 +65,13 @@ test_that("by_section with keep_parents = FALSE", {
     )
   )
   
-  # Test selecting subsection without parents
   sub_subset = rmd_select(original_ast, by_section(c("Main Section", "Subsection"), keep_parents = FALSE))
-  
-  # Expected result: only Subsection heading and its content (positions 3, 4)
   expected_subset = original_ast[c(3, 4)]
   
   expect_equal(sub_subset, expected_subset)
 })
 
 test_that("by_section returns empty when no matches", {
-  # Create test AST
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Introduction", level = 1L),
@@ -96,17 +79,13 @@ test_that("by_section returns empty when no matches", {
     )
   )
   
-  # Test with non-existent section
   result = rmd_select(original_ast, by_section("Nonexistent Section"))
-  
-  # Expected empty AST
   expected_empty = original_ast[integer(0)]
   
   expect_equal(result, expected_empty)
 })
 
 test_that("by_section works with different heading levels", {
-  # Create test AST with various heading levels
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Chapter", level = 1L),
@@ -118,17 +97,13 @@ test_that("by_section works with different heading levels", {
     )
   )
   
-  # Test selecting deeply nested section
   deep_subset = rmd_select(original_ast, by_section(c("Chapter", "Section", "Subsection")))
-  
-  # Expected result: all parent headings plus subsection content
   expected_subset = original_ast[c(1, 2, 3, 4)]
   
   expect_equal(deep_subset, expected_subset)
 })
 
 test_that("by_section validates input", {
-  # Test that by_section requires proper input
   expect_snapshot_error(by_section(123))
   expect_snapshot_error(by_section(NULL))
   expect_snapshot_error(by_section(character(0)))
@@ -137,7 +112,6 @@ test_that("by_section validates input", {
 })
 
 test_that("by_section works with single level sections", {
-  # Create test AST with only level 1 headings
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "First", level = 1L),
@@ -149,20 +123,14 @@ test_that("by_section works with single level sections", {
     )
   )
   
-  # Test selecting middle section
   second_subset = rmd_select(original_ast, by_section("Second"))
-  
-  # Expected result: Second heading and its content until next heading
   expected_subset = original_ast[c(4, 5)]
   
   expect_equal(second_subset, expected_subset)
 })
 
 test_that("by_section works with empty AST", {
-  # Create empty AST
   empty_ast = rmd_ast(nodes = list())
-  
-  # Test selection on empty AST
   result = rmd_select(empty_ast, by_section("Any Section"))
   
   expect_equal(result, empty_ast)

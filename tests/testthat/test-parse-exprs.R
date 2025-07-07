@@ -1,5 +1,3 @@
-# Tests around basic expression parsers
-
 test_that("curly brace expressions", {
 
   expect_equal( check_cbrace_expr_parser("{}"), "" )
@@ -11,4 +9,3 @@ test_that("curly brace expressions", {
   expect_error( check_cbrace_expr_parser("{}}") )
   expect_error( check_cbrace_expr_parser("{") )
 })
-

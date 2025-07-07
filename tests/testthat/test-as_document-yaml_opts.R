@@ -48,7 +48,7 @@ test_that("as_document formats differ between use_yaml_opts TRUE and FALSE", {
   yaml_format = as_document(chunk, use_yaml_opts = TRUE)
   traditional_format = as_document(chunk, use_yaml_opts = FALSE)
   
-  # They should be different
+
   expect_false(identical(yaml_format, traditional_format))
   
   expected_yaml = c(
@@ -80,7 +80,7 @@ test_that("as_document handles chunks with no options correctly", {
   yaml_format = as_document(chunk, use_yaml_opts = TRUE)
   traditional_format = as_document(chunk, use_yaml_opts = FALSE)
   
-  # Should be identical when no options
+
   expect_equal(yaml_format, traditional_format)
   
   expected = c(
@@ -131,7 +131,7 @@ test_that("as_document default behavior uses YAML format", {
   default_result = as_document(chunk)
   explicit_yaml_result = as_document(chunk, use_yaml_opts = TRUE)
   
-  # Should be identical
+
   expect_equal(default_result, explicit_yaml_result)
   
   expected = c(
@@ -148,7 +148,7 @@ test_that("as_document preserves different engine types with both formats", {
   r_chunk = rmd_chunk(engine = "r", options = list(echo = FALSE), code = "x = 1")
   python_chunk = rmd_chunk(engine = "python", options = list(eval = FALSE), code = "y = 2")
   
-  # YAML format
+
   r_yaml = as_document(r_chunk, use_yaml_opts = TRUE)
   python_yaml = as_document(python_chunk, use_yaml_opts = TRUE)
   
@@ -169,7 +169,7 @@ test_that("as_document preserves different engine types with both formats", {
   expect_equal(r_yaml, expected_r_yaml)
   expect_equal(python_yaml, expected_python_yaml)
   
-  # Traditional format
+
   r_trad = as_document(r_chunk, use_yaml_opts = FALSE)
   python_trad = as_document(python_chunk, use_yaml_opts = FALSE)
   
@@ -224,8 +224,6 @@ test_that("as_document parameter propagates through AST with multiple chunks", {
   expect_equal(yaml_result, expected_yaml)
   expect_equal(traditional_result, expected_traditional)
 })
-
-# === Option Name Conversion Tests ===
 
 test_that("as_document converts dot notation to dash notation for YAML output", {
   chunk = rmd_chunk(
@@ -332,7 +330,7 @@ test_that("as_document handles options without dots unchanged", {
   yaml_result = as_document(chunk, use_yaml_opts = TRUE)
   traditional_result = as_document(chunk, use_yaml_opts = FALSE)
   
-  # Option names should be the same since no dots to convert
+
   expected_yaml = c(
     "```{r simple}",
     "#| echo: true",

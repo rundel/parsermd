@@ -1,6 +1,4 @@
 
-
-
 test_that("chunk parsing - Basic", {
   expect_equal(
     check_chunk_parser("```{r}\n```\n"),
@@ -27,8 +25,6 @@ test_that("chunk parsing - Basic", {
     rmd_chunk(name = "test", options = list(x = 1, y = 2))
   )
 })
-
-
 
 test_that("chunk parsing - option names", {
 
@@ -102,22 +98,16 @@ test_that("chunk parsing - code", {
     rmd_chunk(code = c(1, "", "3"))
   )
 })
-
-
 test_that("chunk parsing - issues", {
-  # allow dashes
+
   expect_equal(
     check_chunk_parser("```{r load-packages, message=FALSE}\n```\n"),
     rmd_chunk(name="load-packages", options = list(message=FALSE))
   )
-
-  # allow engine, opt1=val for a chunk
   expect_equal(
     check_chunk_parser("```{r, include=FALSE}\n```\n"),
     rmd_chunk(options = list(include=FALSE))
   )
-
-  # trailing white spaces causes an issue
   expect_equal(
     check_chunk_parser("```{r} \n```\n"),
     rmd_chunk()
@@ -133,8 +123,6 @@ test_that("chunk parsing - issues", {
     rmd_chunk()
   )
 })
-
-
 test_that("chunk parsing - indented", {
 
   expect_equal(
@@ -167,8 +155,6 @@ test_that("chunk parsing - indented", {
     )
   )
 
-  ## Bad indents
-
   expect_error(
     check_chunk_parser("> ```{r}\n  ```\n"),
   )
@@ -181,8 +167,6 @@ test_that("chunk parsing - indented", {
     check_chunk_parser(" ```{r}\n```\n"),
   )
 
-
-  ## Handling of blank lines within indented blocks
   expect_equal(
     check_chunk_parser("  ```{r}\n  1+1\n  \n  2+2\n  ```\n"),
     check_chunk_parser("  ```{r}\n  1+1\n\n  2+2\n  ```\n")
@@ -234,23 +218,13 @@ test_that("chunk parsing - comma after engine", {
     rmd_chunk(name = "bob", option = list(include=FALSE))
   )
 })
-
-
 test_that("chunk parsing - variants", {
-  # Cover all possible variants of labels and options
-
   parse = check_chunk_parser
-
-  # No label, no options
   expect_equal( parse("```{r}\n```\n"),   rmd_chunk() )
   expect_equal( parse("```{r,}\n```\n"),  rmd_chunk() )
   expect_equal( parse("```{r,,}\n```\n"), rmd_chunk() )
-
-  # Label, no options
   expect_equal( parse("```{r m}\n```\n"),  rmd_chunk(name = "m") )
   expect_equal( parse("```{r m,}\n```\n"), rmd_chunk(name = "m") )
-
-  # No label, options
   expect_equal( parse("```{r x=1}\n```\n"),   rmd_chunk(option = list(x = 1)) )
   expect_equal( parse("```{r x=1,}\n```\n"),  rmd_chunk(option = list(x = 1)) )
   expect_equal( parse("```{r, x=1}\n```\n"),  rmd_chunk(option = list(x = 1)) )
@@ -264,8 +238,6 @@ test_that("chunk parsing - variants", {
                 rmd_chunk(option = list(x=1, y=1)) )
   expect_equal( parse("```{r, x=1, y=1,}\n```\n"),
                 rmd_chunk(option = list(x=1, y=1)) )
-
-  # label, options
   expect_equal( parse("```{r m, x=1}\n```\n"),
                 rmd_chunk(name = "m", option = list(x = 1)) )
   expect_equal( parse("```{r m, x=1,}\n```\n"),
@@ -278,14 +250,10 @@ test_that("chunk parsing - variants", {
 
 test_that("chunk parsing - bad chunks", {
   parse = check_chunk_parser
-
-  # Basic chunks
   expect_snapshot_error( parse("```{}\n```\n") )
   expect_snapshot_error( parse("```{r\n```\n") )
   expect_snapshot_error( parse("```r}\n```\n") )
   expect_snapshot_error( parse("```{r}\n``\n") )
-
-  # Bad labels or options
   expect_snapshot_error( parse("```{r m, m}\n```\n") )
   expect_snapshot_error( parse("```{r abc.def}\n```\n") )
   expect_snapshot_error( parse("```{r m x=1}\n```\n") )
@@ -293,8 +261,6 @@ test_that("chunk parsing - bad chunks", {
   expect_snapshot_error( parse("```{r x=, y=1}\n```\n") )
   expect_snapshot_error( parse("```{r x=1, y=}\n```\n") )
 })
-
-
 test_that("chunk parsing - raw attribute chunk", {
 
   expect_equal( 
@@ -305,27 +271,19 @@ test_that("chunk parsing - raw attribute chunk", {
     check_chunk_parser("```{=md}\n```\n"),   
     rmd_raw_chunk("md") 
   )
-
-  # Check code
   expect_equal(
     check_chunk_parser("```{=html}\n<h1>hello</h1>\n```\n"),
     rmd_raw_chunk("html", code = "<h1>hello</h1>")
   )
-
-  # Check indent
   expect_equal(
     check_chunk_parser("   ```{=html}\n   <h1>hello</h1>\n   ```\n"),
     rmd_raw_chunk("html", code = "<h1>hello</h1>", indent = "   ")
   )
-
-  # Bad
   expect_snapshot( check_chunk_parser("```{=}\n```\n"),   error=TRUE)
   expect_snapshot( check_chunk_parser("```{==}\n```\n"),  error=TRUE)
   expect_snapshot( check_chunk_parser("```{=a=}\n```\n"), error=TRUE)
   expect_snapshot( check_chunk_parser("```{a=}\n```\n"),  error=TRUE)
 })
-
-
 
 test_that("chunk parsing - more than 3 ticks", {
   expect_equal(
@@ -358,8 +316,6 @@ test_that("chunk parsing - more than 3 ticks", {
     rmd_chunk(n_ticks = 4L, indent = "> ")
   )
 
-  ## Unbalanced ticks
-
   expect_snapshot(
     check_chunk_parser("````{r}\n```"), error=TRUE
   )
@@ -376,8 +332,6 @@ test_that("chunk parsing - more than 3 ticks", {
     check_chunk_parser("`````{r}\n````"), error=TRUE
   )
 })
-
-
 test_that("chunk parsing - nested ticks", {
   
   expect_equal(
@@ -403,4 +357,3 @@ test_that("chunk parsing - nested ticks", {
     ) )
   )
 })
-

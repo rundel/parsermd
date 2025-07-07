@@ -31,4 +31,3 @@ test_that("markdown", {
     rmd_markdown("``{r} 1+1``")
   )
 })
-

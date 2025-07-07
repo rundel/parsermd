@@ -60,8 +60,6 @@ test_that("chunk with yaml options", {
     )
   )
 })
-
-
 test_that("yaml options with break", {
 
   expect_identical(
@@ -93,8 +91,6 @@ test_that("yaml options with break", {
       options = list(echo = TRUE, `fig-width` = 10L)
     )
   )
-
-  ## Indented
 
   expect_identical(
     check_chunk_parser("  ```{r}\n  #| echo: true\n  ```\n"),
@@ -162,6 +158,4 @@ test_that("Array arguments", {
     check_chunk_parser("```{r}\n#| layout: [[1,1], [1]]\n```\n"),
     check_chunk_parser("```{r}\n#| layout:\n#| - - 1\n#|   - 1\n#| - 1\n```\n")
   )
-
-
 })

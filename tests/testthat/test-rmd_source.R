@@ -24,8 +24,6 @@ test_that("Basic sourcing", {
   expect_equal(y, 2)
   expect_equal(z, 3)
 })
-
-
 test_that("eval stuff", {
   ast = rmd_ast( list(
     rmd_chunk(code = "x = 1", options = list(eval = TRUE)),
@@ -35,14 +33,10 @@ test_that("eval stuff", {
   rmd_source(ast, local=TRUE, use_eval = TRUE)
   expect_equal(x, 1)
   expect_error(y, regexp = "object 'y' not found")
-
-
   rmd_source(ast, local=TRUE, use_eval = FALSE)
   expect_equal(x, 1)
   expect_equal(y, 2)
 })
-
-
 test_that("function scope", {
   ast = rmd_ast( list(
     rmd_chunk(code = "x = 1"),
@@ -69,8 +63,6 @@ test_that("function scope", {
     g(), c("x", "y")
   )
 })
-
-
 test_that("echo", {
   ast = rmd_ast( list(
     rmd_chunk(name = "Chunk 1", code = "x = 1"),
