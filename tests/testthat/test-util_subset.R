@@ -11,6 +11,8 @@ test_that("vec_grepl", {
   expect_error(vec_grepl(patterns[1:2], x))
   expect_error(vec_grepl(patterns, x[1:2]))
 })
+
+
 test_that("subset_match", {
   x = c("A", "B", "C")
 
@@ -56,3 +58,6 @@ test_that("parent_match", {
 
   expect_false( parent_match(secs, regex = character()) )
 })
+
+
+

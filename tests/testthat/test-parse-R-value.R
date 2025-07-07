@@ -35,53 +35,53 @@ test_that("parse_R_value_cpp() parses string values correctly", {
 })
 
 test_that("parse_R_value_cpp() type precedence works correctly", {
-
+  # Boolean has highest precedence
   expect_equal(parse_R_value_cpp("TRUE"), TRUE)
   expect_equal(parse_R_value_cpp("FALSE"), FALSE)
   
-
+  # Doubles have precedence over integers when decimal point present
   expect_equal(parse_R_value_cpp("5.0"), 5.0)
   expect_equal(parse_R_value_cpp("3.14"), 3.14)
   
-
+  # Numbers without L suffix are parsed as doubles
   expect_equal(parse_R_value_cpp("42"), 42.0)
   
-
+  # Numbers with L suffix are parsed as integers  
   expect_equal(parse_R_value_cpp("100L"), 100L)
   
-
+  # Strings are the fallback for anything else
   expect_equal(parse_R_value_cpp("not_a_number"), "not_a_number")
   expect_equal(parse_R_value_cpp("true"), "true")  # lowercase
 })
 
 test_that("parse_R_value_cpp() handles edge cases", {
-
-  expect_equal(parse_R_value_cpp("1"), 1.0)
+  # Test integer/double boundary cases
+  expect_equal(parse_R_value_cpp("1"), 1.0)  # Numbers without L are doubles
   expect_equal(parse_R_value_cpp("1."), 1.0)
   expect_equal(parse_R_value_cpp("1.0"), 1.0)
   
-
+  # Test that L suffix forces integer interpretation
   expect_equal(parse_R_value_cpp("1L"), 1L)
   
-
+  # Test that scientific notation is double
   expect_equal(parse_R_value_cpp("1e5"), 1e5)
   expect_equal(parse_R_value_cpp("1E5"), 1E5)
   
-
+  # Test very large numbers
   expect_equal(parse_R_value_cpp("999999999"), 999999999.0)
   expect_equal(parse_R_value_cpp("999999999L"), 999999999L)
   
-
+  # Test very small decimal
   expect_equal(parse_R_value_cpp("0.0001"), 0.0001)
 })
 
 test_that("parse_R_value_cpp() handles mixed content correctly with fixed parser", {
-
-  expect_equal(parse_R_value_cpp("123abc"), "123abc")
-  expect_equal(parse_R_value_cpp("42test"), "42test")
-  expect_equal(parse_R_value_cpp("3.14xyz"), "3.14xyz")
-  expect_equal(parse_R_value_cpp("TRUE_VALUE"), "TRUE_VALUE")
-  expect_equal(parse_R_value_cpp("FALSE123"), "FALSE123")
+  # With the fixed parser, mixed content now works as strings
+  expect_equal(parse_R_value_cpp("123abc"), "123abc")  # Now works as string
+  expect_equal(parse_R_value_cpp("42test"), "42test")  # Now works as string
+  expect_equal(parse_R_value_cpp("3.14xyz"), "3.14xyz")  # Now works as string
+  expect_equal(parse_R_value_cpp("TRUE_VALUE"), "TRUE_VALUE")  # Now works as string
+  expect_equal(parse_R_value_cpp("FALSE123"), "FALSE123")  # Now works as string
   expect_equal(parse_R_value_cpp("my-var_name"), "my-var_name")
   expect_equal(parse_R_value_cpp("variable"), "variable")
 })

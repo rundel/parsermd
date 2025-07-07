@@ -1,4 +1,6 @@
 
+# From https://github.com/r-lib/cli/issues/226
+
 local_cli_config = function(
   unicode = FALSE, dynamic = FALSE, ansi = FALSE,
   num_colors = 1, .local_envir = parent.frame()
@@ -17,3 +19,5 @@ local_cli_config = function(
     .local_envir = .local_envir
   )
 }
+
+# local_cli_config(unicode = TRUE, num_colors = 256)

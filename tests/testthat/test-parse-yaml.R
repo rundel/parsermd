@@ -75,6 +75,14 @@ test_that("yaml parsing - blank lines", {
 })
 
 test_that("GitHub #25 - Unicode + YAML", {
+
+  # Failed w/ the following case:
+  # docker run -it --rm rocker/r-devel bash
+  # apt update
+  # apt install -y locales-all
+  # LANG=en_US.iso88591 LC_ALL=en_US.iso88591 R
+  # install.packages("parsermd")
+
   rmd = "---\nauthor: \"Sébastien Rochette\"\n---\n"
 
   expect_s3_class(parse_rmd(rmd), "rmd_ast")

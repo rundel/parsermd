@@ -1,4 +1,8 @@
+# Tests around basic expression parsers
+
 test_that("Basic parser tests - open", {
+
+  ## Valid inputs
 
   expect_equal(
     check_fdiv_open_parser("::: test\n"),
@@ -14,6 +18,8 @@ test_that("Basic parser tests - open", {
     check_fdiv_open_parser("::: {#test}\n"),
     rmd_fenced_div_open("#test")
   )
+
+
   expect_equal(
     check_fdiv_open_parser(":::: test\n"),
     rmd_fenced_div_open(".test")
@@ -24,6 +30,7 @@ test_that("Basic parser tests - open", {
     rmd_fenced_div_open("test")
   )
 
+  ## Trailing : or " "
   expect_equal(
     check_fdiv_open_parser("::: test \n"),
     rmd_fenced_div_open(".test")
@@ -53,25 +60,29 @@ test_that("Basic parser tests - open", {
     check_fdiv_open_parser("::: {   }\n"),
     rmd_fenced_div_open()
   )
-  expect_snapshot(
+
+  ## Bad inputs
+
+  expect_snapshot( # No attribute
     check_fdiv_open_parser(":::\n"), error=TRUE
   )
 
-  expect_snapshot(
+  expect_snapshot( # Multiple unbraced attributes
     check_fdiv_open_parser("::: a x\n"), error=TRUE
   )
 
-  expect_snapshot(
+  expect_snapshot( # Incomplete opening fence
     check_fdiv_open_parser(":: {}\n"), error=TRUE
   )
 
-  expect_snapshot(
+  expect_snapshot( # Incomplete opening fence
     check_fdiv_open_parser(":: \n"), error=TRUE
   )
 
 })
 
 test_that("Basic parser tests - close", {
+  # Valid
   expect_equal(
     check_fdiv_close_parser(":::\n"),
     rmd_fenced_div_close()
@@ -86,6 +97,8 @@ test_that("Basic parser tests - close", {
     check_fdiv_close_parser("::: \n"),
     rmd_fenced_div_close()
   )
+
+  # Invalid
 
   expect_snapshot(
     check_fdiv_close_parser("::: a\n"), error=TRUE
@@ -115,6 +128,8 @@ test_that("Nested inputs", {
       rmd_fenced_div_close()
     ) )
   )
+
+
   expect_equal(
     parse_rmd_cpp("::: test1\n::: test2\n::: test3\n:::\n:::\n:::\n"),
     rmd_ast( list(
@@ -187,6 +202,54 @@ This is a warning within a warning.
 
 })
 
+
+
+#test_that("Utils - fenced_div_depth()", {
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      "::: a\n:::\n"
+#    ) ),
+#    1
+#  )
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      ":::: a\n::: b\n:::\n::::\n"
+#    ) ),
+#    2
+#  )
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      ":::: a\n::: b1\n:::\n::: b2\n:::\n::::\n"
+#    ) ),
+#    2
+#  )
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      ":::: a\n::: b\n::: c\n:::\n:::\n::::\n"
+#    ) ),
+#    3
+#  )
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      ":::: a\n::: b1\n::: c\n:::\n:::\n::: b2\n:::\n::::\n"
+#    ) ),
+#    3
+#  )
+#
+#  expect_equal(
+#    fenced_div_depth( check_fenced_div_parser(
+#      ":::: a\n::: b1\n:::\n::: b2\n::: c\n:::\n:::\n::::\n"
+#    ) ),
+#    3
+#  )
+#})
+
+
 test_that("Utils - as_document()", {
   expect_round_trip_identical = function(x) {
     x = parse_rmd_cpp(x)
@@ -208,6 +271,7 @@ test_that("Utils - as_document()", {
 
 test_that("Enhanced attribute parsing - individual types", {
   
+  # Class attributes
   expect_equal(
     check_fdiv_open_parser("::: {.warning}\n"),
     rmd_fenced_div_open(".warning")
@@ -223,6 +287,7 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open(".class_with_underscores")
   )
   
+  # ID attributes
   expect_equal(
     check_fdiv_open_parser("::: {#special}\n"),
     rmd_fenced_div_open("#special")
@@ -238,6 +303,7 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open("#id_with_underscores")
   )
   
+  # Key=value attributes - unquoted
   expect_equal(
     check_fdiv_open_parser("::: {data-toggle=collapse}\n"),
     rmd_fenced_div_open("data-toggle=collapse")
@@ -248,6 +314,7 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open("style=color:red")
   )
   
+  # Key=value attributes - double quoted
   expect_equal(
     check_fdiv_open_parser("::: {title=\"My Title\"}\n"),
     rmd_fenced_div_open("title=\"My Title\"")
@@ -258,6 +325,7 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open("data-content=\"Hello World\"")
   )
   
+  # Key=value attributes - single quoted
   expect_equal(
     check_fdiv_open_parser("::: {title='Single Quoted'}\n"),
     rmd_fenced_div_open("title='Single Quoted'")
@@ -268,6 +336,7 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open("alt='Image description'")
   )
   
+  # Plain attributes
   expect_equal(
     check_fdiv_open_parser("::: {warning}\n"),
     rmd_fenced_div_open("warning")
@@ -281,51 +350,61 @@ test_that("Enhanced attribute parsing - individual types", {
 
 test_that("Enhanced attribute parsing - combinations", {
   
+  # Two classes
   expect_equal(
     check_fdiv_open_parser("::: {.primary .large}\n"),
     rmd_fenced_div_open(c(".primary", ".large"))
   )
   
+  # ID and class
   expect_equal(
     check_fdiv_open_parser("::: {#myid .myclass}\n"),
     rmd_fenced_div_open(c("#myid", ".myclass"))
   )
   
+  # Class and ID (order reversed)
   expect_equal(
     check_fdiv_open_parser("::: {.myclass #myid}\n"),
     rmd_fenced_div_open(c(".myclass", "#myid"))
   )
   
+  # Plain and class
   expect_equal(
     check_fdiv_open_parser("::: {warning .red}\n"),
     rmd_fenced_div_open(c("warning", ".red"))
   )
   
+  # Key=value and class
   expect_equal(
     check_fdiv_open_parser("::: {data-value=test .highlight}\n"),
     rmd_fenced_div_open(c("data-value=test", ".highlight"))
   )
   
+  # Three attributes: ID, class, plain
   expect_equal(
     check_fdiv_open_parser("::: {#section .important note}\n"),
     rmd_fenced_div_open(c("#section", ".important", "note"))
   )
   
+  # Three attributes: key=value, ID, class
   expect_equal(
     check_fdiv_open_parser("::: {data-role=button #submit .primary}\n"),
     rmd_fenced_div_open(c("data-role=button", "#submit", ".primary"))
   )
   
+  # Four attributes: all types
   expect_equal(
     check_fdiv_open_parser("::: {#main .container data-test=value callout}\n"),
     rmd_fenced_div_open(c("#main", ".container", "data-test=value", "callout"))
   )
   
+  # Multiple key=value pairs
   expect_equal(
     check_fdiv_open_parser("::: {width=100 height=200}\n"),
     rmd_fenced_div_open(c("width=100", "height=200"))
   )
   
+  # Mixed quoted and unquoted values
   expect_equal(
     check_fdiv_open_parser("::: {title=\"Main Section\" data-id=section1 .highlighted}\n"),
     rmd_fenced_div_open(c("title=\"Main Section\"", "data-id=section1", ".highlighted"))
@@ -334,26 +413,31 @@ test_that("Enhanced attribute parsing - combinations", {
 
 test_that("Enhanced attribute parsing - edge cases", {
   
+  # Empty braces (should work as before)
   expect_equal(
     check_fdiv_open_parser("::: {}\n"),
     rmd_fenced_div_open()
   )
   
+  # Extra spaces
   expect_equal(
     check_fdiv_open_parser("::: {  .class1   .class2  }\n"),
     rmd_fenced_div_open(c(".class1", ".class2"))
   )
   
+  # Complex key=value with special characters
   expect_equal(
     check_fdiv_open_parser("::: {data-url=\"https://example.com/path?q=test\"}\n"),
     rmd_fenced_div_open("data-url=\"https://example.com/path?q=test\"")
   )
   
+  # Hyphenated and underscored names
   expect_equal(
     check_fdiv_open_parser("::: {.my-class_name #my-id_value}\n"),
     rmd_fenced_div_open(c(".my-class_name", "#my-id_value"))
   )
   
+  # Numbers in attributes
   expect_equal(
     check_fdiv_open_parser("::: {.class1 #id2 data-level=3}\n"),
     rmd_fenced_div_open(c(".class1", "#id2", "data-level=3"))
@@ -362,20 +446,26 @@ test_that("Enhanced attribute parsing - edge cases", {
 
 test_that("Enhanced attribute parsing - error cases", {
   
+  # Invalid class (no name after dot)
   expect_snapshot(
     check_fdiv_open_parser("::: {.}\n"), error=TRUE
   )
   
+  # Invalid ID (no name after hash)
   expect_snapshot(
     check_fdiv_open_parser("::: {#}\n"), error=TRUE
   )
   
+  # Invalid key=value (no value)
   expect_snapshot(
     check_fdiv_open_parser("::: {key=}\n"), error=TRUE
   )
   
   
+  # Missing closing brace
   expect_snapshot(
     check_fdiv_open_parser("::: {.class\n"), error=TRUE
   )
 })
+
+

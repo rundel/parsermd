@@ -24,9 +24,12 @@ test_that("as_tibble - minimal.Rmd", {
 
   expect_s3_class(tbl, c("rmd_tibble", "tbl_df", "tbl", "data.frame"))
 
+  # ignore ast column for now
   tbl$ast = NULL
   expect_equal(tbl, tbl_expected)
 })
+
+
 test_that("as_tibble - hw01.Rmd", {
   ast = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
@@ -63,9 +66,12 @@ test_that("as_tibble - hw01.Rmd", {
 
   expect_s3_class(tbl, c("rmd_tibble", "tbl_df", "tbl", "data.frame"))
 
+  # ignore ast column for now
   tbl$ast = NULL
   expect_equal(tbl, tbl_expected)
 })
+
+
 test_that("as_tibble - hw01-student.Rmd", {
   ast = parse_rmd(system.file("examples/hw01-student.Rmd", package = "parsermd"))
   tbl = as_tibble(ast)
@@ -99,6 +105,7 @@ test_that("as_tibble - hw01-student.Rmd", {
 
   expect_s3_class(tbl, c("rmd_tibble", "tbl_df", "tbl", "data.frame"))
 
+  # ignore ast column for now
   tbl$ast = NULL
   expect_equal(tbl, tbl_expected)
 })
@@ -121,9 +128,12 @@ test_that("as_tibble - empty_sections.Rmd", {
 
   expect_s3_class(tbl, c("rmd_tibble", "tbl_df", "tbl", "data.frame"))
 
+  # ignore ast column for now
   tbl$ast = NULL
   expect_equal(tbl, tbl_expected)
 })
+
+
 
 test_that("as_tibble - reverse_sections.Rmd", {
   ast = parse_rmd(system.file("examples/reverse_sections.Rmd", package = "parsermd"))
@@ -145,6 +155,7 @@ test_that("as_tibble - reverse_sections.Rmd", {
 
   expect_s3_class(tbl, c("rmd_tibble", "tbl_df", "tbl", "data.frame"))
 
+  # ignore ast column for now
   tbl$ast = NULL
   expect_equal(tbl, tbl_expected)
 })

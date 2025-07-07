@@ -48,8 +48,12 @@ test_that("raw chunk", {
       trimws(x, which = "right")
      )
   }
+
+
   test_trans("```{=html}\n```\n")
   test_trans("```{=html}\n<h1>hello</h1>\n```\n")
   test_trans("  ```{=html}\n  ```\n")
   test_trans("  ```{=html}\n  <h1>hello</h1>\n  ```\n")
 })
+
+## TODO - add checks for other nodes

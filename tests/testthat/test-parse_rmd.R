@@ -47,6 +47,8 @@ test_that("minimal.Rmd", {
 })
 
 test_that("Found issues", {
+
+  # No newline at the end
   expect_equal(
     parse_rmd("```{r}\n1+1\n```"),
     rmd_ast( list(
@@ -54,3 +56,5 @@ test_that("Found issues", {
     ) )
   )
 })
+
+

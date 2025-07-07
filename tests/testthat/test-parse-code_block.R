@@ -1,3 +1,5 @@
+
+
 test_that("code block parsing - Basic", {
   expect_equal(
     check_code_block_parser("```\n```\n"),
@@ -19,7 +21,7 @@ test_that("code block parsing - Basic", {
     rmd_code_block(attr = "{{r}}")
   )
 
-  expect_equal(
+  expect_equal( # Check proper disabiguation of code block vs. chunk
     parse_rmd("```{{r}}\n```\n"),
     rmd_ast( list(
       rmd_code_block(attr = "{{r}}")
@@ -35,6 +37,8 @@ test_that("code block parsing - Basic", {
     check_code_block_parser("``` abc def\n```\n"),
     rmd_code_block(attr = "abc def")
   )
+
+
   expect_equal(
     check_code_block_parser("````\n````\n"),
     rmd_code_block(n_ticks = 4L)
@@ -92,6 +96,8 @@ test_that("code block parsing - Indents", {
     error=TRUE
   )
 
+  # With code
+
   expect_equal(
     check_code_block_parser("  ```\n  1+1\n  ```\n"),
     rmd_code_block(indent="  ", code="1+1")
@@ -106,6 +112,8 @@ test_that("code block parsing - Indents", {
     check_code_block_parser("> ```\n> 1+1\n> ```\n"),
     rmd_code_block(indent="> ", code="1+1")
   )
+
+  ## Handling of blank lines within indented blocks
   expect_equal(
     check_code_block_parser("  ```\n  1+1\n  \n  2+2\n  ```\n"),
     check_code_block_parser("  ```\n  1+1\n\n  2+2\n  ```\n")
