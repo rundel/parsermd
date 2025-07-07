@@ -32,6 +32,9 @@ namespace Rcpp {
   //template <> SEXP wrap(client::ast::md_element const& x);
   //template <> SEXP wrap(client::ast::md_line const& x);
   template <> SEXP wrap(client::ast::markdown const& x);
+
+  template <> SEXP wrap(client::ast::R_type const& type);
+  template <> SEXP wrap(client::ast::R_value const& value);
 }
 
 #endif

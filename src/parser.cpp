@@ -13,6 +13,7 @@
 #include "parse_markdown.h"
 #include "parse_shortcode.h"
 #include "parse_inline_code.h"
+#include "parse_R_type.h"
 
 #include "rcpp_wrap.h"
 
@@ -88,6 +89,15 @@ SEXP parse_rmd_cpp(std::string const& str) {
 
   return Rcpp::wrap(doc);
 }
+
+// [[Rcpp::export]]
+SEXP parse_R_value_cpp(std::string const& str) {
+  client::ast::R_value expr;
+  parse_str(str, client::parser::R_value, expr);
+
+  return Rcpp::wrap(expr);
+}
+
 
 
 // [[Rcpp::export]]
@@ -350,6 +360,22 @@ template <> SEXP wrap(client::ast::element const& element) {
 
   return boost::apply_visitor(v, element);
 };
+
+template <> SEXP wrap(client::ast::R_type const& type) {
+  struct line_visitor {
+    SEXP operator()(bool x) { return Rcpp::wrap(x); }
+    SEXP operator()(int  x) { return Rcpp::wrap(x); }
+    SEXP operator()(double x) { return Rcpp::wrap(x); }
+    SEXP operator()(std::string x) { return Rcpp::wrap(x); }
+  } v;
+
+  return boost::apply_visitor(v, type);
+};
+
+template <> SEXP wrap(client::ast::R_value const& value) {
+  return Rcpp::wrap(value.x);
+};
+
 
 template <> SEXP wrap(client::ast::rmd const& rmd) {
   Rcpp::List nodes;
