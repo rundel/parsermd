@@ -182,15 +182,47 @@ The `rmd_chunk` node represents executable code chunks with options and metadata
 
 - `engine`: The code engine (default: "r")
 - `name`: Optional chunk name/label
-- `options`: List of chunk options (eval, echo, etc.)
-- `yaml_options`: List of YAML-style chunk options
+- `options`: List of chunk options containing both traditional and YAML options
 - `code`: Character vector containing the code lines
 - `indent`: Indentation string
 - `n_ticks`: Number of backticks used (default: 3)
 
-**Example:**
+**Chunk Option Formats:**
 
-Raw text that would be parsed:
+Chunks support two option formats that can be used independently or together:
+
+1. **Traditional format**: Options specified in the chunk header after the engine and label
+   ```markdown
+   ```{r chunk-name, eval=TRUE, echo=FALSE}
+   ```
+   
+2. **YAML format**: Options specified as YAML comments within the chunk
+   ```markdown
+   ```{r chunk-name}
+   #| eval: true
+   #| echo: false
+   ```
+
+**Option Conflict Resolution:**
+
+When the same option is specified in both formats, YAML options take precedence over traditional options. A warning is emitted when conflicts occur:
+
+```markdown
+```{r eval=TRUE}
+#| eval: false
+```
+```
+
+In this case, `eval: false` (YAML) wins over `eval=TRUE` (traditional), and the parser emits: "YAML options override traditional options for: eval"
+
+**Type Handling:**
+
+- **Traditional options**: Always stored as strings (e.g., `"TRUE"`, `"5"`)
+- **YAML options**: Preserve proper R types (e.g., `TRUE`, `5L`, `3.14`)
+
+**Examples:**
+
+**Traditional format chunk:**
 ````markdown
 ```{{r example, eval=TRUE, echo=FALSE}}
 x <- 1:10
@@ -198,15 +230,46 @@ mean(x)
 ```
 ````
 
-Programmatic creation:
+**YAML format chunk:**
+````markdown
+```{{r example}}
+#| eval: true
+#| echo: false
+x <- 1:10
+mean(x)
+```
+````
+
+**Mixed format chunk (with conflict):**
+````markdown
+```{{r example, eval=TRUE}}
+#| eval: false
+#| message: false
+x <- 1:10
+mean(x)
+```
+````
+In this case, `eval: false` (YAML) overrides `eval=TRUE` (traditional).
+
+**Programmatic creation:**
 ```{r}
-chunk_node = rmd_chunk(
+# Traditional-style options
+chunk_node_traditional = rmd_chunk(
+  engine = "r",
+  name = "example",
+  options = list(eval = "TRUE", echo = "FALSE"),
+  code = c("x <- 1:10", "mean(x)")
+)
+
+# YAML-style options with proper types
+chunk_node_yaml = rmd_chunk(
   engine = "r",
   name = "example",
   options = list(eval = TRUE, echo = FALSE),
   code = c("x <- 1:10", "mean(x)")
 )
-chunk_node
+
+chunk_node_yaml
 ```
 
 ---
