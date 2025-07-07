@@ -224,3 +224,130 @@ test_that("as_document parameter propagates through AST with multiple chunks", {
   expect_equal(yaml_result, expected_yaml)
   expect_equal(traditional_result, expected_traditional)
 })
+
+# === Option Name Conversion Tests ===
+
+test_that("as_document converts dot notation to dash notation for YAML output", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(fig.width = 5, fig.height = 3, out.width = "100%"),
+    code = "x = 1"
+  )
+  
+  yaml_result = as_document(chunk, use_yaml_opts = TRUE)
+  
+  expected = c(
+    "```{r test}",
+    "#| fig-width: 5.0",
+    "#| fig-height: 3.0", 
+    "#| out-width: 100%",
+    "x = 1",
+    "```"
+  )
+  
+  expect_equal(yaml_result, expected)
+})
+
+test_that("as_document preserves dot notation for traditional output", {
+  chunk = rmd_chunk(
+    engine = "r", 
+    name = "test",
+    options = list(fig.width = 5, fig.height = 3, out.width = "100%"),
+    code = "x = 1"
+  )
+  
+  traditional_result = as_document(chunk, use_yaml_opts = FALSE)
+  
+  expected = c(
+    "```{r test, fig.width = 5, fig.height = 3, out.width = 100%}",
+    "x = 1",
+    "```"
+  )
+  
+  expect_equal(traditional_result, expected)
+})
+
+test_that("as_document handles options with multiple dots correctly", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test", 
+    options = list(fig.cap.location = "bottom", out.extra.css = "color: red"),
+    code = "x = 1"
+  )
+  
+  yaml_result = as_document(chunk, use_yaml_opts = TRUE)
+  traditional_result = as_document(chunk, use_yaml_opts = FALSE)
+  
+  expected_yaml = c(
+    "```{r test}",
+    "#| fig-cap-location: bottom",
+    "#| out-extra-css: 'color: red'",
+    "x = 1", 
+    "```"
+  )
+  
+  expected_traditional = c(
+    "```{r test, fig.cap.location = bottom, out.extra.css = color: red}",
+    "x = 1",
+    "```"
+  )
+  
+  expect_equal(yaml_result, expected_yaml)
+  expect_equal(traditional_result, expected_traditional)
+})
+
+test_that("as_document name conversion works with mixed option types", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "analysis",
+    options = list(echo = TRUE, fig.width = 7, eval = FALSE, out.height = "50%"),
+    code = c("plot(1:10)", "summary(data)")
+  )
+  
+  yaml_result = as_document(chunk, use_yaml_opts = TRUE)
+  
+  expected = c(
+    "```{r analysis}",
+    "#| echo: true",
+    "#| fig-width: 7.0", 
+    "#| eval: false",
+    "#| out-height: 50%",
+    "plot(1:10)",
+    "summary(data)",
+    "```"
+  )
+  
+  expect_equal(yaml_result, expected)
+})
+
+test_that("as_document handles options without dots unchanged", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "simple",
+    options = list(echo = TRUE, eval = FALSE, message = TRUE),
+    code = "x = 1"
+  )
+  
+  yaml_result = as_document(chunk, use_yaml_opts = TRUE)
+  traditional_result = as_document(chunk, use_yaml_opts = FALSE)
+  
+  # Option names should be the same since no dots to convert
+  expected_yaml = c(
+    "```{r simple}",
+    "#| echo: true",
+    "#| eval: false", 
+    "#| message: true",
+    "x = 1",
+    "```"
+  )
+  
+  expected_traditional = c(
+    "```{r simple, echo = TRUE, eval = FALSE, message = TRUE}",
+    "x = 1",
+    "```"
+  )
+  
+  expect_equal(yaml_result, expected_yaml)
+  expect_equal(traditional_result, expected_traditional)
+})

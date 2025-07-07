@@ -135,21 +135,21 @@ test_that("Warning message format is correct for single and multiple conflicts",
 })
 
 test_that("Complex option values handle conflicts correctly", {
-  # Test with different option names that don't actually conflict
-  # since YAML uses fig-width and traditional uses fig.width
-  expect_no_warning({
+  # Test with option names that actually conflict after normalization
+  # since fig-width normalizes to fig.width
+  expect_warning({
     result = check_chunk_parser("```{r fig.width = 5, fig.height = 3}
 #| fig-width: 7
 #| fig-dpi: 300
 x = 1
 ```
 ")
-  })
+  }, "YAML options override traditional options for: fig.width")
   
   expected_chunk = rmd_chunk(
     engine = "r",
     name = "",
-    options = list(fig.width = 5, fig.height = 3, `fig-width` = 7, `fig-dpi` = 300),
+    options = list(fig.width = 7, fig.height = 3, fig.dpi = 300),
     code = "x = 1"
   )
   expect_equal(result, expected_chunk)
@@ -267,4 +267,79 @@ x = 1
 ```")
   
   expect_equal(result, expected)
+})
+
+# === Option Name Normalization Tests ===
+
+test_that("YAML option names with dashes are normalized to dots for conflict detection", {
+  # Test fig.width vs fig-width conflict
+  expect_warning({
+    result = check_chunk_parser("```{r fig.width = 5}\n#| fig-width: 7\nx = 1\n```\n")
+  }, "YAML options override traditional options for: fig.width")
+  
+  # YAML option should win and be stored with dot notation
+  expected_chunk = rmd_chunk(
+    engine = "r",
+    name = "",
+    options = list(fig.width = 7),
+    code = "x = 1"
+  )
+  expect_equal(result, expected_chunk)
+})
+
+test_that("Multiple YAML options with dashes are normalized correctly", {
+  expect_warning({
+    result = check_chunk_parser("```{r fig.width = 5, fig.height = 3}\n#| fig-width: 7\n#| fig-height: 4\nx = 1\n```\n")
+  }, "YAML options override traditional options for: fig.width, fig.height")
+  
+  expected_chunk = rmd_chunk(
+    engine = "r", 
+    name = "",
+    options = list(fig.width = 7, fig.height = 4),
+    code = "x = 1"
+  )
+  expect_equal(result, expected_chunk)
+})
+
+test_that("YAML options with dashes that don't conflict are preserved as dots", {
+  expect_no_warning({
+    result = check_chunk_parser("```{r eval = TRUE}\n#| fig-width: 7\n#| out-height: 100\nx = 1\n```\n")
+  })
+  
+  expected_chunk = rmd_chunk(
+    engine = "r",
+    name = "",
+    options = list(eval = TRUE, fig.width = 7, out.height = 100),
+    code = "x = 1"
+  )
+  expect_equal(result, expected_chunk)
+})
+
+test_that("Options with multiple dashes are normalized correctly", {
+  expect_no_warning({
+    result = check_chunk_parser("```{r}\n#| fig-cap-location: bottom\n#| out-extra-css: 'color: red'\nx = 1\n```\n")
+  })
+  
+  expected_chunk = rmd_chunk(
+    engine = "r",
+    name = "",
+    options = list(fig.cap.location = "bottom", out.extra.css = "color: red"),
+    code = "x = 1"
+  )
+  expect_equal(result, expected_chunk)
+})
+
+test_that("Mixed options with equivalent names normalize correctly", {
+  # Traditional uses dots, YAML uses dashes for same options
+  expect_warning({
+    result = check_chunk_parser("```{r echo = TRUE, fig.width = 5}\n#| echo: false\n#| fig-width: 7\n#| message: false\nx = 1\n```\n")
+  }, "YAML options override traditional options for: echo, fig.width")
+  
+  expected_chunk = rmd_chunk(
+    engine = "r",
+    name = "",
+    options = list(echo = FALSE, fig.width = 7, message = FALSE),
+    code = "x = 1"
+  )
+  expect_equal(result, expected_chunk)
 })

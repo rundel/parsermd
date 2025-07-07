@@ -26,6 +26,17 @@
 #'
 NULL
 
+
+normalize_option_names = function(names) {
+  # Convert YAML-style names (dashes) to traditional names (dots)
+  gsub("-", ".", names, fixed = TRUE)
+}
+
+yamlize_option_names = function(names) {
+  # Convert traditional names (dots) to YAML-style names (dashes)
+  gsub(".", "-", names, fixed = TRUE)
+}
+
 #' @rdname chunk_options
 #' @export
 rmd_set_options = function(x, ...) {
@@ -44,8 +55,11 @@ rmd_set_options.rmd_chunk = function(x, ...) {
   if (is.null(names(opts)) | any(names(opts) == ""))
     stop("All options must be named", call. = FALSE)
 
+  # Normalize option names (replace - with .) before setting
+  normalized_names = normalize_option_names(names(opts))
+  
   for(i in seq_along(opts)) {
-    x[["options"]][[ names(opts)[i] ]] = opts[[i]]
+    x@options[[ normalized_names[i] ]] = opts[[i]]
   }
 
   x
@@ -91,10 +105,13 @@ rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   } else {
     checkmate::assert_character(opts, any.missing = FALSE)
 
+    # Normalize option names (replace - with .) before lookup
+    normalized_opts = normalize_option_names(opts)
+    
     res = purrr::map(
-      opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
+      normalized_opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
     )
-    names(res) = opts
+    names(res) = opts  # Keep original names in result
     res
   }
 }

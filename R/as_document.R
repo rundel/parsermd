@@ -64,7 +64,13 @@ as_document.rmd_chunk = function(x, ..., use_yaml_opts = TRUE) {
     details = if (x@name != "") x@name else ""
     if (details != "") details = paste0(" ", details)
     
-    yaml_lines = yaml_text(x@options)
+    # Convert option names from . to - for YAML format
+    yaml_options = x@options
+    if (length(names(yaml_options)) > 0) {
+      names(yaml_options) = yamlize_option_names(names(yaml_options))
+    }
+    
+    yaml_lines = yaml_text(yaml_options)
     
     lines = c(
       paste0(ticks, "{", x@engine, details, "}"),

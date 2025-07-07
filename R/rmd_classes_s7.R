@@ -105,12 +105,21 @@ rmd_chunk = S7::new_class(
   "rmd_chunk",
   parent = rmd_node,
   properties = list(
-    engine       = S7::new_property(S7::class_character, default = quote("r")),
-    name         = S7::new_property(S7::class_character, default = quote("")),
-    options      = S7::new_property(S7::class_list, default = quote(list())),
-    code         = S7::new_property(S7::class_character, default = quote(character())),
-    indent       = S7::new_property(S7::class_character, default = quote("")),
-    n_ticks      = S7::new_property(S7::class_integer, default = quote(3L))
+    engine  = S7::new_property(S7::class_character, default = quote("r")),
+    name    = S7::new_property(S7::class_character, default = quote("")),
+    options = S7::new_property(
+      S7::class_list, 
+      default = quote(list()),
+      setter = function(self, value) {
+        # Internally store option names in "traditional" format (dots)
+        names(value) = normalize_option_names(names(value))
+        self@options = value
+        self
+      }
+    ),
+    code    = S7::new_property(S7::class_character, default = quote(character())),
+    indent  = S7::new_property(S7::class_character, default = quote("")),
+    n_ticks = S7::new_property(S7::class_integer, default = quote(3L))
   ),
   validator = function(self) {
     if (length(self@engine) != 1) {

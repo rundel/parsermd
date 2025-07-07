@@ -305,6 +305,8 @@ rmd_node_code = function(x, ...) {
 `rmd_node_options<-.rmd_chunk` = function(x, value) {
   checkmate::assert_list(value, names = "named")
   
+  names(value) = normalize_option_names(names(value))
+
   # Merge new options with existing options
   x@options = utils::modifyList(x@options, value)
   x

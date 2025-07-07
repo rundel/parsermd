@@ -225,3 +225,111 @@ test_that("has_option works with empty AST", {
   
   expect_equal(result, empty_ast)
 })
+
+# === Option Name Normalization Tests ===
+
+test_that("has_option normalizes dash option names to dots", {
+  # Create test AST with chunks having dot-named options
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(
+        engine = "r", 
+        name = "plot1", 
+        code = "plot(cars)",
+        options = list(fig.width = 8, fig.height = 6, out.width = "100%")
+      ),
+      rmd_chunk(
+        engine = "r", 
+        name = "plot2", 
+        code = "plot(mtcars)",
+        options = list(echo = TRUE, message = FALSE)
+      )
+    )
+  )
+  
+  expect_equal(
+    rmd_select(original_ast, has_option("fig-width")), 
+    original_ast[1]
+  )
+})
+
+test_that("has_option normalizes dash option names with values", {
+  # Create test AST with chunks having dot-named options
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(
+        engine = "r", 
+        name = "plot1", 
+        code = "plot(cars)",
+        options = list(fig.width = "8", out.width = "100%")
+      ),
+      rmd_chunk(
+        engine = "r", 
+        name = "plot2", 
+        code = "plot(mtcars)",
+        options = list(fig.width = "10", out.width = "50%")
+      )
+    )
+  )
+  
+  expect_equal(
+    rmd_select(original_ast, has_option(`fig-width` = "8")), 
+    original_ast[1]
+  )
+})
+
+test_that("has_option works with multiple dash options", {
+  # Create test AST with chunks having various dot-named options
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(
+        engine = "r", 
+        name = "setup", 
+        code = "library(ggplot2)",
+        options = list(fig.width = 8, fig.height = 6, out.width = "100%")
+      ),
+      rmd_chunk(
+        engine = "r", 
+        name = "plot", 
+        code = "plot(cars)",
+        options = list(echo = TRUE, out.height = "50%")
+      ),
+      rmd_chunk(
+        engine = "r", 
+        name = "analysis", 
+        code = "summary(cars)",
+        options = list(message = FALSE)
+      )
+    )
+  )
+  
+  expect_equal(
+    rmd_select(original_ast, has_option("fig-width", "out-height")),
+    original_ast[c(1, 2)]
+  )
+})
+
+test_that("has_option works with mixed dot and dash option names", {
+  # Create test AST with chunks having dot-named options
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_chunk(
+        engine = "r", 
+        name = "plot", 
+        code = "plot(cars)",
+        options = list(fig.width = 8, echo = TRUE, out.width = "100%")
+      ),
+      rmd_chunk(
+        engine = "r", 
+        name = "analysis", 
+        code = "summary(cars)",
+        options = list(message = FALSE, warning = TRUE)
+      )
+    )
+  )
+  
+  expect_equal(
+    rmd_select(original_ast, has_option("echo", "fig-width", "message")), 
+    original_ast[c(1, 2)]
+  )
+})

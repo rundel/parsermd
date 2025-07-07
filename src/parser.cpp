@@ -289,17 +289,19 @@ template <> SEXP wrap(client::ast::chunk const& chunk) {
   std::string conflicts = "";
   
   for (auto yaml_name : yaml_names) {
-    //std::string yaml_name = Rcpp::as<std::string>(yaml_names[i]);
     
-    // Check for conflicts
-    if (std::find(option_names.begin(), option_names.end(), yaml_name) != option_names.end()) {
+    std::string yaml_name_norm = yaml_name; // Normalize YAML option name 
+    std::replace(yaml_name_norm.begin(), yaml_name_norm.end(), '-', '.');
+    
+    
+    if (std::find(option_names.begin(), option_names.end(), yaml_name_norm) != option_names.end()) {
       if (conflicts != "") 
         conflicts += ", ";
       conflicts += yaml_name;
     }
     
-    // Add YAML option (overriding any conflicts)
-    options[yaml_name] = parsed_yaml_options[yaml_name];
+    // Add YAML option using normalized name (overriding any conflicts)
+    options[yaml_name_norm] = parsed_yaml_options[yaml_name];
   }
 
   // Warn about conflicts if any

@@ -88,8 +88,8 @@
     
     
     ```{r plot-dino}
-    #| fig.height: 3.0
-    #| fig.width: 6.0
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -113,8 +113,8 @@
     #### Solution
     
     ```{r plot-star}
-    #| fig.height: 3.0
-    #| fig.width: 6.0
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     star_data <- datasaurus_dozen %>%
       filter(dataset == "star")
     
@@ -167,8 +167,8 @@
     
     
     ```{r plot-dino}
-    #| fig.height: 3.0
-    #| fig.width: 6.0
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     

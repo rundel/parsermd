@@ -42,7 +42,7 @@ test_that("ast -> document", {
 test_that("raw chunk", {
   test_trans = function(x) {
     expect_equal(
-      parsermd:::check_chunk_parser(x) |> 
+      check_chunk_parser(x) |> 
         as_document() |> 
         paste(collapse="\n"),
       trimws(x, which = "right")

@@ -188,15 +188,19 @@ has_option = function(...) {
     opts, names(opts),
     function(opt, name) {
       if (name == "") {
-        rmd_get_options(x, opt) %>%
-          purrr::map_lgl(~!is.null(.x[[opt]]))
+        # Normalize option name for lookup (replace - with .)
+        normalized_opt = normalize_option_names(opt)
+        rmd_get_options(x, normalized_opt) |>
+          purrr::map_lgl(~!is.null(.x[[normalized_opt]]))
       } else {
-        rmd_get_options(x, name) %>%
-          purrr::map_lgl(~identical(.x[[name]], as.character(opt)))
+        # Normalize option name for comparison (replace - with .)
+        normalized_name = normalize_option_names(name)
+        rmd_get_options(x, normalized_name) |>
+          purrr::map_lgl(~identical(.x[[normalized_name]], as.character(opt)))
       }
     }
-  ) %>%
-    purrr::reduce(`|`) %>%
+  ) |>
+    purrr::reduce(`|`) |>
     which()
 }
 
