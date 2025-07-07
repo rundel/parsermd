@@ -1,0 +1,195 @@
+---
+title: "Homework 3 - Data Analysis with R"
+author: "Your Name"
+date: "Due: Friday, March 15, 2024"
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+## Setup
+
+Load the required packages for this assignment:
+
+```{r setup}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+## Exercise 1: Basic Data Exploration
+
+Examine the `penguins` dataset from the `palmerpenguins` package. Your task is to create a summary of the dataset that shows the number of observations and variables, and identify any missing values.
+
+```{r ex1-student}
+# Write your code here to:
+# 1. Display the dimensions of the penguins dataset
+# 2. Show the structure of the dataset
+# 3. Count missing values in each column
+
+```
+
+```{r ex1-key}
+# Solution: Basic data exploration
+# 1. Display dimensions
+cat("Dataset dimensions:", dim(penguins), "\n")
+cat("Rows:", nrow(penguins), "Columns:", ncol(penguins), "\n\n")
+
+# 2. Show structure
+str(penguins)
+
+# 3. Count missing values
+cat("\nMissing values by column:\n")
+penguins %>%
+  summarise(across(everything(), ~ sum(is.na(.))))
+```
+
+## Exercise 2: Data Visualization
+
+Create a scatter plot showing the relationship between flipper length and body mass for penguins. Color the points by species and add appropriate labels and a title.
+
+```{r ex2-student}
+# Create a scatter plot with:
+# - x-axis: flipper_length_mm
+# - y-axis: body_mass_g
+# - color by species
+# - add appropriate labels and title
+
+ggplot(data = penguins, aes(x = ___, y = ___)) +
+  geom_point(aes(color = ___)) +
+  labs(
+    title = "___",
+    x = "___",
+    y = "___"
+  )
+```
+
+```{r ex2-key}
+# Solution: Scatter plot of flipper length vs body mass
+ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species), alpha = 0.8, size = 2) +
+  labs(
+    title = "Penguin Flipper Length vs Body Mass by Species",
+    x = "Flipper Length (mm)",
+    y = "Body Mass (g)",
+    color = "Species"
+  ) +
+  theme_minimal() +
+  scale_color_viridis_d()
+```
+
+## Exercise 3: Statistical Analysis
+
+Calculate summary statistics for bill length by species. Create a table showing the mean, median, standard deviation, and count for each species.
+
+```{r ex3-student}
+# Calculate summary statistics for bill_length_mm by species
+# Include: mean, median, standard deviation, and count
+# Remove missing values before calculating
+
+penguins %>%
+  # Add your code here
+
+```
+
+```{r ex3-key}
+# Solution: Summary statistics for bill length by species
+penguins %>%
+  filter(!is.na(bill_length_mm)) %>%
+  group_by(species) %>%
+  summarise(
+    count = n(),
+    mean_bill_length = round(mean(bill_length_mm), 2),
+    median_bill_length = round(median(bill_length_mm), 2),
+    sd_bill_length = round(sd(bill_length_mm), 2),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(mean_bill_length))
+```
+
+## Exercise 4: Advanced Data Manipulation
+
+Filter the dataset to include only penguins with complete data (no missing values), then create a new variable called `bill_ratio` that represents the ratio of bill length to bill depth. Finally, identify which species has the highest average bill ratio.
+
+```{r ex4-student}
+# Step 1: Filter for complete cases
+# Step 2: Create bill_ratio variable (bill_length_mm / bill_depth_mm)
+# Step 3: Calculate average bill_ratio by species
+# Step 4: Identify species with highest average ratio
+
+```
+
+```{r ex4-key}
+# Solution: Advanced data manipulation
+complete_penguins = penguins %>%
+  # Remove rows with any missing values
+  filter(complete.cases(.)) %>%
+  # Create bill_ratio variable
+  mutate(bill_ratio = bill_length_mm / bill_depth_mm)
+
+# Calculate average bill ratio by species
+bill_ratio_summary = complete_penguins %>%
+  group_by(species) %>%
+  summarise(
+    avg_bill_ratio = round(mean(bill_ratio), 3),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(avg_bill_ratio))
+
+print(bill_ratio_summary)
+
+# Identify species with highest average bill ratio
+highest_ratio_species = bill_ratio_summary %>%
+  slice_max(avg_bill_ratio, n = 1) %>%
+  pull(species)
+
+cat("\nSpecies with highest average bill ratio:", as.character(highest_ratio_species))
+```
+
+## Bonus Exercise: Conditional Logic
+
+Write a function that categorizes penguins as "small", "medium", or "large" based on their body mass. Use the following criteria:
+- Small: body mass < 3500g
+- Medium: body mass between 3500g and 4500g  
+- Large: body mass > 4500g
+
+Apply this function to create a new column and create a summary table.
+
+```{r bonus-student}
+# Create a function to categorize penguins by size
+categorize_size = function(mass) {
+  # Add your conditional logic here
+  
+}
+
+# Apply the function and create summary
+```
+
+```{r bonus-key}
+# Solution: Conditional logic for size categorization
+categorize_size = function(mass) {
+  case_when(
+    is.na(mass) ~ "Unknown",
+    mass < 3500 ~ "Small",
+    mass >= 3500 & mass <= 4500 ~ "Medium",
+    mass > 4500 ~ "Large"
+  )
+}
+
+# Apply the function and create summary
+penguins_with_size = penguins %>%
+  mutate(size_category = categorize_size(body_mass_g))
+
+# Create summary table
+size_summary = penguins_with_size %>%
+  count(species, size_category) %>%
+  pivot_wider(names_from = size_category, values_from = n, values_fill = 0)
+
+print(size_summary)
+
+# Overall size distribution
+penguins_with_size %>%
+  count(size_category) %>%
+  mutate(percentage = round(n / sum(n) * 100, 1))
+```

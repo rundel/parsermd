@@ -1,0 +1,195 @@
+---
+title: "Processing Homework Assignments"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Processing Homework Assignments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+```{r setup}
+library(parsermd)
+library(stringr)
+```
+
+## Introduction
+
+A common workflow in educational settings involves creating homework assignments that contain both student scaffolding and instructor solutions within the same document. This vignette demonstrates how to use `parsermd` to process such documents and automatically generate separate versions for students and instructors.
+
+The typical workflow involves:
+
+1. **Primary Document**: A single Qmd/Rmd file containing both student prompts and complete solutions
+2. **Student Version**: Contains only student chunks with scaffolding and instructions
+3. **Instructor Key**: Contains only solution chunks with complete answers
+4. **Minimalist Key**: A streamlined version with solutions only (no instructional text)
+
+## Sample Assignment Structure
+
+Let's start by examining a sample homework assignment that follows this pattern. The assignment includes multiple exercises, each with two code chunks:
+
+- **Student chunk**: labeled with `-student` suffix, contains scaffolding code
+- **Solution chunk**: labeled with `-key` suffix, contains complete solutions
+
+```{r show-assignment}
+# Load the sample assignment
+assignment_path = system.file("examples/hw03-full.qmd", package = "parsermd")
+cat(readLines(assignment_path), sep = "\n")
+```
+
+## Parsing the Document
+
+First, let's parse the assignment document to understand its structure:
+
+```{r parse-document}
+# Parse the assignment
+rmd = parse_rmd(assignment_path)
+
+# Display the document structure
+print(rmd)
+```
+
+We can also examine the document as a tibble to better understand the chunk labels and structure:
+
+```{r examine-tibble}
+# Convert to tibble for easier inspection
+as_tibble(rmd)
+```
+
+## Creating the Student Version
+
+To create the student version, we need to:
+
+1. Keep all markdown content (instructions, problem statements)
+2. Keep only the student chunks (those with `-student` suffix)
+3. Remove all solution chunks
+
+```{r create-student-version}
+# Select student chunks and all non-chunk content
+student_version = rmd |>
+  rmd_select(
+    # Easier to specify the nodes we want to remove
+    !has_label("*-key")
+  )
+
+# Display the student version structure
+student_version
+```
+
+If we don't want to let the student on to the fact that the chunks are just for them we can use `rmd_modify()` to remove the `-student` suffix:
+
+```{r remove-student-suffix}
+student_version = student_version |>
+  rmd_modify(
+    function(node) {
+      rmd_node_label(node) = stringr::str_remove(rmd_node_label(node), "-student")
+      node
+    },
+    has_label("*-student")
+  )
+
+# Show the first few chunks to see the label changes
+student_version
+```
+
+Let's see what the student version looks like as a document:
+
+```{r student-document}
+# Convert to document and display first few sections
+as_document(student_version) |>
+  cat(sep = "\n")
+```
+
+We can also save this to a file:
+
+```{r save-student, eval=FALSE}
+# Save student version (not run in vignette)
+as_document(student_version) |>
+  writeLines("homework-student.qmd")
+```
+
+## Creating the Instructor Key
+
+For the instructor key, we want to:
+
+1. Keep all markdown content for context
+2. Keep only the solution chunks (those with `-key` suffix)
+3. Remove all student chunks
+
+```{r create-instructor-key}
+# Select solution chunks and all non-chunk content
+instructor_key = rmd |>
+  rmd_select(
+    # Again this is easier to specify the nodes we want to remove
+    !has_label("*-student")
+  )
+
+# Display the instructor key structure
+instructor_key
+```
+
+Let's examine the instructor key document:
+
+```{r instructor-document}
+# Convert to document
+instructor_doc = as_document(instructor_key)
+
+# Display first part of the document
+cat(head(strsplit(instructor_doc, "\n")[[1]], 50), sep = "\n")
+```
+
+## Creating a Minimalist Key
+
+Sometimes instructors may want a very streamlined version that contains only the solution code without all the instructional text. 
+
+We can create this by:
+
+1. Keeping only exercise headings and solution chunks
+2. Removing all markdown instructions
+3. Setting `#| include: false` for the `setup` chunk
+
+```{r create-minimalist-key}
+# Select only headings and solution chunks
+minimalist_key = rmd |>
+  rmd_select(
+    # Keep yaml and exercise headings for structure
+    has_type("rmd_yaml"),
+    has_heading(c("Exercise *", "Bonus*")),
+    # Keep only solution chunks
+    has_label(c("*-key", "setup"))
+  ) |>
+  rmd_modify(
+    function(node) {
+      rmd_node_options(node) = list(include = FALSE)
+      node
+    },
+    has_label("setup")
+  )
+
+# Display the minimalist key structure
+minimalist_key
+```
+
+```{r minimalist-document}
+# Convert to document
+minimalist_doc = as_document(minimalist_key)
+cat(minimalist_doc, sep = "\n")
+```
+
+
+## Best Practices
+
+When creating homework assignments for processing with `parsermd`, consider these best practices:
+
+1. **Clear Structure**: Use headings to organize exercises and maintain hierarchy
+2. **Meaningful Labels**: Use descriptive chunk labels that identify the document components and their type (e.g., `ex1-student`, `ex2-key`)
+3. **Testing**: Always test the generated versions to ensure they work correctly and you haven't lost anything important (e.g. your YAML front matter or your setup chunk)
+
