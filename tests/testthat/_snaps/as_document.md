@@ -21,7 +21,6 @@
     This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, 
     PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
     
-    
     When you click the **Knit** button a document will be generated that includes both content as well 
     as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
     
@@ -162,7 +161,6 @@
     
     (The answers for this Exercise are given for you below. But you should clean up some of the narrative so that it only includes what you want to turn in.)
     
-    
     First let's plot the data in the dino dataset:
     
     
@@ -192,7 +190,6 @@
     #### Solution
     
     (Add code and narrative as needed. Note that the R chunks are labeled with `plot-star` and `cor-star` to provide spaces to place the code for plotting and calculating the correlation coefficient. To finish, clean up the narrative by removing these instructions.)
-    
     
     Blah blah blah...
     
@@ -234,7 +231,6 @@
     ## R Markdown
     
     This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-    
     
     When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
     

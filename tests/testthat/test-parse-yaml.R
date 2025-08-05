@@ -119,8 +119,7 @@ test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html
   expect_equal(
     parse_rmd("---\n\n...\n"),
     rmd_ast( list(
-      rmd_markdown("---"),
-      rmd_markdown("...")
+      rmd_markdown(c("---", "", "..."))
     ) )
   )
 
@@ -137,8 +136,7 @@ test_that("Pandoc - yaml metadata block", { # See https://pandoc.org/MANUAL.html
     parse_rmd("---\n---\n---\n\n...\n"),
     rmd_ast( list(
       rmd_yaml(),
-      rmd_markdown("---"),
-      rmd_markdown("...")
+      rmd_markdown(c("---", "", "..."))
     ) )
   )
 })

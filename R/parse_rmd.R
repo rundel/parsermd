@@ -29,6 +29,7 @@ parse_rmd = function(rmd) {
 
   ast = parse_rmd_cpp(rmd)
   ast = fix_unnamed_chunks(ast)
+  ast = collapse_markdown_nodes(ast)
   ast
 }
 
@@ -54,5 +55,24 @@ fix_unnamed_chunks = function(ast) {
     }
   }
 
+  ast
+}
+
+collapse_markdown_nodes = function(ast) {
+  new_nodes = list()
+  
+  for (node in ast@nodes) {
+    if (inherits(node, "rmd_markdown") && 
+        length(new_nodes) > 0 && 
+        inherits(new_nodes[[length(new_nodes)]], "rmd_markdown")) {
+      
+      last_node = new_nodes[[length(new_nodes)]]
+      new_nodes[[length(new_nodes)]] = rmd_markdown(lines = c(last_node@lines, "", node@lines))
+    } else {
+      new_nodes[[length(new_nodes) + 1]] = node
+    }
+  }
+  
+  ast@nodes = new_nodes
   ast
 }

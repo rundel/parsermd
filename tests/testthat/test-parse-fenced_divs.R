@@ -173,8 +173,7 @@ And another.
     parse_rmd(ex1),
     rmd_ast( list(
       rmd_fenced_div_open(c("#special",".sidebar")),
-      rmd_markdown("Here is a paragraph."),
-      rmd_markdown("And another."),
+      rmd_markdown(c("Here is a paragraph.", "", "And another.")),
       rmd_fenced_div_close()
     ) )
   )

@@ -45,12 +45,9 @@ tree_node.rmd_code_block = function(x) {
 tree_node.rmd_chunk = function(x) {
   name = cli::style_bold(rmd_node_label(x))
 
-  n_opt = length(x@options)
-
   list(
     text = "Chunk",
-    #label = paste0("[", x@engine, ", ", opt, length(x@code), " lines] - ", name)
-    label = cli::pluralize("[{x@engine}, {n_opt} {?options/option/options}, {length(x@code)} line{?s}] - {name}")
+    label = cli::pluralize("[{x@engine}, {length(x@code)} line{?s}] - {name}")
   )
 }
 

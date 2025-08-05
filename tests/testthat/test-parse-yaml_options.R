@@ -121,12 +121,11 @@ test_that("parse full document with yaml options", {
     rmd_yaml( list(
       title = "Using dash options in YAML options header"
     ) ),
-    rmd_markdown(
-      "In Quarto, it is recommended to use YAML options format with dash in option name instead of dot. In knitr 1.44, any chunk option with dash will be transformed to its dot counterpart. This is because knitr is responsible for engine option parsing in Quarto. "
-    ),
-    rmd_markdown(
+    rmd_markdown(c(
+      "In Quarto, it is recommended to use YAML options format with dash in option name instead of dot. In knitr 1.44, any chunk option with dash will be transformed to its dot counterpart. This is because knitr is responsible for engine option parsing in Quarto. ",
+      "",
       "This document checks that YAML options are parsed correctly and that dash option are correctly converted when provided in YAML. "
-    ),
+    )),
     rmd_chunk(
       engine = "r",
       name = "unnamed-chunk-1",
