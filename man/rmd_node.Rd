@@ -3,6 +3,9 @@
 \name{rmd_node}
 \alias{rmd_node}
 \alias{rmd_node_label}
+\alias{rmd_node_label<-}
+\alias{rmd_node_label<-.default}
+\alias{rmd_node_label<-.rmd_chunk}
 \alias{rmd_node_type}
 \alias{rmd_node_length}
 \alias{rmd_node_content}
@@ -21,6 +24,12 @@
 rmd_node()
 
 rmd_node_label(x, ...)
+
+rmd_node_label(x) <- value
+
+\method{rmd_node_label}{default}(x) <- value
+
+\method{rmd_node_label}{rmd_chunk}(x) <- value
 
 rmd_node_type(x, ...)
 
@@ -53,9 +62,9 @@ rmd_node_attr(x, attr) <- value
 
 \item{...}{Unused, for extensibility.}
 
-\item{attr}{Attribute name to extract.}
-
 \item{value}{The new value to assign (for assignment functions).}
+
+\item{attr}{Attribute name to extract.}
 }
 \value{
 \itemize{

@@ -100,13 +100,13 @@ rmd_node_label.rmd_chunk = function(x, ...) {
   name
 }
 
-#' @rdname rmd_node_label
+#' @rdname rmd_node
 #' @export
 `rmd_node_label<-` = function(x, value) {
   UseMethod("rmd_node_label<-")
 }
 
-#' @rdname rmd_node_label
+#' @rdname rmd_node
 #' @export
 `rmd_node_label<-.default` = function(x, value) {
   cli::cli_abort(
@@ -114,7 +114,7 @@ rmd_node_label.rmd_chunk = function(x, ...) {
   )
 }
 
-#' @rdname rmd_node_label  
+#' @rdname rmd_node
 #' @export
 `rmd_node_label<-.rmd_chunk` = function(x, value) {
   checkmate::assert_string(value, na.ok = FALSE)
