@@ -29,9 +29,9 @@ Imports:
     rlang,
     magrittr,
     tidyselect (>= 1.2.0),
-    lifecycle,
     fs,
-    quarto
+    quarto,
+    S7
 RoxygenNote: 7.3.2
 SystemRequirements: C++17
 LinkingTo: 

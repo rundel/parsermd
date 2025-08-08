@@ -26,6 +26,17 @@
 #'
 NULL
 
+
+normalize_option_names = function(names) {
+  # Convert YAML-style names (dashes) to traditional names (dots)
+  gsub("-", ".", names, fixed = TRUE)
+}
+
+yamlize_option_names = function(names) {
+  # Convert traditional names (dots) to YAML-style names (dashes)
+  gsub(".", "-", names, fixed = TRUE)
+}
+
 #' @rdname chunk_options
 #' @export
 rmd_set_options = function(x, ...) {
@@ -44,8 +55,11 @@ rmd_set_options.rmd_chunk = function(x, ...) {
   if (is.null(names(opts)) | any(names(opts) == ""))
     stop("All options must be named", call. = FALSE)
 
+  # Normalize option names (replace - with .) before setting
+  normalized_names = normalize_option_names(names(opts))
+  
   for(i in seq_along(opts)) {
-    x[["options"]][[ names(opts)[i] ]] = opts[[i]]
+    x@options[[ normalized_names[i] ]] = opts[[i]]
   }
 
   x
@@ -53,17 +67,15 @@ rmd_set_options.rmd_chunk = function(x, ...) {
 
 #' @exportS3Method
 rmd_set_options.rmd_ast = function(x, ...) {
-  ast = purrr::map(x, rmd_set_options, ...)
-
-  class(ast) = c("rmd_ast", "list")
-  ast
+  x@nodes = purrr::map(x@nodes, rmd_set_options, ...)
+  x
 }
 
 #' @exportS3Method
 rmd_set_options.rmd_tibble = function(x, ...) {
-  x$ast = rmd_set_options.rmd_ast(x$ast, ...)
-
-  x
+  # Convert to AST, modify it, then convert back to tibble
+  modified_ast = rmd_set_options(as_ast(x), ...)
+  as_tibble(modified_ast)
 }
 
 
@@ -84,24 +96,27 @@ rmd_get_options.default = function(x, ..., defaults = list()) {
 rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
   opts = unlist(list(...))
 
-  chunk_opts = c(x[["options"]], x[["yaml_options"]])
+  chunk_opts = x@options
 
   if (length(opts) == 0) {
     chunk_opts
   } else {
     checkmate::assert_character(opts, any.missing = FALSE)
 
+    # Normalize option names (replace - with .) before lookup
+    normalized_opts = normalize_option_names(opts)
+    
     res = purrr::map(
-      opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
+      normalized_opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
     )
-    names(res) = opts
+    names(res) = opts  # Keep original names in result
     res
   }
 }
 
 #' @exportS3Method
 rmd_get_options.rmd_ast = function(x, ..., defaults = list()) {
-  purrr::map(x, rmd_get_options, ..., defaults = defaults)
+  purrr::map(x@nodes, rmd_get_options, ..., defaults = defaults)
 }
 
 #' @exportS3Method

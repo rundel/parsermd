@@ -2,23 +2,22 @@
 
     +-- YAML [4 fields]
     +-- Heading [h1] - Setup
-    |   \-- Chunk [r, 1 option, 1 line] - setup
+    |   \-- Chunk [r, 1 line] - setup
     \-- Heading [h1] - Content
         +-- Heading [h2] - R Markdown
-        |   +-- Markdown [2 lines]
-        |   +-- Markdown [2 lines]
-        |   +-- Chunk [r, 0 options, 1 line] - cars
-        |   \-- Chunk [r, 0 options, 1 line] - unnamed-chunk-1
+        |   +-- Markdown [5 lines]
+        |   +-- Chunk [r, 1 line] - cars
+        |   \-- Chunk [r, 1 line] - unnamed-chunk-1
         \-- Heading [h2] - Including Plots
             +-- Markdown [1 line]
-            +-- Chunk [r, 1 option, 1 line] - pressure
+            +-- Chunk [r, 1 line] - pressure
             \-- Markdown [2 lines]
 
 ---
 
     +-- YAML [2 fields]
     +-- Heading [h3] - Load packages
-    |   \-- Chunk [r, 1 option, 2 lines] - load-packages
+    |   \-- Chunk [r, 2 lines] - load-packages
     +-- Heading [h3] - Exercise 1
     |   +-- Markdown [1 line]
     |   \-- Heading [h4] - Solution
@@ -27,20 +26,20 @@
     |   +-- Markdown [1 line]
     |   \-- Heading [h4] - Solution
     |       +-- Markdown [1 line]
-    |       +-- Chunk [r, 2 options, 5 lines] - plot-dino
+    |       +-- Chunk [r, 5 lines] - plot-dino
     |       +-- Markdown [1 line]
-    |       \-- Chunk [r, 0 options, 2 lines] - cor-dino
+    |       \-- Chunk [r, 2 lines] - cor-dino
     \-- Heading [h3] - Exercise 3
         +-- Markdown [1 line]
         \-- Heading [h4] - Solution
-            +-- Chunk [r, 2 options, 5 lines] - plot-star
-            \-- Chunk [r, 0 options, 2 lines] - cor-star
+            +-- Chunk [r, 5 lines] - plot-star
+            \-- Chunk [r, 2 lines] - cor-star
 
 ---
 
     +-- YAML [2 fields]
     +-- Heading [h3] - Load packages
-    |   \-- Chunk [r, 1 option, 2 lines] - load-packages
+    |   \-- Chunk [r, 2 lines] - load-packages
     +-- Heading [h3] - Exercise 1
     |   +-- Markdown [1 line]
     |   \-- Heading [h4] - Solution
@@ -48,19 +47,17 @@
     +-- Heading [h3] - Exercise 2
     |   +-- Markdown [1 line]
     |   \-- Heading [h4] - Solution
+    |       +-- Markdown [3 lines]
+    |       +-- Chunk [r, 5 lines] - plot-dino
     |       +-- Markdown [1 line]
-    |       +-- Markdown [1 line]
-    |       +-- Chunk [r, 2 options, 5 lines] - plot-dino
-    |       +-- Markdown [1 line]
-    |       \-- Chunk [r, 0 options, 2 lines] - cor-dino
+    |       \-- Chunk [r, 2 lines] - cor-dino
     \-- Heading [h3] - Exercise 3
         +-- Markdown [1 line]
         \-- Heading [h4] - Solution
+            +-- Markdown [3 lines]
+            +-- Chunk [r, 1 line] - plot-star
             +-- Markdown [1 line]
-            +-- Markdown [1 line]
-            +-- Chunk [r, 0 options, 1 line] - plot-star
-            +-- Markdown [1 line]
-            \-- Chunk [r, 0 options, 1 line] - cor-star
+            \-- Chunk [r, 1 line] - cor-star
 
 ---
 
@@ -74,9 +71,8 @@
 
     +-- YAML [1 field]
     +-- Heading [h2] - R Markdown
-    |   +-- Markdown [1 line]
-    |   +-- Markdown [1 line]
-    |   \-- Chunk [r, 0 options, 1 line] - cars
+    |   +-- Markdown [3 lines]
+    |   \-- Chunk [r, 1 line] - cars
     \-- Heading [h2] - Pandoc Raw Attribute Chunk
         +-- Markdown [1 line]
         \-- Raw Attr Chunk [html, 5 lines]

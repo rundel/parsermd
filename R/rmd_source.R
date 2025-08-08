@@ -69,8 +69,10 @@ rmd_source.rmd_ast = function(x, local = FALSE, ..., label_comment = TRUE, use_e
   label = rmd_node_label(x)
   engine = rmd_node_engine(x)
 
-  other = engine != "r"
-  if (any(other)) {
+  # Handle NA engines by treating them as R engines (default)
+  # Only exclude chunks that are explicitly not R
+  other = !is.na(engine) & engine != "r"
+  if (any(other, na.rm = TRUE)) {
       problem = paste(label[other], " (", engine[other]  ,")",
                       sep="", collapse = ", ")
       warning("Following chunks do not use R and are being excluded: ", problem,

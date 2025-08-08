@@ -13,6 +13,10 @@ parse_rmd_cpp <- function(str) {
     .Call(`_parsermd_parse_rmd_cpp`, str)
 }
 
+parse_R_value_cpp <- function(str) {
+    .Call(`_parsermd_parse_R_value_cpp`, str)
+}
+
 check_yaml_parser <- function(str) {
     .Call(`_parsermd_check_yaml_parser`, str)
 }

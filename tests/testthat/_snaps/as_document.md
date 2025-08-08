@@ -9,7 +9,8 @@
     
     # Setup
     
-    ```{r setup, include = FALSE}
+    ```{r setup}
+    #| include: false
     knitr::opts_chunk$set(echo = TRUE)
     ```
     
@@ -19,7 +20,6 @@
     
     This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, 
     PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-    
     
     When you click the **Knit** button a document will be generated that includes both content as well 
     as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
@@ -38,7 +38,8 @@
     You can also embed plots, for example:
     
     
-    ```{r pressure, echo = FALSE}
+    ```{r pressure}
+    #| echo: false
     plot(pressure)
     ```
     
@@ -56,7 +57,8 @@
     
     ### Load packages
     
-    ```{r load-packages, message = FALSE}
+    ```{r load-packages}
+    #| message: false
     library(tidyverse) 
     library(datasauRus)
     ```
@@ -84,7 +86,9 @@
     First let's plot the data in the dino dataset:
     
     
-    ```{r plot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino}
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -107,7 +111,9 @@
     
     #### Solution
     
-    ```{r plot-star, fig.height = 3, fig.width = 6}
+    ```{r plot-star}
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     star_data <- datasaurus_dozen %>%
       filter(dataset == "star")
     
@@ -130,7 +136,8 @@
     
     ### Load packages
     
-    ```{r load-packages, message = FALSE}
+    ```{r load-packages}
+    #| message: false
     library(tidyverse) 
     library(datasauRus)
     ```
@@ -154,11 +161,12 @@
     
     (The answers for this Exercise are given for you below. But you should clean up some of the narrative so that it only includes what you want to turn in.)
     
-    
     First let's plot the data in the dino dataset:
     
     
-    ```{r plot-dino, fig.height = 3, fig.width = 6}
+    ```{r plot-dino}
+    #| fig-height: 3.0
+    #| fig-width: 6.0
     dino_data <- datasaurus_dozen %>%
       filter(dataset == "dino")
     
@@ -182,7 +190,6 @@
     #### Solution
     
     (Add code and narrative as needed. Note that the R chunks are labeled with `plot-star` and `cor-star` to provide spaces to place the code for plotting and calculating the correlation coefficient. To finish, clean up the narrative by removing these instructions.)
-    
     
     Blah blah blah...
     
@@ -224,7 +231,6 @@
     ## R Markdown
     
     This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-    
     
     When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
     

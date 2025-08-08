@@ -22,7 +22,7 @@ rmd_has_shortcode = function(x, func_name = NULL) {
 
 #' @export
 rmd_has_shortcode.rmd_ast = function(x, func_name = NULL) {
-  purrr::map_lgl(x, rmd_has_shortcode, func_name = func_name)
+  purrr::map_lgl(x@nodes, rmd_has_shortcode, func_name = func_name)
 }
 
 #' @export
@@ -46,12 +46,12 @@ rmd_has_shortcode.default = function(x, func_name = NULL) {
 #' @exportS3Method
 print.rmd_shortcode = function(x, ...) {
   # Build the shortcode representation
-  func_name = cli::col_blue(cli::style_bold(x$func))
+  func_name = cli::col_blue(cli::style_bold(x@func))
   
-  if (length(x$args) == 0) {
+  if (length(x@args) == 0) {
     args_text = ""
   } else {
-    args_colored = cli::col_green(x$args)
+    args_colored = cli::col_green(x@args)
     args_text = paste0(" ", paste(args_colored, collapse = " "))
   }
   
@@ -102,15 +102,56 @@ rmd_extract_shortcodes.character = function(x, flatten = FALSE) {
 
 #' @export
 rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
-  res = purrr::map(x, rmd_extract_shortcodes, flatten = flatten)
+  # Check if this is an S7 object that should use the S7_object method
+  if (S7::S7_inherits(x, S7::S7_object)) {
+    return(rmd_extract_shortcodes.S7_object(x, flatten = flatten))
+  }
+  
+  # For non-S7 objects that can be mapped over (like lists, vectors)
+  if (is.list(x) || is.vector(x)) {
+    res = purrr::map(x, rmd_extract_shortcodes, flatten = flatten)
+    
+    if (flatten) {
+      res |> purrr::flatten()
+    } else {
+      nm = names(x)
+      if (is.null(nm) && is.list(x)) {
+        nm = purrr::map_chr(x, class) 
+      }
+      res |> stats::setNames(nm)
+    }
+  } else {
+    # For other types, return empty list
+    if (flatten) {
+      list()
+    } else {
+      list(list())
+    }
+  }
+}
+
+#' @export
+rmd_extract_shortcodes.S7_object = function(x, flatten = FALSE) {
+  props = S7::prop_names(x)
+  
+  # Only process properties that are likely to contain shortcodes
+  # This avoids recursion through complex nested structures
+  content_props = c("yaml", "lines", "code", "name", "text", "attr", "args")
+  props_to_check = intersect(props, content_props)
+
+  res = purrr::map(props_to_check, ~{
+    prop_value = S7::prop(x, .x)
+    # Process the property value, but only if it's character or simple list
+    if (is.character(prop_value) || (is.list(prop_value) && .x == "yaml")) {
+      rmd_extract_shortcodes(prop_value, flatten = flatten)
+    } else {
+      if (flatten) list() else list(list())
+    }
+  }) 
   
   if (flatten) {
-    res |> purrr::flatten()
+    res |> purrr::flatten() 
   } else {
-    nm = names(x)
-    if (is.null(nm) && (!inherits(x, "list") || inherits(x, "rmd_ast"))) {
-      nm = purrr::map_chr(x, class) 
-    }
-    res |> stats::setNames(nm)
+    stats::setNames(res, props_to_check)
   }
 }

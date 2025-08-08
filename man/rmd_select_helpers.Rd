@@ -5,10 +5,12 @@
 \alias{has_type}
 \alias{by_section}
 \alias{has_label}
+\alias{has_heading}
 \alias{has_code}
 \alias{has_option}
 \alias{has_shortcode}
 \alias{has_inline_code}
+\alias{by_fdiv}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
@@ -17,6 +19,8 @@ by_section(sec_ref, keep_parents = TRUE)
 
 has_label(label)
 
+has_heading(heading)
+
 has_code(code)
 
 has_option(...)
@@ -24,6 +28,8 @@ has_option(...)
 has_shortcode(func_name = NULL)
 
 has_inline_code(engine = NULL)
+
+by_fdiv(..., regexp = FALSE)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -36,17 +42,21 @@ Default: \code{TRUE}}
 
 \item{label}{character vector, glob patterns for matching chunk labels.}
 
+\item{heading}{character vector, glob patterns for matching heading titles.}
+
 \item{code}{character vector, regex patterns for matching chunk code line(s)}
 
-\item{...}{Either option names represented by a scalar string or a named argument with the form
-\code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example
-\code{eval = TRUE} would check for the option \code{eval} being set to \code{TRUE}.}
+\item{...}{Character vector patterns to match against fenced div attributes.
+All provided patterns must match at least one attribute in the div's attr property.}
 
 \item{func_name}{character vector, optional glob patterns for matching shortcode function names.
 If NULL (default), matches any shortcode.}
 
 \item{engine}{character vector, optional glob patterns for matching inline code engine names.
 If NULL (default), matches any inline code.}
+
+\item{regexp}{Logical, use regular expressions for pattern matching instead of glob patterns.
+Default: FALSE (uses glob patterns).}
 }
 \value{
 All helper functions return an integer vector of selected indexes.
@@ -58,8 +68,10 @@ select nodes from an Rmd ast.
 \item \code{by_section()} - uses section selectors to select nodes.
 \item \code{has_type()} - selects all nodes that have the given type(s).
 \item \code{has_label()} - selects nodes with labels matching the given glob.
+\item \code{has_heading()} - selects heading nodes with titles matching the given glob pattern(s).
 \item \code{has_option()} - selects nodes that have the given option(s) set.
 \item \code{has_shortcode()} - selects nodes containing shortcodes matching the given function name(s).
+\item \code{by_fdiv()} - selects fenced div sections where all provided patterns match the div attributes.
 }
 }
 \details{
@@ -90,12 +102,17 @@ rmd_select(rmd, has_type("rmd_chunk"))
 
 rmd_select(rmd, has_label("*dino"))
 
+rmd_select(rmd, has_heading("Exercise *"))
+
 rmd_select(rmd, has_option("message"))
 rmd_select(rmd, has_option(message = FALSE))
 rmd_select(rmd, has_option(message = TRUE))
 
 rmd_select(rmd, has_shortcode())
 rmd_select(rmd, has_shortcode("video"))
+
+rmd_select(rmd, by_fdiv("note"))
+rmd_select(rmd, by_fdiv(".warning", "important"))
 
 
 }

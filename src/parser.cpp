@@ -5,6 +5,7 @@
 
 #include <Rcpp.h>
 #include <boost/format.hpp>
+#include <algorithm>
 
 #include "parser_error_handler.h"
 
@@ -13,6 +14,7 @@
 #include "parse_markdown.h"
 #include "parse_shortcode.h"
 #include "parse_inline_code.h"
+#include "parse_R_type.h"
 
 #include "rcpp_wrap.h"
 
@@ -45,7 +47,7 @@ inline error_handler_type parse_str(
 }
 
 // [[Rcpp::export]]
-Rcpp::List parse_shortcodes_cpp(std::string const& str) {
+SEXP parse_shortcodes_cpp(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<client::ast::shortcode> expr;
@@ -62,7 +64,7 @@ Rcpp::List parse_shortcodes_cpp(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List parse_inline_code_cpp(std::string const& str) {
+SEXP parse_inline_code_cpp(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<client::ast::inline_code> expr;
@@ -79,19 +81,26 @@ Rcpp::List parse_inline_code_cpp(std::string const& str) {
 }
 
 
-
-
 // [[Rcpp::export]]
-Rcpp::List parse_rmd_cpp(std::string const& str) {
+SEXP parse_rmd_cpp(std::string const& str) {
   client::ast::rmd doc;
   parse_str(str, client::parser::rmd, doc);
 
   return Rcpp::wrap(doc);
 }
 
+// [[Rcpp::export]]
+SEXP parse_R_value_cpp(std::string const& str) {
+  client::ast::R_value expr;
+  parse_str(str, client::parser::R_value, expr);
+
+  return Rcpp::wrap(expr);
+}
+
+
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_yaml_parser(std::string const& str) {
+SEXP check_yaml_parser(std::string const& str) {
   client::ast::yaml expr;
   parse_str(str, client::parser::yaml, expr);
 
@@ -101,7 +110,7 @@ Rcpp::CharacterVector check_yaml_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_chunk_parser(std::string const& str) {
+SEXP check_chunk_parser(std::string const& str) {
   client::ast::chunk expr;
   parse_str(str, client::parser::chunk, expr);
 
@@ -109,7 +118,7 @@ Rcpp::List check_chunk_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_multi_chunk_parser(std::string const& str) {
+SEXP check_multi_chunk_parser(std::string const& str) {
   std::vector<client::ast::chunk> expr;
   parse_str(str, +client::parser::chunk, expr);
 
@@ -118,7 +127,7 @@ Rcpp::List check_multi_chunk_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_markdown_parser(std::string const& str) {
+SEXP check_markdown_parser(std::string const& str) {
   client::ast::markdown expr;
   parse_str(str, client::parser::markdown, expr);
 
@@ -128,7 +137,7 @@ Rcpp::List check_markdown_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_markdown_heading_parser(std::string const& str) {
+SEXP check_markdown_heading_parser(std::string const& str) {
   client::ast::heading expr;
   parse_str(str, client::parser::heading, expr);
 
@@ -137,7 +146,7 @@ Rcpp::List check_markdown_heading_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_chunk_option_parser(std::string const& str) {
+SEXP check_chunk_option_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<client::ast::option> expr;
@@ -148,7 +157,7 @@ Rcpp::List check_chunk_option_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_yaml_option_parser(std::string const& str) {
+SEXP check_yaml_option_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::vector<std::string> expr;
@@ -161,7 +170,7 @@ Rcpp::CharacterVector check_yaml_option_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
+SEXP check_fdiv_open_parser(std::string const& str) {
   client::ast::fdiv_open expr;
   parse_str(str, client::parser::fdiv_open, expr);
 
@@ -169,7 +178,7 @@ Rcpp::CharacterVector check_fdiv_open_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_fdiv_close_parser(std::string const& str) {
+SEXP check_fdiv_close_parser(std::string const& str) {
   client::ast::fdiv_close expr;
   parse_str(str, client::parser::fdiv_close, expr);
 
@@ -180,7 +189,7 @@ Rcpp::List check_fdiv_close_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
+SEXP check_cbrace_expr_parser(std::string const& str) {
   namespace x3 = boost::spirit::x3;
 
   std::string expr;
@@ -191,7 +200,7 @@ Rcpp::CharacterVector check_cbrace_expr_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_code_block_parser(std::string const& str) {
+SEXP check_code_block_parser(std::string const& str) {
   client::ast::code_block expr;
   parse_str(str, client::parser::code_block, expr);
 
@@ -201,7 +210,7 @@ Rcpp::List check_code_block_parser(std::string const& str) {
 
 
 // [[Rcpp::export]]
-Rcpp::List check_inline_code_parser(std::string const& str) {
+SEXP check_inline_code_parser(std::string const& str) {
   client::ast::inline_code expr;
   parse_str(str, client::parser::inline_code, expr);
 
@@ -209,7 +218,7 @@ Rcpp::List check_inline_code_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List check_shortcode_parser(std::string const& str) {
+SEXP check_shortcode_parser(std::string const& str) {
   client::ast::shortcode expr;
   parse_str(str, client::parser::shortcode, expr);
 
@@ -217,7 +226,7 @@ Rcpp::List check_shortcode_parser(std::string const& str) {
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw = false) {
+SEXP check_qstring_parser(std::string const& str, bool raw = false) {
   namespace x3 = boost::spirit::x3;
 
   std::string expr;
@@ -234,49 +243,83 @@ Rcpp::CharacterVector check_qstring_parser(std::string const& str, bool raw = fa
 namespace Rcpp {
 // code block wrappers
 template <> SEXP wrap(client::ast::code_block const& code_block) {
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("attr")  = code_block.args.attr,
-    Rcpp::Named("code")    = code_block.code,
-    Rcpp::Named("indent")  = code_block.args.indent,
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_code_block = pkg["rmd_code_block"];
+  
+  return rmd_code_block(
+    Rcpp::Named("attr") = code_block.args.attr,
+    Rcpp::Named("code") = code_block.code,
+    Rcpp::Named("indent") = code_block.args.indent,
     Rcpp::Named("n_ticks") = code_block.args.n_ticks
   );
-
-  res.attr("class") = "rmd_code_block";
-
-  return res;
 }
 
 
 // chunk wrappers
 template <> SEXP wrap(client::ast::chunk const& chunk) {
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
 
   // Pandoc raw attribute chunks get their own node class
   if (chunk.args.engine[0] == '=') {
-    Rcpp::List res = Rcpp::List::create(
-      Rcpp::Named("format")  = chunk.args.engine.substr(1, chunk.args.engine.size()-1),
-      Rcpp::Named("code")    = chunk.code,
-      Rcpp::Named("indent")  = chunk.args.indent,
-      Rcpp::Named("n_ticks")  = chunk.args.n_ticks
+    Rcpp::Function rmd_raw_chunk = pkg["rmd_raw_chunk"];
+    
+    return rmd_raw_chunk(
+      Rcpp::Named("format") = chunk.args.engine.substr(1, chunk.args.engine.size()-1),
+      Rcpp::Named("code") = chunk.code,
+      Rcpp::Named("indent") = chunk.args.indent,
+      Rcpp::Named("n_ticks") = chunk.args.n_ticks
     );
-
-    res.attr("class") = "rmd_raw_chunk";
-
-    return res;
   }
 
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("engine")  = chunk.args.engine,
-    Rcpp::Named("name")    = chunk.args.name,
-    Rcpp::Named("options") = Rcpp::wrap(chunk.args.chunk_options),
-    Rcpp::Named("yaml_options") = Rcpp::wrap(chunk.yaml_options),
-    Rcpp::Named("code")    = chunk.code,
-    Rcpp::Named("indent")  = chunk.args.indent,
-    Rcpp::Named("n_ticks")  = chunk.args.n_ticks
+  Rcpp::List options = Rcpp::wrap(chunk.args.chunk_options);
+
+  Rcpp::CharacterVector yaml_options = Rcpp::wrap(chunk.yaml_options);
+  
+  Rcpp::Function parse_yaml = pkg["parse_yaml"];
+  Rcpp::List parsed_yaml_options = parse_yaml(yaml_options);
+
+  std::vector<std::string> yaml_names = Rcpp::as<std::vector<std::string>>(
+    parsed_yaml_options.hasAttribute("names") 
+    ? parsed_yaml_options.names()
+    : Rcpp::CharacterVector()
   );
 
-  res.attr("class") = "rmd_chunk";
+  Rcpp::CharacterVector option_names = options.hasAttribute("names")
+    ? options.names()
+    : Rcpp::CharacterVector();
+  
+  std::string conflicts = "";
+  
+  for (auto yaml_name : yaml_names) {
+    
+    std::string yaml_name_norm = yaml_name; // Normalize YAML option name 
+    std::replace(yaml_name_norm.begin(), yaml_name_norm.end(), '-', '.');
+    
+    
+    if (std::find(option_names.begin(), option_names.end(), yaml_name_norm) != option_names.end()) {
+      if (conflicts != "") 
+        conflicts += ", ";
+      conflicts += yaml_name;
+    }
+    
+    // Add YAML option using normalized name (overriding any conflicts)
+    options[yaml_name_norm] = parsed_yaml_options[yaml_name];
+  }
 
-  return res;
+  // Warn about conflicts if any
+  if (conflicts != "") {
+    Rcpp::warning("YAML options override traditional options for: " + conflicts);
+  }
+
+  Rcpp::Function rmd_chunk = pkg["rmd_chunk"];
+  return rmd_chunk(
+    Rcpp::Named("engine") = chunk.args.engine,
+    Rcpp::Named("name") = chunk.args.name,
+    Rcpp::Named("options") = options,
+    Rcpp::Named("code") = chunk.code,
+    Rcpp::Named("indent") = chunk.args.indent,
+    Rcpp::Named("n_ticks") = chunk.args.n_ticks
+  );
 };
 
 template <> SEXP wrap(std::vector<client::ast::chunk> const& chunks){
@@ -288,12 +331,15 @@ template <> SEXP wrap(std::vector<client::ast::option> const& opts) {
   Rcpp::CharacterVector names;
 
   for(auto opt : opts) {
-    values.push_back(opt.value);
+    SEXP R_val = parse_R_value_cpp(opt.value); 
+    values.push_back(R_val);
     names.push_back(opt.name);
   }
 
-  values.attr("names") = names;
-
+  if (names.size() != 0) {
+    values.attr("names") = names;
+  }
+  
   return values;
 }
 
@@ -301,37 +347,43 @@ template <> SEXP wrap(std::vector<client::ast::option> const& opts) {
 
 // rmd wrappers
 template <> SEXP wrap(client::ast::heading const& h) {
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("name")  = h.name,
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_heading = pkg["rmd_heading"];
+  
+  return rmd_heading(
+    Rcpp::Named("name") = h.name,
     Rcpp::Named("level") = h.level
   );
-  res.attr("class") = "rmd_heading";
-
-  return res;
 };
 
 
 template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
-  Rcpp::CharacterVector res = Rcpp::wrap(fdiv.attrs);
-  res.attr("class") = "rmd_fenced_div_open";
-
-  return res;
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_fenced_div_open = pkg["rmd_fenced_div_open"];
+  
+  return rmd_fenced_div_open(
+    Rcpp::Named("attr") = Rcpp::wrap(fdiv.attrs)
+  );
 }
 
 template <> SEXP wrap(client::ast::fdiv_close const& fdiv) {
-  Rcpp::List res = Rcpp::List::create(
-  );
-  res.attr("class") = "rmd_fenced_div_close";
-
-  return res;
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_fenced_div_close = pkg["rmd_fenced_div_close"];
+  
+  return rmd_fenced_div_close();
 }
 
 
-template <> SEXP wrap(client::ast::yaml const& yaml) {
-  Rcpp::CharacterVector res = Rcpp::wrap(yaml.lines);
-  res.attr("class") = "rmd_yaml_text";
+template <> SEXP wrap(client::ast::yaml const& x) {
+  Rcpp::CharacterVector yaml = Rcpp::wrap(x.lines);
+  
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function parse_yaml = pkg["parse_yaml"];
+  Rcpp::Function rmd_yaml = pkg["rmd_yaml"];
 
-  return res;
+  return rmd_yaml(
+    Rcpp::Named("yaml") = parse_yaml(yaml)
+  );
 }
 
 template <> SEXP wrap(client::ast::element const& element) {
@@ -348,50 +400,57 @@ template <> SEXP wrap(client::ast::element const& element) {
   return boost::apply_visitor(v, element);
 };
 
-template <> SEXP wrap(client::ast::rmd const& rmd) {
-  Rcpp::List res;
-  for(auto const& element : rmd.elements) {
-    res.push_back(Rcpp::wrap(element));
-  }
-  res.attr("class") = Rcpp::CharacterVector({"rmd_ast", "list"});
+template <> SEXP wrap(client::ast::R_type const& type) {
+  struct line_visitor {
+    SEXP operator()(bool x) { return Rcpp::wrap(x); }
+    SEXP operator()(int  x) { return Rcpp::wrap(x); }
+    SEXP operator()(double x) { return Rcpp::wrap(x); }
+    SEXP operator()(std::string x) { return Rcpp::wrap(x); }
+  } v;
 
-  return res;
+  return boost::apply_visitor(v, type);
+};
+
+template <> SEXP wrap(client::ast::R_value const& value) {
+  return Rcpp::wrap(value.x);
+};
+
+
+template <> SEXP wrap(client::ast::rmd const& rmd) {
+  Rcpp::List nodes;
+  for(auto const& element : rmd.elements) {
+    nodes.push_back(Rcpp::wrap(element));
+  }
+  
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_ast = pkg["rmd_ast"];
+  return rmd_ast(Rcpp::Named("nodes") = nodes);
 };
 
 
 template <> SEXP wrap(client::ast::inline_code const& ic) {
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("engine")  = ic.engine,
-    Rcpp::Named("code")    = ic.code,
-    Rcpp::Named("braced")  = ic.braced
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_inline_code = pkg["rmd_inline_code"];
+  
+  return rmd_inline_code(
+    Rcpp::Named("engine") = ic.engine,
+    Rcpp::Named("code") = ic.code,
+    Rcpp::Named("braced") = ic.braced,
+    Rcpp::Named("start") = ic.start,
+    Rcpp::Named("length") = ic.length
   );
-  
-  // Only add start and length as attributes if either is not -1
-  if (ic.start != -1 || ic.length != -1) {
-    res.attr("start") = Rcpp::wrap(ic.start);
-    res.attr("length") = Rcpp::wrap(ic.length);
-  }
-  
-  res.attr("class") = "rmd_inline_code";
-
-  return res;
 };
 
 template <> SEXP wrap(client::ast::shortcode const& sc) {
-  Rcpp::List res = Rcpp::List::create(
-    Rcpp::Named("func")   = Rcpp::wrap(sc.func),
-    Rcpp::Named("args")   = Rcpp::wrap(sc.args)
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_shortcode = pkg["rmd_shortcode"];
+  
+  return rmd_shortcode(
+    Rcpp::Named("func") = Rcpp::wrap(sc.func),
+    Rcpp::Named("args") = Rcpp::wrap(sc.args),
+    Rcpp::Named("start") = sc.start,
+    Rcpp::Named("length") = sc.length
   );
-  
-  // Only add start and length as attributes if either is not -1
-  if (sc.start != -1 || sc.length != -1) {
-    res.attr("start") = Rcpp::wrap(sc.start);
-    res.attr("length") = Rcpp::wrap(sc.length);
-  }
-  
-  res.attr("class") = "rmd_shortcode";
-
-  return res;
 };
 
 template <> SEXP wrap(std::vector<client::ast::shortcode> const& v) {
@@ -423,11 +482,11 @@ template <> SEXP wrap(std::vector<client::ast::shortcode> const& v) {
 //}
 
 template <> SEXP wrap(client::ast::markdown const& x) {
-  Rcpp::List res =  Rcpp::List::create(
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_markdown = pkg["rmd_markdown"];
+  
+  return rmd_markdown(
     Rcpp::Named("lines") = Rcpp::wrap(x.lines)
   );
-  res.attr("class") = "rmd_markdown";
-
-  return res;
 }
 }

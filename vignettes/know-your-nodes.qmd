@@ -1,0 +1,472 @@
+---
+title: "Know your nodes"
+author: "parsermd"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, comment = "#>")
+library(parsermd)
+```
+
+# Introduction
+
+The parsermd package parses R Markdown and Quarto documents into an Abstract Syntax Tree (AST) representation. This vignette introduces the different types of AST nodes and their properties, helping you understand how parsermd represents document structure.
+
+## AST Container - `rmd_ast`
+
+The `rmd_ast` object serves as the container for all parsed document nodes. It holds a linear sequence of nodes representing different document elements, where each node type corresponds to a specific R Markdown or Quarto construct (headings, code chunks, text, etc.).
+
+**Important**: The AST represents documents as a linear sequence of nodes, not a nested tree structure. This means that structural elements like fenced divs are represented as separate opening and closing nodes in the sequence, rather than as nodes with children.
+ 
+The default print method for `rmd_ast`'s (`flat = FALSE`) presents an implicit tree structure based on heading levels. This provides a hierarchical view that reflects the document's logical organization, where content is grouped under headings based on their level.
+
+**Properties:**
+
+- `nodes`: A list containing all the parsed nodes in document order
+
+**Example:**
+
+Raw text that would be parsed:
+````markdown
+---
+title: "Example Document"
+---
+
+# Introduction
+
+This is some text.
+
+```{{r}}
+x <- 1:5
+mean(x)
+```
+````
+
+This would create an `rmd_ast` object containing:
+
+1. `rmd_yaml` node with the title
+2. `rmd_heading` node with "Introduction" 
+3. `rmd_markdown` node with "This is some text."
+4. `rmd_chunk` node with the R code
+
+Programmatic creation:
+```{r}
+ast = rmd_ast(list(
+  rmd_yaml(list(title = "Example Document")),
+  rmd_heading(name = "Introduction", level = 1L),
+  rmd_markdown(lines = "This is some text."),
+  rmd_chunk(
+    engine = "r",
+    code = c("x <- 1:5", "mean(x)")
+  )
+))
+```
+
+:::::: {.columns}
+::: {.column width="50%"}
+**Hierarchical view (`flat = FALSE`):**
+```{r}
+print(ast, flat = FALSE)
+```
+:::
+
+::: {.column width="50%"}
+**Linear view (`flat = TRUE`):**
+```{r}
+print(ast, flat = TRUE)
+```
+:::
+::::::
+
+---
+
+# Core Node Types
+
+## Document Structure Nodes
+
+### YAML Header - `rmd_yaml`
+
+The `rmd_yaml` node represents YAML front matter at the beginning of documents.
+
+
+**Properties:**
+
+- `yaml`: List containing the parsed YAML content
+
+**Example:**
+
+Raw text that would be parsed:
+```yaml
+---
+title: "My Document"
+author: "John Doe"
+date: "2023-01-01"
+---
+```
+
+Programmatic creation:
+```{r}
+yaml_node = rmd_yaml(list(
+  title = "My Document",
+  author = "John Doe",
+  date = "2023-01-01"
+))
+yaml_node
+```
+
+---
+
+### Markdown Headings - `rmd_heading`
+
+The `rmd_heading` node represents section headings in markdown.
+
+
+**Properties:**
+
+- `name`: Character string containing the heading text
+- `level`: Integer from 1-6 indicating the heading level (# = 1, ## = 2, etc.)
+
+**Example:**
+
+Raw text that would be parsed:
+```markdown
+# Introduction
+```
+
+Programmatic creation:
+```{r}
+heading_node = rmd_heading(
+  name = "Introduction", 
+  level = 1L
+)
+heading_node
+```
+
+---
+
+### Markdown Text - `rmd_markdown`
+
+The `rmd_markdown` node represents plain markdown text content.
+
+
+**Properties:**
+
+- `lines`: Character vector containing the markdown text lines
+
+**Example:**
+
+Raw text that would be parsed:
+```markdown
+This is a paragraph.
+With multiple lines.
+```
+
+Programmatic creation:
+```{r}
+markdown_node = rmd_markdown(
+  lines = c("This is a paragraph.", "With multiple lines.")
+)
+markdown_node
+```
+
+---
+
+## Code and Execution Nodes
+
+### Executable Code Chunks - `rmd_chunk`
+
+The `rmd_chunk` node represents executable code chunks with options and metadata.
+
+
+**Properties:**
+
+- `engine`: The code engine (default: "r")
+- `name`: Optional chunk name/label
+- `options`: List of chunk options containing both traditional and YAML options
+- `code`: Character vector containing the code lines
+- `indent`: Indentation string
+- `n_ticks`: Number of backticks used (default: 3)
+
+**Chunk Option Formats:**
+
+Chunks support two option formats that can be used independently or together:
+
+1. **Traditional format**: Options specified in the chunk header after the engine and label
+   ```markdown
+   ```{r chunk-name, eval=TRUE, echo=FALSE}
+   ```
+   
+2. **YAML format**: Options specified as YAML comments within the chunk
+   ```markdown
+   ```{r chunk-name}
+   #| eval: true
+   #| echo: false
+   ```
+
+**Option Conflict Resolution:**
+
+When the same option is specified in both formats, YAML options take precedence over traditional options. A warning is emitted when conflicts occur:
+
+```markdown
+```{r eval=TRUE}
+#| eval: false
+```
+```
+
+In this case, `eval: false` (YAML) wins over `eval=TRUE` (traditional), and the parser emits: "YAML options override traditional options for: eval"
+
+**Type Handling:**
+
+- **Traditional options**: Always stored as strings (e.g., `"TRUE"`, `"5"`)
+- **YAML options**: Preserve proper R types (e.g., `TRUE`, `5L`, `3.14`)
+
+**Examples:**
+
+**Traditional format chunk:**
+````markdown
+```{{r example, eval=TRUE, echo=FALSE}}
+x <- 1:10
+mean(x)
+```
+````
+
+**YAML format chunk:**
+````markdown
+```{{r example}}
+#| eval: true
+#| echo: false
+x <- 1:10
+mean(x)
+```
+````
+
+**Mixed format chunk (with conflict):**
+````markdown
+```{{r example, eval=TRUE}}
+#| eval: false
+#| message: false
+x <- 1:10
+mean(x)
+```
+````
+In this case, `eval: false` (YAML) overrides `eval=TRUE` (traditional).
+
+**Programmatic creation:**
+```{r}
+# Traditional-style options
+chunk_node_traditional = rmd_chunk(
+  engine = "r",
+  name = "example",
+  options = list(eval = "TRUE", echo = "FALSE"),
+  code = c("x <- 1:10", "mean(x)")
+)
+
+# YAML-style options with proper types
+chunk_node_yaml = rmd_chunk(
+  engine = "r",
+  name = "example",
+  options = list(eval = TRUE, echo = FALSE),
+  code = c("x <- 1:10", "mean(x)")
+)
+
+chunk_node_yaml
+```
+
+---
+
+### Raw Output Chunks - `rmd_raw_chunk`
+
+The `rmd_raw_chunk` node represents raw output chunks for specific formats.
+
+
+**Properties:**
+
+- `format`: The output format (e.g., "html", "latex")
+- `code`: Character vector containing the raw content
+- `indent`: Indentation string
+- `n_ticks`: Number of backticks used
+
+**Example:**
+
+Raw text that would be parsed:
+````markdown
+```{=html}
+<div class='custom'>
+  <p>Custom HTML content</p>
+</div>
+```
+````
+
+Programmatic creation:
+```{r}
+raw_chunk_node = rmd_raw_chunk(
+  format = "html",
+  code = c(
+    "<div class='custom'>", 
+    "  <p>Custom HTML content</p>", 
+    "</div>"
+  )
+)
+raw_chunk_node
+```
+
+---
+
+### Fenced Code Blocks - `rmd_code_block`
+
+The `rmd_code_block` node represents non-executable fenced code blocks.
+
+
+**Properties:**
+
+- `attr`: Attributes string (language, classes, etc.)
+- `code`: Character vector containing the code lines
+- `indent`: Indentation string
+- `n_ticks`: Number of backticks used
+
+**Example:**
+
+Raw text that would be parsed:
+````markdown
+```python
+def hello():
+    print('Hello, World!')
+```
+````
+
+Programmatic creation:
+```{r}
+code_block_node = rmd_code_block(
+  attr = "python",
+  code = c(
+    "def hello():", 
+    "    print('Hello, World!')"
+  )
+)
+code_block_node
+```
+
+---
+
+## Inline Elements
+
+### Inline Code - `rmd_inline_code`
+
+The `rmd_inline_code` node represents inline code expressions.
+
+
+**Properties:**
+
+- `engine`: The code engine (empty string for static code)
+- `code`: The inline code content
+- `braced`: Whether the code uses braced syntax
+- `start`: Starting position in the source
+- `length`: Length of the inline code
+
+**Example:**
+
+Raw text that would be parsed:
+```markdown
+The result is `r 2 + 2`.
+```
+
+Programmatic creation:
+```{r}
+inline_code_node = rmd_inline_code(
+  engine = "r",
+  code = "2 + 2",
+  braced = FALSE
+)
+inline_code_node
+```
+
+---
+
+### Shortcode Function Calls - `rmd_shortcode`
+
+The `rmd_shortcode` node represents shortcode function calls (Quarto feature).
+
+
+**Properties:**
+
+- `func`: The shortcode function name
+- `args`: Character vector of arguments
+- `start`: Starting position in the source
+- `length`: Length of the shortcode
+
+**Example:**
+
+Raw text that would be parsed:
+```markdown
+{{< embed type=video src=example.mp4 >}}
+```
+
+Programmatic creation:
+```{r}
+shortcode_node = rmd_shortcode(
+  func = "embed",
+  args = c(
+    "type=video", 
+    "src=example.mp4"
+  )
+)
+shortcode_node
+```
+
+---
+
+## Structural Elements
+
+### Fenced Divs - `rmd_fenced_div_open` & `rmd_fenced_div_close`
+
+Fenced divs are represented as pairs of nodes in the linear AST sequence. The `rmd_fenced_div_open` node marks the beginning of a fenced div block, and the `rmd_fenced_div_close` node marks the end. Any content between these nodes is considered to be inside the fenced div.
+
+**rmd_fenced_div_open Properties:**
+
+- `attr`: Character vector of div attributes
+
+**rmd_fenced_div_close Properties:** None (just a marker)
+
+**Example:**
+
+Raw text that would be parsed:
+```markdown
+::: {.warning #important}
+This content is inside the fenced div.
+
+More content here.
+:::
+```
+
+This would create a sequence of nodes:
+1. `rmd_fenced_div_open` with attributes
+2. `rmd_markdown` with "This content is inside the fenced div."
+3. `rmd_markdown` with "More content here."
+4. `rmd_fenced_div_close`
+
+Programmatic creation:
+```{r}
+# Create the opening node
+fenced_div_open_node = rmd_fenced_div_open(
+  attr = c("class=warning", "id=important")
+)
+
+# Create the closing node
+fenced_div_close_node = rmd_fenced_div_close()
+
+# These would typically be combined with content nodes in an rmd_ast
+ast_with_div = rmd_ast(list(
+  fenced_div_open_node,
+  rmd_markdown(
+    lines = "This content is inside the fenced div."
+  ),
+  rmd_markdown(
+    lines = "More content here."
+  ),
+  fenced_div_close_node
+))
+```
+
+---
+
+

@@ -12,7 +12,6 @@ test_that("as_tibble - minimal.Rmd", {
     "Content",                NA,   "rmd_heading",                 NA,
     "Content",      "R Markdown",   "rmd_heading",                 NA,
     "Content",      "R Markdown",  "rmd_markdown",                 NA,
-    "Content",      "R Markdown",  "rmd_markdown",                 NA,
     "Content",      "R Markdown",     "rmd_chunk",             "cars",
     "Content",      "R Markdown",     "rmd_chunk",  "unnamed-chunk-1",
     "Content", "Including Plots",   "rmd_heading",                 NA,
@@ -49,14 +48,12 @@ test_that("as_tibble - hw01.Rmd", {
     "Exercise 2",         NA,  "rmd_markdown",              NA,
     "Exercise 2", "Solution",   "rmd_heading",              NA,
     "Exercise 2", "Solution",  "rmd_markdown",              NA,
-    "Exercise 2", "Solution",  "rmd_markdown",              NA,
     "Exercise 2", "Solution",     "rmd_chunk",     "plot-dino",
     "Exercise 2", "Solution",  "rmd_markdown",              NA,
     "Exercise 2", "Solution",     "rmd_chunk",      "cor-dino",
     "Exercise 3",         NA,   "rmd_heading",              NA,
     "Exercise 3",         NA,  "rmd_markdown",              NA,
     "Exercise 3", "Solution",   "rmd_heading",              NA,
-    "Exercise 3", "Solution",  "rmd_markdown",              NA,
     "Exercise 3", "Solution",  "rmd_markdown",              NA,
     "Exercise 3", "Solution",     "rmd_chunk",     "plot-star",
     "Exercise 3", "Solution",  "rmd_markdown",              NA,
@@ -141,7 +138,7 @@ test_that("as_tibble - reverse_sections.Rmd", {
 
   expect_snapshot_output(tbl)
 
-  yaml = rmd_yaml('title: "Reversed Sections"','output: html_document')
+  yaml = rmd_yaml(list(title = "Reversed Sections", output = "html_document"))
   tbl_expected = tibble::tribble(
     ~sec_h1, ~sec_h2,       ~sec_h3,           ~type,        ~label,
     NA,           NA,            NA,      "rmd_yaml", NA_character_,

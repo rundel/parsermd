@@ -23,9 +23,9 @@ test_that("code block parsing - Basic", {
 
   expect_equal( # Check proper disabiguation of code block vs. chunk
     parse_rmd("```{{r}}\n```\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_code_block(attr = "{{r}}")
-    )
+    ) )
   )
 
   expect_equal(

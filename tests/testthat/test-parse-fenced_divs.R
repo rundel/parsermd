@@ -121,25 +121,25 @@ test_that("Basic parser tests - close", {
 test_that("Nested inputs", {
   expect_equal(
     parse_rmd_cpp("::: test1\n::: test2\n:::\n:::\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_fenced_div_open(".test1"),
       rmd_fenced_div_open(".test2"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
-    )
+    ) )
   )
 
 
   expect_equal(
     parse_rmd_cpp("::: test1\n::: test2\n::: test3\n:::\n:::\n:::\n"),
-    rmd_ast(
+    rmd_ast( list(
       rmd_fenced_div_open(".test1"),
       rmd_fenced_div_open(".test2"),
       rmd_fenced_div_open(".test3"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
-    )
+    ) )
   )
 })
 
@@ -171,12 +171,11 @@ And another.
 "
   expect_equal(
     parse_rmd(ex1),
-    rmd_ast(
+    rmd_ast( list(
       rmd_fenced_div_open(c("#special",".sidebar")),
-      rmd_markdown("Here is a paragraph."),
-      rmd_markdown("And another."),
+      rmd_markdown(c("Here is a paragraph.", "", "And another.")),
       rmd_fenced_div_close()
-    )
+    ) )
   )
 
   ex2 = "::: Warning ::::::
@@ -190,14 +189,14 @@ This is a warning within a warning.
 
   expect_equal(
     parse_rmd(ex2),
-    rmd_ast(
+    rmd_ast( list(
       rmd_fenced_div_open(".Warning"),
       rmd_markdown("This is a warning."),
       rmd_fenced_div_open(".Danger"),
       rmd_markdown("This is a warning within a warning."),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
-    )
+    ) )
   )
 
 })

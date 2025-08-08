@@ -1,5 +1,9 @@
 # parsermd 0.2.0 (development version)
 
+* **Breaking Change**: Migrated from S3/S4 classes to S7 classes for all AST node types (`rmd_ast`, `rmd_chunk`, `rmd_heading`, etc.)
+
+* **Breaking Change**: Removed deprecated `rmd_subset()` and related helper functions (`rmd_get_node()`, `rmd_get_chunk()`, `rmd_get_markdown()`, `rmd_has_node()`, `rmd_has_chunk()`, `rmd_has_markdown()`). Use `rmd_select()` with tidyselect syntax instead.
+
 * Added support for yaml chunk options - e.g. (`#| echo: false`)
 
 * Added support for fenced divs - e.g. (`::: {.class} ... :::`)
@@ -22,6 +26,12 @@
   
   * New functions: `rmd_has_inline_code()`, `rmd_extract_inline_code()`, and `has_inline_code()` for selecting nodes
   * Support for engine-specific filtering using glob patterns
+
+* Enhanced `rmd_select()` functionality and node manipulation
+
+  * Added `has_heading()` helper function for selecting heading nodes using glob patterns
+  * Added `by_fdiv()` helper function for selecting fenced div sections using attribute patterns
+  * Added `keep_yaml` argument to `rmd_select()` (defaults to `TRUE`) to automatically include YAML nodes in selections
 
 # parsermd 0.1.3
 

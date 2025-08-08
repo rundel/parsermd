@@ -71,7 +71,7 @@
 # chunk parsing - raw attribute chunk
 
     Code
-      parse("```{=}\n```\n")
+      check_chunk_parser("```{=}\n```\n")
     Condition
       Error:
       ! Failed to parse line 1
@@ -81,7 +81,7 @@
 ---
 
     Code
-      parse("```{==}\n```\n")
+      check_chunk_parser("```{==}\n```\n")
     Condition
       Error:
       ! Failed to parse line 1
@@ -91,7 +91,7 @@
 ---
 
     Code
-      parse("```{=a=}\n```\n")
+      check_chunk_parser("```{=a=}\n```\n")
     Condition
       Error:
       ! Failed to parse line 1
@@ -101,7 +101,7 @@
 ---
 
     Code
-      parse("```{a=}\n```\n")
+      check_chunk_parser("```{a=}\n```\n")
     Condition
       Error:
       ! Failed to parse line 1
@@ -111,7 +111,7 @@
 # chunk parsing - more than 3 ticks
 
     Code
-      parse("````{r}\n```")
+      check_chunk_parser("````{r}\n```")
     Condition
       Error:
       ! Failed to parse line 1
@@ -121,7 +121,7 @@
 ---
 
     Code
-      parse("```{r}\n````")
+      check_chunk_parser("```{r}\n````")
     Condition
       Error:
       ! Failed to parse line 1
@@ -131,7 +131,7 @@
 ---
 
     Code
-      parse("````{r}\n`````")
+      check_chunk_parser("````{r}\n`````")
     Condition
       Error:
       ! Failed to parse line 1
@@ -141,7 +141,7 @@
 ---
 
     Code
-      parse("`````{r}\n````")
+      check_chunk_parser("`````{r}\n````")
     Condition
       Error:
       ! Failed to parse line 1

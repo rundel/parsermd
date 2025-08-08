@@ -22,7 +22,7 @@ rmd_has_inline_code = function(x, engine = NULL) {
 
 #' @export
 rmd_has_inline_code.rmd_ast = function(x, engine = NULL) {
-  purrr::map_lgl(x, rmd_has_inline_code, engine = engine)
+  purrr::map_lgl(x@nodes, rmd_has_inline_code, engine = engine)
 }
 
 #' @export
@@ -46,12 +46,12 @@ rmd_has_inline_code.default = function(x, engine = NULL) {
 #' @exportS3Method
 print.rmd_inline_code = function(x, ...) {
   # Build the inline code representation
-  engine_name = x$engine
-  if (x$braced) {
+  engine_name = x@engine
+  if (x@braced) {
     engine_name = paste0("{", engine_name, "}")
   }
   engine_name = cli::col_blue(cli::style_bold(engine_name))
-  code_text = cli::col_green(x$code)
+  code_text = cli::col_green(x@code)
   
   # Check if start/length attributes exist
   has_position = !is.null(attr(x, "start")) || !is.null(attr(x, "length"))
@@ -110,5 +110,31 @@ rmd_extract_inline_code.default = function(x, flatten = FALSE) {
       nm = purrr::map_chr(x, class) 
     }
     res |> stats::setNames(nm)
+  }
+}
+
+#' @export
+rmd_extract_inline_code.rmd_chunk = function(x, flatten = FALSE) {
+  props = S7::prop_names(x)
+
+  res = purrr::map(props, ~list()) 
+  
+  if (flatten) {
+    res |> purrr::flatten() 
+  } else {
+    stats::setNames(res, props)
+  }
+}
+
+#' @export
+rmd_extract_inline_code.S7_object = function(x, flatten = FALSE) {
+  props = S7::prop_names(x)
+
+  res = purrr::map(props, ~rmd_extract_inline_code(S7::prop(x, .x), flatten = flatten)) 
+  
+  if (flatten) {
+    res |> purrr::flatten() 
+  } else {
+    stats::setNames(res, props)
   }
 }
