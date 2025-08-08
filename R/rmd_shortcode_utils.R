@@ -107,16 +107,26 @@ rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
     return(rmd_extract_shortcodes.S7_object(x, flatten = flatten))
   }
   
-  res = purrr::map(x, rmd_extract_shortcodes, flatten = flatten)
-  
-  if (flatten) {
-    res |> purrr::flatten()
-  } else {
-    nm = names(x)
-    if (is.null(nm) && (!inherits(x, "list") || inherits(x, "rmd_ast"))) {
-      nm = purrr::map_chr(x, class) 
+  # For non-S7 objects that can be mapped over (like lists, vectors)
+  if (is.list(x) || is.vector(x)) {
+    res = purrr::map(x, rmd_extract_shortcodes, flatten = flatten)
+    
+    if (flatten) {
+      res |> purrr::flatten()
+    } else {
+      nm = names(x)
+      if (is.null(nm) && is.list(x)) {
+        nm = purrr::map_chr(x, class) 
+      }
+      res |> stats::setNames(nm)
     }
-    res |> stats::setNames(nm)
+  } else {
+    # For other types, return empty list
+    if (flatten) {
+      list()
+    } else {
+      list(list())
+    }
   }
 }
 
@@ -124,18 +134,18 @@ rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
 rmd_extract_shortcodes.S7_object = function(x, flatten = FALSE) {
   props = S7::prop_names(x)
   
-  # Only extract shortcodes from text-like properties to avoid infinite recursion
-  # Common text properties in rmd nodes: lines, yaml, code, name, text, attr
-  text_props = c("lines", "yaml", "code", "name", "text", "attr", "args")
-  props_to_check = intersect(props, text_props)
+  # Only process properties that are likely to contain shortcodes
+  # This avoids recursion through complex nested structures
+  content_props = c("yaml", "lines", "code", "name", "text", "attr", "args")
+  props_to_check = intersect(props, content_props)
 
   res = purrr::map(props_to_check, ~{
     prop_value = S7::prop(x, .x)
-    # Only process character vectors directly to avoid recursion
-    if (is.character(prop_value)) {
+    # Process the property value, but only if it's character or simple list
+    if (is.character(prop_value) || (is.list(prop_value) && .x == "yaml")) {
       rmd_extract_shortcodes(prop_value, flatten = flatten)
     } else {
-      list()
+      if (flatten) list() else list(list())
     }
   }) 
   

@@ -250,12 +250,14 @@ x = 1
 })
 
 test_that("Combined chunks with conflicts preserve both option formats for non-conflicting keys", {
-  result = parse_rmd("```{r eval = TRUE, message = FALSE}
+  expect_warning({
+    result = parse_rmd("```{r eval = TRUE, message = FALSE}
 #| echo: false
 #| warning: true
 #| eval: false
 x = 1
 ```")
+  }, "YAML options override traditional options for: eval")
   
   # Create a chunk with the same final options but in the expected order
   # Since YAML wins conflicts and traditional options come first in processing,
