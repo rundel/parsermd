@@ -117,3 +117,157 @@ test_that("normalization preserves complex option names", {
   expect_equal(dash_result, expected_dash)
   expect_equal(dot_result, expected_dot)
 })
+
+test_that("rmd_set_options works with rmd_ast objects", {
+  # Create a minimal AST with multiple chunks
+  chunk1 = rmd_chunk("r", "chunk1", code = "x = 1")
+  chunk2 = rmd_chunk("python", "chunk2", code = "y = 2")  
+  markdown1 = rmd_markdown(lines = "Some text")
+  
+  ast = rmd_ast(nodes = list(chunk1, markdown1, chunk2))
+  
+  # Set options on all chunks
+  result = rmd_set_options(ast, include = FALSE, echo = TRUE)
+  
+  # Check that only chunks were modified
+  expect_equal(result@nodes[[1]]@options$include, FALSE)
+  expect_equal(result@nodes[[1]]@options$echo, TRUE)
+  expect_equal(result@nodes[[3]]@options$include, FALSE) 
+  expect_equal(result@nodes[[3]]@options$echo, TRUE)
+  
+  # Markdown node should be unchanged
+  expect_equal(result@nodes[[2]], markdown1)
+})
+
+test_that("rmd_get_options works with rmd_ast objects", {
+  # Create chunks with different options
+  chunk1 = rmd_chunk("r", "chunk1", options = list(include = TRUE, echo = FALSE), code = "x = 1")
+  chunk2 = rmd_chunk("python", "chunk2", options = list(include = FALSE, eval = TRUE), code = "y = 2")
+  markdown1 = rmd_markdown(lines = "Some text")
+  
+  ast = rmd_ast(nodes = list(chunk1, markdown1, chunk2))
+  
+  # Get all options
+  result = rmd_get_options(ast)
+  
+  expect_equal(length(result), 3)
+  expect_equal(result[[1]], list(include = TRUE, echo = FALSE))
+  expect_null(result[[2]]) # markdown node returns NULL
+  expect_equal(result[[3]], list(include = FALSE, eval = TRUE))
+  
+  # Get specific options
+  specific_result = rmd_get_options(ast, "include", "echo")
+  expect_equal(specific_result[[1]], list(include = TRUE, echo = FALSE))
+  expect_null(specific_result[[2]])
+  expect_equal(specific_result[[3]], list(include = FALSE, echo = NULL)) # echo not set, should be NULL
+})
+
+test_that("rmd_set_options works with rmd_tibble objects", {
+  rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
+  tbl = as_tibble(rmd)
+  
+  # Set options on tibble
+  result = rmd_set_options(tbl, include = TRUE, echo = FALSE)
+  
+  # Check that the result is still a tibble and options were set
+  expect_s3_class(result, "rmd_tibble")
+  
+  # Convert back to verify changes
+  result_ast = as_ast(result)
+  chunk_rows = result$type == "rmd_chunk"
+  
+  # All chunk nodes should have the new options
+  if (any(chunk_rows)) {
+    chunk_nodes = result_ast@nodes[sapply(result_ast@nodes, function(x) inherits(x, "rmd_chunk"))]
+    for (chunk in chunk_nodes) {
+      expect_equal(chunk@options$include, TRUE)
+      expect_equal(chunk@options$echo, FALSE)  
+    }
+  }
+})
+
+test_that("rmd_get_options works with rmd_tibble objects", {
+  rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
+  tbl = as_tibble(rmd)
+  
+  # Get options from tibble
+  result = rmd_get_options(tbl)
+  
+  # Should return same as getting from AST
+  ast_result = rmd_get_options(rmd)
+  expect_equal(result, ast_result)
+})
+
+test_that("rmd_set_options handles unnamed options error", {
+  chunk = rmd_chunk("r", "test", code = "x = 1")
+  
+  expect_snapshot_error(rmd_set_options(chunk, TRUE, FALSE))
+  expect_snapshot_error(rmd_set_options(chunk, include = TRUE, FALSE))
+})
+
+test_that("rmd_set_options preserves existing options while adding new ones", {
+  chunk = rmd_chunk("r", "test", options = list(include = TRUE, echo = FALSE), code = "x = 1")
+  
+  # Add new options without overwriting existing
+  result = rmd_set_options(chunk, eval = FALSE, warning = TRUE)
+  
+  expected_options = list(include = TRUE, echo = FALSE, eval = FALSE, warning = TRUE)
+  expect_equal(result@options, expected_options)
+  
+  # Overwrite existing option
+  result2 = rmd_set_options(result, include = FALSE)
+  expected_options2 = list(include = FALSE, echo = FALSE, eval = FALSE, warning = TRUE)
+  expect_equal(result2@options, expected_options2)
+})
+
+test_that("rmd_get_options returns NULL for non-chunk nodes", {
+  markdown = rmd_markdown(lines = "Some text")
+  yaml = rmd_yaml(yaml = list("title: Test"))
+  heading = rmd_heading(name = "Title", level = 1L)
+  
+  expect_null(rmd_get_options(markdown))
+  expect_null(rmd_get_options(yaml))
+  expect_null(rmd_get_options(heading))
+})
+
+test_that("rmd_set_options returns unchanged for non-chunk nodes", {
+  markdown = rmd_markdown(lines = "Some text")
+  yaml = rmd_yaml(yaml = list("title: Test"))
+  heading = rmd_heading(name = "Title", level = 1L)
+  
+  expect_equal(rmd_set_options(markdown, include = FALSE), markdown)
+  expect_equal(rmd_set_options(yaml, echo = TRUE), yaml)
+  expect_equal(rmd_set_options(heading, eval = FALSE), heading)
+})
+
+test_that("rmd_get_options with defaults works correctly", {
+  chunk = rmd_chunk("r", "test", options = list(include = TRUE), code = "x = 1")
+  
+  defaults = list(echo = FALSE, eval = TRUE, warning = FALSE)
+  
+  # Get existing option - should not use default
+  result1 = rmd_get_options(chunk, "include", defaults = defaults)
+  expect_equal(result1, list(include = TRUE))
+  
+  # Get non-existing option - should use default
+  result2 = rmd_get_options(chunk, "echo", defaults = defaults) 
+  expect_equal(result2, list(echo = FALSE))
+  
+  # Get mix of existing and non-existing
+  result3 = rmd_get_options(chunk, "include", "echo", "eval", defaults = defaults)
+  expect_equal(result3, list(include = TRUE, echo = FALSE, eval = TRUE))
+})
+
+test_that("option normalization works bidirectionally", {
+  chunk = rmd_chunk("r", "test", code = "x = 1")
+  
+  # Set with dashes, get with dots
+  chunk_dash = rmd_set_options(chunk, `fig-width` = 8, `fig-height` = 6)
+  dot_result = rmd_get_options(chunk_dash, "fig.width", "fig.height")
+  expect_equal(dot_result, list(fig.width = 8, fig.height = 6))
+  
+  # Set with dots, get with dashes
+  chunk_dot = rmd_set_options(chunk, fig.width = 10, fig.height = 8)
+  dash_result = rmd_get_options(chunk_dot, "fig-width", "fig-height")
+  expect_equal(dash_result, list(`fig-width` = 10, `fig-height` = 8))
+})

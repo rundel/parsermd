@@ -67,17 +67,15 @@ rmd_set_options.rmd_chunk = function(x, ...) {
 
 #' @exportS3Method
 rmd_set_options.rmd_ast = function(x, ...) {
-  ast = purrr::map(x, rmd_set_options, ...)
-
-  class(ast) = c("rmd_ast", "list")
-  ast
+  x@nodes = purrr::map(x@nodes, rmd_set_options, ...)
+  x
 }
 
 #' @exportS3Method
 rmd_set_options.rmd_tibble = function(x, ...) {
-  x$ast = rmd_set_options.rmd_ast(x$ast, ...)
-
-  x
+  # Convert to AST, modify it, then convert back to tibble
+  modified_ast = rmd_set_options(as_ast(x), ...)
+  as_tibble(modified_ast)
 }
 
 
