@@ -15,6 +15,10 @@ navbar:
     menu:
     - text: Rmd Templates
       href: articles/templates.html
+    - text: Homework Processing
+      href: articles/homework-processing.html
+    - text: Know Your Nodes
+      href: articles/know-your-nodes.html
   - text: "News"
     href: news/index.html
 
