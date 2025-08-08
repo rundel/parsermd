@@ -1,13 +1,10 @@
 ---
 title: "Rmd Templates"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Rmd Templates}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+format: html
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -95,4 +92,3 @@ rmd_sols |>
   rmd_template(keep_content = TRUE) |>
   rmd_check_template(file, template = _)
 ```
-

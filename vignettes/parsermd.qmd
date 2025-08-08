@@ -1,13 +1,10 @@
 ---
 title: "Getting Started"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Getting Started}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+format: html
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -45,37 +42,43 @@ library(parsermd)
 
 This is a basic example which shows you the basic abstract syntax tree (AST) that results from parsing a simple Rmd file,
 
-```{r example}
+```{r}
+#| label: example
 rmd = parsermd::parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 ```
 
 The R Markdown document is parsed and stored in a flat, ordered list object containing tagged elements. By default the package will present a hierarchical view of the document where chunks and markdown text are nested within headings, which is shown by the default print method for `rmd_ast` objects.
 
-```{r tree}
+```{r}
+#| label: tree
 print(rmd)
 ```
 
 If you would prefer to see the underlying flat structure, this can be printed by setting `flat = TRUE` with `print`.
 
-```{r no_headings}
+```{r}
+#| label: no_headings
 print(rmd, flat = TRUE)
 ```
 
 Additionally, to ease the manipulation of the AST the package supports the transformation of the object into a tidy tibble with `as_tibble` or `as.data.frame` (both return a tibble).
 
-```{r tibble}
+```{r}
+#| label: tibble
 as_tibble(rmd)
 ```
 
 and it is possible to convert from these data frames back into an `rmd_ast`.
 
-```{r as_ast}
+```{r}
+#| label: as_ast
 as_ast( as_tibble(rmd) )
 ```
 
 Finally, we can also convert the `rmd_ast` back into an R Markdown document via `as_document`
 
-```{r as_doc}
+```{r}
+#| label: as_doc
 cat(
   as_document(rmd),
   sep = "\n"
@@ -133,4 +136,3 @@ Similarly, if we wanted to just extract the chunks that involve plotting we can 
 ```{r}
 rmd_select(rmd, has_label("plot*"))
 ```
-
