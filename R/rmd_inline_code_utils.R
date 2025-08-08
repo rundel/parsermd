@@ -135,6 +135,6 @@ rmd_extract_inline_code.S7_object = function(x, flatten = FALSE) {
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    stats::setnames(res, props)
+    stats::setNames(res, props)
   }
 }
