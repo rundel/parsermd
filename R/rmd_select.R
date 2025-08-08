@@ -45,7 +45,7 @@ rmd_select_impl = function(x, ..., keep_yaml = TRUE) {
   checkmate::assert_class(x, "rmd_ast")
   checkmate::assert_logical(keep_yaml, len = 1, any.missing = FALSE)
 
-  nodes = setNames(x@nodes, rmd_node_label(x))
+  nodes = stats::setNames(x@nodes, rmd_node_label(x))
   
   # Check if we have any selection expressions
   dots = rlang::enquos(...)

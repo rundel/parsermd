@@ -62,7 +62,7 @@ selection_locs = function(x, selection_quos) {
     seq_along(x@nodes)
   } else {
     # Use tidyselect for node selection
-    nodes = setNames(x@nodes, rmd_node_label(x))
+    nodes = stats::setNames(x@nodes, rmd_node_label(x))
     loc = tidyselect::eval_select(rlang::expr(c(!!!selection_quos)), nodes)
     sort(loc) # maintain original order
   }

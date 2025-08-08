@@ -176,7 +176,7 @@ test_that("rmd_node_options extracts chunk options correctly", {
   
   expected_options = list(
     list(eval = TRUE, echo = FALSE),
-    list() |> setNames(character()),
+    list() |> stats::setNames(character()),
     list(fig.width = 8)
   )
   

@@ -124,6 +124,6 @@ rmd_extract_shortcodes.S7_object = function(x, flatten = FALSE) {
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    setNames(res, props)
+    stats::setNames(res, props)
   }
 }
