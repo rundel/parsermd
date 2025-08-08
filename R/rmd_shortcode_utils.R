@@ -102,6 +102,11 @@ rmd_extract_shortcodes.character = function(x, flatten = FALSE) {
 
 #' @export
 rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
+  # Check if this is an S7 object that should use the S7_object method
+  if (S7::S7_inherits(x, S7::S7_object)) {
+    return(rmd_extract_shortcodes.S7_object(x, flatten = flatten))
+  }
+  
   res = purrr::map(x, rmd_extract_shortcodes, flatten = flatten)
   
   if (flatten) {
@@ -118,12 +123,25 @@ rmd_extract_shortcodes.default = function(x, flatten = FALSE) {
 #' @export
 rmd_extract_shortcodes.S7_object = function(x, flatten = FALSE) {
   props = S7::prop_names(x)
+  
+  # Only extract shortcodes from text-like properties to avoid infinite recursion
+  # Common text properties in rmd nodes: lines, yaml, code, name, text, attr
+  text_props = c("lines", "yaml", "code", "name", "text", "attr", "args")
+  props_to_check = intersect(props, text_props)
 
-  res = purrr::map(props, ~rmd_extract_shortcodes(S7::prop(x, .x), flatten = flatten)) 
+  res = purrr::map(props_to_check, ~{
+    prop_value = S7::prop(x, .x)
+    # Only process character vectors directly to avoid recursion
+    if (is.character(prop_value)) {
+      rmd_extract_shortcodes(prop_value, flatten = flatten)
+    } else {
+      list()
+    }
+  }) 
   
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    stats::setNames(res, props)
+    stats::setNames(res, props_to_check)
   }
 }
