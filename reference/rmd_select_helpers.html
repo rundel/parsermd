@@ -4,14 +4,20 @@ select nodes from an Rmd ast.
 by_section() - uses section selectors to select nodes.
 has_type() - selects all nodes that have the given type(s).
 has_label() - selects nodes with labels matching the given glob.
+has_heading() - selects heading nodes with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
+has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
+by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
 
 "><meta property="og:description" content="These functions are used in conjunction with rmd_select() to
 select nodes from an Rmd ast.
 by_section() - uses section selectors to select nodes.
 has_type() - selects all nodes that have the given type(s).
 has_label() - selects nodes with labels matching the given glob.
+has_heading() - selects heading nodes with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
+has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
+by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
 
 "></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -58,7 +64,10 @@ has_option() - selects nodes that have the given option(s) set.
 select nodes from an Rmd ast.</p><ul><li><p><code>by_section()</code> - uses section selectors to select nodes.</p></li>
 <li><p><code>has_type()</code> - selects all nodes that have the given type(s).</p></li>
 <li><p><code>has_label()</code> - selects nodes with labels matching the given glob.</p></li>
+<li><p><code>has_heading()</code> - selects heading nodes with titles matching the given glob pattern(s).</p></li>
 <li><p><code>has_option()</code> - selects nodes that have the given option(s) set.</p></li>
+<li><p><code>has_shortcode()</code> - selects nodes containing shortcodes matching the given function name(s).</p></li>
+<li><p><code>by_fdiv()</code> - selects fenced div sections where all provided patterns match the div attributes.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -69,9 +78,17 @@ select nodes from an Rmd ast.</p><ul><li><p><code>by_section()</code> - uses sec
 <span></span>
 <span><span class="fu">has_label</span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">has_heading</span><span class="op">(</span><span class="va">heading</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">has_code</span><span class="op">(</span><span class="va">code</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">has_option</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">has_option</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">has_shortcode</span><span class="op">(</span>func_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">has_inline_code</span><span class="op">(</span>engine <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">by_fdiv</span><span class="op">(</span><span class="va">...</span>, regexp <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -96,14 +113,32 @@ Default: <code>TRUE</code></p></dd>
 <dd><p>character vector, glob patterns for matching chunk labels.</p></dd>
 
 
+<dt id="arg-heading">heading<a class="anchor" aria-label="anchor" href="#arg-heading"></a></dt>
+<dd><p>character vector, glob patterns for matching heading titles.</p></dd>
+
+
 <dt id="arg-code">code<a class="anchor" aria-label="anchor" href="#arg-code"></a></dt>
 <dd><p>character vector, regex patterns for matching chunk code line(s)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Either option names represented by a scalar string or a named argument with the form
-<code>opt = value</code> where <code>opt</code> is the option name and <code>value</code> is the value to be checked. For example
-<code>eval = TRUE</code> would check for the option <code>eval</code> being set to <code>TRUE</code>.</p></dd>
+<dd><p>Character vector patterns to match against fenced div attributes.
+All provided patterns must match at least one attribute in the div's attr property.</p></dd>
+
+
+<dt id="arg-func-name">func_name<a class="anchor" aria-label="anchor" href="#arg-func-name"></a></dt>
+<dd><p>character vector, optional glob patterns for matching shortcode function names.
+If NULL (default), matches any shortcode.</p></dd>
+
+
+<dt id="arg-engine">engine<a class="anchor" aria-label="anchor" href="#arg-engine"></a></dt>
+<dd><p>character vector, optional glob patterns for matching inline code engine names.
+If NULL (default), matches any inline code.</p></dd>
+
+
+<dt id="arg-regexp">regexp<a class="anchor" aria-label="anchor" href="#arg-regexp"></a></dt>
+<dd><p>Logical, use regular expressions for pattern matching instead of glob patterns.
+Default: FALSE (uses glob patterns).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -140,21 +175,41 @@ for more details on the syntax for these patterns.</p>
 <span class="r-in"><span><span class="va">rmd</span> <span class="op">=</span> <span class="fu"><a href="parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/hw01.Rmd"</span>, package<span class="op">=</span><span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_type</span><span class="op">(</span><span class="st">"rmd_chunk"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_label</span><span class="op">(</span><span class="st">"*dino"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Chunk <span style="color: #555555;">[r, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_heading</span><span class="op">(</span><span class="st">"Exercise *"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_option</span><span class="op">(</span><span class="st">"message"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_option</span><span class="op">(</span>message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_option</span><span class="op">(</span>message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_shortcode</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_shortcode</span><span class="op">(</span><span class="st">"video"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">by_fdiv</span><span class="op">(</span><span class="st">"note"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">by_fdiv</span><span class="op">(</span><span class="st">".warning"</span>, <span class="st">"important"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

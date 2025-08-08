@@ -10,7 +10,9 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Rmd Templates">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="templates_files/libs/quarto-html/popper.min.js"></script><script src="templates_files/libs/quarto-html/tippy.umd.min.js"></script><link href="templates_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="templates_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Rmd Templates">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -50,190 +52,162 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Rmd Templates</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/rundel/parsermd/blob/main/vignettes/templates.Rmd" class="external-link"><code>vignettes/templates.Rmd</code></a></small>
-      <div class="d-none name"><code>templates.Rmd</code></div>
+
+
+
+
+      <small class="dont-index">Source: <a href="https://github.com/rundel/parsermd/blob/main/vignettes/templates.qmd" class="external-link"><code>vignettes/templates.qmd</code></a></small>
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<p>In the getting started vignette we introduced a variety of predicate
-functions for interrogating the contents of a parsed R Markdown
-document. The family of <code>rmd_has_*</code> functions give a
-convenient way of checking explicitly for elements of an Rmd, however
-often we want to check for multiple elements at the same time and
-provide consistent output for any detected discrepancies.</p>
-<p>To support this type of workflow, <code>parsermd</code> implements
-the concept of an Rmd template. These are tibble based representations
-of Rmd elements which can be easily be compared with a parsed
-document.</p>
-<div class="section level2">
-<h2 id="example---hw01">Example - <code>hw01</code><a class="anchor" aria-label="anchor" href="#example---hw01"></a>
+
+
+
+
+
+    <p>In the getting started vignette we introduced a variety of predicate functions for interrogating the contents of a parsed R Markdown document. The family of <code>rmd_has_*</code> functions give a convenient way of checking explicitly for elements of an Rmd, however often we want to check for multiple elements at the same time and provide consistent output for any detected discrepancies.</p>
+<p>To support this type of workflow, <code>parsermd</code> implements the concept of an Rmd template. These are tibble based representations of Rmd elements which can be easily be compared with a parsed document.</p>
+<section class="level2"><h2 id="example---hw01">Example - <code>hw01</code>
+<a class="anchor" aria-label="anchor" href="#example---hw01"></a>
 </h2>
-<p>Imagine that a homework assignment has been distributed to students
-in the form of an Rmd document named <code>hw01.Rmd</code>. This
-document describes all of the necessary tasks for the student to
-complete and also includes scaffolding in the form of Rmd chunks and
-markdown that indicates where the students are expected to include their
-solutions.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p>Imagine that a homework assignment has been distributed to students in the form of an Rmd document named <code>hw01.Rmd</code>. This document describes all of the necessary tasks for the student to complete and also includes scaffolding in the form of Rmd chunks and markdown that indicates where the students are expected to include their solutions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd</span> <span class="op">=</span> <span class="fu"><a href="../reference/parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/hw01.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ├── YAML <span style="color: #555555;">[2 fields]</span></span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Load packages</span></span></span>
-<span><span class="co">#&gt; │   └── Chunk <span style="color: #555555;">[r, 1 option, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span></span>
-<span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       └── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
-<span><span class="co">#&gt; │   ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
-<span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
-<span><span class="co">#&gt;     ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
-<span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
-<p>We can see examples of this templating by extracting the contents of
-the markdown in the Exercise 1 &gt; Solution section.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; ├── YAML [2 fields]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Load packages</span></span>
+<span><span class="co">#&gt; │   └── Chunk [r, 2 lines] - load-packages</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
+<span><span class="co">#&gt; │   ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       └── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
+<span><span class="co">#&gt; │   ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [3 lines]</span></span>
+<span><span class="co">#&gt; │       ├── Chunk [r, 5 lines] - plot-dino</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; │       └── Chunk [r, 2 lines] - cor-dino</span></span>
+<span><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
+<span><span class="co">#&gt;     ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt;         ├── Markdown [3 lines]</span></span>
+<span><span class="co">#&gt;         ├── Chunk [r, 1 line] - plot-star</span></span>
+<span><span class="co">#&gt;         ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt;         └── Chunk [r, 1 line] - cor-star</span></span></code></pre></div>
+</div>
+<p>We can see examples of this templating by extracting the contents of the markdown in the Exercise 1 &gt; Solution section.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span></span>
 <span>  <span class="va">rmd</span>, </span>
 <span>  <span class="fu"><a href="../reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exercise 1"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> </span>
 <span>  <span class="fu"><a href="../reference/rmd_select_helpers.html">has_type</a></span><span class="op">(</span><span class="st">"rmd_markdown"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/as_document.html">as_document</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "(Type your answer to Exercise 1 here. This exercise does not require any R code.)"</span></span>
-<span><span class="co">#&gt; [2] ""                                                                                 </span></span>
-<span><span class="co">#&gt; [3] ""</span></span></code></pre></div>
-<p>When a student completes this assignment we want to be able to check
-that they have included solutions in the appropriate sections. At a
-minimum this means that we need to check that these sections still
-exist, and secondarily we might also want to check that the provided
-content in the solution differs from the provided scaffolding.</p>
-<div class="section level3">
-<h3 id="constructing-a-template">Constructing a template<a class="anchor" aria-label="anchor" href="#constructing-a-template"></a>
-</h3>
-<p>We will begin by subsetting the original parsed document to select
-only the elements that will contain the student’s answers - this assumes
-the other sections and elements are extraneous and contain things like
-background, instructions, and question text. Below we use
-<code>rmd_select</code> to select all of the elements of the original
-document contained withing a section matching “Exercise *” and
-“Solution” which should cover the answers for all three exercises.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd_sols</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="../reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       └── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
-<span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
-<span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
-<span><span class="co">#&gt;         ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
-<p>One we have this more limited set of elements we use the
-<code>rmd_template</code> function to generate our template. Here we
-have included <code>keep_content  = TRUE</code> in order to keep the
-scaffolded content for each answer which will then be compared to the
-student’s answers.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_template.html">rmd_template</a></span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 5</span></span></span>
-<span><span class="co">#&gt;   sec_h3     sec_h4   type         label     content                            </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Exercise 1 Solution rmd_markdown <span style="color: #BB0000;">NA</span>        <span style="color: #949494;">"</span>list(\"(Type your answer to Exerc…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Exercise 2 Solution rmd_markdown <span style="color: #BB0000;">NA</span>        <span style="color: #949494;">"</span>list(\"(The answers for this Exer…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Exercise 2 Solution rmd_chunk    plot-dino <span style="color: #949494;">"</span>dino_data &lt;- datasaurus_dozen %&gt;%…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Exercise 2 Solution rmd_markdown <span style="color: #BB0000;">NA</span>        <span style="color: #949494;">"</span>list(\"And next calculate the cor…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Exercise 2 Solution rmd_chunk    cor-dino  <span style="color: #949494;">"</span>dino_data %&gt;%\n  summarize(r = co…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Exercise 3 Solution rmd_markdown <span style="color: #BB0000;">NA</span>        <span style="color: #949494;">"</span>list(\"(Add code and narrative as…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> Exercise 3 Solution rmd_chunk    plot-star <span style="color: #949494;">""</span>                                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> Exercise 3 Solution rmd_markdown <span style="color: #BB0000;">NA</span>        <span style="color: #949494;">"</span>list(\"I'm some text, you should …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> Exercise 3 Solution rmd_chunk    cor-star  <span style="color: #949494;">""</span></span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "---"                                                                              </span></span>
+<span><span class="co">#&gt; [2] "title: Homework 01 - Hello R"                                                     </span></span>
+<span><span class="co">#&gt; [3] "output: html_document"                                                            </span></span>
+<span><span class="co">#&gt; [4] "---"                                                                              </span></span>
+<span><span class="co">#&gt; [5] ""                                                                                 </span></span>
+<span><span class="co">#&gt; [6] "(Type your answer to Exercise 1 here. This exercise does not require any R code.)"</span></span>
+<span><span class="co">#&gt; [7] ""                                                                                 </span></span>
+<span><span class="co">#&gt; [8] ""</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="using-a-template">Using a template<a class="anchor" aria-label="anchor" href="#using-a-template"></a>
+<p>When a student completes this assignment we want to be able to check that they have included solutions in the appropriate sections. At a minimum this means that we need to check that these sections still exist, and secondarily we might also want to check that the provided content in the solution differs from the provided scaffolding.</p>
+<section class="level3"><h3 id="constructing-a-template">Constructing a template<a class="anchor" aria-label="anchor" href="#constructing-a-template"></a>
 </h3>
-<p>One the template is constructed we can then compare it with a new Rmd
-document via the <code>rmd_check_template</code> function. Note that we
-can pass in an <code>rmd_ast</code> or <code>rmd_tibble</code> object
-directly, or the path to an Rmd which will then be parsed and
-compared.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>We will begin by subsetting the original parsed document to select only the elements that will contain the student’s answers - this assumes the other sections and elements are extraneous and contain things like background, instructions, and question text. Below we use <code>rmd_select</code> to select all of the elements of the original document contained withing a section matching “Exercise *” and “Solution” which should cover the answers for all three exercises.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd_sols</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="../reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exercise *"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ├── YAML [2 fields]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       └── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [3 lines]</span></span>
+<span><span class="co">#&gt; │       ├── Chunk [r, 5 lines] - plot-dino</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; │       └── Chunk [r, 2 lines] - cor-dino</span></span>
+<span><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
+<span><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt;         ├── Markdown [3 lines]</span></span>
+<span><span class="co">#&gt;         ├── Chunk [r, 1 line] - plot-star</span></span>
+<span><span class="co">#&gt;         ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt;         └── Chunk [r, 1 line] - cor-star</span></span></code></pre></div>
+</div>
+<p>One we have this more limited set of elements we use the <code>rmd_template</code> function to generate our template. Here we have included <code>keep_content  = TRUE</code> in order to keep the scaffolded content for each answer which will then be compared to the student’s answers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_template.html">rmd_template</a></span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 9 × 5</span></span>
+<span><span class="co">#&gt;   sec_h3     sec_h4   type         label     content                            </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;                              </span></span>
+<span><span class="co">#&gt; 1 Exercise 1 Solution rmd_markdown &lt;NA&gt;      "(Type your answer to Exercise 1 h…</span></span>
+<span><span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "(The answers for this Exercise ar…</span></span>
+<span><span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino "dino_data &lt;- datasaurus_dozen %&gt;%…</span></span>
+<span><span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "And next calculate the correlatio…</span></span>
+<span><span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  "dino_data %&gt;%\n  summarize(r = co…</span></span>
+<span><span class="co">#&gt; 6 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "(Add code and narrative as needed…</span></span>
+<span><span class="co">#&gt; 7 Exercise 3 Solution rmd_chunk    plot-star ""                                 </span></span>
+<span><span class="co">#&gt; 8 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "I'm some text, you should replace…</span></span>
+<span><span class="co">#&gt; 9 Exercise 3 Solution rmd_chunk    cor-star  ""</span></span></code></pre></div>
+</div>
+</section><section class="level3"><h3 id="using-a-template">Using a template<a class="anchor" aria-label="anchor" href="#using-a-template"></a>
+</h3>
+<p>One the template is constructed we can then compare it with a new Rmd document via the <code>rmd_check_template</code> function. Note that we can pass in an <code>rmd_ast</code> or <code>rmd_tibble</code> object directly, or the path to an Rmd which will then be parsed and compared.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/hw01-student.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/rmd_check_template.html">rmd_check_template</a></span><span class="op">(</span><span class="va">file</span>, <span class="va">rmd_tmpl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> The following required elements were missing in the document:</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 3"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> is missing required <span style="color: #0000BB;">"markdown text"</span>.</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 3"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> is missing required <span style="color: #0000BB;">"markdown text"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> The following document elements were unmodified from the template:</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has a <span style="color: #0000BB;">"code chunk"</span> named <span style="color: #0000BB;">"plot-dino"</span></span></span>
+<span><span class="co">#&gt; ✖ The following required elements were missing in the document:</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 3" &gt; "Solution" is missing required "markdown text".</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 3" &gt; "Solution" is missing required "markdown text".</span></span>
+<span><span class="co">#&gt; ✖ The following document elements were unmodified from the template:</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has a "code chunk" named "plot-dino"</span></span>
 <span><span class="co">#&gt;     which has not been modified.</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has <span style="color: #0000BB;">"markdown text"</span> which has not been</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has "markdown text" which has not been</span></span>
 <span><span class="co">#&gt;     modified.</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has a <span style="color: #0000BB;">"code chunk"</span> named <span style="color: #0000BB;">"cor-dino"</span></span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has a "code chunk" named "cor-dino"</span></span>
 <span><span class="co">#&gt;     which has not been modified.</span></span></code></pre></div>
-<p>From the output we can see that there are several issues with the
-document submitted by the student, they are missing the two expected
-markdown text entries for Exercise 3 and it appears that they have not
-entered any thing new for the chunks or markdown in Exercise 2.</p>
 </div>
-<div class="section level3">
-<h3 id="revising-a-template">Revising a template<a class="anchor" aria-label="anchor" href="#revising-a-template"></a>
+<p>From the output we can see that there are several issues with the document submitted by the student, they are missing the two expected markdown text entries for Exercise 3 and it appears that they have not entered any thing new for the chunks or markdown in Exercise 2.</p>
+</section><section class="level3"><h3 id="revising-a-template">Revising a template<a class="anchor" aria-label="anchor" href="#revising-a-template"></a>
 </h3>
-<p>Let assume that our original template was a bit too strict, and we
-would like to revise the feedback it is giving to students.</p>
-<p>If we were to decide that for Exercise 3 the markdown text was not
-actually necessary, we can remove this requirement by filtering those
-elements from <code>rmd_sols</code> or from <code>rmd_tmpl</code>.
-(Generally, the former is the suggested workflow and will always work,
-while the later approach is likely to be somewhat fragile to any changes
-made to the template format in future releases.) Here we use
-<code>rmd_select</code> with the <code>!</code> operator to remove these
-specific markdown elements.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Let assume that our original template was a bit too strict, and we would like to revise the feedback it is giving to students.</p>
+<p>If we were to decide that for Exercise 3 the markdown text was not actually necessary, we can remove this requirement by filtering those elements from <code>rmd_sols</code> or from <code>rmd_tmpl</code>. (Generally, the former is the suggested workflow and will always work, while the later approach is likely to be somewhat fragile to any changes made to the template format in future releases.) Here we use <code>rmd_select</code> with the <code>!</code> operator to remove these specific markdown elements.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rmd_sols</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span> </span>
 <span>    <span class="op">!</span><span class="op">(</span><span class="fu"><a href="../reference/rmd_select_helpers.html">by_section</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exercise 3"</span>, <span class="st">"Solution"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> </span>
 <span>    <span class="fu"><a href="../reference/rmd_select_helpers.html">has_type</a></span><span class="op">(</span><span class="st">"rmd_markdown"</span><span class="op">)</span><span class="op">)</span> </span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       └── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 2</span></span></span>
-<span><span class="co">#&gt; │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[4 lines]</span></span></span>
-<span><span class="co">#&gt; │       ├── Chunk <span style="color: #555555;">[r, 2 options, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span></span>
-<span><span class="co">#&gt; │       ├── Markdown <span style="color: #555555;">[2 lines]</span></span></span>
-<span><span class="co">#&gt; │       └── Chunk <span style="color: #555555;">[r, 0 options, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span></span>
-<span><span class="co">#&gt; └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span></span>
-<span><span class="co">#&gt;     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span></span>
-<span><span class="co">#&gt;         ├── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span></span>
-<span><span class="co">#&gt;         └── Chunk <span style="color: #555555;">[r, 0 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span></span></code></pre></div>
-<p>This new AST can then be passed to <code>rmd_template</code> and
-<code>rmd_check_template</code> to provide the revised feedback,</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; ├── YAML [2 fields]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 1</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       └── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; ├── Heading [h3] - Exercise 2</span></span>
+<span><span class="co">#&gt; │   └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [3 lines]</span></span>
+<span><span class="co">#&gt; │       ├── Chunk [r, 5 lines] - plot-dino</span></span>
+<span><span class="co">#&gt; │       ├── Markdown [1 line]</span></span>
+<span><span class="co">#&gt; │       └── Chunk [r, 2 lines] - cor-dino</span></span>
+<span><span class="co">#&gt; └── Heading [h3] - Exercise 3</span></span>
+<span><span class="co">#&gt;     └── Heading [h4] - Solution</span></span>
+<span><span class="co">#&gt;         ├── Chunk [r, 1 line] - plot-star</span></span>
+<span><span class="co">#&gt;         └── Chunk [r, 1 line] - cor-star</span></span></code></pre></div>
+</div>
+<p>This new AST can then be passed to <code>rmd_template</code> and <code>rmd_check_template</code> to provide the revised feedback,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/hw01-student.Rmd"</span>, package <span class="op">=</span> <span class="st">"parsermd"</span><span class="op">)</span></span>
 <span><span class="va">rmd_sols</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rmd_select.html">rmd_select</a></span><span class="op">(</span> </span>
@@ -242,19 +216,100 @@ specific markdown elements.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rmd_template.html">rmd_template</a></span><span class="op">(</span>keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rmd_check_template.html">rmd_check_template</a></span><span class="op">(</span><span class="va">file</span>, template <span class="op">=</span> <span class="va">_</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> The following document elements were unmodified from the template:</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has a <span style="color: #0000BB;">"code chunk"</span> named <span style="color: #0000BB;">"plot-dino"</span></span></span>
+<span><span class="co">#&gt; ✖ The following document elements were unmodified from the template:</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has a "code chunk" named "plot-dino"</span></span>
 <span><span class="co">#&gt;     which has not been modified.</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has <span style="color: #0000BB;">"markdown text"</span> which has not been</span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has "markdown text" which has not been</span></span>
 <span><span class="co">#&gt;     modified.</span></span>
-<span><span class="co">#&gt;   • Section <span style="color: #555555; font-style: italic;">"Exercise 2"</span><span style="font-style: italic;"> &gt; </span><span style="color: #555555; font-style: italic;">"Solution"</span> has a <span style="color: #0000BB;">"code chunk"</span> named <span style="color: #0000BB;">"cor-dino"</span></span></span>
+<span><span class="co">#&gt;   • Section "Exercise 2" &gt; "Solution" has a "code chunk" named "cor-dino"</span></span>
 <span><span class="co">#&gt;     which has not been modified.</span></span></code></pre></div>
 </div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</section></section><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config);
+    }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
 
 
     <footer><div class="pkgdown-footer-left">

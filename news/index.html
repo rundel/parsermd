@@ -40,18 +40,31 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="parsermd-020-development-version">parsermd 0.2.0 (development version)<a class="anchor" aria-label="anchor" href="#parsermd-020-development-version"></a></h2>
-<ul><li><p>Added support for yaml chunk options - e.g. (<code>#| echo: false</code>)</p></li>
+<ul><li><p><strong>Breaking Change</strong>: Migrated from S3/S4 classes to S7 classes for all AST node types (<code>rmd_ast</code>, <code>rmd_chunk</code>, <code>rmd_heading</code>, etc.)</p></li>
+<li><p><strong>Breaking Change</strong>: Removed deprecated <code>rmd_subset()</code> and related helper functions (<code>rmd_get_node()</code>, <code>rmd_get_chunk()</code>, <code>rmd_get_markdown()</code>, <code>rmd_has_node()</code>, <code>rmd_has_chunk()</code>, <code>rmd_has_markdown()</code>). Use <code><a href="../reference/rmd_select.html">rmd_select()</a></code> with tidyselect syntax instead.</p></li>
+<li><p>Added support for yaml chunk options - e.g. (<code>#| echo: false</code>)</p></li>
 <li><p>Added support for fenced divs - e.g. (<code>::: {.class} ... :::</code>)</p></li>
 <li><p>Added support for markdown code blocks</p></li>
 <li><p>Added support for yaml expressions - e.g. (<code>!expr</code>)</p></li>
-<li>
-<p>Improved support for markdown parsing</p>
-<ul><li><p>Added support for inline code blocks - e.g. (<code>`{r} 1+1`</code>)</p></li>
-<li><p>Added support for quarto shortcodes - e.g. (<code>{{&lt; meta title &gt;}}</code>)</p></li>
-</ul></li>
-<li><p>Exported and cleaned up node creation functions - see <code><a href="../reference/rmd_create.html">?rmd_create</a></code> for details</p></li>
+<li><p>Exported and cleaned up node creation functions - see <code>?rmd_create</code> for details</p></li>
 <li><p>Added experimental support for parsing collections of Rmd and qmd files - see <code><a href="../reference/parse_collection.html">parse_qmd_collection()</a></code> and <code><a href="../reference/parse_collection.html">parse_rmd_collection()</a></code></p></li>
 <li><p>Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include <code>rmd_yaml</code>.</p></li>
+<li>
+<p>Added support for 2ndary parsing to handle quarto shortcodes and inline code</p>
+<ul><li>See helper functions: <code><a href="../reference/shortcode_utils.html">rmd_has_shortcode()</a></code>, <code><a href="../reference/shortcode_utils.html">rmd_extract_shortcodes()</a></code>, and <code><a href="../reference/rmd_select_helpers.html">has_shortcode()</a></code>
+</li>
+</ul></li>
+<li>
+<p>Added comprehensive inline code detection and extraction utilities</p>
+<ul><li>New functions: <code><a href="../reference/inline_code_utils.html">rmd_has_inline_code()</a></code>, <code><a href="../reference/inline_code_utils.html">rmd_extract_inline_code()</a></code>, and <code><a href="../reference/rmd_select_helpers.html">has_inline_code()</a></code> for selecting nodes</li>
+<li>Support for engine-specific filtering using glob patterns</li>
+</ul></li>
+<li>
+<p>Enhanced <code><a href="../reference/rmd_select.html">rmd_select()</a></code> functionality and node manipulation</p>
+<ul><li>Added <code><a href="../reference/rmd_select_helpers.html">has_heading()</a></code> helper function for selecting heading nodes using glob patterns</li>
+<li>Added <code><a href="../reference/rmd_select_helpers.html">by_fdiv()</a></code> helper function for selecting fenced div sections using attribute patterns</li>
+<li>Added <code>keep_yaml</code> argument to <code><a href="../reference/rmd_select.html">rmd_select()</a></code> (defaults to <code>TRUE</code>) to automatically include YAML nodes in selections</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.3" id="parsermd-013">parsermd 0.1.3<a class="anchor" aria-label="anchor" href="#parsermd-013"></a></h2><p class="text-muted">CRAN release: 2024-01-16</p>

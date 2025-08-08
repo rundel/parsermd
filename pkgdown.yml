@@ -2,9 +2,11 @@ pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
+  homework-processing: homework-processing.html
+  know-your-nodes: know-your-nodes.html
   parsermd: parsermd.html
   templates: templates.html
-last_built: 2025-06-20T19:11Z
+last_built: 2025-08-08T17:41Z
 urls:
   reference: https://rundel.github.io/parsermd/reference
   article: https://rundel.github.io/parsermd/articles

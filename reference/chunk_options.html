@@ -86,46 +86,46 @@ are specified). Non-chunk nodes return <code>NULL</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ include: chr "FALSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ include: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : Named list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : Named list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ echo: chr "FALSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ echo: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rmd_get_options</span><span class="op">(</span><span class="va">rmd</span><span class="op">)</span>, <span class="st">"include"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ include: chr "FALSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ include: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : Named list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ : Named list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ echo: chr "FALSE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ echo: logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ : NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">rmd_set_options</span><span class="op">(</span><span class="va">rmd</span>, include <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[4 fields]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Setup</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">setup</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">setup</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── Heading <span style="color: #555555;">[h1] - </span><span style="color: #555555; font-weight: bold;">Content</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ├── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">R Markdown</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     │   ├── Markdown <span style="color: #555555;">[6 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     │   ├── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">cars</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     │   └── Chunk <span style="color: #555555;">[r, 1 option, 1 line] - </span><span style="color: #555555; font-weight: bold;">unnamed-chunk-1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     │   ├── Markdown <span style="color: #555555;">[5 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     │   ├── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">cars</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">unnamed-chunk-1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     └── Heading <span style="color: #555555;">[h2] - </span><span style="color: #555555; font-weight: bold;">Including Plots</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[2 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Chunk <span style="color: #555555;">[r, 2 options, 1 line] - </span><span style="color: #555555; font-weight: bold;">pressure</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">pressure</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         └── Markdown <span style="color: #555555;">[2 lines]</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

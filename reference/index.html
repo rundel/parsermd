@@ -115,7 +115,7 @@
         <dd>Select nodes of an Rmd ast</dd>
       </dl><dl><dt>
 
-          <code><a href="rmd_select_helpers.html">has_type()</a></code> <code><a href="rmd_select_helpers.html">by_section()</a></code> <code><a href="rmd_select_helpers.html">has_label()</a></code> <code><a href="rmd_select_helpers.html">has_code()</a></code> <code><a href="rmd_select_helpers.html">has_option()</a></code>
+          <code><a href="rmd_select_helpers.html">has_type()</a></code> <code><a href="rmd_select_helpers.html">by_section()</a></code> <code><a href="rmd_select_helpers.html">has_label()</a></code> <code><a href="rmd_select_helpers.html">has_heading()</a></code> <code><a href="rmd_select_helpers.html">has_code()</a></code> <code><a href="rmd_select_helpers.html">has_option()</a></code> <code><a href="rmd_select_helpers.html">has_shortcode()</a></code> <code><a href="rmd_select_helpers.html">has_inline_code()</a></code> <code><a href="rmd_select_helpers.html">by_fdiv()</a></code>
 
         </dt>
         <dd>Rmd selection helper functions</dd>
@@ -132,10 +132,10 @@
 
       <dl><dt>
 
-          <code><a href="rmd_node.html">rmd_node_label()</a></code> <code><a href="rmd_node.html">rmd_node_type()</a></code> <code><a href="rmd_node.html">rmd_node_length()</a></code> <code><a href="rmd_node.html">rmd_node_content()</a></code> <code><a href="rmd_node.html">rmd_node_attr()</a></code> <code><a href="rmd_node.html">rmd_node_engine()</a></code> <code><a href="rmd_node.html">rmd_node_options()</a></code> <code><a href="rmd_node.html">rmd_node_code()</a></code>
+          <code><a href="rmd_node.html">rmd_node()</a></code> <code><a href="rmd_node.html">rmd_node_label()</a></code> <code><a href="rmd_node.html">`rmd_node_label&lt;-`()</a></code> <code><a href="rmd_node.html">rmd_node_type()</a></code> <code><a href="rmd_node.html">rmd_node_length()</a></code> <code><a href="rmd_node.html">rmd_node_content()</a></code> <code><a href="rmd_node.html">rmd_node_attr()</a></code> <code><a href="rmd_node.html">rmd_node_engine()</a></code> <code><a href="rmd_node.html">rmd_node_options()</a></code> <code><a href="rmd_node.html">rmd_node_code()</a></code> <code><a href="rmd_node.html">`rmd_node_options&lt;-`()</a></code> <code><a href="rmd_node.html">`rmd_node_attr&lt;-`()</a></code>
 
         </dt>
-        <dd>rmd node utility functions</dd>
+        <dd>Base S7 class for all RMD nodes</dd>
       </dl><dl><dt>
 
           <code><a href="rmd_node_sections.html">rmd_node_sections()</a></code>
@@ -149,7 +149,7 @@
         </dt>
         <dd>Get and set code chunk options</dd>
       </dl></div><div class="section level2">
-      <h2 id="node-functions-1">Node functions<a class="anchor" aria-label="anchor" href="#node-functions-1"></a></h2>
+      <h2 id="node-creation-functions">Node creation functions<a class="anchor" aria-label="anchor" href="#node-creation-functions"></a></h2>
 
 
 
@@ -161,10 +161,64 @@
 
       <dl><dt>
 
-          <code><a href="rmd_create.html">rmd_ast()</a></code> <code><a href="rmd_create.html">rmd_yaml()</a></code> <code><a href="rmd_create.html">rmd_heading()</a></code> <code><a href="rmd_create.html">rmd_code_block()</a></code> <code><a href="rmd_create.html">rmd_chunk()</a></code> <code><a href="rmd_create.html">rmd_raw_chunk()</a></code> <code><a href="rmd_create.html">rmd_fenced_div_open()</a></code> <code><a href="rmd_create.html">rmd_fenced_div_close()</a></code> <code><a href="rmd_create.html">rmd_markdown()</a></code> <code><a href="rmd_create.html">rmd_markdown_line()</a></code> <code><a href="rmd_create.html">rmd_inline_code()</a></code> <code><a href="rmd_create.html">rmd_shortcode()</a></code>
+          <code><a href="rmd_chunk.html">rmd_chunk()</a></code>
 
         </dt>
-        <dd>AST node creation</dd>
+        <dd>Code chunk node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_yaml.html">rmd_yaml()</a></code>
+
+        </dt>
+        <dd>YAML header node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_heading.html">rmd_heading()</a></code>
+
+        </dt>
+        <dd>Heading node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_markdown.html">rmd_markdown()</a></code>
+
+        </dt>
+        <dd>Markdown text node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_code_block.html">rmd_code_block()</a></code>
+
+        </dt>
+        <dd>Markdown code block node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_raw_chunk.html">rmd_raw_chunk()</a></code>
+
+        </dt>
+        <dd>Raw chunk node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_fenced_div_open.html">rmd_fenced_div_open()</a></code>
+
+        </dt>
+        <dd>Opening fenced div node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_fenced_div_close.html">rmd_fenced_div_close()</a></code>
+
+        </dt>
+        <dd>Closing fenced div node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_shortcode.html">rmd_shortcode()</a></code>
+
+        </dt>
+        <dd>Shortcode node</dd>
+      </dl><dl><dt>
+
+          <code><a href="rmd_inline_code.html">rmd_inline_code()</a></code>
+
+        </dt>
+        <dd>Inline code node</dd>
       </dl></div><div class="section level2">
       <h2 id="template-functions">Template functions<a class="anchor" aria-label="anchor" href="#template-functions"></a></h2>
 
@@ -189,7 +243,7 @@
         </dt>
         <dd>Check an Rmd against a template</dd>
       </dl></div><div class="section level2">
-      <h2 id="deprecated-functions">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions"></a></h2>
+      <h2 id="ast-and-s-classes">AST and S7 Classes<a class="anchor" aria-label="anchor" href="#ast-and-s-classes"></a></h2>
 
 
 
@@ -201,16 +255,45 @@
 
       <dl><dt>
 
-          <code><a href="rmd_subset.html">rmd_subset()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+          <code><a href="rmd_ast.html">rmd_ast()</a></code>
+
         </dt>
-        <dd>Subset the nodes of an rmd object</dd>
+        <dd>AST container for multiple nodes</dd>
       </dl><dl><dt>
 
-          <code><a href="rmd_subset_util.html">rmd_get_node()</a></code> <code><a href="rmd_subset_util.html">rmd_get_chunk()</a></code> <code><a href="rmd_subset_util.html">rmd_get_markdown()</a></code> <code><a href="rmd_subset_util.html">rmd_has_node()</a></code> <code><a href="rmd_subset_util.html">rmd_has_chunk()</a></code> <code><a href="rmd_subset_util.html">rmd_has_markdown()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+          <code><a href="rmd_classes_s7.html">rmd_classes_s7</a></code>
+
         </dt>
-        <dd>rmd_subset utility functions</dd>
+        <dd>S7 Class Definitions for RMD Nodes</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions">Utility functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="rmd_modify.html">rmd_modify()</a></code>
+
+        </dt>
+        <dd>Modify nodes of an Rmd ast</dd>
+      </dl><dl><dt>
+
+          <code><a href="inline_code_utils.html">rmd_has_inline_code()</a></code> <code><a href="inline_code_utils.html">rmd_extract_inline_code()</a></code>
+
+        </dt>
+        <dd>Inline code detection and extraction utilities</dd>
+      </dl><dl><dt>
+
+          <code><a href="shortcode_utils.html">rmd_has_shortcode()</a></code> <code><a href="shortcode_utils.html">rmd_extract_shortcodes()</a></code>
+
+        </dt>
+        <dd>Shortcode detection and extraction utilities</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
