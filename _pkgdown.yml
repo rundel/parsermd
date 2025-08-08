@@ -49,19 +49,28 @@ reference:
   - rmd_node_type
   - rmd_set_options
   - rmd_get_options
-- title: Node functions
+- title: Node creation functions
   contents:
-  - rmd_create
+  - rmd_chunk
+  - rmd_yaml
+  - rmd_heading
+  - rmd_markdown
+  - rmd_code_block
+  - rmd_raw_chunk
+  - rmd_fenced_div_open
+  - rmd_fenced_div_close
+  - rmd_shortcode
+  - rmd_inline_code
 - title: Template functions
   contents:
   - rmd_template
   - rmd_check_template
-- title: Deprecated functions
+- title: AST and S7 Classes
   contents:
-  - rmd_subset
-  - rmd_get_chunk
-  - rmd_get_markdown
-  - rmd_get_node
-  - rmd_has_chunk
-  - rmd_has_markdown
-  - rmd_has_node
+  - rmd_ast
+  - rmd_classes_s7
+- title: Utility functions
+  contents:
+  - rmd_modify
+  - inline_code_utils
+  - shortcode_utils
