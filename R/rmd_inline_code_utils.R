@@ -122,7 +122,7 @@ rmd_extract_inline_code.rmd_chunk = function(x, flatten = FALSE) {
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    setNames(res, props)
+    stats::setNames(res, props)
   }
 }
 
@@ -135,6 +135,6 @@ rmd_extract_inline_code.S7_object = function(x, flatten = FALSE) {
   if (flatten) {
     res |> purrr::flatten() 
   } else {
-    setNames(res, props)
+    stats::(res, props)
   }
 }

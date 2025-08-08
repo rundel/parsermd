@@ -29,7 +29,6 @@ Imports:
     rlang,
     magrittr,
     tidyselect (>= 1.2.0),
-    lifecycle,
     fs,
     quarto,
     S7
