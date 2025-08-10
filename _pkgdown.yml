@@ -7,6 +7,7 @@ navbar:
   left:
   - icon: fa-home fa-lg
     href: index.html
+    aria-label: Home
   - text: Getting Started
     href: articles/parsermd.html
   - text: Reference
@@ -15,10 +16,10 @@ navbar:
     menu:
     - text: Rmd Templates
       href: articles/templates.html
-    - text: Homework Processing
-      href: articles/homework-processing.html
     - text: Know Your Nodes
       href: articles/know-your-nodes.html
+    - text: Example - Assignment with Key
+      href: articles/assignment-with-key.html
   - text: "News"
     href: news/index.html
 

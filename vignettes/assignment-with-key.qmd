@@ -1,5 +1,5 @@
 ---
-title: "Processing Homework Assignments"
+title: "Example - Assignment with Key"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Processing Homework Assignments}
