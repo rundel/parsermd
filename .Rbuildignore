@@ -1,6 +1,6 @@
 ^parsermd\.Rproj$
 ^\.Rproj\.user$
-^README\.Rmd$
+^README\.qmd$
 ^\.devcontainer
 ^LICENSE\.md$
 ^_pkgdown\.yml$
@@ -18,3 +18,4 @@ TODO.md
 ^\.claude$
 ^\.vscode$
 ^CLAUDE\.md$
+^vignettes/.quarto
