@@ -1,10 +1,11 @@
 ---
-output: github_document
+format: gfm
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.qmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(
 options(width = 80)
 ```
 
-# parsermd
+# parsermd <img src='man/figures/logo/parsermd.png' align="right" height="140" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/parsermd)](https://CRAN.R-project.org/package=parsermd)
@@ -46,7 +47,8 @@ library(parsermd)
 
 For more details see the getting started [vignette](https://rundel.github.io/parsermd/articles/parsermd.html) or any of the topic specific articles.
 
-```{r example}
+```{r}
+#| label: example
 (rmd = parsermd::parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd")))
 
 as_tibble(rmd)

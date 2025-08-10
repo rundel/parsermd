@@ -16,3 +16,8 @@ tests/testthat/quarto-web/*
 .claude/
 CLAUDE.md
 .vscode/launch.json
+man/figures/logo/House.ttf
+man/figures/logo/logo.key
+man/figures/logo/markermd.png
+
+/.quarto/
