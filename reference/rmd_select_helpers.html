@@ -4,7 +4,7 @@ select nodes from an Rmd ast.
 by_section() - uses section selectors to select nodes.
 has_type() - selects all nodes that have the given type(s).
 has_label() - selects nodes with labels matching the given glob.
-has_heading() - selects heading nodes with titles matching the given glob pattern(s).
+has_heading() - selects heading nodes (only) with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
 has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
 by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
@@ -14,7 +14,7 @@ select nodes from an Rmd ast.
 by_section() - uses section selectors to select nodes.
 has_type() - selects all nodes that have the given type(s).
 has_label() - selects nodes with labels matching the given glob.
-has_heading() - selects heading nodes with titles matching the given glob pattern(s).
+has_heading() - selects heading nodes (only) with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
 has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
 by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
@@ -35,14 +35,14 @@ by_fdiv() - selects fenced div sections where all provided patterns match the di
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home fa-lg"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/parsermd.html">Getting Started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
-    <li><a class="dropdown-item" href="../articles/homework-processing.html">Homework Processing</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
+    <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">News</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -66,7 +66,7 @@ by_fdiv() - selects fenced div sections where all provided patterns match the di
 select nodes from an Rmd ast.</p><ul><li><p><code>by_section()</code> - uses section selectors to select nodes.</p></li>
 <li><p><code>has_type()</code> - selects all nodes that have the given type(s).</p></li>
 <li><p><code>has_label()</code> - selects nodes with labels matching the given glob.</p></li>
-<li><p><code>has_heading()</code> - selects heading nodes with titles matching the given glob pattern(s).</p></li>
+<li><p><code>has_heading()</code> - selects heading nodes (only) with titles matching the given glob pattern(s).</p></li>
 <li><p><code>has_option()</code> - selects nodes that have the given option(s) set.</p></li>
 <li><p><code>has_shortcode()</code> - selects nodes containing shortcodes matching the given function name(s).</p></li>
 <li><p><code>by_fdiv()</code> - selects fenced div sections where all provided patterns match the div attributes.</p></li>
@@ -169,6 +169,10 @@ patterns), which may match one or more sections within the document, e.g.
 for more details on the syntax for these patterns.</p>
 </div>
 
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="rmd_select.html">rmd_select()</a></code> for the main selection function that uses these helpers.</p></div>
     </div>
 
     <div class="section level2">
