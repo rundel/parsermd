@@ -19,6 +19,9 @@
 \alias{rmd_node_attr<-}
 \alias{rmd_node_attr<-.default}
 \alias{rmd_node_attr<-.rmd_node}
+\alias{rmd_node_set_label}
+\alias{rmd_node_set_options}
+\alias{rmd_node_set_attr}
 \title{Base S7 class for all RMD nodes}
 \usage{
 rmd_node()
@@ -56,6 +59,12 @@ rmd_node_attr(x, attr) <- value
 \method{rmd_node_attr}{default}(x, attr) <- value
 
 \method{rmd_node_attr}{rmd_node}(x, attr) <- value
+
+rmd_node_set_label(x, value, ...)
+
+rmd_node_set_options(x, value, ...)
+
+rmd_node_set_attr(x, attr, value, ...)
 }
 \arguments{
 \item{x}{An rmd object, e.g. \code{rmd_ast} or \code{rmd_tibble}.}
@@ -64,7 +73,7 @@ rmd_node_attr(x, attr) <- value
 
 \item{value}{The new value to assign (for assignment functions).}
 
-\item{attr}{Attribute name to extract.}
+\item{attr}{Attribute name to extract or set.}
 }
 \value{
 \itemize{
@@ -83,6 +92,9 @@ nodes without a length return \code{NA}.
 \item \verb{rmd_node_attr<-()} - assigns new attribute values to nodes. For the setter, returns the modified object.
 \item \code{rmd_node_code()} - returns a list of chunk node code (character vector),
 \code{NULL} for all other node types.
+\item \code{rmd_node_set_label()} - pipeable version of \verb{rmd_node_label<-()} for setting node labels.
+\item \code{rmd_node_set_options()} - pipeable version of \verb{rmd_node_options<-()} for setting chunk options.
+\item \code{rmd_node_set_attr()} - pipeable version of \verb{rmd_node_attr<-()} for setting node attributes.
 }
 }
 \description{
@@ -115,5 +127,19 @@ rmd_node_options(chunk)  # List with eval=FALSE, echo=TRUE
 # Setting attributes
 rmd_node_attr(chunk, "engine") = "python"
 rmd_node_attr(chunk, "engine")  # "python"
+
+# Pipeable versions for chaining operations
+chunk = rmd_chunk("r", "example", code = "1 + 1") |>
+  rmd_node_set_label("new_label") |>
+  rmd_node_set_options(list(eval = FALSE, echo = TRUE))
+
+rmd_node_label(chunk)    # "new_label"
+rmd_node_options(chunk)  # List with eval=FALSE, echo=TRUE
+
+# Set engine via attribute
+chunk = rmd_chunk("r", "example", code = "x = 1") |>
+  rmd_node_set_attr("engine", "python")
+
+rmd_node_engine(chunk)  # "python"
 
 }
