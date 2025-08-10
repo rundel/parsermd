@@ -340,3 +340,82 @@ test_that("rmd_node_attr assignment works", {
   expect_snapshot_error({x = list(); rmd_node_attr(x, "test") = "value"})
   expect_snapshot_error({x = data.frame(); rmd_node_attr(x, "test") = "value"})
 })
+
+test_that("rmd_node_set_label works and is pipeable", {
+  # Test basic functionality
+  chunk = rmd_chunk("r", "original", code = "1 + 1")
+  result = rmd_node_set_label(chunk, "new_label")
+  
+  expect_equal(rmd_node_label(result), "new_label")
+  expect_true(S7::S7_inherits(result, rmd_chunk))
+  
+  # Test piping
+  result = rmd_chunk("r", "test", code = "x = 1") |>
+    rmd_node_set_label("piped_label")
+  
+  expect_equal(rmd_node_label(result), "piped_label")
+  
+  # Test chaining with other functions
+  result = rmd_chunk("r", "test", code = "x = 1") |>
+    rmd_node_set_label("chained_label") |>
+    rmd_node_set_options(list(eval = FALSE))
+  
+  expect_equal(rmd_node_label(result), "chained_label")
+  expect_equal(rmd_node_options(result), list(eval = FALSE))
+})
+
+test_that("rmd_node_set_options works and is pipeable", {
+  # Test basic functionality
+  chunk = rmd_chunk("r", "test", code = "1 + 1", options = list(eval = TRUE))
+  result = rmd_node_set_options(chunk, list(echo = FALSE))
+  
+  expected_options = list(eval = TRUE, echo = FALSE)
+  expect_equal(rmd_node_options(result), expected_options)
+  expect_true(S7::S7_inherits(result, rmd_chunk))
+  
+  # Test piping
+  result = rmd_chunk("r", "test", code = "x = 1") |>
+    rmd_node_set_options(list(fig.width = 8, eval = FALSE))
+  
+  expect_equal(rmd_node_options(result), list(fig.width = 8, eval = FALSE))
+  
+  # Test chaining with other functions
+  result = rmd_chunk("r", "original", code = "x = 1") |>
+    rmd_node_set_label("chained") |>
+    rmd_node_set_options(list(echo = TRUE, warning = FALSE))
+  
+  expect_equal(rmd_node_label(result), "chained")
+  expect_equal(rmd_node_options(result), list(echo = TRUE, warning = FALSE))
+})
+
+test_that("rmd_node_set_attr works and is pipeable", {
+  # Test basic functionality
+  chunk = rmd_chunk("r", "test", code = "1 + 1")
+  result = rmd_node_set_attr(chunk, "engine", "python")
+  
+  expect_equal(rmd_node_attr(result, "engine"), "python")
+  expect_true(S7::S7_inherits(result, rmd_chunk))
+  
+  # Test piping
+  result = rmd_chunk("r", "test", code = "x = 1") |>
+    rmd_node_set_attr("engine", "julia")
+  
+  expect_equal(rmd_node_attr(result, "engine"), "julia")
+  
+  # Test chaining with other functions
+  result = rmd_chunk("r", "original", code = "x = 1") |>
+    rmd_node_set_label("attr_test") |>
+    rmd_node_set_attr("engine", "python") |>
+    rmd_node_set_options(list(eval = FALSE))
+  
+  expect_equal(rmd_node_label(result), "attr_test")
+  expect_equal(rmd_node_attr(result, "engine"), "python")
+  expect_equal(rmd_node_options(result), list(eval = FALSE))
+})
+
+test_that("pipeable setters handle errors correctly", {
+  # Test that errors from underlying functions are propagated
+  expect_snapshot_error(rmd_node_set_label(list(), "test"))
+  expect_snapshot_error(rmd_node_set_options(list(), list(eval = TRUE)))
+  expect_snapshot_error(rmd_node_set_attr(list(), "test", "value"))
+})

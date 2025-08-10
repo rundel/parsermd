@@ -335,3 +335,53 @@ rmd_node_code = function(x, ...) {
 }
 
 
+#' @name rmd_node_set
+#' @title Pipeable rmd node setters
+#'
+#' @description Pipeable versions of the rmd node assignment functions. These functions
+#' allow for convenient chaining operations when modifying rmd node properties.
+#'
+#' @param x An rmd object, e.g. `rmd_ast` or `rmd_tibble`, or individual node.
+#' @param value The new value to assign.
+#' @param attr Attribute name to set (for `rmd_node_set_attr()`).
+#' @param ... Unused, for extensibility.
+#'
+#' @returns The modified object (for chaining).
+#'
+#' @examples
+#'
+#' # Create a chunk and chain modifications
+#' chunk = rmd_chunk("r", "example", code = "1 + 1") |>
+#'   rmd_node_set_label("new_label") |>
+#'   rmd_node_set_options(list(eval = FALSE, echo = TRUE))
+#'
+#' rmd_node_label(chunk)    # "new_label"
+#' rmd_node_options(chunk)  # List with eval=FALSE, echo=TRUE
+#'
+#' # Set engine via attribute
+#' chunk = rmd_chunk("r", "example", code = "x = 1") |>
+#'   rmd_node_set_attr("engine", "python")
+#'
+#' rmd_node_engine(chunk)  # "python"
+#'
+NULL
+
+#' @rdname rmd_node_set
+#' @export
+rmd_node_set_label = function(x, value, ...) {
+  `rmd_node_label<-`(x, value)
+}
+
+#' @rdname rmd_node_set
+#' @export
+rmd_node_set_options = function(x, value, ...) {
+  `rmd_node_options<-`(x, value)
+}
+
+#' @rdname rmd_node_set
+#' @export
+rmd_node_set_attr = function(x, attr, value, ...) {
+  `rmd_node_attr<-`(x, attr, value)
+}
+
+
