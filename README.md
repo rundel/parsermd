@@ -2,7 +2,7 @@
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
-# parsermd <img src='man/figures/logo/parsermd.png' align="right" height="140" />
+# parsermd <img src='man/figures/logo/parsermd.png' align="right" style="height:140px;max-width:200px;" alt="parsermd logo" />
 
 <!-- badges: start -->
 

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 options(width = 80)
 ```
 
-# parsermd <img src='man/figures/logo/parsermd.png' align="right" height="140" />
+# parsermd <img src='man/figures/logo/parsermd.png' align="right" style="height:140px;max-width:200px;" alt="parsermd logo" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/parsermd)](https://CRAN.R-project.org/package=parsermd)
