@@ -1,9 +1,9 @@
 ---
 title: "Example - Assignment with Key"
-output: rmarkdown::html_vignette
+format: html
 vignette: >
-  %\VignetteIndexEntry{Processing Homework Assignments}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Example - Assignment with Key}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 

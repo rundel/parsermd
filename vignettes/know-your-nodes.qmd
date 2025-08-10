@@ -1,6 +1,10 @@
 ---
 title: "Know your nodes"
-author: "parsermd"
+format: html
+vignette: >
+  %\VignetteIndexEntry{Know your nodes}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

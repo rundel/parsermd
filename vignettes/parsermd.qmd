@@ -1,6 +1,10 @@
 ---
 title: "Getting Started"
 format: html
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}

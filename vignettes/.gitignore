@@ -2,3 +2,4 @@
 *.R
 
 /.quarto/
+*_files

@@ -1,6 +1,10 @@
 ---
 title: "Rmd Templates"
 format: html
+vignette: >
+  %\VignetteIndexEntry{Rmd Templates}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}
