@@ -18,6 +18,8 @@
 #'
 #' @return Returns a subset Rmd object (either `rmd_ast` or `rmd_tibble` depending on input).
 #'
+#' @seealso [rmd_select_helpers] for helper functions to use with `rmd_select()`, including [by_section()], [has_type()], [has_label()], and [has_option()].
+#'
 #' @examples
 #' rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 #'

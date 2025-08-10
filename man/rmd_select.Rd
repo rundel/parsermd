@@ -38,3 +38,6 @@ rmd_select(rmd, has_type("rmd_chunk"))
 rmd_select(rmd, by_section(c("Exercise *", "Solution")))
 
 }
+\seealso{
+\link{rmd_select_helpers} for helper functions to use with \code{rmd_select()}, including \code{\link[=by_section]{by_section()}}, \code{\link[=has_type]{has_type()}}, \code{\link[=has_label]{has_label()}}, and \code{\link[=has_option]{has_option()}}.
+}

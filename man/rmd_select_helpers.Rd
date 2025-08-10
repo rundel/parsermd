@@ -68,7 +68,7 @@ select nodes from an Rmd ast.
 \item \code{by_section()} - uses section selectors to select nodes.
 \item \code{has_type()} - selects all nodes that have the given type(s).
 \item \code{has_label()} - selects nodes with labels matching the given glob.
-\item \code{has_heading()} - selects heading nodes with titles matching the given glob pattern(s).
+\item \code{has_heading()} - selects heading nodes (only) with titles matching the given glob pattern(s).
 \item \code{has_option()} - selects nodes that have the given option(s) set.
 \item \code{has_shortcode()} - selects nodes containing shortcodes matching the given function name(s).
 \item \code{by_fdiv()} - selects fenced div sections where all provided patterns match the div attributes.
@@ -115,4 +115,7 @@ rmd_select(rmd, by_fdiv("note"))
 rmd_select(rmd, by_fdiv(".warning", "important"))
 
 
+}
+\seealso{
+\code{\link[=rmd_select]{rmd_select()}} for the main selection function that uses these helpers.
 }

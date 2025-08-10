@@ -9,12 +9,14 @@
 #' * `by_section()` - uses section selectors to select nodes.
 #' * `has_type()` - selects all nodes that have the given type(s).
 #' * `has_label()` - selects nodes with labels matching the given glob.
-#' * `has_heading()` - selects heading nodes with titles matching the given glob pattern(s).
+#' * `has_heading()` - selects heading nodes (only) with titles matching the given glob pattern(s).
 #' * `has_option()` - selects nodes that have the given option(s) set.
 #' * `has_shortcode()` - selects nodes containing shortcodes matching the given function name(s).
 #' * `by_fdiv()` - selects fenced div sections where all provided patterns match the div attributes.
 #'
 #' @return All helper functions return an integer vector of selected indexes.
+#'
+#' @seealso [rmd_select()] for the main selection function that uses these helpers.
 #'
 #' @examples
 #'
