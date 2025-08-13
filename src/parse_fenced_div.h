@@ -88,10 +88,10 @@ namespace client { namespace parser {
 
   // Individual attribute parsers
   auto class_attr = x3::rule<struct _, std::string> ("class attribute")
-  = x3::raw[ x3::lit(".") >> +(x3::char_("a-zA-Z0-9_-")) ];
+  = x3::raw[ x3::lit(".") >> +(x3::char_("a-zA-Z0-9._-")) ];
 
   auto id_attr = x3::rule<struct _, std::string> ("id attribute")  
-  = x3::raw[ x3::lit("#") >> +(x3::char_("a-zA-Z0-9_-")) ];
+  = x3::raw[ x3::lit("#") >> +(x3::char_("a-zA-Z0-9._-")) ];
 
   auto key_value_attr = x3::rule<struct _, std::string> ("key=value attribute")
   = x3::raw[

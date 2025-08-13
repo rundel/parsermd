@@ -443,6 +443,98 @@ test_that("Enhanced attribute parsing - edge cases", {
   )
 })
 
+test_that("ID and class allowed character combinations", {
+  
+  # Specific requested test case
+  expect_equal(
+    check_fdiv_open_parser(":::{#exr-var-of-binom-2-0.50}\n"),
+    rmd_fenced_div_open("#exr-var-of-binom-2-0.50")
+  )
+  
+  # Letters only (a-z, A-Z)
+  expect_equal(
+    check_fdiv_open_parser("::: {#myId .myClass}\n"),
+    rmd_fenced_div_open(c("#myId", ".myClass"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#ALLCAPS .lowercase}\n"),
+    rmd_fenced_div_open(c("#ALLCAPS", ".lowercase"))
+  )
+  
+  # Letters with digits (not as first character)
+  expect_equal(
+    check_fdiv_open_parser("::: {#section1 .class2test}\n"),
+    rmd_fenced_div_open(c("#section1", ".class2test"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#test123 .example456}\n"),
+    rmd_fenced_div_open(c("#test123", ".example456"))
+  )
+  
+  # Letters with hyphens
+  expect_equal(
+    check_fdiv_open_parser("::: {#multi-word-id .multi-word-class}\n"),
+    rmd_fenced_div_open(c("#multi-word-id", ".multi-word-class"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#start-middle-end .nav-item-active}\n"),
+    rmd_fenced_div_open(c("#start-middle-end", ".nav-item-active"))
+  )
+  
+  # Letters with underscores
+  expect_equal(
+    check_fdiv_open_parser("::: {#snake_case_id .snake_case_class}\n"),
+    rmd_fenced_div_open(c("#snake_case_id", ".snake_case_class"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#my_long_identifier .utility_class_name}\n"),
+    rmd_fenced_div_open(c("#my_long_identifier", ".utility_class_name"))
+  )
+  
+  # Letters with periods (for classes)
+  expect_equal(
+    check_fdiv_open_parser("::: {.class.with.dots}\n"),
+    rmd_fenced_div_open(".class.with.dots")
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {.namespace.component.modifier}\n"),
+    rmd_fenced_div_open(".namespace.component.modifier")
+  )
+  
+  # Complex combinations of all allowed characters
+  expect_equal(
+    check_fdiv_open_parser("::: {#complex_id-with.dots123 .complex_class-name.with123}\n"),
+    rmd_fenced_div_open(c("#complex_id-with.dots123", ".complex_class-name.with123"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#section_2-test.version1 .btn-primary.size-lg.state-active2}\n"),
+    rmd_fenced_div_open(c("#section_2-test.version1", ".btn-primary.size-lg.state-active2"))
+  )
+  
+  # Mixed case with all character types
+  expect_equal(
+    check_fdiv_open_parser("::: {#MyComplex_ID-with.Dots123 .MyClass_Name-with.Periods456}\n"),
+    rmd_fenced_div_open(c("#MyComplex_ID-with.Dots123", ".MyClass_Name-with.Periods456"))
+  )
+  
+  # Edge cases with starting characters (must be letters)
+  expect_equal(
+    check_fdiv_open_parser("::: {#a1 .z9}\n"),
+    rmd_fenced_div_open(c("#a1", ".z9"))
+  )
+  
+  expect_equal(
+    check_fdiv_open_parser("::: {#A_test .Z-test}\n"),
+    rmd_fenced_div_open(c("#A_test", ".Z-test"))
+  )
+}
+
 test_that("Enhanced attribute parsing - error cases", {
   
   # Invalid class (no name after dot)
