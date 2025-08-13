@@ -20,3 +20,4 @@ TODO.md
 ^CLAUDE\.md$
 ^vignettes/.quarto
 ^vignettes/*_files$
+^TODO$
