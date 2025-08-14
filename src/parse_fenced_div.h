@@ -129,6 +129,24 @@ namespace client { namespace parser {
 
   BOOST_SPIRIT_DEFINE(fdiv_close);
 
+  
+  
+  struct span_class : error_handler {};
+  x3::rule<span_class, client::ast::span> const span = "span";
+
+  auto const span_def
+  = x3::lit("[") >>
+    x3::lexeme[ +("\\]" | (x3::char_ - ']' - x3::eol)) ] >> // span text
+    x3::lit("]") >>
+    cbrace_attrs;
+
+  BOOST_SPIRIT_DEFINE(span);
+
+  auto not_span = x3::rule<struct _> ("not a span")
+  = x3::raw[*( !span >> (x3::char_ | x3::eol) )];
+
+  auto const string_with_span = not_span >> *(span >> not_span);
+
 } }
 
 #endif

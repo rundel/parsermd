@@ -26,6 +26,7 @@ namespace Rcpp {
   template <> SEXP wrap(client::ast::fdiv_close const& fdiv);
   template <> SEXP wrap(client::ast::shortcode const& sc);
   template <> SEXP wrap(std::vector<client::ast::shortcode> const& v);
+  template <> SEXP wrap(client::ast::span const& s);
 
   // markdown
   template <> SEXP wrap(client::ast::inline_code const& x);

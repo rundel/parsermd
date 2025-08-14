@@ -333,6 +333,43 @@ rmd_shortcode = S7::new_class(
   package = NULL
 )
 
+#' @title Span node
+#' @description S7 class representing a span with attributes
+#' @param text Character. Span text content
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Additional attributes
+#' @export
+rmd_span = S7::new_class(
+  "rmd_span",
+  parent = rmd_node,
+  properties = list(
+    text = S7::new_property(S7::class_character, default = quote("")),
+    id = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr = S7::new_property(S7::class_character, default = quote(character()))
+  ),
+  validator = function(self) {
+    if (length(self@text) != 1) {
+      return("text must be a single character string")
+    }
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (length(self@id) == 1 && !grepl("^#", self@id)) {
+      return("id must start with '#' when present")
+    }
+    if (any(!grepl("^\\.", self@classes))) {
+      return("all classes must start with '.' when present")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be a named character vector when not empty")
+    }
+    NULL
+  },
+  package = NULL
+)
+
 validate_fdiv_balance = function(ast) {
   nodes = ast@nodes
 

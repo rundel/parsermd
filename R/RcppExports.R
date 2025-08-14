@@ -9,6 +9,10 @@ parse_inline_code_cpp <- function(str) {
     .Call(`_parsermd_parse_inline_code_cpp`, str)
 }
 
+parse_spans_cpp <- function(str) {
+    .Call(`_parsermd_parse_spans_cpp`, str)
+}
+
 parse_rmd_cpp <- function(str) {
     .Call(`_parsermd_parse_rmd_cpp`, str)
 }
@@ -67,6 +71,10 @@ check_inline_code_parser <- function(str) {
 
 check_shortcode_parser <- function(str) {
     .Call(`_parsermd_check_shortcode_parser`, str)
+}
+
+check_span_parser <- function(str) {
+    .Call(`_parsermd_check_span_parser`, str)
 }
 
 check_qstring_parser <- function(str, raw = FALSE) {
