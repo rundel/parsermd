@@ -10,8 +10,15 @@
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
+  struct key_value {
+    std::string key;
+    std::string value;
+  };
+
   struct fdiv_open : x3::position_tagged {
-    std::vector<std::string> attrs;
+    std::string id;
+    std::vector<std::string> classes;
+    std::vector<key_value> kvs;
   };
 
   struct fdiv_close : x3::position_tagged {
@@ -19,8 +26,13 @@ namespace client { namespace ast {
 } }
 
 BOOST_FUSION_ADAPT_STRUCT(
+  client::ast::key_value,
+  key, value
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
   client::ast::fdiv_open,
-  attrs
+  id, classes, kvs
 )
 
 BOOST_FUSION_ADAPT_STRUCT(

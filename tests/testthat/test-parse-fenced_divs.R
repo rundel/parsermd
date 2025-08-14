@@ -9,10 +9,6 @@ test_that("Basic parser tests - open", {
     rmd_fenced_div_open(".test")
   )
 
-  expect_equal(
-    check_fdiv_open_parser("::: {test}\n"),
-    rmd_fenced_div_open("test")
-  )
 
   expect_equal(
     check_fdiv_open_parser("::: {#test}\n"),
@@ -25,10 +21,6 @@ test_that("Basic parser tests - open", {
     rmd_fenced_div_open(".test")
   )
 
-  expect_equal(
-    check_fdiv_open_parser(":::: {test}\n"),
-    rmd_fenced_div_open("test")
-  )
 
   ## Trailing : or " "
   expect_equal(
@@ -335,16 +327,6 @@ test_that("Enhanced attribute parsing - individual types", {
     rmd_fenced_div_open("alt='Image description'")
   )
   
-  # Plain attributes
-  expect_equal(
-    check_fdiv_open_parser("::: {warning}\n"),
-    rmd_fenced_div_open("warning")
-  )
-  
-  expect_equal(
-    check_fdiv_open_parser("::: {callout-note}\n"),
-    rmd_fenced_div_open("callout-note")
-  )
 })
 
 test_that("Enhanced attribute parsing - combinations", {
@@ -361,40 +343,34 @@ test_that("Enhanced attribute parsing - combinations", {
     rmd_fenced_div_open(c("#myid", ".myclass"))
   )
   
-  # Class and ID (order reversed)
+  # Class and ID (correct order: ID first, then class)  
   expect_equal(
-    check_fdiv_open_parser("::: {.myclass #myid}\n"),
-    rmd_fenced_div_open(c(".myclass", "#myid"))
+    check_fdiv_open_parser("::: {#myid .myclass}\n"),
+    rmd_fenced_div_open(c("#myid", ".myclass"))
   )
   
-  # Plain and class
+  # Class and key=value (correct order: class first, then key=value)
   expect_equal(
-    check_fdiv_open_parser("::: {warning .red}\n"),
-    rmd_fenced_div_open(c("warning", ".red"))
+    check_fdiv_open_parser("::: {.highlight data-value=test}\n"),
+    rmd_fenced_div_open(c(".highlight", "data-value=test"))
   )
   
-  # Key=value and class
+  # Three attributes: ID, class, key=value (correct order)
   expect_equal(
-    check_fdiv_open_parser("::: {data-value=test .highlight}\n"),
-    rmd_fenced_div_open(c("data-value=test", ".highlight"))
+    check_fdiv_open_parser("::: {#section .important data-role=note}\n"),
+    rmd_fenced_div_open(c("#section", ".important", "data-role=note"))
   )
   
-  # Three attributes: ID, class, plain
+  # Three attributes: ID, class, key=value (correct order)
   expect_equal(
-    check_fdiv_open_parser("::: {#section .important note}\n"),
-    rmd_fenced_div_open(c("#section", ".important", "note"))
+    check_fdiv_open_parser("::: {#submit .primary data-role=button}\n"),
+    rmd_fenced_div_open(c("#submit", ".primary", "data-role=button"))
   )
   
-  # Three attributes: key=value, ID, class
+  # Multiple attributes: ID, multiple classes, multiple key=value (correct order)
   expect_equal(
-    check_fdiv_open_parser("::: {data-role=button #submit .primary}\n"),
-    rmd_fenced_div_open(c("data-role=button", "#submit", ".primary"))
-  )
-  
-  # Four attributes: all types
-  expect_equal(
-    check_fdiv_open_parser("::: {#main .container data-test=value callout}\n"),
-    rmd_fenced_div_open(c("#main", ".container", "data-test=value", "callout"))
+    check_fdiv_open_parser("::: {#main .container .highlight data-test=value data-role=section}\n"),
+    rmd_fenced_div_open(c("#main", ".container", ".highlight", "data-test=value", "data-role=section"))
   )
   
   # Multiple key=value pairs
@@ -403,10 +379,10 @@ test_that("Enhanced attribute parsing - combinations", {
     rmd_fenced_div_open(c("width=100", "height=200"))
   )
   
-  # Mixed quoted and unquoted values
+  # Mixed quoted and unquoted values (correct order: class first, then key=value)
   expect_equal(
-    check_fdiv_open_parser("::: {title=\"Main Section\" data-id=section1 .highlighted}\n"),
-    rmd_fenced_div_open(c("title=\"Main Section\"", "data-id=section1", ".highlighted"))
+    check_fdiv_open_parser("::: {.highlighted title=\"Main Section\" data-id=section1}\n"),
+    rmd_fenced_div_open(c(".highlighted", "title=\"Main Section\"", "data-id=section1"))
   )
 })
 
@@ -430,16 +406,16 @@ test_that("Enhanced attribute parsing - edge cases", {
     rmd_fenced_div_open("data-url=\"https://example.com/path?q=test\"")
   )
   
-  # Hyphenated and underscored names
+  # Hyphenated and underscored names (correct order: ID first, then class)
   expect_equal(
-    check_fdiv_open_parser("::: {.my-class_name #my-id_value}\n"),
-    rmd_fenced_div_open(c(".my-class_name", "#my-id_value"))
+    check_fdiv_open_parser("::: {#my-id_value .my-class_name}\n"),
+    rmd_fenced_div_open(c("#my-id_value", ".my-class_name"))
   )
   
-  # Numbers in attributes
+  # Numbers in attributes (correct order: ID, class, key=value)
   expect_equal(
-    check_fdiv_open_parser("::: {.class1 #id2 data-level=3}\n"),
-    rmd_fenced_div_open(c(".class1", "#id2", "data-level=3"))
+    check_fdiv_open_parser("::: {#id2 .class1 data-level=3}\n"),
+    rmd_fenced_div_open(c("#id2", ".class1", "data-level=3"))
   )
 })
 
@@ -533,7 +509,7 @@ test_that("ID and class allowed character combinations", {
     check_fdiv_open_parser("::: {#A_test .Z-test}\n"),
     rmd_fenced_div_open(c("#A_test", ".Z-test"))
   )
-}
+})
 
 test_that("Enhanced attribute parsing - error cases", {
   
@@ -556,6 +532,51 @@ test_that("Enhanced attribute parsing - error cases", {
   # Missing closing brace
   expect_snapshot(
     check_fdiv_open_parser("::: {.class\n"), error=TRUE
+  )
+  
+  # Invalid ordering: class before ID (should be ID first)
+  expect_snapshot(
+    check_fdiv_open_parser("::: {.myclass #myid}\n"), error=TRUE
+  )
+  
+  # Invalid ordering: class before ID (another example)
+  expect_snapshot(
+    check_fdiv_open_parser("::: {.my-class_name #my-id_value}\n"), error=TRUE
+  )
+  
+  # Invalid ordering: class before ID (third example)
+  expect_snapshot(
+    check_fdiv_open_parser("::: {.class1 #id2 data-level=3}\n"), error=TRUE
+  )
+  
+  # Invalid ordering: key=value before class
+  expect_snapshot(
+    check_fdiv_open_parser("::: {data-value=test .highlight}\n"), error=TRUE
+  )
+  
+  # Invalid ordering: key=value before class (another example)
+  expect_snapshot(
+    check_fdiv_open_parser("::: {title=\"Main Section\" data-id=section1 .highlighted}\n"), error=TRUE
+  )
+  
+  # Invalid ordering: key=value before ID  
+  expect_snapshot(
+    check_fdiv_open_parser("::: {data-role=button #submit}\n"), error=TRUE
+  )
+  
+  # Invalid: plain attributes not allowed in braced form
+  expect_snapshot(
+    check_fdiv_open_parser("::: {warning}\n"), error=TRUE
+  )
+  
+  # Invalid: plain attributes not allowed in braced form (other examples)
+  expect_snapshot(
+    check_fdiv_open_parser("::: {test}\n"), error=TRUE
+  )
+  
+  # Invalid: multiple IDs  
+  expect_snapshot(
+    check_fdiv_open_parser("::: {#id1 #id2}\n"), error=TRUE
   )
 })
 
