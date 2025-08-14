@@ -58,6 +58,16 @@
     <rmd_code_block> object is invalid:
     - n_ticks must be a single integer
 
+# rmd_fenced_div_open S7 class works
+
+    <rmd_fenced_div_open> object is invalid:
+    - id must be a character vector of length 0 or 1
+
+---
+
+    <rmd_fenced_div_open> object is invalid:
+    - attr must be a named character vector when not empty
+
 # rmd_inline_code S7 class works
 
     <rmd_inline_code> object is invalid:

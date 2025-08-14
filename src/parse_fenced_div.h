@@ -74,18 +74,14 @@ namespace client { namespace parser {
   // Also indenting is not supported so we ignore that as well
   // - See https://github.com/jgm/pandoc/issues/7936
 
-  struct fdiv_open_class : error_handler {};
-  x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
 
   // For unbraced attributes add the css class decorator and convert to fdiv_open
   auto add_unbraced_class = [](auto& ctx){
-    client::ast::fdiv_open fdiv;
-    fdiv.id = "";  // no ID for unbraced
-    fdiv.classes.push_back(std::string(".") + _attr(ctx));  // add class with dot prefix
-    // kvs remains empty for unbraced
-    _val(ctx) = fdiv;
+    client::ast::pandoc_attr attr;
+    attr.classes.push_back(std::string(".") + _attr(ctx));
+    _val(ctx) = attr;
   };
-  auto unbraced_attr = x3::rule<struct _, client::ast::fdiv_open > ("unbraced attribute")
+  auto unbraced_attr = x3::rule<struct _, client::ast::pandoc_attr > ("unbraced attribute")
   = x3::lexeme[ (+(x3::char_ - x3::eol - x3::blank))[add_unbraced_class] ];
 
 
@@ -103,12 +99,16 @@ namespace client { namespace parser {
         +(x3::char_ - x3::char_(" }"))  // unquoted value
     )];
 
-  auto cbrace_attrs = x3::rule<struct _, client::ast::fdiv_open > ("braced attribute(s)")
+  auto cbrace_attrs = x3::rule<struct _, client::ast::pandoc_attr > ("braced attribute(s)")
   = x3::lit("{") > x3::lexeme[
       (id_attr | x3::attr(std::string())) > *x3::lit(" ") >
       (class_attr % +x3::lit(" ") | x3::attr(std::vector<std::string>())) > *x3::lit(" ") >
       (key_value_attr % +x3::lit(" ") | x3::attr(std::vector<client::ast::key_value>())) > *x3::lit(" ")
     ] > x3::lit("}");
+
+
+  struct fdiv_open_class : error_handler {};
+  x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
 
   auto const fdiv_open_def
   = x3::lexeme[x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ]] >>

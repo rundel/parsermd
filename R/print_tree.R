@@ -78,9 +78,34 @@ tree_node.rmd_markdown = function(x) {
 
 #' @exportS3Method
 tree_node.rmd_fenced_div_open = function(x) {
+  # Build display components
+  components = character(0)
+  
+  # Add ID with # prefix
+  if (length(x@id) > 0) {
+    components = c(components, paste0("#", x@id))
+  }
+  
+  # Add classes with . prefix
+  if (length(x@classes) > 0) {
+    components = c(components, paste0(".", x@classes))
+  }
+  
+  # Add key=value pairs
+  if (length(x@attr) > 0) {
+    kv_pairs = paste0(names(x@attr), "=", x@attr)
+    components = c(components, kv_pairs)
+  }
+  
+  label = if (length(components) == 0) {
+    cli::style_italic("<no attrs>")
+  } else {
+    paste0("[", paste(components, collapse=", "), "]")
+  }
+  
   list(
     text = "Open Fenced div",
-    label = paste0("[", paste(x@attr, collapse=", "), "]")
+    label = label
   )
 }
 

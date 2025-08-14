@@ -179,15 +179,50 @@ test_that("rmd_code_block S7 class works", {
 })
 
 test_that("rmd_fenced_div_open S7 class works", {
-  # Valid fenced div open
-  div_open = rmd_fenced_div_open(attr = c("note", "warning"))
+  # Valid fenced div with all properties
+  div_open = rmd_fenced_div_open(
+    id = "myid", 
+    classes = c("note", "warning"), 
+    attr = c(title = "Test", role = "alert")
+  )
   expect_s3_class(div_open, "rmd_fenced_div_open")
-  expect_equal(div_open@attr, c("note", "warning"))
+  expect_equal(div_open@id, "myid")
+  expect_equal(div_open@classes, c("note", "warning"))
+  expect_equal(div_open@attr, c(title = "Test", role = "alert"))
   
-  # Valid empty attr
-  empty_div = rmd_fenced_div_open(attr = character())
+  # Valid empty properties
+  empty_div = rmd_fenced_div_open()
   expect_s3_class(empty_div, "rmd_fenced_div_open")
+  expect_equal(empty_div@id, character())
+  expect_equal(empty_div@classes, character())
   expect_equal(empty_div@attr, character())
+  
+  # Valid with only ID
+  id_only = rmd_fenced_div_open(id = "test")
+  expect_equal(id_only@id, "test")
+  expect_equal(id_only@classes, character())
+  expect_equal(id_only@attr, character())
+  
+  # Valid with only classes
+  class_only = rmd_fenced_div_open(classes = c("warning", "large"))
+  expect_equal(class_only@id, character())
+  expect_equal(class_only@classes, c("warning", "large"))
+  expect_equal(class_only@attr, character())
+  
+  # Valid with only attributes
+  attr_only = rmd_fenced_div_open(attr = c(style = "color:red", width = "100px"))
+  expect_equal(attr_only@id, character())
+  expect_equal(attr_only@classes, character())
+  expect_equal(attr_only@attr, c(style = "color:red", width = "100px"))
+  
+  # Test validators
+  expect_snapshot_error(
+    rmd_fenced_div_open(id = c("id1", "id2"))  # Multiple IDs not allowed
+  )
+  
+  expect_snapshot_error(
+    rmd_fenced_div_open(attr = c("value1", "value2"))  # Unnamed attr not allowed
+  )
 })
 
 test_that("rmd_fenced_div_close S7 class works", {
@@ -281,7 +316,7 @@ test_that("rmd_ast balanced fenced div validation works", {
   # Valid: balanced fenced divs
   expect_s3_class(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = "note"),
       rmd_markdown(lines = "Content"),
       rmd_fenced_div_close()
     )),
@@ -291,8 +326,8 @@ test_that("rmd_ast balanced fenced div validation works", {
   # Valid: nested balanced fenced divs
   expect_s3_class(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "outer"),
-      rmd_fenced_div_open(attr = "inner"),
+      rmd_fenced_div_open(classes = "outer"),
+      rmd_fenced_div_open(classes = "inner"),
       rmd_markdown(lines = "Content"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
@@ -320,7 +355,7 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: unclosed fenced div
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = "note"),
       rmd_markdown(lines = "Content")
     ))
   )
@@ -328,8 +363,8 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: multiple unclosed fenced divs
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "outer"),
-      rmd_fenced_div_open(attr = "inner"),
+      rmd_fenced_div_open(classes = "outer"),
+      rmd_fenced_div_open(classes = "inner"),
       rmd_markdown(lines = "Content")
     ))
   )
@@ -345,7 +380,7 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: more closes than opens
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = "note"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
     ))
@@ -354,8 +389,8 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: unbalanced nested divs
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(attr = "outer"),
-      rmd_fenced_div_open(attr = "inner"),
+      rmd_fenced_div_open(classes = "outer"),
+      rmd_fenced_div_open(classes = "inner"),
       rmd_fenced_div_close()
     ))
   )

@@ -15,13 +15,23 @@ namespace client { namespace ast {
     std::string value;
   };
 
-  struct fdiv_open : x3::position_tagged {
+  struct pandoc_attr : x3::position_tagged {
     std::string id;
     std::vector<std::string> classes;
     std::vector<key_value> kvs;
   };
 
+
+  struct fdiv_open : x3::position_tagged {
+    pandoc_attr attr;
+  };
+
   struct fdiv_close : x3::position_tagged {
+  };
+
+  struct span : x3::position_tagged {
+    std::string text;
+    pandoc_attr attr;
   };
 } }
 
@@ -31,12 +41,23 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-  client::ast::fdiv_open,
+  client::ast::pandoc_attr,
   id, classes, kvs
+)
+
+
+BOOST_FUSION_ADAPT_STRUCT(
+  client::ast::fdiv_open,
+  attr
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::fdiv_close
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+  client::ast::span,
+  text, attr
 )
 
 #endif

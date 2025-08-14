@@ -4,10 +4,18 @@
 \alias{rmd_fenced_div_open}
 \title{Opening fenced div node}
 \usage{
-rmd_fenced_div_open(attr = character(0))
+rmd_fenced_div_open(
+  id = character(),
+  classes = character(),
+  attr = character()
+)
 }
 \arguments{
-\item{attr}{Character vector. Div attributes}
+\item{id}{Character vector. HTML ID (length 0 or 1)}
+
+\item{classes}{Character vector. CSS classes}
+
+\item{attr}{Named character vector. Key-value attributes (keys as names)}
 }
 \description{
 S7 class representing the opening of a fenced div

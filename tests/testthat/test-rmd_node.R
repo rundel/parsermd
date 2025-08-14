@@ -49,7 +49,7 @@ test_that("rmd_node_type works with all node types", {
       rmd_markdown(lines = "Some text"),
       rmd_shortcode(func = "video", args = "demo.mp4"),
       rmd_inline_code(engine = "r", code = "2+2"),
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_fenced_div_close()
     )
   )

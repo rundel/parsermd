@@ -218,14 +218,39 @@ rmd_code_block = S7::new_class(
 
 #' @title Opening fenced div node
 #' @description S7 class representing the opening of a fenced div
-#' @param attr Character vector. Div attributes
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Key-value attributes (keys as names)
 #' @export
 rmd_fenced_div_open = S7::new_class(
   "rmd_fenced_div_open",
   parent = rmd_node,
   properties = list(
-    attr = S7::class_character
+    id = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr = S7::new_property(S7::class_character, default = quote(character()))
   ),
+  validator = function(self) {
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (length(self@id) > 0 && !startsWith(self@id, "#")) {
+      return("id must start with # prefix")
+    }
+    if (!is.character(self@classes)) {
+      return("classes must be a character vector")
+    }
+    if (length(self@classes) > 0 && !all(startsWith(self@classes, "."))) {
+      return("all classes must start with . prefix")
+    }
+    if (!is.character(self@attr)) {
+      return("attr must be a character vector")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be a named character vector when not empty")
+    }
+    NULL
+  },
   package = NULL
 )
 

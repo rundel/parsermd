@@ -1,7 +1,7 @@
 // [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(BH)]]
 
-#define BOOST_SPIRIT_X3_DEBUG
+//#define BOOST_SPIRIT_X3_DEBUG
 
 #include <Rcpp.h>
 #include <boost/format.hpp>
@@ -361,38 +361,34 @@ template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
   Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
   Rcpp::Function rmd_fenced_div_open = pkg["rmd_fenced_div_open"];
   
-  // Debug output
-  Rcpp::Rcout << "DEBUG: fdiv.id = '" << fdiv.id << "'" << std::endl;
-  Rcpp::Rcout << "DEBUG: fdiv.classes.size() = " << fdiv.classes.size() << std::endl;
-  for (size_t i = 0; i < fdiv.classes.size(); ++i) {
-    Rcpp::Rcout << "DEBUG: fdiv.classes[" << i << "] = '" << fdiv.classes[i] << "'" << std::endl;
-  }
-  Rcpp::Rcout << "DEBUG: fdiv.kvs.size() = " << fdiv.kvs.size() << std::endl;
-  for (size_t i = 0; i < fdiv.kvs.size(); ++i) {
-    Rcpp::Rcout << "DEBUG: fdiv.kvs[" << i << "].key = '" << fdiv.kvs[i].key << "'" << std::endl;
-    Rcpp::Rcout << "DEBUG: fdiv.kvs[" << i << "].value = '" << fdiv.kvs[i].value << "'" << std::endl;
+  // Extract ID (keep # prefix)
+  std::string id_str = fdiv.attr.id;
+  Rcpp::CharacterVector id_vec;
+  if (!id_str.empty()) {
+    id_vec = Rcpp::CharacterVector::create(id_str);
   }
   
-  // Build combined attributes vector in the correct order: ID, classes, key=values
-  std::vector<std::string> attrs;
-  
-  // Add ID if present (ID already includes # prefix from parser)
-  if (!fdiv.id.empty()) {
-    attrs.push_back(fdiv.id);
+  // Extract classes (keep . prefix)
+  Rcpp::CharacterVector classes_vec;
+  for (const auto& cls : fdiv.attr.classes) {
+    classes_vec.push_back(cls);
   }
   
-  // Add classes  
-  for (const auto& cls : fdiv.classes) {
-    attrs.push_back(cls);
+  // Extract key=value pairs into named vector
+  Rcpp::CharacterVector attr_vec;
+  Rcpp::CharacterVector attr_names;
+  for (const auto& kv : fdiv.attr.kvs) {
+    attr_vec.push_back(kv.value);
+    attr_names.push_back(kv.key);
   }
-  
-  // Add key=value pairs
-  for (const auto& kv : fdiv.kvs) {
-    attrs.push_back(kv.key + "=" + kv.value);
+  if (attr_vec.size() > 0) {
+    attr_vec.names() = attr_names;
   }
   
   return rmd_fenced_div_open(
-    Rcpp::Named("attr") = Rcpp::wrap(attrs)
+    Rcpp::Named("id") = id_vec,
+    Rcpp::Named("classes") = classes_vec,
+    Rcpp::Named("attr") = attr_vec
   );
 }
 

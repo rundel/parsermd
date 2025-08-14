@@ -38,3 +38,15 @@
 
     Setting attributes is not supported for objects of type <data.frame>.
 
+# pipeable setters handle errors correctly
+
+    Setting labels is not supported for objects of type <list>.
+
+---
+
+    Setting options is only supported for objects of type <rmd_chunk> this object has class <list>.
+
+---
+
+    Setting attributes is not supported for objects of type <list>.
+

@@ -171,10 +171,46 @@ as_document.rmd_yaml = function(x, ...) {
 #' @exportS3Method
 as_document.rmd_fenced_div_open = function(x, ...) {
   # FIXME - add depth counting to make :'s match for more readability
-
-  paste0(
-    "::: {", paste(x@attr, collapse=" "), "}"
-  )
+  
+  # Check if this is an unbraced case (only classes, no ID or attr)
+  has_id = length(x@id) > 0
+  has_attr = length(x@attr) > 0
+  has_classes = length(x@classes) > 0
+  
+  # If only classes and exactly one class, use unbraced syntax
+  if (!has_id && !has_attr && has_classes && length(x@classes) == 1) {
+    # Remove . prefix for unbraced syntax
+    class_name = x@classes[1]
+    if (startsWith(class_name, ".")) {
+      class_name = substr(class_name, 2, nchar(class_name))
+    }
+    paste0("::: ", class_name)
+  } else {
+    # Use braced syntax
+    components = character(0)
+    
+    # Add ID (already has # prefix)
+    if (has_id) {
+      components = c(components, x@id)
+    }
+    
+    # Add classes (already have . prefix)
+    if (has_classes) {
+      components = c(components, x@classes)
+    }
+    
+    # Add key=value pairs
+    if (has_attr) {
+      kv_pairs = paste0(names(x@attr), "=", x@attr)
+      components = c(components, kv_pairs)
+    }
+    
+    if (length(components) == 0) {
+      "::: {}"
+    } else {
+      paste0("::: {", paste(components, collapse=" "), "}")
+    }
+  }
 }
 
 
