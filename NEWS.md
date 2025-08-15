@@ -18,6 +18,8 @@
 
 * Added support for Pandoc-style ordered fenced attributes for code blocks, fenced divs, and spans
 
+* Added `rmd_fenced_div_wrap()` function to wrap selected nodes with fenced divs
+
 * Added support for code block literals - e.g. ```{{r}}
 
 * Added support for 2ndary parsing to handle inline elements:

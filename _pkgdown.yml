@@ -90,6 +90,7 @@ reference:
 - title: Utility functions
   contents:
   - rmd_modify
+  - rmd_fenced_div_wrap
   - rmd_extract_inline_code
   - rmd_extract_shortcodes
   - rmd_extract_spans
