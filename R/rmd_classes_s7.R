@@ -187,7 +187,9 @@ rmd_markdown = S7::new_class(
 
 #' @title Markdown code block node
 #' @description S7 class representing a fenced code block
-#' @param attr Character. Block attributes
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Key-value attributes (keys as names)
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
 #' @param n_ticks Integer. Number of backticks
@@ -196,14 +198,22 @@ rmd_code_block = S7::new_class(
   "rmd_code_block",
   parent = rmd_node,
   properties = list(
-    attr    = S7::new_property(S7::class_character, default = quote("")),
+    id      = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr    = S7::new_property(S7::class_character, default = quote(character())),
     code    = S7::new_property(S7::class_character, default = quote(character())),
     indent  = S7::new_property(S7::class_character, default = quote("")),
     n_ticks = S7::new_property(S7::class_integer, default = quote(3L))
   ),
   validator = function(self) {
-    if (length(self@attr) != 1) {
-      return("attr must be a single character string")
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (!is.null(names(self@classes))) {
+      return("classes cannot be named")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be named if not empty")
     }
     if (length(self@indent) != 1) {
       return("indent must be a single character string")

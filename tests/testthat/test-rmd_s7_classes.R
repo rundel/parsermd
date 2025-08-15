@@ -147,20 +147,73 @@ test_that("rmd_markdown S7 class works", {
 })
 
 test_that("rmd_code_block S7 class works", {
-  # Valid code block
+  # Valid code block with classes
   code_block = rmd_code_block(
-    attr = "python",
+    id = character(),
+    classes = c(".python"),
+    attr = character(),
     code = c("print('hello')", "x = 1"),
     indent = "",
     n_ticks = 3L
   )
   expect_s3_class(code_block, "rmd_code_block")
-  expect_equal(code_block@attr, "python")
+  expect_equal(code_block@classes, ".python")
   
-  # Invalid attr (wrong length)
+  # Valid code block with ID and attributes
+  code_block_full = rmd_code_block(
+    id = "#mycode",
+    classes = c(".python", ".numberLines"),
+    attr = c(startFrom = "10", linenos = "table"),
+    code = c("print('hello')"),
+    indent = "",
+    n_ticks = 3L
+  )
+  expect_s3_class(code_block_full, "rmd_code_block")
+  expect_equal(code_block_full@id, "#mycode")
+  expect_equal(code_block_full@classes, c(".python", ".numberLines"))
+  expect_equal(code_block_full@attr[["startFrom"]], "10")
+  
+  # Valid empty code block
+  empty_block = rmd_code_block(
+    id = character(),
+    classes = character(),
+    attr = character(),
+    code = character(),
+    indent = "",
+    n_ticks = 3L
+  )
+  expect_s3_class(empty_block, "rmd_code_block")
+  
+  # Invalid id (wrong length)
   expect_snapshot_error(
     rmd_code_block(
-      attr = c("python", "r"),
+      id = c("#id1", "#id2"),
+      classes = character(),
+      attr = character(),
+      code = character(),
+      indent = "",
+      n_ticks = 3L
+    )
+  )
+  
+  # Invalid classes (named)
+  expect_snapshot_error(
+    rmd_code_block(
+      id = character(),
+      classes = c(python = ".python"),
+      attr = character(),
+      code = character(),
+      indent = "",
+      n_ticks = 3L
+    )
+  )
+  
+  # Invalid attr (unnamed)
+  expect_snapshot_error(
+    rmd_code_block(
+      id = character(),
+      classes = character(),
+      attr = c("value1", "value2"),
       code = character(),
       indent = "",
       n_ticks = 3L
@@ -170,7 +223,9 @@ test_that("rmd_code_block S7 class works", {
   # Invalid n_ticks (wrong length)
   expect_snapshot_error(
     rmd_code_block(
-      attr = "python",
+      id = character(),
+      classes = character(),
+      attr = character(),
       code = character(),
       indent = "",
       n_ticks = c(3L, 4L)

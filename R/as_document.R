@@ -129,9 +129,51 @@ as_document.rmd_raw_chunk = function(x, ...) {
 #' @exportS3Method
 as_document.rmd_code_block = function(x, ...) {
   ticks = paste(rep('`', x@n_ticks), collapse="")
-
+  
+  # Reconstruct code block attributes
+  has_id = length(x@id) > 0
+  has_attr = length(x@attr) > 0  
+  has_classes = length(x@classes) > 0
+  
+  attr_str = ""
+  
+  if (has_id || has_attr || has_classes) {
+    # Check if we can use pure unbraced syntax (single class, no id/attr)
+    if (!has_id && !has_attr && has_classes && length(x@classes) == 1) {
+      # Remove . prefix for unbraced syntax
+      class_name = x@classes[1]
+      if (startsWith(class_name, ".")) {
+        class_name = substr(class_name, 2, nchar(class_name))
+      }
+      attr_str = class_name
+    } else {
+      # Use braced syntax for any complex attributes
+      components = character(0)
+      
+      # Add ID (already has # prefix)
+      if (has_id) {
+        components = c(components, x@id)
+      }
+      
+      # Add classes (already have . prefix)
+      if (has_classes) {
+        components = c(components, x@classes)
+      }
+      
+      # Add key=value pairs
+      if (has_attr) {
+        kv_pairs = paste0(names(x@attr), "=", x@attr)
+        components = c(components, kv_pairs)
+      }
+      
+      if (length(components) > 0) {
+        attr_str = paste0("{", paste(components, collapse=" "), "}")
+      }
+    }
+  }
+  
   lines = c(
-    paste(ticks, x@attr),
+    paste(ticks, attr_str),
     x@code,
     ticks
   )

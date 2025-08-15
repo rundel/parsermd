@@ -6,6 +6,8 @@
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
+#include "parse_pandoc_attr_ast.h"
+
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
@@ -15,7 +17,8 @@ namespace client { namespace ast {
   struct code_block_args : x3::position_tagged {
     std::string indent;
     int n_ticks;
-    std::string attr;
+    std::string unbraced_class;
+    pandoc_attr attr;
   };
 
 
@@ -27,7 +30,7 @@ namespace client { namespace ast {
 
 BOOST_FUSION_ADAPT_STRUCT(
   client::ast::code_block_args,
-  indent, n_ticks, attr
+  indent, n_ticks, unbraced_class, attr
 )
 
 BOOST_FUSION_ADAPT_STRUCT(

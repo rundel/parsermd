@@ -31,12 +31,33 @@ tree_node.rmd_heading = function(x) {
 
 #' @exportS3Method
 tree_node.rmd_code_block = function(x) {
-  attr = if (x@attr == "") cli::style_italic("<no attrs>")
-         else x@attr
+  # Format attributes for display
+  has_id = length(x@id) > 0
+  has_attr = length(x@attr) > 0  
+  has_classes = length(x@classes) > 0
+  
+  if (!has_id && !has_attr && !has_classes) {
+    attr = cli::style_italic("<no attrs>")
+  } else {
+    components = character(0)
+    if (has_id) components = c(components, x@id)
+    if (has_classes) {
+      # Display classes without the . prefix for cleaner output
+      clean_classes = x@classes
+      clean_classes = ifelse(startsWith(clean_classes, "."), 
+                           substr(clean_classes, 2, nchar(clean_classes)), 
+                           clean_classes)
+      components = c(components, clean_classes)
+    }
+    if (has_attr) {
+      kv_pairs = paste0(names(x@attr), "=", x@attr)
+      components = c(components, kv_pairs)
+    }
+    attr = paste(components, collapse=" ")
+  }
 
   list(
     text = "Code block",
-    #label = paste0("[", attr, ", ", length(x@code), " lines]")
     label = cli::pluralize("[{attr}, {length(x@code)} line{?s}]")
   )
 }
