@@ -181,13 +181,13 @@ test_that("rmd_code_block S7 class works", {
 test_that("rmd_fenced_div_open S7 class works", {
   # Valid fenced div with all properties
   div_open = rmd_fenced_div_open(
-    id = "myid", 
-    classes = c("note", "warning"), 
+    id = "#myid", 
+    classes = c(".note", ".warning"), 
     attr = c(title = "Test", role = "alert")
   )
   expect_s3_class(div_open, "rmd_fenced_div_open")
-  expect_equal(div_open@id, "myid")
-  expect_equal(div_open@classes, c("note", "warning"))
+  expect_equal(div_open@id, "#myid")
+  expect_equal(div_open@classes, c(".note", ".warning"))
   expect_equal(div_open@attr, c(title = "Test", role = "alert"))
   
   # Valid empty properties
@@ -198,15 +198,15 @@ test_that("rmd_fenced_div_open S7 class works", {
   expect_equal(empty_div@attr, character())
   
   # Valid with only ID
-  id_only = rmd_fenced_div_open(id = "test")
-  expect_equal(id_only@id, "test")
+  id_only = rmd_fenced_div_open(id = "#test")
+  expect_equal(id_only@id, "#test")
   expect_equal(id_only@classes, character())
   expect_equal(id_only@attr, character())
   
   # Valid with only classes
-  class_only = rmd_fenced_div_open(classes = c("warning", "large"))
+  class_only = rmd_fenced_div_open(classes = c(".warning", ".large"))
   expect_equal(class_only@id, character())
-  expect_equal(class_only@classes, c("warning", "large"))
+  expect_equal(class_only@classes, c(".warning", ".large"))
   expect_equal(class_only@attr, character())
   
   # Valid with only attributes
@@ -215,13 +215,24 @@ test_that("rmd_fenced_div_open S7 class works", {
   expect_equal(attr_only@classes, character())
   expect_equal(attr_only@attr, c(style = "color:red", width = "100px"))
   
-  # Test validators
+  # Test validators - ID without # prefix
   expect_snapshot_error(
-    rmd_fenced_div_open(id = c("id1", "id2"))  # Multiple IDs not allowed
+    rmd_fenced_div_open(id = "myid")  # ID must start with #
   )
   
+  # Test validators - class without . prefix
   expect_snapshot_error(
-    rmd_fenced_div_open(attr = c("value1", "value2"))  # Unnamed attr not allowed
+    rmd_fenced_div_open(classes = c("note"))  # Classes must start with .
+  )
+  
+  # Test validators - multiple IDs not allowed
+  expect_snapshot_error(
+    rmd_fenced_div_open(id = c("#id1", "#id2"))
+  )
+  
+  # Test validators - unnamed attr not allowed
+  expect_snapshot_error(
+    rmd_fenced_div_open(attr = c("value1", "value2"))
   )
 })
 
@@ -301,6 +312,54 @@ test_that("rmd_shortcode S7 class works", {
   expect_equal(empty_args@args, character())
 })
 
+test_that("rmd_span S7 class works", {
+  # Valid span
+  span = rmd_span(
+    text = "emphasized text",
+    id = "#myspan",
+    classes = c(".emphasis", ".highlight"),
+    attr = c(style = "color:red", role = "button")
+  )
+  expect_s3_class(span, "rmd_span")
+  expect_equal(span@text, "emphasized text")
+  expect_equal(span@id, "#myspan")
+  expect_equal(span@classes, c(".emphasis", ".highlight"))
+  expect_equal(span@attr, c(style = "color:red", role = "button"))
+  
+  # Valid span with empty properties
+  empty_span = rmd_span(text = "text")
+  expect_s3_class(empty_span, "rmd_span")
+  expect_equal(empty_span@text, "text")
+  expect_equal(empty_span@id, character())
+  expect_equal(empty_span@classes, character())
+  expect_equal(empty_span@attr, character())
+  
+  # Invalid text (wrong length)
+  expect_snapshot_error(
+    rmd_span(text = c("text1", "text2"))
+  )
+  
+  # Invalid id (wrong length)
+  expect_snapshot_error(
+    rmd_span(text = "test", id = c("#id1", "#id2"))
+  )
+  
+  # Invalid id (no # prefix)
+  expect_snapshot_error(
+    rmd_span(text = "test", id = "myid")
+  )
+  
+  # Invalid classes (no . prefix)
+  expect_snapshot_error(
+    rmd_span(text = "test", classes = c("myclass"))
+  )
+  
+  # Invalid attr (unnamed attributes)
+  expect_snapshot_error(
+    rmd_span(text = "test", attr = c("value1", "value2"))
+  )
+})
+
 test_that("S7 inheritance works", {
   # All classes should inherit from rmd_node
   expect_true(S7::S7_inherits(rmd_yaml(yaml = list()), rmd_node))
@@ -310,13 +369,16 @@ test_that("S7 inheritance works", {
     code = character(), indent = "", n_ticks = 3L
   ), rmd_node))
   expect_true(S7::S7_inherits(rmd_markdown(lines = "test"), rmd_node))
+  expect_true(S7::S7_inherits(rmd_span(text = "test"), rmd_node))
+  expect_true(S7::S7_inherits(rmd_fenced_div_open(), rmd_node))
+  expect_true(S7::S7_inherits(rmd_fenced_div_close(), rmd_node))
 })
 
 test_that("rmd_ast balanced fenced div validation works", {
   # Valid: balanced fenced divs
   expect_s3_class(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "note"),
+      rmd_fenced_div_open(classes = c(".note")),
       rmd_markdown(lines = "Content"),
       rmd_fenced_div_close()
     )),
@@ -326,8 +388,8 @@ test_that("rmd_ast balanced fenced div validation works", {
   # Valid: nested balanced fenced divs
   expect_s3_class(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "outer"),
-      rmd_fenced_div_open(classes = "inner"),
+      rmd_fenced_div_open(classes = c(".outer")),
+      rmd_fenced_div_open(classes = c(".inner")),
       rmd_markdown(lines = "Content"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
@@ -355,7 +417,7 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: unclosed fenced div
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "note"),
+      rmd_fenced_div_open(classes = c(".note")),
       rmd_markdown(lines = "Content")
     ))
   )
@@ -363,8 +425,8 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: multiple unclosed fenced divs
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "outer"),
-      rmd_fenced_div_open(classes = "inner"),
+      rmd_fenced_div_open(classes = c(".outer")),
+      rmd_fenced_div_open(classes = c(".inner")),
       rmd_markdown(lines = "Content")
     ))
   )
@@ -380,7 +442,7 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: more closes than opens
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "note"),
+      rmd_fenced_div_open(classes = c(".note")),
       rmd_fenced_div_close(),
       rmd_fenced_div_close()
     ))
@@ -389,8 +451,8 @@ test_that("rmd_ast unbalanced fenced div validation fails", {
   # Invalid: unbalanced nested divs
   expect_snapshot_error(
     rmd_ast(nodes = list(
-      rmd_fenced_div_open(classes = "outer"),
-      rmd_fenced_div_open(classes = "inner"),
+      rmd_fenced_div_open(classes = c(".outer")),
+      rmd_fenced_div_open(classes = c(".inner")),
       rmd_fenced_div_close()
     ))
   )

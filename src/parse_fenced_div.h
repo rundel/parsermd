@@ -101,8 +101,8 @@ namespace client { namespace parser {
 
   auto cbrace_attrs = x3::rule<struct _, client::ast::pandoc_attr > ("braced attribute(s)")
   = x3::lit("{") > x3::lexeme[
-      (id_attr | x3::attr(std::string())) > *x3::lit(" ") >
-      (class_attr % +x3::lit(" ") | x3::attr(std::vector<std::string>())) > *x3::lit(" ") >
+      (id_attr | x3::attr(std::string())) >> *x3::lit(" ") >
+      (class_attr % +x3::lit(" ") | x3::attr(std::vector<std::string>())) >> *x3::lit(" ") >
       (key_value_attr % +x3::lit(" ") | x3::attr(std::vector<client::ast::key_value>())) > *x3::lit(" ")
     ] > x3::lit("}");
 

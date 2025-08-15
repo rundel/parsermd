@@ -841,6 +841,26 @@ test_that("examples/quarto-web/docs/blog/posts/2025-05-19-quarto-codespaces/inde
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-web/docs/blog/posts/2025-07-24-parameterized-reports-python/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/blog/posts/2025-07-24-parameterized-reports-python/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/blog/posts/2025-07-28-R-package-release-1.5/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/blog/posts/2025-07-28-R-package-release-1.5/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-web/docs/blog/posts/2025-xx-xx-1.7-release/index.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -1622,6 +1642,13 @@ test_that("examples/quarto-web/docs/get-started/authoring/neovim.qmd", {
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-web/docs/get-started/authoring/positron.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-web/docs/get-started/authoring/positron.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-web/docs/get-started/authoring/rstudio.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-web/docs/get-started/authoring/rstudio.qmd"
@@ -1673,6 +1700,46 @@ test_that("examples/quarto-web/docs/get-started/computations/_computations.qmd",
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-web/docs/get-started/computations/_positron/python/computations-complete.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/get-started/computations/_positron/python/computations-complete.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/computations/_positron/python/computations.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/get-started/computations/_positron/python/computations.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/computations/_positron/r/computations-complete.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/get-started/computations/_positron/r/computations-complete.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/computations/_positron/r/computations.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/get-started/computations/_positron/r/computations.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-web/docs/get-started/computations/index.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-web/docs/get-started/computations/index.qmd"
@@ -1690,6 +1757,13 @@ test_that("examples/quarto-web/docs/get-started/computations/jupyter.qmd", {
 test_that("examples/quarto-web/docs/get-started/computations/neovim.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-web/docs/get-started/computations/neovim.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/computations/positron.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-web/docs/get-started/computations/positron.qmd"
   ), class = "rmd_ast")
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
@@ -1722,6 +1796,23 @@ test_that("examples/quarto-web/docs/get-started/hello/_hello.qmd", {
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-web/docs/get-started/hello/_positron/python/hello.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-web/docs/get-started/hello/_positron/python/hello.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/hello/_positron/r/hello.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-web/docs/get-started/hello/_positron/r/hello.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-web/docs/get-started/hello/index.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-web/docs/get-started/hello/index.qmd"
@@ -1739,6 +1830,13 @@ test_that("examples/quarto-web/docs/get-started/hello/jupyter.qmd", {
 test_that("examples/quarto-web/docs/get-started/hello/neovim.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-web/docs/get-started/hello/neovim.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-web/docs/get-started/hello/positron.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-web/docs/get-started/hello/positron.qmd"
   ), class = "rmd_ast")
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
