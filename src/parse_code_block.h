@@ -30,6 +30,7 @@ namespace client { namespace parser {
       x3::omit[ end_indent ] >>
       close_ticks(3)
     ] >>
+    *x3::lit(" ") >>
     x3::eol;
 
   struct code_block_class : error_handler {};
