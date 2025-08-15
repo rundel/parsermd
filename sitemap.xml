@@ -26,6 +26,7 @@
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_chunk.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_classes_s7.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_code_block.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_code_block_literal.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_fenced_div_close.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_fenced_div_open.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_heading.html</loc></url>
@@ -39,8 +40,10 @@
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_select_helpers.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_shortcode.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_source.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_span.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_yaml.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/shortcode_utils.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/span_utils.html</loc></url>
 </urlset>
 

@@ -48,18 +48,13 @@
 <li><p>Added support for fenced divs - e.g. (<code>::: {.class} ... :::</code>)</p></li>
 <li><p>Added support for markdown code blocks</p></li>
 <li><p>Added support for yaml expressions - e.g. (<code>!expr</code>)</p></li>
-<li><p>Exported and cleaned up node creation functions - see <code>?rmd_create</code> for details</p></li>
-<li><p>Added experimental support for parsing collections of Rmd and qmd files - see <code><a href="../reference/parse_collection.html">parse_qmd_collection()</a></code> and <code><a href="../reference/parse_collection.html">parse_rmd_collection()</a></code></p></li>
+<li><p>Added support for parsing collections of Rmd and qmd files - see <code><a href="../reference/parse_collection.html">parse_qmd_collection()</a></code> and <code><a href="../reference/parse_collection.html">parse_rmd_collection()</a></code></p></li>
 <li><p>Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include <code>rmd_yaml</code>.</p></li>
+<li><p>Added support for Pandoc-style ordered fenced attributes for code blocks, fenced divs, and spans</p></li>
+<li><p>Added support for code block literals - e.g. ```{{r}}</p></li>
 <li>
-<p>Added support for 2ndary parsing to handle quarto shortcodes and inline code</p>
-<ul><li>See helper functions: <code><a href="../reference/shortcode_utils.html">rmd_has_shortcode()</a></code>, <code><a href="../reference/shortcode_utils.html">rmd_extract_shortcodes()</a></code>, and <code><a href="../reference/rmd_select_helpers.html">has_shortcode()</a></code>
-</li>
-</ul></li>
-<li>
-<p>Added comprehensive inline code detection and extraction utilities</p>
-<ul><li>New functions: <code><a href="../reference/inline_code_utils.html">rmd_has_inline_code()</a></code>, <code><a href="../reference/inline_code_utils.html">rmd_extract_inline_code()</a></code>, and <code><a href="../reference/rmd_select_helpers.html">has_inline_code()</a></code> for selecting nodes</li>
-<li>Support for engine-specific filtering using glob patterns</li>
+<p>Added support for 2ndary parsing to handle inline elements:</p>
+<ul><li>quarto shortcodes, inline code, and spans</li>
 </ul></li>
 <li>
 <p>Enhanced <code><a href="../reference/rmd_select.html">rmd_select()</a></code> functionality and node manipulation</p>
