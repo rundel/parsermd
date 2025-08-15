@@ -16,6 +16,7 @@
 #include "parse_inline_code.h"
 #include "parse_span.h"
 #include "parse_R_type.h"
+#include "parse_code_block_literal.h"
 
 #include "rcpp_wrap.h"
 
@@ -218,6 +219,14 @@ SEXP check_code_block_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+// [[Rcpp::export]]
+SEXP check_code_block_literal_parser(std::string const& str) {
+  client::ast::code_block_literal expr;
+  parse_str(str, client::parser::code_block_literal, expr);
+
+  return Rcpp::wrap(expr);
+}
+
 
 
 // [[Rcpp::export]]
@@ -305,6 +314,19 @@ template <> SEXP wrap(client::ast::code_block const& code_block) {
     Rcpp::Named("code") = code_block.code,
     Rcpp::Named("indent") = code_block.args.indent,
     Rcpp::Named("n_ticks") = code_block.args.n_ticks
+  );
+}
+
+// code block literal wrappers
+template <> SEXP wrap(client::ast::code_block_literal const& code_block_literal) {
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_code_block_literal = pkg["rmd_code_block_literal"];
+  
+  return rmd_code_block_literal(
+    Rcpp::Named("attr") = code_block_literal.args.attr,
+    Rcpp::Named("code") = code_block_literal.code,
+    Rcpp::Named("indent") = code_block_literal.args.indent,
+    Rcpp::Named("n_ticks") = code_block_literal.args.n_ticks
   );
 }
 
@@ -468,8 +490,9 @@ template <> SEXP wrap(client::ast::yaml const& x) {
 
 template <> SEXP wrap(client::ast::element const& element) {
   struct line_visitor {
-    SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
-    SEXP operator()(client::ast::code_block const& x ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::chunk const& x              ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::code_block const& x         ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::code_block_literal const& x ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }

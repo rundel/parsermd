@@ -4,6 +4,7 @@
 #include "parse_option_ast.h"
 #include "parse_chunk_ast.h"
 #include "parse_code_block_ast.h"
+#include "parse_code_block_literal_ast.h"
 #include "parse_rmd_ast.h"
 #include "parse_markdown_ast.h"
 
@@ -16,6 +17,7 @@ namespace Rcpp {
   template <> SEXP wrap(std::vector<client::ast::option> const& opts);
 
   template <> SEXP wrap(client::ast::code_block const& block);
+  template <> SEXP wrap(client::ast::code_block_literal const& block);
 
   // rmd
   template <> SEXP wrap(client::ast::heading const& h);

@@ -226,6 +226,37 @@ rmd_code_block = S7::new_class(
   package = NULL
 )
 
+#' @title Code block literal node
+#' @description S7 class representing a code block with {{...}} attributes
+#' @param attr Character. Raw attribute content from {{...}}
+#' @param code Character vector. Code lines
+#' @param indent Character. Indentation
+#' @param n_ticks Integer. Number of backticks
+#' @export
+rmd_code_block_literal = S7::new_class(
+  "rmd_code_block_literal",
+  parent = rmd_node,
+  properties = list(
+    attr    = S7::new_property(S7::class_character, default = quote("")),
+    code    = S7::new_property(S7::class_character, default = quote(character())),
+    indent  = S7::new_property(S7::class_character, default = quote("")),
+    n_ticks = S7::new_property(S7::class_integer, default = quote(3L))
+  ),
+  validator = function(self) {
+    if (length(self@attr) != 1) {
+      return("attr must be a single character string")
+    }
+    if (length(self@indent) != 1) {
+      return("indent must be a single character string")
+    }
+    if (length(self@n_ticks) != 1) {
+      return("n_ticks must be a single integer")
+    }
+    NULL
+  },
+  package = NULL
+)
+
 #' @title Opening fenced div node
 #' @description S7 class representing the opening of a fenced div
 #' @param id Character vector. HTML ID (length 0 or 1)

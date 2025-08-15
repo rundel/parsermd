@@ -65,6 +65,10 @@ check_code_block_parser <- function(str) {
     .Call(`_parsermd_check_code_block_parser`, str)
 }
 
+check_code_block_literal_parser <- function(str) {
+    .Call(`_parsermd_check_code_block_literal_parser`, str)
+}
+
 check_inline_code_parser <- function(str) {
     .Call(`_parsermd_check_inline_code_parser`, str)
 }

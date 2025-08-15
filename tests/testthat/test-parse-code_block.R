@@ -16,20 +16,6 @@ test_that("code block parsing - Basic", {
     rmd_code_block(classes = ".r")
   )
 
-  # Skip this test for now - {{r}} is not valid pandoc attribute syntax
-  # TODO: Handle edge cases like {{r}} which should be treated as literal text
-  # expect_equal(
-  #   check_code_block_parser("```{{r}}\n```\n"),
-  #   rmd_code_block(classes = ".{{r}}")
-  # )
-  
-  # expect_equal( # Check proper disabiguation of code block vs. chunk
-  #   parse_rmd("```{{r}}\n```\n"),
-  #   rmd_ast( list(
-  #     rmd_code_block(classes = ".{{r}}")
-  #   ) )
-  # )
-
   # Multi-word unbraced attributes are not valid - these should fail to parse
   expect_error(
     check_code_block_parser("```abc def\n```\n")

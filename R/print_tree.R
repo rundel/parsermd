@@ -63,6 +63,17 @@ tree_node.rmd_code_block = function(x) {
 }
 
 #' @exportS3Method
+tree_node.rmd_code_block_literal = function(x) {
+  attr = if (x@attr == "") cli::style_italic("<no attrs>")
+         else paste0("{{", x@attr, "}}")
+
+  list(
+    text = "Code block literal",
+    label = cli::pluralize("[{attr}, {length(x@code)} line{?s}]")
+  )
+}
+
+#' @exportS3Method
 tree_node.rmd_chunk = function(x) {
   name = cli::style_bold(rmd_node_label(x))
 

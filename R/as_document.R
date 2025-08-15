@@ -184,6 +184,22 @@ as_document.rmd_code_block = function(x, ...) {
   )
 }
 
+#' @exportS3Method
+as_document.rmd_code_block_literal = function(x, ...) {
+  ticks = paste(rep('`', x@n_ticks), collapse="")
+  
+  lines = c(
+    paste0(ticks, "{{", x@attr, "}}"),
+    x@code,
+    ticks
+  )
+
+  paste0(
+    x@indent,
+    lines
+  )
+}
+
 
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
