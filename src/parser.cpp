@@ -278,9 +278,12 @@ template <> SEXP wrap(client::ast::code_block const& code_block) {
   std::string id_str = code_block.args.attr.id;
   std::vector<std::string> classes = code_block.args.attr.classes;
   
-  // Add unbraced class if present (with . prefix)
+  // Add unbraced class if present (ensure . prefix)
   if (!code_block.args.unbraced_class.empty()) {
-    std::string unbraced_with_prefix = "." + code_block.args.unbraced_class;
+    std::string unbraced_with_prefix = code_block.args.unbraced_class;
+    if (unbraced_with_prefix[0] != '.') {
+      unbraced_with_prefix = "." + unbraced_with_prefix;
+    }
     classes.insert(classes.begin(), unbraced_with_prefix);
   }
   

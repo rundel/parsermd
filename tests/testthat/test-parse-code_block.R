@@ -284,17 +284,6 @@ test_that("code block parsing - Edge Cases and Errors", {
     check_code_block_parser("```abc def\n```\n")
   )
   
-  expect_error(
-    check_code_block_parser("```1invalid\n```\n")  # Cannot start with digit
-  )
-  
-  expect_error(
-    check_code_block_parser("```-invalid\n```\n")  # Cannot start with hyphen
-  )
-  
-  expect_error(
-    check_code_block_parser("```_invalid\n```\n")  # Cannot start with underscore
-  )
   
   expect_error(
     check_code_block_parser("```python code\n```\n")  # Spaces not allowed
@@ -302,6 +291,40 @@ test_that("code block parsing - Edge Cases and Errors", {
   
   expect_error(
     check_code_block_parser("```city=\"Corvallis\"\n```\n")  # Not valid CSS class
+  )
+  
+  # Unbraced class starting with dot is now allowed
+  expect_equal(
+    check_code_block_parser("```.yaml\n```\n"),
+    rmd_code_block(classes = ".yaml")
+  )
+  
+  expect_equal(
+    check_code_block_parser("``` .python\n```\n"),
+    rmd_code_block(classes = ".python")
+  )
+  
+  # Both dotted and non-dotted unbraced classes should result in same internal representation
+  expect_equal(
+    check_code_block_parser("```yaml\n```\n"),
+    check_code_block_parser("```.yaml\n```\n")
+  )
+  
+  # Invalid unbraced classes that should still fail with good error messages
+  expect_error(
+    check_code_block_parser("```1invalid\n```\n")  # starts with number
+  )
+  
+  expect_error(
+    check_code_block_parser("```--invalid\n```\n")  # starts with --
+  )
+  
+  expect_error(
+    check_code_block_parser("```_invalid\n```\n")  # starts with underscore
+  )
+  
+  expect_error(
+    check_code_block_parser("```-invalid\n```\n")  # starts with single hyphen
   )
   
   # === Empty braces ===
