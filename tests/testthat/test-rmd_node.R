@@ -45,7 +45,7 @@ test_that("rmd_node_type works with all node types", {
       rmd_heading(name = "Section", level = 1L),
       rmd_chunk(engine = "r", name = "code", code = "x = 1"),
       rmd_raw_chunk(format = "r", code = "y = 2"),
-      rmd_code_block(attr = "python", code = "print('hello')"),
+      rmd_code_block(classes = ".python", code = "print('hello')"),
       rmd_markdown(lines = "Some text"),
       rmd_shortcode(func = "video", args = "demo.mp4"),
       rmd_inline_code(engine = "r", code = "2+2"),
@@ -73,7 +73,7 @@ test_that("rmd_node_length works with different node types", {
       rmd_markdown(lines = c("Line 1", "Line 2", "Line 3", "Line 4")),
       rmd_yaml(yaml = list(title = "Test", author = "Me", date = "2023-01-01")),
       rmd_heading(name = "Section", level = 1L),  # should return NA
-      rmd_code_block(attr = "python", code = "print('hello')")  # should return NA (no specific method)
+      rmd_code_block(classes = ".python", code = "print('hello')")  # should return NA (no specific method)
     )
   )
   

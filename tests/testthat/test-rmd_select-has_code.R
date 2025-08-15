@@ -105,7 +105,7 @@ test_that("has_code only matches code chunks", {
       rmd_heading(name = "Analysis", level = 1L),
       rmd_markdown(lines = "Text mentioning plot() function"),
       rmd_chunk(engine = "r", name = "code", code = "plot(cars)"),
-      rmd_code_block(attr = "r", code = "plot(data)")  # code block, not chunk
+      rmd_code_block(classes = ".r", code = "plot(data)")  # code block, not chunk
     )
   )
   

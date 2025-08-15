@@ -51,12 +51,12 @@
 # rmd_code_block S7 class works
 
     <rmd_code_block> object is invalid:
-    - attr must be a single character string
+    - id must be a character vector of length 0 or 1
 
 ---
 
     <rmd_code_block> object is invalid:
-    - n_ticks must be a single integer
+    - classes cannot be named
 
 ---
 
