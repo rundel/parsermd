@@ -314,7 +314,6 @@ rmd_fenced_div_close = S7::new_class(
 #' @export
 rmd_inline_code = S7::new_class(
   "rmd_inline_code",
-  parent = rmd_node,
   properties = list(
     engine = S7::new_property(S7::class_character, default = quote("")),
     code   = S7::new_property(S7::class_character, default = quote("")),
@@ -352,7 +351,6 @@ rmd_inline_code = S7::new_class(
 #' @export
 rmd_shortcode = S7::new_class(
   "rmd_shortcode",
-  parent = rmd_node,
   properties = list(
     func   = S7::class_character,
     args   = S7::new_property(S7::class_character, default = quote(character())),
@@ -383,7 +381,6 @@ rmd_shortcode = S7::new_class(
 #' @export
 rmd_span = S7::new_class(
   "rmd_span",
-  parent = rmd_node,
   properties = list(
     text = S7::new_property(S7::class_character, default = quote("")),
     id = S7::new_property(S7::class_character, default = quote(character())),
