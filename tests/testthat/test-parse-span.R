@@ -70,9 +70,9 @@ test_that("C++ single span parser - basic functionality", {
   
   # Test span with escaped brackets in text
   expect_equal(
-    check_span_parser("[text with \\] bracket]{.class}"), 
+    check_span_parser(r"([text with \] bracket]{.class})"), 
     rmd_span(
-      text = "text with  bracket",
+      text = r"(text with \] bracket)",
       classes = ".class"
     )
   )
@@ -93,6 +93,75 @@ test_that("C++ span parser - edge cases and validation", {
     rmd_span(
       text = "text with spaces and punctuation!",
       classes = ".highlight"
+    )
+  )
+
+})
+
+test_that("C++ span parser - nested spans", {
+  
+  # Test basic nested span - inner span becomes text content  
+  expect_equal(
+    check_span_parser("[[hello]{.class1}]{.class2}"),
+    rmd_span(
+      text = "[hello]{.class1}",
+      classes = ".class2"
+    )
+  )
+  
+  # Test nested span with ID and multiple attributes
+  expect_equal(
+    check_span_parser("[[inner text]{.inner}]{#outer .outer key=value}"),
+    rmd_span(
+      text = "[inner text]{.inner}",
+      id = "#outer",
+      classes = ".outer",
+      attr = c(key = "value")
+    )
+  )
+  
+  # Test nested span with complex inner content
+  expect_equal(
+    check_span_parser("[[text with spaces]{.highlight .bold}]{.container}"),
+    rmd_span(
+      text = "[text with spaces]{.highlight .bold}",
+      classes = ".container"
+    )
+  )
+  
+  # Test text with non-span brackets (should be included in content)
+  expect_equal(
+    check_span_parser("[text with [brackets] inside]{.class}"),
+    rmd_span(
+      text = "text with [brackets] inside",
+      classes = ".class"
+    )
+  )
+  
+  # Test mixed content - span followed by non-span brackets
+  expect_equal(
+    check_span_parser("[prefix [nested]{.inner} and [more brackets]]{.outer}"),
+    rmd_span(
+      text = "prefix [nested]{.inner} and [more brackets]",
+      classes = ".outer"
+    )
+  )
+  
+  # Test deeply nested spans
+  expect_equal(
+    check_span_parser("[[[deep]{.level1}]{.level2}]{.level3}"),
+    rmd_span(
+      text = "[[deep]{.level1}]{.level2}",
+      classes = ".level3"
+    )
+  )
+  
+  # Test escaped brackets in nested spans
+  expect_equal(
+    check_span_parser(r"([[text with \] escaped]{.inner}]{.outer})"),
+    rmd_span(
+      text = r"([text with \] escaped]{.inner})",
+      classes = ".outer"
     )
   )
 
