@@ -33,11 +33,17 @@ extract_shortcode_lines = function(content) {
   lines = strsplit(content, "\n")[[1]]
   shortcode_pattern = "\\{\\{<\\s*[^>]+\\s*>\\}\\}"
   escaped_pattern = "\\{\\{</\\*.*?\\*/>\\}\\}"
+  triple_brace_pattern = "\\{\\{\\{<.*?>\\}\\}\\}"  # Filter out {{{< ... >}}} patterns
   
   matches = list()
   for (i in seq_along(lines)) {
     line = lines[i]
     if (grepl(shortcode_pattern, line)) {
+      # Skip lines that contain triple-brace shortcode examples
+      if (grepl(triple_brace_pattern, line)) {
+        next
+      }
+      
       # Extract all shortcode matches from this line
       shortcode_matches = regmatches(line, gregexpr(shortcode_pattern, line))[[1]]
       has_valid_shortcode = FALSE
@@ -145,8 +151,8 @@ test_shortcode_parsing = function(file, skip_files = character()) {
     
     # Create the expectation testing the full line
     expectation = paste0(
-      "  testthat::expect_no_error(\n",
-      "    parse_shortcodes_cpp(", rlang::expr_deparse(full_line), ")\n",
+      "  testthat::expect_true(\n",
+      "    length(parse_shortcodes_cpp(", rlang::expr_deparse(full_line), ")) >= 1\n",
       "  )"
     )
     
@@ -195,8 +201,8 @@ test_span_parsing = function(file, skip_files = character()) {
     
     # Create the expectation testing the full line
     expectation = paste0(
-      "  testthat::expect_no_error(\n",
-      "    parse_spans_cpp(", rlang::expr_deparse(full_line), ")\n",
+      "  testthat::expect_true(\n",
+      "    length(parse_spans_cpp(", rlang::expr_deparse(full_line), ")) >= 1\n",
       "  )"
     )
     
