@@ -10,6 +10,7 @@
 #include "parser_error_handler.h"
 #include "parse_fenced_div_ast.h"
 #include "parse_qstring.h"
+#include "parse_pandoc_attr.h"
 
 
 
@@ -74,39 +75,6 @@ namespace client { namespace parser {
   // Also indenting is not supported so we ignore that as well
   // - See https://github.com/jgm/pandoc/issues/7936
 
-
-  // For unbraced attributes add the css class decorator and convert to fdiv_open
-  auto add_unbraced_class = [](auto& ctx){
-    client::ast::pandoc_attr attr;
-    attr.classes.push_back(std::string(".") + _attr(ctx));
-    _val(ctx) = attr;
-  };
-  auto unbraced_attr = x3::rule<struct _, client::ast::pandoc_attr > ("unbraced attribute")
-  = x3::lexeme[ (+(x3::char_ - x3::eol - x3::blank))[add_unbraced_class] ];
-
-
-  auto id_attr = x3::rule<struct _, std::string> ("id attribute")  
-  = x3::raw[ x3::lit("#") >> +(x3::char_("a-zA-Z0-9._-")) ];
-
-  auto class_attr = x3::rule<struct _, std::string> ("class attribute")
-  = x3::raw[ x3::lit(".") >> +(x3::char_("a-zA-Z0-9._-")) ];
-
-  auto key_value_attr = x3::rule<struct _, client::ast::key_value> ("key=value attribute")
-  = x3::raw[ +(x3::char_("a-zA-Z0-9_-")) ] >> 
-    x3::lit("=") >> 
-    x3::raw[ 
-      ( x3::raw[q_string] |             // quoted value
-        +(x3::char_ - x3::char_(" }"))  // unquoted value
-    )];
-
-  auto cbrace_attrs = x3::rule<struct _, client::ast::pandoc_attr > ("braced attribute(s)")
-  = x3::lit("{") > x3::lexeme[
-      (id_attr | x3::attr(std::string())) >> *x3::lit(" ") >
-      (class_attr % +x3::lit(" ") | x3::attr(std::vector<std::string>())) >> *x3::lit(" ") >
-      (key_value_attr % +x3::lit(" ") | x3::attr(std::vector<client::ast::key_value>())) > *x3::lit(" ")
-    ] > x3::lit("}");
-
-
   struct fdiv_open_class : error_handler {};
   x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
 
@@ -128,24 +96,6 @@ namespace client { namespace parser {
   = x3::lexeme[ x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ] ] >> x3::omit[*x3::blank] >> x3::eol;
 
   BOOST_SPIRIT_DEFINE(fdiv_close);
-
-  
-  
-  struct span_class : error_handler {};
-  x3::rule<span_class, client::ast::span> const span = "span";
-
-  auto const span_def
-  = x3::lit("[") >>
-    x3::lexeme[ +("\\]" | (x3::char_ - ']' - x3::eol)) ] >> // span text
-    x3::lit("]") >>
-    cbrace_attrs;
-
-  BOOST_SPIRIT_DEFINE(span);
-
-  auto not_span = x3::rule<struct _> ("not a span")
-  = x3::raw[*( !span >> (x3::char_ | x3::eol) )];
-
-  auto const string_with_span = not_span >> *(span >> not_span);
 
 } }
 

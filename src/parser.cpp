@@ -14,6 +14,7 @@
 #include "parse_markdown.h"
 #include "parse_shortcode.h"
 #include "parse_inline_code.h"
+#include "parse_span.h"
 #include "parse_R_type.h"
 
 #include "rcpp_wrap.h"
