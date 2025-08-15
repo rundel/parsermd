@@ -187,13 +187,54 @@ rmd_markdown = S7::new_class(
 
 #' @title Markdown code block node
 #' @description S7 class representing a fenced code block
-#' @param attr Character. Block attributes
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Key-value attributes (keys as names)
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
 #' @param n_ticks Integer. Number of backticks
 #' @export
 rmd_code_block = S7::new_class(
   "rmd_code_block",
+  parent = rmd_node,
+  properties = list(
+    id      = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr    = S7::new_property(S7::class_character, default = quote(character())),
+    code    = S7::new_property(S7::class_character, default = quote(character())),
+    indent  = S7::new_property(S7::class_character, default = quote("")),
+    n_ticks = S7::new_property(S7::class_integer, default = quote(3L))
+  ),
+  validator = function(self) {
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (!is.null(names(self@classes))) {
+      return("classes cannot be named")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be named if not empty")
+    }
+    if (length(self@indent) != 1) {
+      return("indent must be a single character string")
+    }
+    if (length(self@n_ticks) != 1) {
+      return("n_ticks must be a single integer")
+    }
+    NULL
+  },
+  package = NULL
+)
+
+#' @title Code block literal node
+#' @description S7 class representing a code block with {{...}} attributes
+#' @param attr Character. Raw attribute content from {{...}}
+#' @param code Character vector. Code lines
+#' @param indent Character. Indentation
+#' @param n_ticks Integer. Number of backticks
+#' @export
+rmd_code_block_literal = S7::new_class(
+  "rmd_code_block_literal",
   parent = rmd_node,
   properties = list(
     attr    = S7::new_property(S7::class_character, default = quote("")),
@@ -208,8 +249,8 @@ rmd_code_block = S7::new_class(
     if (length(self@indent) != 1) {
       return("indent must be a single character string")
     }
-    if (length(self@n_ticks) != 1) {
-      return("n_ticks must be a single integer")
+    if (length(self@n_ticks) != 1 || self@n_ticks < 3) {
+      return("n_ticks must be a single integer >= 3")
     }
     NULL
   },
@@ -218,14 +259,39 @@ rmd_code_block = S7::new_class(
 
 #' @title Opening fenced div node
 #' @description S7 class representing the opening of a fenced div
-#' @param attr Character vector. Div attributes
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Key-value attributes (keys as names)
 #' @export
 rmd_fenced_div_open = S7::new_class(
   "rmd_fenced_div_open",
   parent = rmd_node,
   properties = list(
-    attr = S7::class_character
+    id = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr = S7::new_property(S7::class_character, default = quote(character()))
   ),
+  validator = function(self) {
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (length(self@id) > 0 && !startsWith(self@id, "#")) {
+      return("id must start with # prefix")
+    }
+    if (!is.character(self@classes)) {
+      return("classes must be a character vector")
+    }
+    if (length(self@classes) > 0 && !all(startsWith(self@classes, "."))) {
+      return("all classes must start with . prefix")
+    }
+    if (!is.character(self@attr)) {
+      return("attr must be a character vector")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be a named character vector when not empty")
+    }
+    NULL
+  },
   package = NULL
 )
 
@@ -248,7 +314,6 @@ rmd_fenced_div_close = S7::new_class(
 #' @export
 rmd_inline_code = S7::new_class(
   "rmd_inline_code",
-  parent = rmd_node,
   properties = list(
     engine = S7::new_property(S7::class_character, default = quote("")),
     code   = S7::new_property(S7::class_character, default = quote("")),
@@ -286,7 +351,6 @@ rmd_inline_code = S7::new_class(
 #' @export
 rmd_shortcode = S7::new_class(
   "rmd_shortcode",
-  parent = rmd_node,
   properties = list(
     func   = S7::class_character,
     args   = S7::new_property(S7::class_character, default = quote(character())),
@@ -302,6 +366,42 @@ rmd_shortcode = S7::new_class(
     }
     if (length(self@length) != 1) {
       return("length must be a single integer")
+    }
+    NULL
+  },
+  package = NULL
+)
+
+#' @title Span node
+#' @description S7 class representing a span with attributes
+#' @param text Character. Span text content
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Additional attributes
+#' @export
+rmd_span = S7::new_class(
+  "rmd_span",
+  properties = list(
+    text = S7::new_property(S7::class_character, default = quote("")),
+    id = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr = S7::new_property(S7::class_character, default = quote(character()))
+  ),
+  validator = function(self) {
+    if (length(self@text) != 1) {
+      return("text must be a single character string")
+    }
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (length(self@id) == 1 && !grepl("^#", self@id)) {
+      return("id must start with '#' when present")
+    }
+    if (any(!grepl("^\\.", self@classes))) {
+      return("all classes must start with '.' when present")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be a named character vector when not empty")
     }
     NULL
   },

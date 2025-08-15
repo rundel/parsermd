@@ -12,20 +12,17 @@
 
 * Added support for yaml expressions - e.g. (`!expr`)
 
-* Exported and cleaned up node creation functions - see `?rmd_create` for details
-
-* Added experimental support for parsing collections of Rmd and qmd files - see `parse_qmd_collection()` and `parse_rmd_collection()`
+* Added support for parsing collections of Rmd and qmd files - see `parse_qmd_collection()` and `parse_rmd_collection()`
 
 * Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include `rmd_yaml`.
 
-* Added support for 2ndary parsing to handle quarto shortcodes and inline code
-  
-  * See helper functions: `rmd_has_shortcode()`, `rmd_extract_shortcodes()`, and `has_shortcode()`
+* Added support for Pandoc-style ordered fenced attributes for code blocks, fenced divs, and spans
 
-* Added comprehensive inline code detection and extraction utilities
-  
-  * New functions: `rmd_has_inline_code()`, `rmd_extract_inline_code()`, and `has_inline_code()` for selecting nodes
-  * Support for engine-specific filtering using glob patterns
+* Added support for code block literals - e.g. ```{{r}}
+
+* Added support for 2ndary parsing to handle inline elements:
+
+  * quarto shortcodes, inline code, and spans
 
 * Enhanced `rmd_select()` functionality and node manipulation
 

@@ -2,11 +2,11 @@ test_that("by_fdiv works with single pattern matching", {
   # Create test AST with fenced divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "This is a note"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Regular markdown"),
-      rmd_fenced_div_open(attr = ".warning"),
+      rmd_fenced_div_open(classes = ".warning"),
       rmd_markdown(lines = "This is a warning"),
       rmd_fenced_div_close()
     )
@@ -25,10 +25,10 @@ test_that("by_fdiv works with class attribute patterns", {
   # Create test AST with class attributes
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = ".warning"),
+      rmd_fenced_div_open(classes = ".warning"),
       rmd_markdown(lines = "Warning content"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = c(".note", "important")),
+      rmd_fenced_div_open(classes = c(".note", ".important")),
       rmd_markdown(lines = "Important note"),
       rmd_fenced_div_close()
     )
@@ -47,13 +47,13 @@ test_that("by_fdiv works with multiple pattern matching (ALL must match)", {
   # Create test AST with multiple attributes
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = c(".warning", "important")),
+      rmd_fenced_div_open(classes = c(".warning", ".important")),
       rmd_markdown(lines = "Important warning"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = ".warning"),
+      rmd_fenced_div_open(classes = ".warning"),
       rmd_markdown(lines = "Regular warning"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = c("important", "note")),
+      rmd_fenced_div_open(classes = c(".important", ".note")),
       rmd_markdown(lines = "Important note"),
       rmd_fenced_div_close()
     )
@@ -72,9 +72,9 @@ test_that("by_fdiv handles nested fenced divs correctly", {
   # Create test AST with nested divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "outer"),
+      rmd_fenced_div_open(classes = ".outer"),
       rmd_markdown(lines = "Outer content"),
-      rmd_fenced_div_open(attr = "inner"),
+      rmd_fenced_div_open(classes = ".inner"),
       rmd_markdown(lines = "Inner content"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "More outer content"),
@@ -103,13 +103,13 @@ test_that("by_fdiv works with glob patterns", {
   # Create test AST with callout-style divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "callout-note"),
+      rmd_fenced_div_open(classes = ".callout-note"),
       rmd_markdown(lines = "Note content"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = "callout-warning"),
+      rmd_fenced_div_open(classes = ".callout-warning"),
       rmd_markdown(lines = "Warning content"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "Regular note"),
       rmd_fenced_div_close()
     )
@@ -128,13 +128,13 @@ test_that("by_fdiv works with regexp patterns", {
   # Create test AST with various div types
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "Note content"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = "callout-note"),
+      rmd_fenced_div_open(classes = ".callout-note"),
       rmd_markdown(lines = "Callout note"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = "footnote"),
+      rmd_fenced_div_open(classes = ".footnote"),
       rmd_markdown(lines = "Footnote content"),
       rmd_fenced_div_close()
     )
@@ -153,7 +153,7 @@ test_that("by_fdiv returns empty when no matches", {
   # Create test AST without target divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "Note content"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Regular content")
@@ -173,14 +173,14 @@ test_that("by_fdiv works with multiple independent divs", {
   # Create test AST with multiple separate note divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "First note"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Between notes"),
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "Second note"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = "warning"),
+      rmd_fenced_div_open(classes = ".warning"),
       rmd_markdown(lines = "Warning content"),
       rmd_fenced_div_close()
     )
@@ -199,10 +199,10 @@ test_that("by_fdiv works with complex attribute combinations", {
   # Create test AST with complex attributes
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = c("#special", ".sidebar", "important")),
+      rmd_fenced_div_open(id = "#special", classes = c(".sidebar", ".important")),
       rmd_markdown(lines = "Special sidebar"),
       rmd_fenced_div_close(),
-      rmd_fenced_div_open(attr = c(".sidebar", "normal")),
+      rmd_fenced_div_open(classes = c(".sidebar", ".normal")),
       rmd_markdown(lines = "Normal sidebar"),
       rmd_fenced_div_close()
     )
@@ -221,7 +221,7 @@ test_that("by_fdiv validates input correctly", {
   # Create a simple test AST for validation testing
   test_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_markdown(lines = "Content"),
       rmd_fenced_div_close()
     )
@@ -252,7 +252,7 @@ test_that("by_fdiv handles edge case with no matching close", {
   # Create a simple AST with just an open (this would normally be invalid,
   # but we're testing robustness of the helper function)
   test_nodes = list(
-    rmd_fenced_div_open(attr = "note"),
+    rmd_fenced_div_open(classes = ".note"),
     rmd_markdown(lines = "Content")
     # Intentionally no close for testing
   )
@@ -268,11 +268,11 @@ test_that("by_fdiv handles deeply nested divs", {
   # Create test AST with deeply nested divs
   original_ast = rmd_ast(
     nodes = list(
-      rmd_fenced_div_open(attr = "level1"),
+      rmd_fenced_div_open(classes = ".level1"),
       rmd_markdown(lines = "Level 1 content"),
-      rmd_fenced_div_open(attr = "level2"),
+      rmd_fenced_div_open(classes = ".level2"),
       rmd_markdown(lines = "Level 2 content"),
-      rmd_fenced_div_open(attr = "level3"),
+      rmd_fenced_div_open(classes = ".level3"),
       rmd_markdown(lines = "Level 3 content"),
       rmd_fenced_div_close(),
       rmd_fenced_div_close(),

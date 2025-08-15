@@ -31,9 +31,9 @@ namespace client { namespace parser {
 
   auto const unquoted_arg = x3::rule<struct _, std::string>{"unquoted argument"}
     = +( !shortcode_close >> 
-         (  x3::char_ - x3::char_(" '\"") - x3::eol 
-          | x3::char_('\\') >> x3::char_('\'') 
-          | x3::char_('\\') >> x3::char_('"') )
+         (  (x3::char_('\\') >> x3::char_('\'')) 
+          | (x3::char_('\\') >> x3::char_('"')) 
+          | x3::char_ - x3::char_(" '\"") - x3::eol )
        );
 
   auto const key_value_arg = x3::rule<struct _, std::string>{"key=value argument"}

@@ -1455,6 +1455,16 @@ test_that("examples/quarto-cli/src/resources/create/documents/default/qstart-fil
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/src/resources/create/extensions/brand/example.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/src/resources/create/extensions/brand/example.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/src/resources/create/extensions/filter/example.ejs.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -4311,6 +4321,46 @@ test_that("examples/quarto-cli/tests/docs/playwright/ojs/test-ojs.qmd", {
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/playwright/revealjs/brand/project/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/playwright/revealjs/brand/project/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/playwright/revealjs/brand/project/subdir/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/playwright/revealjs/brand/project/subdir/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/playwright/revealjs/brand/single.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/playwright/revealjs/brand/single.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/playwright/revealjs/brand/subdir/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/playwright/revealjs/brand/subdir/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/playwright/revealjs/callouts/custom-colors.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -4753,27 +4803,6 @@ test_that("examples/quarto-cli/tests/docs/self-contained/simple.qmd", {
 test_that("examples/quarto-cli/tests/docs/shortcodes/brand-light-dark.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-cli/tests/docs/shortcodes/brand-light-dark.qmd"
-  ), class = "rmd_ast")
-  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
-})
-
-test_that("examples/quarto-cli/tests/docs/shortcodes/brand-logo-dark.qmd", {
-  ast <- testthat::expect_no_error(parse_rmd(
-    "examples/quarto-cli/tests/docs/shortcodes/brand-logo-dark.qmd"
-  ), class = "rmd_ast")
-  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
-})
-
-test_that("examples/quarto-cli/tests/docs/shortcodes/brand-logo-light.qmd", {
-  ast <- testthat::expect_no_error(parse_rmd(
-    "examples/quarto-cli/tests/docs/shortcodes/brand-logo-light.qmd"
-  ), class = "rmd_ast")
-  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
-})
-
-test_that("examples/quarto-cli/tests/docs/shortcodes/brand-logo-one-brand.qmd", {
-  ast <- testthat::expect_no_error(parse_rmd(
-    "examples/quarto-cli/tests/docs/shortcodes/brand-logo-one-brand.qmd"
   ), class = "rmd_ast")
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
@@ -9207,6 +9236,13 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/2025/06/12/issue-12919.qmd",
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/2025/07/10/13051.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-cli/tests/docs/smoke-all/2025/07/10/13051.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/article-layout/grid.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-cli/tests/docs/smoke-all/article-layout/grid.qmd"
@@ -9426,6 +9462,156 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/book/simple/summary.qmd", {
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt-override-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt-override-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt-override.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt-override.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-alt.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-image-path-alt.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-image-path-alt.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-image-path-only.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-image-path-only.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-large.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-large.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-light.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-light.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-missing-mode.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-missing-mode.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-mixed-paths.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-mixed-paths.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-reverse-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-reverse-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-reverse.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-logo-reverse.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-default.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-default.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-light.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/brand-mode/brand-mode-light.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/brand-icon-small-favicon-book/index.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -9476,10 +9662,297 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/choose-logo-resou
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-logo.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-logo.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-no-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-no-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-no-light-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-no-light-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-search-priority.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/dark-mode-search-priority.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/default-logo.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
       "examples/quarto-cli/tests/docs/smoke-all/brand/logo/default-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-brand-precedence.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-brand-precedence.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-dark-brand-dark-only.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-dark-brand-dark-only.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-light-brand-light-only.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/document-light-brand-light-only.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/explicit-dark-light-paths.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/explicit-dark-light-paths.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/format-specific-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/format-specific-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/legacy-logo-syntax.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/legacy-logo-syntax.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/logo-extension/logo-brand-extension.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/logo-extension/logo-brand-extension.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/logo-extension-github/logo-brand-extension.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/logo-extension-github/logo-brand-extension.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/missing-medium-dark-fallback.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/missing-medium-dark-fallback.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/mixed-resource-direct-path.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/mixed-resource-direct-path.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/mode-first-search-algorithm.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/mode-first-search-algorithm.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/alt-text-consistency/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/alt-text-consistency/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-default/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-default/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-default/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-default/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-alt/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-alt/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-alt/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-alt/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-resources/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-resources/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-resources/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/brand-override-resources/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/missing-logo-handling/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/missing-logo-handling/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/size-preference-test/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/size-preference-test/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/size-preference-test/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/size-preference-test/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/theme-dark-enables-dark-logo/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/theme-dark-enables-dark-logo/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/theme-dark-enables-dark-logo/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/navbar/theme-dark-enables-dark-logo/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/no-dark-mode-no-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/no-dark-mode-no-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/override-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/override-dark-logo.qmd"
     ),
     class = "rmd_ast"
   )
@@ -9523,6 +9996,203 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/override-logo-res
     ),
     class = "rmd_ast"
   )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/partial-document-override.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/partial-document-override.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/path-vs-object-specification.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/path-vs-object-specification.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-default/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-default/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-default/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-default/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-alt/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-alt/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-alt/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-alt/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-resources/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-resources/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-resources/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/brand-override-resources/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/mode-first-search/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/mode-first-search/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/mode-first-search/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/mode-first-search/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/size-preference-order/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/size-preference-order/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/size-preference-order/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/size-preference-order/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/theme-dark-mode-enables-dark-logo/conclusion.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/theme-dark-mode-enables-dark-logo/conclusion.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/theme-dark-mode-enables-dark-logo/index.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/sidebar/theme-dark-mode-enables-dark-logo/index.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-doc-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-doc-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-no-doc-logo-yes-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-no-doc-logo-yes-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-yes-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-brand-file-light-yes-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-yes-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-mode-yes-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-project-brand-file-light/yes-dark-logo.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/brand/logo/theme-dark-project-brand-file-light/yes-dark-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/brand/logo/url-logo.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-cli/tests/docs/smoke-all/brand/logo/url-logo.qmd"
+  ), class = "rmd_ast")
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
@@ -11454,6 +12124,16 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/dark-mode/ggplot-brandless.q
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/dark-mode/ggplot-duobrand-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/dark-mode/ggplot-duobrand-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/dark-mode/ggplot-duobrand-echo.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -12054,6 +12734,13 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/embed/tables/inset-table.qmd
 test_that("examples/quarto-cli/tests/docs/smoke-all/embed/tables/parent.qmd", {
   ast <- testthat::expect_no_error(parse_rmd(
     "examples/quarto-cli/tests/docs/smoke-all/embed/tables/parent.qmd"
+  ), class = "rmd_ast")
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/engine/execute_info.qmd", {
+  ast <- testthat::expect_no_error(parse_rmd(
+    "examples/quarto-cli/tests/docs/smoke-all/engine/execute_info.qmd"
   ), class = "rmd_ast")
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
@@ -12773,6 +13460,106 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/revealjs/scroll-view-config.
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-both.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-both.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-dark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-dark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-fallback-light.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-fallback-light.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-fallback.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-fallback.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-light.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-light.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-sizes.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-sizes.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand-both.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand-both.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand-nodark.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand-nodark.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/brand-logo-unified-brand.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/shortcodes/meta-bad-data.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/shortcodes/meta-bad-data.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/table/appearance-bottom-cap.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -12937,6 +13724,66 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/color/typst
   testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
 })
 
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/customize-without-path.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/customize-without-path.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/directional-padding.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/directional-padding.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-directional-padding-dark-mode.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-directional-padding-dark-mode.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-directional-padding.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-directional-padding.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-variants-dark-mode.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-variants-dark-mode.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-variants.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/light-dark-variants.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
 test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/online-logo.qmd", {
   ast <- testthat::expect_no_error(
     parse_rmd(
@@ -12991,6 +13838,16 @@ test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/relati
   ast <- testthat::expect_no_error(
     parse_rmd(
       "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/logo/relative-path/brand-logo.qmd"
+    ),
+    class = "rmd_ast"
+  )
+  testthat::expect_equal(ast, parse_rmd(as_document(ast, padding = character())))
+})
+
+test_that("examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/typography/brand-extension/brand-typography.qmd", {
+  ast <- testthat::expect_no_error(
+    parse_rmd(
+      "examples/quarto-cli/tests/docs/smoke-all/typst/brand-yaml/typography/brand-extension/brand-typography.qmd"
     ),
     class = "rmd_ast"
   )

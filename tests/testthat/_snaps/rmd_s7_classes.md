@@ -51,12 +51,62 @@
 # rmd_code_block S7 class works
 
     <rmd_code_block> object is invalid:
-    - attr must be a single character string
+    - id must be a character vector of length 0 or 1
+
+---
+
+    <rmd_code_block> object is invalid:
+    - classes cannot be named
+
+---
+
+    <rmd_code_block> object is invalid:
+    - attr must be named if not empty
 
 ---
 
     <rmd_code_block> object is invalid:
     - n_ticks must be a single integer
+
+# rmd_code_block_literal S7 class works
+
+    <rmd_code_block_literal> object is invalid:
+    - attr must be a single character string
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - indent must be a single character string
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - n_ticks must be a single integer >= 3
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - n_ticks must be a single integer >= 3
+
+# rmd_fenced_div_open S7 class works
+
+    <rmd_fenced_div_open> object is invalid:
+    - id must start with # prefix
+
+---
+
+    <rmd_fenced_div_open> object is invalid:
+    - all classes must start with . prefix
+
+---
+
+    <rmd_fenced_div_open> object is invalid:
+    - id must be a character vector of length 0 or 1
+
+---
+
+    <rmd_fenced_div_open> object is invalid:
+    - attr must be a named character vector when not empty
 
 # rmd_inline_code S7 class works
 
@@ -72,6 +122,31 @@
 
     <rmd_shortcode> object is invalid:
     - func must be a single character string
+
+# rmd_span S7 class works
+
+    <rmd_span> object is invalid:
+    - text must be a single character string
+
+---
+
+    <rmd_span> object is invalid:
+    - id must be a character vector of length 0 or 1
+
+---
+
+    <rmd_span> object is invalid:
+    - id must start with '#' when present
+
+---
+
+    <rmd_span> object is invalid:
+    - all classes must start with '.' when present
+
+---
+
+    <rmd_span> object is invalid:
+    - attr must be a named character vector when not empty
 
 # rmd_ast unbalanced fenced div validation fails
 

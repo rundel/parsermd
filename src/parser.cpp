@@ -14,7 +14,9 @@
 #include "parse_markdown.h"
 #include "parse_shortcode.h"
 #include "parse_inline_code.h"
+#include "parse_span.h"
 #include "parse_R_type.h"
+#include "parse_code_block_literal.h"
 
 #include "rcpp_wrap.h"
 
@@ -76,6 +78,16 @@ SEXP parse_inline_code_cpp(std::string const& str) {
     ic.length = pos.end() - pos.begin();
     ic.braced = *(pos.begin()+1) == '{';
   }
+
+  return Rcpp::wrap(expr);
+}
+
+// [[Rcpp::export]]
+SEXP parse_spans_cpp(std::string const& str) {
+  namespace x3 = boost::spirit::x3;
+
+  std::vector<client::ast::span> expr;
+  auto error_handler = parse_str(str, client::parser::string_with_span, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -207,6 +219,14 @@ SEXP check_code_block_parser(std::string const& str) {
   return Rcpp::wrap(expr);
 }
 
+// [[Rcpp::export]]
+SEXP check_code_block_literal_parser(std::string const& str) {
+  client::ast::code_block_literal expr;
+  parse_str(str, client::parser::code_block_literal, expr);
+
+  return Rcpp::wrap(expr);
+}
+
 
 
 // [[Rcpp::export]]
@@ -221,6 +241,14 @@ SEXP check_inline_code_parser(std::string const& str) {
 SEXP check_shortcode_parser(std::string const& str) {
   client::ast::shortcode expr;
   parse_str(str, client::parser::shortcode, expr);
+
+  return Rcpp::wrap(expr);
+}
+
+// [[Rcpp::export]]
+SEXP check_span_parser(std::string const& str) {
+  client::ast::span expr;
+  parse_str(str, client::parser::span, expr);
 
   return Rcpp::wrap(expr);
 }
@@ -246,11 +274,62 @@ template <> SEXP wrap(client::ast::code_block const& code_block) {
   Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
   Rcpp::Function rmd_code_block = pkg["rmd_code_block"];
   
+  // Start with braced attributes
+  std::string id_str = code_block.args.attr.id;
+  std::vector<std::string> classes = code_block.args.attr.classes;
+  
+  // Add unbraced class if present (ensure . prefix)
+  if (!code_block.args.unbraced_class.empty()) {
+    std::string unbraced_with_prefix = code_block.args.unbraced_class;
+    if (unbraced_with_prefix[0] != '.') {
+      unbraced_with_prefix = "." + unbraced_with_prefix;
+    }
+    classes.insert(classes.begin(), unbraced_with_prefix);
+  }
+  
+  // Extract ID (keep # prefix)
+  Rcpp::CharacterVector id_vec;
+  if (!id_str.empty()) {
+    id_vec = Rcpp::CharacterVector::create(id_str);
+  }
+  
+  // Extract classes (keep . prefix)
+  Rcpp::CharacterVector classes_vec;
+  for (const auto& cls : classes) {
+    classes_vec.push_back(cls);
+  }
+  
+  // Extract key-value pairs as named character vector
+  Rcpp::CharacterVector attr_vec;
+  Rcpp::CharacterVector attr_names;
+  for (const auto& kv : code_block.args.attr.kvs) {
+    attr_vec.push_back(kv.value);
+    attr_names.push_back(kv.key);
+  }
+  if (attr_vec.length() > 0) {
+    attr_vec.attr("names") = attr_names;
+  }
+  
   return rmd_code_block(
-    Rcpp::Named("attr") = code_block.args.attr,
+    Rcpp::Named("id") = id_vec,
+    Rcpp::Named("classes") = classes_vec,
+    Rcpp::Named("attr") = attr_vec,
     Rcpp::Named("code") = code_block.code,
     Rcpp::Named("indent") = code_block.args.indent,
     Rcpp::Named("n_ticks") = code_block.args.n_ticks
+  );
+}
+
+// code block literal wrappers
+template <> SEXP wrap(client::ast::code_block_literal const& code_block_literal) {
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_code_block_literal = pkg["rmd_code_block_literal"];
+  
+  return rmd_code_block_literal(
+    Rcpp::Named("attr") = code_block_literal.args.attr,
+    Rcpp::Named("code") = code_block_literal.code,
+    Rcpp::Named("indent") = code_block_literal.args.indent,
+    Rcpp::Named("n_ticks") = code_block_literal.args.n_ticks
   );
 }
 
@@ -361,8 +440,34 @@ template <> SEXP wrap(client::ast::fdiv_open const& fdiv) {
   Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
   Rcpp::Function rmd_fenced_div_open = pkg["rmd_fenced_div_open"];
   
+  // Extract ID (keep # prefix)
+  std::string id_str = fdiv.attr.id;
+  Rcpp::CharacterVector id_vec;
+  if (!id_str.empty()) {
+    id_vec = Rcpp::CharacterVector::create(id_str);
+  }
+  
+  // Extract classes (keep . prefix)
+  Rcpp::CharacterVector classes_vec;
+  for (const auto& cls : fdiv.attr.classes) {
+    classes_vec.push_back(cls);
+  }
+  
+  // Extract key=value pairs into named vector
+  Rcpp::CharacterVector attr_vec;
+  Rcpp::CharacterVector attr_names;
+  for (const auto& kv : fdiv.attr.kvs) {
+    attr_vec.push_back(kv.value);
+    attr_names.push_back(kv.key);
+  }
+  if (attr_vec.size() > 0) {
+    attr_vec.names() = attr_names;
+  }
+  
   return rmd_fenced_div_open(
-    Rcpp::Named("attr") = Rcpp::wrap(fdiv.attrs)
+    Rcpp::Named("id") = id_vec,
+    Rcpp::Named("classes") = classes_vec,
+    Rcpp::Named("attr") = attr_vec
   );
 }
 
@@ -388,8 +493,9 @@ template <> SEXP wrap(client::ast::yaml const& x) {
 
 template <> SEXP wrap(client::ast::element const& element) {
   struct line_visitor {
-    SEXP operator()(client::ast::chunk const& x      ) { return Rcpp::wrap(x); }
-    SEXP operator()(client::ast::code_block const& x ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::chunk const& x              ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::code_block const& x         ) { return Rcpp::wrap(x); }
+    SEXP operator()(client::ast::code_block_literal const& x ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::yaml const& x       ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::heading const& x    ) { return Rcpp::wrap(x); }
     SEXP operator()(client::ast::fdiv_open const& x  ) { return Rcpp::wrap(x); }
@@ -460,6 +566,42 @@ template <> SEXP wrap(std::vector<client::ast::shortcode> const& v) {
   }
 
   return res;
+};
+
+template <> SEXP wrap(client::ast::span const& sp) {
+  Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
+  Rcpp::Function rmd_span = pkg["rmd_span"];
+  
+  // Extract ID (keep # prefix)
+  std::string id_str = sp.attr.id;
+  Rcpp::CharacterVector id_vec;
+  if (!id_str.empty()) {
+    id_vec = Rcpp::CharacterVector::create(id_str);
+  }
+  
+  // Extract classes (keep . prefix)
+  Rcpp::CharacterVector classes_vec;
+  for (const auto& cls : sp.attr.classes) {
+    classes_vec.push_back(cls);
+  }
+  
+  // Extract key=value pairs into named vector
+  Rcpp::CharacterVector attr_vec;
+  Rcpp::CharacterVector attr_names;
+  for (const auto& kv : sp.attr.kvs) {
+    attr_vec.push_back(kv.value);
+    attr_names.push_back(kv.key);
+  }
+  if (attr_vec.size() > 0) {
+    attr_vec.names() = attr_names;
+  }
+  
+  return rmd_span(
+    Rcpp::Named("text") = sp.text,
+    Rcpp::Named("id") = id_vec,
+    Rcpp::Named("classes") = classes_vec,
+    Rcpp::Named("attr") = attr_vec
+  );
 };
 
 //template <> SEXP wrap(client::ast::md_element const& x) {

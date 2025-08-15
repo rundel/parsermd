@@ -32,6 +32,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// parse_spans_cpp
+SEXP parse_spans_cpp(std::string const& str);
+RcppExport SEXP _parsermd_parse_spans_cpp(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_spans_cpp(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // parse_rmd_cpp
 SEXP parse_rmd_cpp(std::string const& str);
 RcppExport SEXP _parsermd_parse_rmd_cpp(SEXP strSEXP) {
@@ -175,6 +186,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// check_code_block_literal_parser
+SEXP check_code_block_literal_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_code_block_literal_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_code_block_literal_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_inline_code_parser
 SEXP check_inline_code_parser(std::string const& str);
 RcppExport SEXP _parsermd_check_inline_code_parser(SEXP strSEXP) {
@@ -197,6 +219,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// check_span_parser
+SEXP check_span_parser(std::string const& str);
+RcppExport SEXP _parsermd_check_span_parser(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string const& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_span_parser(str));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_qstring_parser
 SEXP check_qstring_parser(std::string const& str, bool raw);
 RcppExport SEXP _parsermd_check_qstring_parser(SEXP strSEXP, SEXP rawSEXP) {
@@ -213,6 +246,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_parse_shortcodes_cpp", (DL_FUNC) &_parsermd_parse_shortcodes_cpp, 1},
     {"_parsermd_parse_inline_code_cpp", (DL_FUNC) &_parsermd_parse_inline_code_cpp, 1},
+    {"_parsermd_parse_spans_cpp", (DL_FUNC) &_parsermd_parse_spans_cpp, 1},
     {"_parsermd_parse_rmd_cpp", (DL_FUNC) &_parsermd_parse_rmd_cpp, 1},
     {"_parsermd_parse_R_value_cpp", (DL_FUNC) &_parsermd_parse_R_value_cpp, 1},
     {"_parsermd_check_yaml_parser", (DL_FUNC) &_parsermd_check_yaml_parser, 1},
@@ -226,8 +260,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_parsermd_check_fdiv_close_parser", (DL_FUNC) &_parsermd_check_fdiv_close_parser, 1},
     {"_parsermd_check_cbrace_expr_parser", (DL_FUNC) &_parsermd_check_cbrace_expr_parser, 1},
     {"_parsermd_check_code_block_parser", (DL_FUNC) &_parsermd_check_code_block_parser, 1},
+    {"_parsermd_check_code_block_literal_parser", (DL_FUNC) &_parsermd_check_code_block_literal_parser, 1},
     {"_parsermd_check_inline_code_parser", (DL_FUNC) &_parsermd_check_inline_code_parser, 1},
     {"_parsermd_check_shortcode_parser", (DL_FUNC) &_parsermd_check_shortcode_parser, 1},
+    {"_parsermd_check_span_parser", (DL_FUNC) &_parsermd_check_span_parser, 1},
     {"_parsermd_check_qstring_parser", (DL_FUNC) &_parsermd_check_qstring_parser, 2},
     {NULL, NULL, 0}
 };

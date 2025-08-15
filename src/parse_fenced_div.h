@@ -10,6 +10,7 @@
 #include "parser_error_handler.h"
 #include "parse_fenced_div_ast.h"
 #include "parse_qstring.h"
+#include "parse_pandoc_attr.h"
 
 
 
@@ -76,37 +77,6 @@ namespace client { namespace parser {
 
   struct fdiv_open_class : error_handler {};
   x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
-
-  // For unbraced attributes add the css class decorator
-  auto add_class = [](auto& ctx){
-    //_val(ctx) += std::string(".") + _attr(ctx);
-    //_val(ctx) = std::vector<std::string> std::string(".") + _attr(ctx) );
-    _val(ctx).push_back( std::string(".") + _attr(ctx) );
-  };
-  auto unbraced_attr = x3::rule<struct _, std::vector<std::string> > ("unbraced attribute")
-  = x3::lexeme[ (+(x3::char_ - x3::eol - x3::blank))[add_class] ];
-
-  // Individual attribute parsers
-  auto class_attr = x3::rule<struct _, std::string> ("class attribute")
-  = x3::raw[ x3::lit(".") >> +(x3::char_("a-zA-Z0-9._-")) ];
-
-  auto id_attr = x3::rule<struct _, std::string> ("id attribute")  
-  = x3::raw[ x3::lit("#") >> +(x3::char_("a-zA-Z0-9._-")) ];
-
-  auto key_value_attr = x3::rule<struct _, std::string> ("key=value attribute")
-  = x3::raw[
-      +(x3::char_("a-zA-Z0-9_-")) >>  // key
-      x3::lit("=") >>
-      ( x3::raw[q_string] |
-        +(x3::char_ - x3::char_(" }"))   // unquoted value
-      )
-    ];
-
-  auto plain_attr = x3::rule<struct _, std::string> ("plain attribute")
-  = +(x3::char_("a-zA-Z0-9_-"));
-
-  auto cbrace_attrs = x3::rule<struct _, std::vector<std::string> > ("braced attribute(s)")
-  = x3::lit("{") > -x3::lexeme[ (class_attr | id_attr | key_value_attr | plain_attr) % +x3::blank ] > x3::lit("}");
 
   auto const fdiv_open_def
   = x3::lexeme[x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ]] >>

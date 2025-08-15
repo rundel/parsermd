@@ -10,6 +10,7 @@
 #include "parse_fenced_div_ast.h"
 #include "parse_chunk_ast.h"
 #include "parse_code_block_ast.h"
+#include "parse_code_block_literal_ast.h"
 #include "parse_heading.h"
 #include "parse_markdown_ast.h"
 
@@ -17,7 +18,7 @@
 namespace client { namespace ast {
   namespace x3 = boost::spirit::x3;
 
-  struct element : x3::variant<yaml, fdiv_open, fdiv_close, chunk, code_block, heading, markdown> {
+  struct element : x3::variant<yaml, fdiv_open, fdiv_close, chunk, code_block_literal, code_block, heading, markdown> {
     using base_type::base_type;
     using base_type::operator=;
   };

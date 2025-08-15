@@ -45,11 +45,10 @@ test_that("rmd_node_type works with all node types", {
       rmd_heading(name = "Section", level = 1L),
       rmd_chunk(engine = "r", name = "code", code = "x = 1"),
       rmd_raw_chunk(format = "r", code = "y = 2"),
-      rmd_code_block(attr = "python", code = "print('hello')"),
+      rmd_code_block(classes = ".python", code = "print('hello')"),
+      rmd_code_block_literal(attr = "r, echo=TRUE", code = "z = 3"),
       rmd_markdown(lines = "Some text"),
-      rmd_shortcode(func = "video", args = "demo.mp4"),
-      rmd_inline_code(engine = "r", code = "2+2"),
-      rmd_fenced_div_open(attr = "note"),
+      rmd_fenced_div_open(classes = ".note"),
       rmd_fenced_div_close()
     )
   )
@@ -58,8 +57,8 @@ test_that("rmd_node_type works with all node types", {
   types = rmd_node_type(original_ast)
   
   expected_types = c("rmd_yaml", "rmd_heading", "rmd_chunk", "rmd_raw_chunk", 
-                     "rmd_code_block", "rmd_markdown", "rmd_shortcode", 
-                     "rmd_inline_code", "rmd_fenced_div_open", "rmd_fenced_div_close")
+                     "rmd_code_block", "rmd_code_block_literal", "rmd_markdown", 
+                     "rmd_fenced_div_open", "rmd_fenced_div_close")
   
   expect_equal(types, expected_types)
 })
@@ -73,15 +72,16 @@ test_that("rmd_node_length works with different node types", {
       rmd_markdown(lines = c("Line 1", "Line 2", "Line 3", "Line 4")),
       rmd_yaml(yaml = list(title = "Test", author = "Me", date = "2023-01-01")),
       rmd_heading(name = "Section", level = 1L),  # should return NA
-      rmd_code_block(attr = "python", code = "print('hello')")  # should return NA (no specific method)
+      rmd_code_block(classes = ".python", code = "print('hello')"),  # should return NA (no specific method)
+      rmd_code_block_literal(attr = "r", code = c("w = 4", "x = 5"))  # should return NA (no specific method)
     )
   )
   
   # Test length extraction
   lengths = rmd_node_length(original_ast)
   
-  # Expected: 3 code lines, 2 code lines, 4 text lines, 3 yaml items, NA, NA
-  expected_lengths = c(3L, 2L, 4L, 3L, NA_integer_, NA_integer_)
+  # Expected: 3 code lines, 2 code lines, 4 text lines, 3 yaml items, NA, NA, NA
+  expected_lengths = c(3L, 2L, 4L, 3L, NA_integer_, NA_integer_, NA_integer_)
   
   expect_equal(lengths, expected_lengths)
 })
@@ -93,6 +93,7 @@ test_that("rmd_node_content works with different node types", {
       rmd_chunk(engine = "r", name = "code", code = c("library(dplyr)", "data %>% filter(x > 0)")),
       rmd_raw_chunk(format = "r", code = c("raw line 1", "raw line 2")),
       rmd_markdown(lines = c("This is markdown", "with multiple lines")),
+      rmd_code_block_literal(attr = "python", code = c("import pandas", "df.head()")),
       rmd_heading(name = "Section", level = 1L),  # should return NA
       rmd_yaml(yaml = list(title = "Test"))  # should return NA (no specific method)
     )
@@ -105,8 +106,9 @@ test_that("rmd_node_content works with different node types", {
     "library(dplyr)\ndata %>% filter(x > 0)",
     "raw line 1\nraw line 2", 
     "This is markdown\nwith multiple lines",
-    NA_character_,
-    NA_character_
+    NA_character_,  # rmd_code_block_literal has no specific content method
+    NA_character_,  # rmd_heading has no content method
+    NA_character_   # rmd_yaml has no content method
   )
   
   expect_equal(content, expected_content)

@@ -302,7 +302,33 @@ fdiv_find_matching_ranges = function(ast, patterns, regexp) {
   
   for (pos in fdiv_open_positions) {
     node = nodes[[pos]]
-    attrs = node@attr
+    
+    # Combine all attributes from the three properties
+    attrs = character(0)
+    
+    # Add ID (already has # prefix) and also bare ID for matching
+    if (length(node@id) > 0) {
+      bare_id = node@id
+      if (startsWith(bare_id, "#")) {
+        bare_id = substr(bare_id, 2, nchar(bare_id))
+      }
+      attrs = c(attrs, node@id, bare_id)
+    }
+    
+    # Add classes (already have . prefix) and also bare class names for matching
+    if (length(node@classes) > 0) {
+      bare_classes = node@classes
+      bare_classes = ifelse(startsWith(bare_classes, "."), 
+                           substr(bare_classes, 2, nchar(bare_classes)), 
+                           bare_classes)
+      attrs = c(attrs, node@classes, bare_classes)
+    }
+    
+    # Add key=value pairs
+    if (length(node@attr) > 0) {
+      kv_pairs = paste0(names(node@attr), "=", node@attr)
+      attrs = c(attrs, kv_pairs)
+    }
     
     # Check if all patterns match at least one attribute
     if (fdiv_all_patterns_match(attrs, patterns, regexp)) {

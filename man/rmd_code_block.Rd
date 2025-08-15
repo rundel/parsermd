@@ -4,10 +4,21 @@
 \alias{rmd_code_block}
 \title{Markdown code block node}
 \usage{
-rmd_code_block(attr = "", code = character(), indent = "", n_ticks = 3L)
+rmd_code_block(
+  id = character(),
+  classes = character(),
+  attr = character(),
+  code = character(),
+  indent = "",
+  n_ticks = 3L
+)
 }
 \arguments{
-\item{attr}{Character. Block attributes}
+\item{id}{Character vector. HTML ID (length 0 or 1)}
+
+\item{classes}{Character vector. CSS classes}
+
+\item{attr}{Named character vector. Key-value attributes (keys as names)}
 
 \item{code}{Character vector. Code lines}
 
