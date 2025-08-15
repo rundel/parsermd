@@ -39,6 +39,7 @@ namespace client { namespace parser {
   (unbraced_class | (x3::eps > !invalid_unbraced_class) | x3::attr(std::string())) >>
   x3::omit[*x3::lit(" ")] >>
   (cbrace_attrs | x3::attr(client::ast::pandoc_attr())) >>
+  *x3::lit(' ') >>
   x3::eol;
 
   auto const block_end = x3::rule<struct _> {"code block end (```)"}

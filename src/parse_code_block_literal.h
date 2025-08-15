@@ -18,7 +18,7 @@ namespace client { namespace parser {
 
   auto const literal_attr_content = x3::rule<struct _, std::string> {"literal attribute content"}
   = x3::raw[*(
-      (x3::char_('}') >> &(*(!x3::lit("}}") >> x3::char_) >> x3::lit("}}"))) // } only if }} still exists ahead
+      (x3::char_('}') >> &(*(!x3::lit("}}") >> !x3::eol >> x3::char_) >> x3::lit("}}"))) // } only if }} still exists ahead
     | (x3::char_ - x3::char_('}'))                               // any non-} character
   )];
 
@@ -31,6 +31,7 @@ namespace client { namespace parser {
   x3::lit("{{") >>
   literal_attr_content >>
   x3::lit("}}") >>
+  *x3::lit(' ') >>
   x3::eol;
 
   auto const literal_block_end = x3::rule<struct _> {"code block literal end (```)"}
