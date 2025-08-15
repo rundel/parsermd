@@ -16,9 +16,11 @@
 namespace client { namespace parser {
   namespace x3 = boost::spirit::x3;
 
-  // Parser for {{...}} content - captures everything between {{ and }}
-  auto literal_attr_content = x3::rule<struct _, std::string> ("literal attribute content")
-  = x3::raw[*(x3::char_ - x3::lit("}}"))];
+  auto const literal_attr_content = x3::rule<struct _, std::string> {"literal attribute content"}
+  = x3::raw[*(
+      (x3::char_('}') >> &(*(!x3::lit("}}") >> x3::char_) >> x3::lit("}}"))) // } only if }} still exists ahead
+    | (x3::char_ - x3::char_('}'))                               // any non-} character
+  )];
 
   auto const literal_block_start = x3::rule<struct _, client::ast::code_block_literal_args> {"code block literal start"}
   = x3::lexeme[

@@ -146,6 +146,44 @@ test_that("code block literal parsing - Special Cases", {
   )
 })
 
+test_that("code block literal parsing - Nested Braces", {
+  # Basic nested case
+  expect_equal(
+    check_code_block_literal_parser("```{{{r}}}\n```\n"),
+    rmd_code_block_literal(attr = "{r}")
+  )
+  
+  # Unbalanced braces  
+  expect_equal(
+    check_code_block_literal_parser("```{{{r}}\n```\n"),
+    rmd_code_block_literal(attr = "{r")
+  )
+  
+  # Complex nested content
+  expect_equal(
+    check_code_block_literal_parser("```{{r, code='{}'}}\n```\n"),
+    rmd_code_block_literal(attr = "r, code='{}'")
+  )
+  
+  # Multiple levels of nesting
+  expect_equal(
+    check_code_block_literal_parser("```{{{{r}}}}\n```\n"),
+    rmd_code_block_literal(attr = "{{r}}")
+  )
+  
+  # Nested with content
+  expect_equal(
+    check_code_block_literal_parser("```{{{r}}}\n1+1\n```\n"),
+    rmd_code_block_literal(attr = "{r}", code = "1+1")
+  )
+  
+  # Complex real-world case
+  expect_equal(
+    check_code_block_literal_parser("```{{r, opts=list(key='{value}'), code='function() { return(1) }'}}\n```\n"),
+    rmd_code_block_literal(attr = "r, opts=list(key='{value}'), code='function() { return(1) }'")
+  )
+})
+
 test_that("code block literal parsing - Error Cases", {
   # Missing closing }}
   expect_error(
@@ -227,6 +265,12 @@ test_that("code block literal parsing - Round-trip", {
   test_roundtrip("``` {{r}}\n```\n")
   test_roundtrip("```  {{python}}\n```\n")
   test_roundtrip("``` {{r, echo=TRUE}}\nplot(cars)\n```\n")
+  
+  # Nested brace cases
+  test_roundtrip("```{{{r}}}\n```\n")
+  test_roundtrip("```{{{r}}\n```\n")
+  test_roundtrip("```{{r, code='{}'}}\n```\n")
+  test_roundtrip("```{{{{r}}}}\n```\n")
   
   # Complex cases
   test_roundtrip("````{{r, fig.cap='Plot'}}\nplot(1:10)\n````\n")
