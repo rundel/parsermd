@@ -233,6 +233,80 @@ test_that("rmd_code_block S7 class works", {
   )
 })
 
+test_that("rmd_code_block_literal S7 class works", {
+  # Valid code block literal
+  code_block_literal = rmd_code_block_literal(
+    attr = "r, echo=TRUE, eval=FALSE",
+    code = c("x <- 1:10", "mean(x)"),
+    indent = "",
+    n_ticks = 3L
+  )
+  expect_s3_class(code_block_literal, "rmd_code_block_literal")
+  expect_equal(code_block_literal@attr, "r, echo=TRUE, eval=FALSE")
+  expect_equal(code_block_literal@code, c("x <- 1:10", "mean(x)"))
+  
+  # Valid empty code block literal
+  empty_literal = rmd_code_block_literal(
+    attr = "",
+    code = character(),
+    indent = "",
+    n_ticks = 3L
+  )
+  expect_s3_class(empty_literal, "rmd_code_block_literal")
+  expect_equal(empty_literal@attr, "")
+  expect_equal(empty_literal@code, character())
+  
+  # Valid with nested braces in attr
+  nested_braces = rmd_code_block_literal(
+    attr = "r, code='function() { return(1) }'",
+    code = character(),
+    indent = "",
+    n_ticks = 3L
+  )
+  expect_s3_class(nested_braces, "rmd_code_block_literal")
+  expect_equal(nested_braces@attr, "r, code='function() { return(1) }'")
+  
+  # Invalid attr (wrong length)
+  expect_snapshot_error(
+    rmd_code_block_literal(
+      attr = c("r", "python"),
+      code = character(),
+      indent = "",
+      n_ticks = 3L
+    )
+  )
+  
+  # Invalid indent (wrong length)
+  expect_snapshot_error(
+    rmd_code_block_literal(
+      attr = "r",
+      code = character(),
+      indent = c("", " "),
+      n_ticks = 3L
+    )
+  )
+  
+  # Invalid n_ticks (too small)
+  expect_snapshot_error(
+    rmd_code_block_literal(
+      attr = "r",
+      code = character(),
+      indent = "",
+      n_ticks = 2L
+    )
+  )
+  
+  # Invalid n_ticks (wrong length)
+  expect_snapshot_error(
+    rmd_code_block_literal(
+      attr = "r",
+      code = character(),
+      indent = "",
+      n_ticks = c(3L, 4L)
+    )
+  )
+})
+
 test_that("rmd_fenced_div_open S7 class works", {
   # Valid fenced div with all properties
   div_open = rmd_fenced_div_open(
@@ -416,17 +490,29 @@ test_that("rmd_span S7 class works", {
 })
 
 test_that("S7 inheritance works", {
-  # All classes should inherit from rmd_node
+  # AST node classes should inherit from rmd_node
   expect_true(S7::S7_inherits(rmd_yaml(yaml = list()), rmd_node))
   expect_true(S7::S7_inherits(rmd_heading(name = "Test", level = 1L), rmd_node))
   expect_true(S7::S7_inherits(rmd_chunk(
     engine = "r", name = "", options = list(),
     code = character(), indent = "", n_ticks = 3L
   ), rmd_node))
+  expect_true(S7::S7_inherits(rmd_raw_chunk(format = "html", code = character()), rmd_node))
+  expect_true(S7::S7_inherits(rmd_code_block(
+    id = character(), classes = character(), attr = character(),
+    code = character(), indent = "", n_ticks = 3L
+  ), rmd_node))
+  expect_true(S7::S7_inherits(rmd_code_block_literal(
+    attr = "", code = character(), indent = "", n_ticks = 3L
+  ), rmd_node))
   expect_true(S7::S7_inherits(rmd_markdown(lines = "test"), rmd_node))
-  expect_true(S7::S7_inherits(rmd_span(text = "test"), rmd_node))
   expect_true(S7::S7_inherits(rmd_fenced_div_open(), rmd_node))
   expect_true(S7::S7_inherits(rmd_fenced_div_close(), rmd_node))
+  
+  # Extracted element classes should NOT inherit from rmd_node
+  expect_false(S7::S7_inherits(rmd_span(text = "test"), rmd_node))
+  expect_false(S7::S7_inherits(rmd_inline_code(engine = "r", code = "x"), rmd_node))
+  expect_false(S7::S7_inherits(rmd_shortcode(func = "test", args = character()), rmd_node))
 })
 
 test_that("rmd_ast balanced fenced div validation works", {

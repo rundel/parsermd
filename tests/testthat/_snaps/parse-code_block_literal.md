@@ -6,5 +6,5 @@
 ---
 
     <rmd_code_block_literal> object is invalid:
-    - n_ticks must be a single integer
+    - n_ticks must be a single integer >= 3
 

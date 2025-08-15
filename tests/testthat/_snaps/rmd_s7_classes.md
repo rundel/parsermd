@@ -68,6 +68,26 @@
     <rmd_code_block> object is invalid:
     - n_ticks must be a single integer
 
+# rmd_code_block_literal S7 class works
+
+    <rmd_code_block_literal> object is invalid:
+    - attr must be a single character string
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - indent must be a single character string
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - n_ticks must be a single integer >= 3
+
+---
+
+    <rmd_code_block_literal> object is invalid:
+    - n_ticks must be a single integer >= 3
+
 # rmd_fenced_div_open S7 class works
 
     <rmd_fenced_div_open> object is invalid:

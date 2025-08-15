@@ -249,8 +249,8 @@ rmd_code_block_literal = S7::new_class(
     if (length(self@indent) != 1) {
       return("indent must be a single character string")
     }
-    if (length(self@n_ticks) != 1) {
-      return("n_ticks must be a single integer")
+    if (length(self@n_ticks) != 1 || self@n_ticks < 3) {
+      return("n_ticks must be a single integer >= 3")
     }
     NULL
   },
