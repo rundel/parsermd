@@ -27,20 +27,28 @@ reference:
 - title: Document functions
   contents:
   - parse_rmd
+  - parse_qmd
+  - parse_rmd_collection
+  - parse_qmd_collection
   - as_ast
   - as_document
   - as_tibble
   - render
   - rmd_source
-  - parse_collection
   - rmd_ast_append
+  - rmd_ast_prepend
 - title: Subsetting functions
   contents:
   - rmd_select
   - by_section
+  - by_fdiv
   - has_label
   - has_option
   - has_type
+  - has_heading
+  - has_code
+  - has_shortcode
+  - has_inline_code
 - title: Node functions
   contents:
   - rmd_node_attr
@@ -54,6 +62,9 @@ reference:
   - rmd_node_type
   - rmd_set_options
   - rmd_get_options
+  - rmd_node_set_attr
+  - rmd_node_set_label
+  - rmd_node_set_options
 - title: Node creation functions
   contents:
   - rmd_chunk
@@ -61,11 +72,13 @@ reference:
   - rmd_heading
   - rmd_markdown
   - rmd_code_block
+  - rmd_code_block_literal
   - rmd_raw_chunk
   - rmd_fenced_div_open
   - rmd_fenced_div_close
   - rmd_shortcode
   - rmd_inline_code
+  - rmd_span
 - title: Template functions
   contents:
   - rmd_template
@@ -77,5 +90,11 @@ reference:
 - title: Utility functions
   contents:
   - rmd_modify
+  - rmd_extract_inline_code
+  - rmd_extract_shortcodes
+  - rmd_extract_spans
+  - rmd_has_inline_code
+  - rmd_has_shortcode
+  - rmd_has_span
   - inline_code_utils
   - shortcode_utils
