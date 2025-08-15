@@ -16,7 +16,13 @@
 
 * Removed option to not parse yaml - this is now always parsed. Based on this yaml node classes were simplified to just include `rmd_yaml`.
 
-* Added support for 2ndary parsing to handle quarto shortcodes, inline code, and spans
+* Added support for Pandoc-style ordered fenced attributes for code blocks, fenced divs, and spans
+
+* Added support for code block literals - e.g. ```{{r}}
+
+* Added support for 2ndary parsing to handle inline elements:
+
+  * quarto shortcodes, inline code, and spans
 
 * Enhanced `rmd_select()` functionality and node manipulation
 
