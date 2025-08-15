@@ -84,6 +84,33 @@ print(ast, flat = TRUE)
 
 ---
 
+# S7 Class System
+
+parsermd uses the S7 object system for all AST node types. S7 provides a modern, robust class system with:
+
+- **Type safety**: Properties are validated when objects are created or modified
+- **Performance**: Efficient method dispatch and memory usage
+- **Consistency**: Uniform interface across all node types
+
+**Key S7 Features in parsermd:**
+
+- All node types inherit from the base `rmd_node` class
+- Properties are accessed using `@` syntax (e.g., `node@content`)
+- Validation ensures data integrity (proper types, lengths, etc.)
+- Method dispatch works seamlessly with generic functions
+
+**Property Access:**
+```{r}
+# Create a heading node
+heading = rmd_heading(name = "Section Title", level = 2L)
+
+# Access properties with @
+heading@name
+heading@level
+```
+
+---
+
 # Core Node Types
 
 ## Document Structure Nodes
@@ -196,13 +223,10 @@ The `rmd_chunk` node represents executable code chunks with options and metadata
 Chunks support two option formats that can be used independently or together:
 
 1. **Traditional format**: Options specified in the chunk header after the engine and label
-   ```markdown
-   ```{r chunk-name, eval=TRUE, echo=FALSE}
-   ```
+   ```{{r chunk-name, eval=TRUE, echo=FALSE}}
    
 2. **YAML format**: Options specified as YAML comments within the chunk
-   ```markdown
-   ```{r chunk-name}
+   ```{{r chunk-name}}
    #| eval: true
    #| echo: false
    ```
@@ -211,10 +235,8 @@ Chunks support two option formats that can be used independently or together:
 
 When the same option is specified in both formats, YAML options take precedence over traditional options. A warning is emitted when conflicts occur:
 
-```markdown
-```{r eval=TRUE}
+```{{r eval=TRUE}}
 #| eval: false
-```
 ```
 
 In this case, `eval: false` (YAML) wins over `eval=TRUE` (traditional), and the parser emits: "YAML options override traditional options for: eval"
@@ -323,7 +345,9 @@ The `rmd_code_block` node represents non-executable fenced code blocks.
 
 **Properties:**
 
-- `attr`: Attributes string (language, classes, etc.)
+- `id`: Optional HTML ID attribute
+- `classes`: Character vector of CSS classes (e.g., language names like "python", "r")
+- `attr`: Named character vector for key-value attributes (e.g., `c(style="color:blue")`)
 - `code`: Character vector containing the code lines
 - `indent`: Indentation string
 - `n_ticks`: Number of backticks used
@@ -341,7 +365,7 @@ def hello():
 Programmatic creation:
 ```{r}
 code_block_node = rmd_code_block(
-  attr = "python",
+  classes = c("python"),
   code = c(
     "def hello():", 
     "    print('Hello, World!')"
@@ -352,70 +376,44 @@ code_block_node
 
 ---
 
-## Inline Elements
+### Code Block Literals - `rmd_code_block_literal`
 
-### Inline Code - `rmd_inline_code`
-
-The `rmd_inline_code` node represents inline code expressions.
-
+The `rmd_code_block_literal` node represents code blocks with literal attribute capture using the `{{...}}` syntax. This format preserves the raw attribute content exactly as written, making it ideal for displaying code chunk examples.
 
 **Properties:**
 
-- `engine`: The code engine (empty string for static code)
-- `code`: The inline code content
-- `braced`: Whether the code uses braced syntax
-- `start`: Starting position in the source
-- `length`: Length of the inline code
+- `attr`: Raw attribute string (exactly as written between `{{` and `}}`)
+- `code`: Character vector containing the code lines
+- `indent`: Indentation string
+- `n_ticks`: Number of backticks used
 
 **Example:**
 
 Raw text that would be parsed:
-```markdown
-The result is `r 2 + 2`.
+```{{r, echo=TRUE, eval=FALSE}}
+x <- 1:10
+mean(x)
 ```
 
 Programmatic creation:
 ```{r}
-inline_code_node = rmd_inline_code(
-  engine = "r",
-  code = "2 + 2",
-  braced = FALSE
-)
-inline_code_node
-```
-
----
-
-### Shortcode Function Calls - `rmd_shortcode`
-
-The `rmd_shortcode` node represents shortcode function calls (Quarto feature).
-
-
-**Properties:**
-
-- `func`: The shortcode function name
-- `args`: Character vector of arguments
-- `start`: Starting position in the source
-- `length`: Length of the shortcode
-
-**Example:**
-
-Raw text that would be parsed:
-```markdown
-{{< embed type=video src=example.mp4 >}}
-```
-
-Programmatic creation:
-```{r}
-shortcode_node = rmd_shortcode(
-  func = "embed",
-  args = c(
-    "type=video", 
-    "src=example.mp4"
+code_block_literal_node = rmd_code_block_literal(
+  attr = "r, echo=TRUE, eval=FALSE",
+  code = c(
+    "x <- 1:10", 
+    "mean(x)"
   )
 )
-shortcode_node
+code_block_literal_node
 ```
+
+**Nested Braces Support:**
+
+The literal format can handle nested braces in attributes:
+```{{r, code='function() { return(1) }'}}
+```
+
+This captures the attribute as: `"r, code='function() { return(1) }'"`
 
 ---
 
@@ -427,7 +425,9 @@ Fenced divs are represented as pairs of nodes in the linear AST sequence. The `r
 
 **rmd_fenced_div_open Properties:**
 
-- `attr`: Character vector of div attributes
+- `id`: Optional HTML ID attribute  
+- `classes`: Character vector of CSS classes
+- `attr`: Named character vector for key-value attributes
 
 **rmd_fenced_div_close Properties:** None (just a marker)
 
@@ -452,7 +452,8 @@ Programmatic creation:
 ```{r}
 # Create the opening node
 fenced_div_open_node = rmd_fenced_div_open(
-  attr = c("class=warning", "id=important")
+  classes = c(".warning"),
+  attr = c(id = "important")
 )
 
 # Create the closing node
@@ -470,6 +471,116 @@ ast_with_div = rmd_ast(list(
   fenced_div_close_node
 ))
 ```
+
+---
+
+# Extracted Elements
+
+The following classes represent elements that can be extracted from AST nodes through secondary parsing, rather than being direct nodes in the AST structure. These elements are found within markdown text and code content.
+
+## Inline Code - `rmd_inline_code`
+
+The `rmd_inline_code` class represents inline code expressions extracted from markdown text.
+
+**Properties:**
+
+- `engine`: The code engine (empty string for static code)
+- `code`: The inline code content
+- `braced`: Whether the code uses braced syntax
+- `start`: Starting position in the source text
+- `length`: Length of the inline code
+
+**Example:**
+
+Raw text containing inline code:
+```markdown
+The result is `r 2 + 2`.
+```
+
+Programmatic creation:
+```{r}
+# Create directly
+inline_code_obj = rmd_inline_code(
+  engine = "r",
+  code = "2 + 2",
+  braced = FALSE
+)
+inline_code_obj
+```
+
+---
+
+## Shortcode Function Calls - `rmd_shortcode`
+
+The `rmd_shortcode` class represents Quarto shortcode function calls extracted from markdown content.
+
+**Properties:**
+
+- `func`: The shortcode function name
+- `args`: Character vector of arguments
+- `start`: Starting position in the source text
+- `length`: Length of the shortcode
+
+**Example:**
+
+Raw text containing a shortcode:
+```markdown
+{{< embed type=video src=example.mp4 >}}
+```
+
+Programmatic creation:
+```{r}
+# Create directly
+shortcode_obj = rmd_shortcode(
+  func = "embed",
+  args = c("type=video", "src=example.mp4")
+)
+shortcode_obj
+```
+
+---
+
+## Spans - `rmd_span`
+
+The `rmd_span` class represents inline span elements with attributes extracted from markdown text.
+
+**Properties:**
+
+- `text`: The text content of the span
+- `id`: Optional HTML ID (must start with '#' if present)
+- `classes`: Character vector of CSS classes (must start with '.' if present)
+- `attr`: Named character vector of additional attributes
+
+**Example:**
+
+Raw text containing a span:
+```markdown
+[Important text]{.highlight #key}
+```
+
+Programmatic creation:
+```{r}
+# Create directly
+span_obj = rmd_span(
+  text = "Important text",
+  id = c("#key"),
+  classes = c(".highlight")
+)
+span_obj
+```
+
+---
+
+## Extraction Functions
+
+These utility functions extract the above elements from AST nodes:
+
+- `rmd_extract_inline_code()`: Extract inline code from text
+- `rmd_extract_shortcodes()`: Extract shortcodes from text  
+- `rmd_extract_spans()`: Extract spans from text
+- `rmd_has_inline_code()`: Check if text contains inline code
+- `rmd_has_shortcode()`: Check if text contains shortcodes
+- `rmd_has_span()`: Check if text contains spans
 
 ---
 
