@@ -227,8 +227,8 @@ rmd_code_block = S7::new_class(
 )
 
 #' @title Code block literal node
-#' @description S7 class representing a code block with {{...}} attributes
-#' @param attr Character. Raw attribute content from {{...}}
+#' @description S7 class representing a code block with \{\{...\}\} attributes
+#' @param attr Character. Raw attribute content from \{\{...\}\}
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
 #' @param n_ticks Integer. Number of backticks

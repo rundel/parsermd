@@ -12,7 +12,7 @@ rmd_code_block_literal(
 )
 }
 \arguments{
-\item{attr}{Character. Raw attribute content from {{...}}}
+\item{attr}{Character. Raw attribute content from \{\{...\}\}}
 
 \item{code}{Character vector. Code lines}
 
@@ -21,5 +21,5 @@ rmd_code_block_literal(
 \item{n_ticks}{Integer. Number of backticks}
 }
 \description{
-S7 class representing a code block with {{...}} attributes
+S7 class representing a code block with \{\{...\}\} attributes
 }
