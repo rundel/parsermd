@@ -29,8 +29,10 @@
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_code_block_literal.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_fenced_div_close.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_fenced_div_open.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_fenced_div_wrap.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_heading.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_inline_code.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_insert.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_markdown.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_modify.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_node.html</loc></url>
