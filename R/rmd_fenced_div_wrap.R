@@ -151,7 +151,7 @@ rmd_fenced_div_wrap.rmd_ast = function(x, ..., open = rmd_fenced_div_open(), all
   insertions = list()
   
   # Process ranges in reverse order to avoid index shifting
-  for (i in length(ranges):1) {
+  for (i in rev(seq_along(ranges))) {
     range = ranges[[i]]
     start_pos = range[1]
     end_pos = range[2]
