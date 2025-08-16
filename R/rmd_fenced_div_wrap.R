@@ -71,7 +71,7 @@ is_continuous_range = function(indices) {
 }
 
 # Helper function to format error message for discontinuous ranges
-format_range_error = function(ranges, indices) {
+format_range_error = function(ranges, indices, action = "wrap multiple ranges separately") {
   range_descriptions = purrr::map_chr(ranges, function(r) {
     if (r[1] == r[2]) {
       as.character(r[1])
@@ -84,7 +84,7 @@ format_range_error = function(ranges, indices) {
     "Selected indices are discontinuous: [{paste(indices, collapse = ', ')}]. ",
     "Found {cli::no(length(ranges))} separate range{?s}: {paste(range_descriptions, collapse = ', ')}. ",
     "Either modify your selection to be continuous or use {.code allow_multiple = TRUE} ",
-    "to wrap multiple ranges separately."
+    "to {action}."
   )
 }
 
