@@ -4,20 +4,57 @@
 #' All classes inherit from the base `rmd_node` class and provide type-safe object creation
 #' with built-in validation of properties.
 #'
+#' @details
+#' The following S7 classes are available for creating R Markdown AST nodes:
+#'
+#' ## Core Classes
+#' 
+#' * `rmd_node()` - Abstract base class for all R Markdown AST nodes. This is the parent class
+#'   for all specific node types and should not be instantiated directly.
+#' 
+#' * `rmd_ast()` - Container for multiple nodes representing a complete document AST.
+#' 
+#' ## Content Nodes
+#' 
+#' * `rmd_yaml()` - YAML frontmatter header containing document metadata.
+#' 
+#' * `rmd_chunk()` - Code chunks with executable code in various engines (R, Python, etc.).
+#' 
+#' * `rmd_raw_chunk()` - Raw code chunks that are not executed.
+#' 
+#' * `rmd_markdown()` - Plain markdown text content.
+#' 
+#' * `rmd_heading()` - Section headings at various levels (1-6).
+#' 
+#' ## Code and Inline Elements
+#' 
+#' * `rmd_code_block()` - Fenced code blocks without execution.
+#' 
+#' * `rmd_code_block_literal()` - Code blocks with literal \{\{...\}\} attributes.
+#' 
+#' * `rmd_inline_code()` - Inline code spans within markdown text.
+#' 
+#' * `rmd_shortcode()` - Quarto/Pandoc shortcodes for special functionality.
+#' 
+#' * `rmd_span()` - Generic inline spans with attributes.
+#' 
+#' ## Structural Elements
+#' 
+#' * `rmd_fenced_div_open()` - Opening tags for fenced divs (:::).
+#' 
+#' * `rmd_fenced_div_close()` - Closing tags for fenced divs (:::).
+#'
+#' @seealso [rmd_node_utilities] for utility functions that work with these S7 objects
 #' @name rmd_classes_s7
 NULL
 
-#' @title Base S7 class for all RMD nodes
-#' @description Abstract base class for all R Markdown AST nodes
-#' @export
+#' @rdname rmd_classes_s7
 rmd_node = S7::new_class(
   "rmd_node",
   package = NULL
 )
 
-#' @title AST container for multiple nodes
-#' @description S7 class representing a collection of R Markdown nodes
-#' @param nodes List of rmd node objects
+#' @rdname rmd_classes_s7
 #' @export
 rmd_ast = S7::new_class(
   "rmd_ast", 
@@ -50,9 +87,7 @@ S7::method(length, rmd_ast) = function(x) {
   length(x@nodes)
 }
 
-#' @title YAML header node
-#' @description S7 class representing YAML frontmatter
-#' @param yaml List containing YAML content
+#' @rdname rmd_classes_s7
 #' @export
 rmd_yaml = S7::new_class(
   "rmd_yaml",
