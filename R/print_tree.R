@@ -113,14 +113,14 @@ tree_node.rmd_fenced_div_open = function(x) {
   # Build display components
   components = character(0)
   
-  # Add ID with # prefix
+  # Add ID (already has # prefix)
   if (length(x@id) > 0) {
-    components = c(components, paste0("#", x@id))
+    components = c(components, x@id)
   }
   
-  # Add classes with . prefix
+  # Add classes (already have . prefix)
   if (length(x@classes) > 0) {
-    components = c(components, paste0(".", x@classes))
+    components = c(components, x@classes)
   }
   
   # Add key=value pairs
