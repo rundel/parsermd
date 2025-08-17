@@ -138,8 +138,7 @@ rmd_extract_inline_code.rmd_markdown = function(x, flatten = FALSE) {
 
 #' @exportS3Method
 rmd_extract_inline_code.rmd_chunk = function(x, flatten = FALSE) {
-  res = rmd_extract_inline_code(x@code, flatten = flatten)
-  if (flatten) res else list(code = res)
+  if (flatten) list() else list()
 }
 
 #' @exportS3Method
