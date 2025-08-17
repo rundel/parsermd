@@ -50,3 +50,43 @@
 
     Setting attributes is not supported for objects of type <list>.
 
+# rmd_node_content assignment validates input
+
+    Assertion on 'value' failed: Must be of type 'character', not 'double'.
+
+---
+
+    Assertion on 'value' failed: Must be of type 'character', not 'list'.
+
+---
+
+    Assertion on 'value' failed: Must be of type 'character', not 'NULL'.
+
+# rmd_node_content assignment fails for unsupported types
+
+    Setting content is not supported for objects of type <list>.
+
+---
+
+    Setting content is not supported for objects of type <data.frame>.
+
+---
+
+    Setting content is not supported for objects of type <rmd_heading/rmd_node/S7_object>.
+
+---
+
+    Setting content is not supported for objects of type <rmd_yaml/rmd_node/S7_object>.
+
+# rmd_node_set_content handles errors correctly
+
+    Setting content is not supported for objects of type <list>.
+
+---
+
+    Setting content is not supported for objects of type <rmd_heading/rmd_node/S7_object>.
+
+---
+
+    Assertion on 'value' failed: Must be of type 'character', not 'double'.
+
