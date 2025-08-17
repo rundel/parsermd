@@ -280,3 +280,148 @@ test_that("Span print methods", {
   expect_output(print(span), "key=value")
 
 })
+
+test_that("rmd_extract_spans works correctly across appropriate node types", {
+  
+  # Test rmd_ast extraction (should only find spans in markdown and headings)
+  test_ast = parse_rmd(c(
+    "---",
+    "title: \"Document with [span]{.class} in YAML\"",  # Should NOT extract
+    "---",
+    "",
+    "# Heading with [span]{.highlight}",  # Should extract
+    "",
+    "Markdown with [important]{.bold} text and [another]{.italic} span",  # Should extract
+    "",
+    "```{r}",
+    "# Code with [span]{.class} - should NOT extract",
+    "```"
+  ))
+  
+  ast_result = rmd_extract_spans(test_ast, flatten = TRUE)
+  expect_length(ast_result, 3)  # Only from heading and markdown
+  expect_equal(ast_result[[1]]@text, "span")
+  expect_equal(ast_result[[1]]@classes, ".highlight")
+  expect_equal(ast_result[[2]]@text, "important")
+  expect_equal(ast_result[[2]]@classes, ".bold")
+  expect_equal(ast_result[[3]]@text, "another")
+  expect_equal(ast_result[[3]]@classes, ".italic")
+  
+  # Test individual node types that SHOULD contain spans
+  markdown_node = rmd_markdown(lines = c("Text with [highlighted]{.highlight} content"))
+  markdown_result = rmd_extract_spans(markdown_node, flatten = TRUE)
+  expect_length(markdown_result, 1)
+  expect_equal(markdown_result[[1]]@text, "highlighted")
+  expect_equal(markdown_result[[1]]@classes, ".highlight")
+  
+  heading_node = rmd_heading(name = "Title with [important]{.bold} text", level = 1L)
+  heading_result = rmd_extract_spans(heading_node, flatten = TRUE)
+  expect_length(heading_result, 1)
+  expect_equal(heading_result[[1]]@text, "important")
+  expect_equal(heading_result[[1]]@classes, ".bold")
+  
+  span_node = rmd_span(text = "Outer span with [nested]{.inner} content")
+  span_result = rmd_extract_spans(span_node, flatten = TRUE)
+  expect_length(span_result, 1)
+  expect_equal(span_result[[1]]@text, "nested")
+  expect_equal(span_result[[1]]@classes, ".inner")
+  
+  # Test node types that should NOT contain spans (should return empty)
+  yaml_node = rmd_yaml(yaml = list(title = "Document with [span]{.class} in YAML"))
+  expect_length(rmd_extract_spans(yaml_node, flatten = TRUE), 0)
+  
+  chunk_node = rmd_chunk(engine = "r", code = c("# Comment with [span]{.class}"))
+  expect_length(rmd_extract_spans(chunk_node, flatten = TRUE), 0)
+  
+  raw_chunk_node = rmd_raw_chunk(format = "html", code = c("<p>HTML with [span]{.class}</p>"))
+  expect_length(rmd_extract_spans(raw_chunk_node, flatten = TRUE), 0)
+  
+  code_block_node = rmd_code_block(code = c("/* comment with [span]{.class} */"))
+  expect_length(rmd_extract_spans(code_block_node, flatten = TRUE), 0)
+  
+  code_literal_node = rmd_code_block_literal(code = c("literal [span]{.class}"))
+  expect_length(rmd_extract_spans(code_literal_node, flatten = TRUE), 0)
+  
+  shortcode_node = rmd_shortcode(func = "test", args = c("arg with [span]{.class}"))
+  expect_length(rmd_extract_spans(shortcode_node, flatten = TRUE), 0)
+  
+  inline_code_node = rmd_inline_code(engine = "r", code = "code with [span]{.class}")
+  expect_length(rmd_extract_spans(inline_code_node, flatten = TRUE), 0)
+  
+  fdiv_open_node = rmd_fenced_div_open()
+  expect_length(rmd_extract_spans(fdiv_open_node, flatten = TRUE), 0)
+  
+  fdiv_close_node = rmd_fenced_div_close()
+  expect_length(rmd_extract_spans(fdiv_close_node, flatten = TRUE), 0)
+})
+
+test_that("rmd_extract_spans flatten parameter works correctly", {
+  
+  # Test nested structure (flatten = FALSE)
+  markdown_node = rmd_markdown(lines = c("Line 1 [first]{.a}", "Line 2 [second]{.b}"))
+  nested_result = rmd_extract_spans(markdown_node, flatten = FALSE)
+  expect_equal(names(nested_result), "lines")
+  expect_length(nested_result$lines, 2)
+  expect_length(nested_result$lines[[1]], 1)
+  expect_length(nested_result$lines[[2]], 1)
+  expect_equal(nested_result$lines[[1]][[1]]@text, "first")
+  expect_equal(nested_result$lines[[2]][[1]]@text, "second")
+  
+  # Test flattened structure (flatten = TRUE)
+  flat_result = rmd_extract_spans(markdown_node, flatten = TRUE)
+  expect_length(flat_result, 2)
+  expect_equal(flat_result[[1]]@text, "first")
+  expect_equal(flat_result[[1]]@classes, ".a")
+  expect_equal(flat_result[[2]]@text, "second")
+  expect_equal(flat_result[[2]]@classes, ".b")
+})
+
+test_that("rmd_extract_spans works with complex span patterns", {
+  
+  # Test multiple spans in same line
+  markdown_node = rmd_markdown(lines = c("Text with [first]{.a} and [second]{.b} and [third]{#id .c}"))
+  result = rmd_extract_spans(markdown_node, flatten = TRUE)
+  expect_length(result, 3)
+  expect_equal(result[[1]]@text, "first")
+  expect_equal(result[[2]]@text, "second") 
+  expect_equal(result[[3]]@text, "third")
+  expect_equal(result[[3]]@id, "#id")
+  
+  # Test nested spans within span
+  span_node = rmd_span(text = "Outer [nested1]{.inner1} and [nested2]{.inner2} content")
+  result = rmd_extract_spans(span_node, flatten = TRUE)
+  expect_length(result, 2)
+  expect_equal(result[[1]]@text, "nested1")
+  expect_equal(result[[2]]@text, "nested2")
+  
+  # Test spans in heading
+  heading_node = rmd_heading(name = "[Important]{.highlight}: Results for [dataset]{.data-name}", level = 2L)
+  result = rmd_extract_spans(heading_node, flatten = TRUE)
+  expect_length(result, 2)
+  expect_equal(result[[1]]@text, "Important")
+  expect_equal(result[[2]]@text, "dataset")
+})
+
+test_that("rmd_has_span works correctly with appropriate node types", {
+  
+  # Test nodes that SHOULD support span detection
+  expect_true(rmd_has_span(rmd_markdown(lines = c("Text with [span]{.class}"))))
+  expect_false(rmd_has_span(rmd_markdown(lines = c("Plain text"))))
+  
+  expect_true(rmd_has_span(rmd_heading(name = "Title with [span]{.class}", level = 1L)))
+  expect_false(rmd_has_span(rmd_heading(name = "Plain title", level = 1L)))
+  
+  expect_true(rmd_has_span(rmd_span(text = "Text with [nested]{.inner}")))
+  expect_false(rmd_has_span(rmd_span(text = "Plain text")))
+  
+  # Test nodes that should NOT support spans (always FALSE)
+  expect_false(rmd_has_span(rmd_yaml(yaml = list(title = "Title with [span]{.class}"))))
+  expect_false(rmd_has_span(rmd_chunk(engine = "r", code = c("# [span]{.class}"))))
+  expect_false(rmd_has_span(rmd_raw_chunk(format = "html", code = c("[span]{.class}"))))
+  expect_false(rmd_has_span(rmd_code_block(code = c("[span]{.class}"))))
+  expect_false(rmd_has_span(rmd_code_block_literal(code = c("[span]{.class}"))))
+  expect_false(rmd_has_span(rmd_shortcode(func = "test", args = c("[span]{.class}"))))
+  expect_false(rmd_has_span(rmd_inline_code(engine = "r", code = "[span]{.class}")))
+  expect_false(rmd_has_span(rmd_fenced_div_open()))
+  expect_false(rmd_has_span(rmd_fenced_div_close()))
+})
