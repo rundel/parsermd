@@ -105,12 +105,7 @@ rmd_extract_spans.character = function(x, flatten = FALSE) {
 
 #' @export
 rmd_extract_spans.default = function(x, flatten = FALSE) {
-  # Check if this is an S7 object that should use the S7_object method
-  if (S7::S7_inherits(x, S7::S7_object)) {
-    return(rmd_extract_spans.S7_object(x, flatten = flatten))
-  }
-  
-  # For non-S7 objects that can be mapped over (like lists, vectors)
+  # For lists and vectors that can be mapped over
   if (is.list(x) || is.vector(x)) {
     res = purrr::map(x, rmd_extract_spans, flatten = flatten)
     
@@ -133,28 +128,76 @@ rmd_extract_spans.default = function(x, flatten = FALSE) {
   }
 }
 
-#' @export
-rmd_extract_spans.S7_object = function(x, flatten = FALSE) {
-  props = S7::prop_names(x)
-  
-  # Only process properties that are likely to contain spans
-  # This avoids recursion through complex nested structures
-  content_props = c("yaml", "lines", "code", "name", "text", "attr", "args")
-  props_to_check = intersect(props, content_props)
-
-  res = purrr::map(props_to_check, ~{
-    prop_value = S7::prop(x, .x)
-    # Process the property value, but only if it's character or simple list
-    if (is.character(prop_value) || (is.list(prop_value) && .x == "yaml")) {
-      rmd_extract_spans(prop_value, flatten = flatten)
-    } else {
-      if (flatten) list() else list(list())
-    }
-  }) 
+#' @exportS3Method
+rmd_extract_spans.rmd_ast = function(x, flatten = FALSE) {
+  res = purrr::map(x@nodes, rmd_extract_spans, flatten = flatten)
   
   if (flatten) {
-    res |> purrr::flatten() 
+    res |> purrr::flatten()
   } else {
-    stats::setNames(res, props_to_check)
+    res
   }
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_markdown = function(x, flatten = FALSE) {
+  res = rmd_extract_spans(x@lines, flatten = flatten)
+  if (flatten) res else list(lines = res)
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_heading = function(x, flatten = FALSE) {
+  res = rmd_extract_spans(x@name, flatten = flatten)
+  if (flatten) res else list(name = res)
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_span = function(x, flatten = FALSE) {
+  res = rmd_extract_spans(x@text, flatten = flatten)
+  if (flatten) res else list(text = res)
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_yaml = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_chunk = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_raw_chunk = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_code_block = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_code_block_literal = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_shortcode = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_inline_code = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_fenced_div_open = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_spans.rmd_fenced_div_close = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
 }
