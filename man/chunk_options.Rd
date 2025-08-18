@@ -8,7 +8,7 @@
 \usage{
 rmd_set_options(x, ...)
 
-rmd_get_options(x, ..., defaults = list())
+rmd_get_options(x, ..., defaults = list(), yaml_style = TRUE)
 }
 \arguments{
 \item{x}{An \code{rmd_ast}, \code{rmd_tibble}, or any rmd ast node object.}
@@ -17,6 +17,8 @@ rmd_get_options(x, ..., defaults = list())
 of the option names for the getter.}
 
 \item{defaults}{A named list of default values for the options.}
+
+\item{yaml_style}{logical, if \code{TRUE} (default) return option names in YAML style (with hyphens), if \code{FALSE} return normalized style (with dots)}
 }
 \value{
 \code{rmd_set_options} returns the modified version of the original object.
@@ -32,7 +34,12 @@ within an rmd object.
 rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 
 str(rmd_get_options(rmd))
-str(rmd_get_options(rmd), "include")
+str(rmd_get_options(rmd, "include"))
+
+# Get options in YAML style (default) vs normalized style
+chunk = rmd_chunk("r", "test", options = list(`fig-width` = 8, eval = TRUE))
+rmd_get_options(chunk, yaml_style = TRUE)   # fig-width
+rmd_get_options(chunk, yaml_style = FALSE)  # fig.width
 
 rmd_set_options(rmd, include = TRUE)
 

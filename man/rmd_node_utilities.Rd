@@ -50,7 +50,7 @@ rmd_node_attr(x, attr)
 
 rmd_node_engine(x)
 
-rmd_node_options(x)
+rmd_node_options(x, yaml_style = TRUE)
 
 rmd_node_code(x)
 
@@ -95,6 +95,8 @@ rmd_node_set_attr(x, attr, value)
 
 \item{attr}{Attribute name to extract or set.}
 
+\item{yaml_style}{logical, if \code{TRUE} (default) return option names in YAML style (with hyphens), if \code{FALSE} return normalized style (with dots)}
+
 \item{...}{For \code{rmd_node_set_options()}, named arguments that will be converted to a list of options to assign.}
 }
 \value{
@@ -105,11 +107,11 @@ nodes without labels return \code{NA}.
 \item \code{rmd_node_type()} - returns a character vector of node types.
 \item \code{rmd_node_length()} - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
 nodes without a length return \code{NA}.
-\item \code{rmd_node_content()} - returns a character vector of node textual content, nodes without content return \code{NA}.
+\item \code{rmd_node_content()} - returns the raw character vector(s) of node textual content (lines/code), nodes without content return \code{NULL}.
 \item \code{rmd_node_attr()} - returns the value of a given node attribute (S7 property), returns \code{NULL} if the attribute does not exist.
 \item \code{rmd_node_engine()} - returns a character vector of chunk engines,
 \code{NA} for all other node types.
-\item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{NULL} for all other node types.
+\item \code{rmd_node_options()} - returns a list of chunk node options (named list), \code{NULL} for all other node types. Option names are returned in YAML style (with hyphens) by default, or normalized style (with dots) if \code{yaml_style = FALSE}.
 \item \verb{rmd_node_options<-()} - assigns new options to chunk nodes by merging with existing options. Takes a named list of options. For the setter, returns the modified object.
 \item \verb{rmd_node_attr<-()} - assigns new attribute values to nodes. For the setter, returns the modified object.
 \item \code{rmd_node_code()} - returns a list of chunk node code (character vector),
@@ -157,6 +159,7 @@ chunk = rmd_chunk("r", "example", code = "1 + 1") |>
 
 rmd_node_label(chunk)
 rmd_node_options(chunk)
+rmd_node_options(chunk, yaml_style = FALSE)  # get in normalized style
 rmd_node_content(chunk)
 
 chunk = rmd_chunk("r", "example", code = "x = 1") |>

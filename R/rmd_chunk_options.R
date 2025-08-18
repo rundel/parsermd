@@ -10,6 +10,7 @@
 #' @param ... Either a collection of named values for the setter or a character values
 #' of the option names for the getter.
 #' @param defaults A named list of default values for the options.
+#' @param yaml_style logical, if `TRUE` (default) return option names in YAML style (with hyphens), if `FALSE` return normalized style (with dots)
 #'
 #' @return `rmd_set_options` returns the modified version of the original object.
 #'
@@ -20,7 +21,12 @@
 #' rmd = parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
 #'
 #' str(rmd_get_options(rmd))
-#' str(rmd_get_options(rmd), "include")
+#' str(rmd_get_options(rmd, "include"))
+#' 
+#' # Get options in YAML style (default) vs normalized style
+#' chunk = rmd_chunk("r", "test", options = list(`fig-width` = 8, eval = TRUE))
+#' rmd_get_options(chunk, yaml_style = TRUE)   # fig-width
+#' rmd_get_options(chunk, yaml_style = FALSE)  # fig.width
 #'
 #' rmd_set_options(rmd, include = TRUE)
 #'
@@ -82,23 +88,28 @@ rmd_set_options.rmd_tibble = function(x, ...) {
 
 
 #' @rdname chunk_options
+#' @param yaml_style logical, if `TRUE` (default) return option names in YAML style (with hyphens), if `FALSE` return normalized style (with dots)
 #' @export
-rmd_get_options = function(x, ..., defaults = list()) {
+rmd_get_options = function(x, ..., defaults = list(), yaml_style = TRUE) {
   UseMethod("rmd_get_options")
 }
 
 #' @exportS3Method
-rmd_get_options.default = function(x, ..., defaults = list()) {
+rmd_get_options.default = function(x, ..., defaults = list(), yaml_style = TRUE) {
   NULL
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
+rmd_get_options.rmd_chunk = function(x, ..., defaults = list(), yaml_style = TRUE) {
   opts = unlist(list(...))
 
   chunk_opts = x@options
 
   if (length(opts) == 0) {
+    # Return all options, converting names based on yaml_style
+    if (yaml_style && !is.null(names(chunk_opts))) {
+      names(chunk_opts) = yamlize_option_names(names(chunk_opts))
+    }
     chunk_opts
   } else {
     checkmate::assert_character(opts, any.missing = FALSE)
@@ -109,19 +120,24 @@ rmd_get_options.rmd_chunk = function(x, ..., defaults = list()) {
     res = purrr::map(
       normalized_opts, ~ chunk_opts[[ .x ]] %||% defaults[[ .x ]]
     )
-    names(res) = opts  # Keep original names in result
+    # Set result names based on yaml_style preference
+    if (yaml_style) {
+      names(res) = opts  # Keep original names (may have hyphens)
+    } else {
+      names(res) = normalized_opts  # Use normalized names (with dots)
+    }
     res
   }
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_ast = function(x, ..., defaults = list()) {
-  purrr::map(x@nodes, rmd_get_options, ..., defaults = defaults)
+rmd_get_options.rmd_ast = function(x, ..., defaults = list(), yaml_style = TRUE) {
+  purrr::map(x@nodes, rmd_get_options, ..., defaults = defaults, yaml_style = yaml_style)
 }
 
 #' @exportS3Method
-rmd_get_options.rmd_tibble = function(x, ..., defaults = list()) {
-  rmd_get_options(as_ast(x), ..., defaults = defaults)
+rmd_get_options.rmd_tibble = function(x, ..., defaults = list(), yaml_style = TRUE) {
+  rmd_get_options(as_ast(x), ..., defaults = defaults, yaml_style = yaml_style)
 }
 
 

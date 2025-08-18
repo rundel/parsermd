@@ -15,14 +15,14 @@
 #' * `rmd_node_length()` - returns an integer vector of node lengths (i.e. lines of code, lines of text, etc.),
 #' nodes without a length return `NA`.
 #'
-#' * `rmd_node_content()` - returns a character vector of node textual content, nodes without content return `NA`.
+#' * `rmd_node_content()` - returns the raw character vector(s) of node textual content (lines/code), nodes without content return `NULL`.
 #'
 #' * `rmd_node_attr()` - returns the value of a given node attribute (S7 property), returns `NULL` if the attribute does not exist.
 #'
 #' * `rmd_node_engine()` - returns a character vector of chunk engines,
 #' `NA` for all other node types.
 #'
-#' * `rmd_node_options()` - returns a list of chunk node options (named list), `NULL` for all other node types.
+#' * `rmd_node_options()` - returns a list of chunk node options (named list), `NULL` for all other node types. Option names are returned in YAML style (with hyphens) by default, or normalized style (with dots) if `yaml_style = FALSE`.
 #'
 #' * `rmd_node_options<-()` - assigns new options to chunk nodes by merging with existing options. Takes a named list of options. For the setter, returns the modified object.
 #'
@@ -79,6 +79,7 @@
 #'
 #' rmd_node_label(chunk)
 #' rmd_node_options(chunk)
+#' rmd_node_options(chunk, yaml_style = FALSE)  # get in normalized style
 #' rmd_node_content(chunk)
 #'
 #' chunk = rmd_chunk("r", "example", code = "x = 1") |>
@@ -222,12 +223,12 @@ rmd_node_content = function(x) {
 
 #' @exportS3Method
 rmd_node_content.default = function(x) {
-  NA_character_
+  NULL
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_ast = function(x) {
-  purrr::map_chr(x@nodes, rmd_node_content)
+  purrr::map(x@nodes, rmd_node_content)
 }
 
 #' @exportS3Method
@@ -237,27 +238,27 @@ rmd_node_content.rmd_tibble = function(x) {
 
 #' @exportS3Method
 rmd_node_content.rmd_chunk = function(x) {
-  paste(x@code, collapse="\n")
+  x@code
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_raw_chunk = function(x) {
-  paste(x@code, collapse="\n")
+  x@code
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_markdown = function(x) {
-  paste(x@lines, collapse="\n")
+  x@lines
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_code_block = function(x) {
-  paste(x@code, collapse="\n")
+  x@code
 }
 
 #' @exportS3Method
 rmd_node_content.rmd_code_block_literal = function(x) {
-  paste(x@code, collapse="\n")
+  x@code
 }
 
 
@@ -309,9 +310,41 @@ rmd_node_engine = function(x) {
 }
 
 #' @rdname rmd_node_utilities
+#' @param yaml_style logical, if `TRUE` (default) return option names in YAML style (with hyphens), if `FALSE` return normalized style (with dots)
 #' @export
-rmd_node_options = function(x) {
-  rmd_node_attr(x, "options")
+rmd_node_options = function(x, yaml_style = TRUE) {
+  UseMethod("rmd_node_options")
+}
+
+#' @exportS3Method
+rmd_node_options.default = function(x, yaml_style = TRUE) {
+  NULL
+}
+
+#' @exportS3Method
+rmd_node_options.rmd_ast = function(x, yaml_style = TRUE) {
+  purrr::map(x@nodes, rmd_node_options, yaml_style = yaml_style)
+}
+
+#' @exportS3Method
+rmd_node_options.rmd_tibble = function(x, yaml_style = TRUE) {
+  rmd_node_options(as_ast(x), yaml_style = yaml_style)
+}
+
+#' @exportS3Method
+rmd_node_options.rmd_chunk = function(x, yaml_style = TRUE) {
+  options = x@options
+  
+  if (is.null(options) || !yaml_style) {
+    return(options)
+  }
+  
+  # Convert option names to YAML style if requested
+  if (is.list(options) && !is.null(names(options))) {
+    names(options) = yamlize_option_names(names(options))
+  }
+  
+  options
 }
 
 #' @rdname rmd_node_utilities
@@ -363,7 +396,7 @@ rmd_node_code = function(x) {
 #' @rdname rmd_node_utilities
 #' @export
 `rmd_node_attr<-.rmd_node` = function(x, attr, value) {
-  # Validation and existance handled by S7
+  # Validation and existence handled by S7
   S7::prop(x, attr) = value
   x
 }

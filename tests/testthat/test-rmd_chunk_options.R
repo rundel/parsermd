@@ -271,3 +271,167 @@ test_that("option normalization works bidirectionally", {
   dash_result = rmd_get_options(chunk_dot, "fig-width", "fig-height")
   expect_equal(dash_result, list(`fig-width` = 10, `fig-height` = 8))
 })
+
+test_that("rmd_get_options yaml_style parameter works correctly", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(fig.width = 8, fig.height = 6, out.width = "100%", eval = TRUE),
+    code = "plot(cars)"
+  )
+  
+  # Test getting all options with yaml_style = TRUE (default)
+  yaml_all = rmd_get_options(chunk, yaml_style = TRUE)
+  expected_yaml_all = list(`fig-width` = 8, `fig-height` = 6, `out-width` = "100%", eval = TRUE)
+  expect_equal(yaml_all, expected_yaml_all)
+  
+  # Test getting all options with yaml_style = FALSE
+  norm_all = rmd_get_options(chunk, yaml_style = FALSE)
+  expected_norm_all = list(fig.width = 8, fig.height = 6, out.width = "100%", eval = TRUE)
+  expect_equal(norm_all, expected_norm_all)
+  
+  # Test getting specific options with yaml_style = TRUE (dash input, dash output)
+  yaml_specific = rmd_get_options(chunk, "fig-width", "out-width", yaml_style = TRUE)
+  expected_yaml_specific = list(`fig-width` = 8, `out-width` = "100%")
+  expect_equal(yaml_specific, expected_yaml_specific)
+  
+  # Test getting specific options with yaml_style = FALSE (dash input, dot output)
+  norm_specific = rmd_get_options(chunk, "fig-width", "out-width", yaml_style = FALSE)
+  expected_norm_specific = list(fig.width = 8, out.width = "100%")
+  expect_equal(norm_specific, expected_norm_specific)
+  
+  # Test getting specific options with dot input and yaml_style = TRUE
+  yaml_dot_input = rmd_get_options(chunk, "fig.width", "out.width", yaml_style = TRUE)
+  expected_yaml_dot = list(fig.width = 8, out.width = "100%")  # Keep original input names
+  expect_equal(yaml_dot_input, expected_yaml_dot)
+  
+  # Test getting specific options with dot input and yaml_style = FALSE
+  norm_dot_input = rmd_get_options(chunk, "fig.width", "out.width", yaml_style = FALSE)
+  expected_norm_dot = list(fig.width = 8, out.width = "100%")
+  expect_equal(norm_dot_input, expected_norm_dot)
+})
+
+test_that("rmd_get_options yaml_style works with defaults", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(fig.width = 8),
+    code = "plot(cars)"
+  )
+  
+  defaults = list(fig.height = 6, out.width = "100%")
+  
+  # Test with yaml_style = TRUE (default)
+  yaml_result = rmd_get_options(chunk, "fig-width", "fig-height", "out-width", 
+                               defaults = defaults, yaml_style = TRUE)
+  expected_yaml = list(`fig-width` = 8, `fig-height` = 6, `out-width` = "100%")
+  expect_equal(yaml_result, expected_yaml)
+  
+  # Test with yaml_style = FALSE
+  norm_result = rmd_get_options(chunk, "fig-width", "fig-height", "out-width", 
+                               defaults = defaults, yaml_style = FALSE)
+  expected_norm = list(fig.width = 8, fig.height = 6, out.width = "100%")
+  expect_equal(norm_result, expected_norm)
+})
+
+test_that("rmd_get_options yaml_style works with AST and tibble objects", {
+  chunk1 = rmd_chunk("r", "chunk1", options = list(fig.width = 8, eval = TRUE), code = "x = 1")
+  chunk2 = rmd_chunk("python", "chunk2", options = list(fig.height = 6), code = "y = 2")
+  markdown1 = rmd_markdown(lines = "Some text")
+  
+  ast = rmd_ast(nodes = list(chunk1, markdown1, chunk2))
+  
+  # Test AST with yaml_style = TRUE
+  yaml_result = rmd_get_options(ast, yaml_style = TRUE)
+  expected_yaml = list(
+    list(`fig-width` = 8, eval = TRUE),
+    NULL,
+    list(`fig-height` = 6)
+  )
+  expect_equal(yaml_result, expected_yaml)
+  
+  # Test AST with yaml_style = FALSE  
+  norm_result = rmd_get_options(ast, yaml_style = FALSE)
+  expected_norm = list(
+    list(fig.width = 8, eval = TRUE),
+    NULL,
+    list(fig.height = 6)
+  )
+  expect_equal(norm_result, expected_norm)
+  
+  # Test with tibble
+  tbl = as_tibble(ast)
+  yaml_tbl_result = rmd_get_options(tbl, yaml_style = TRUE)
+  norm_tbl_result = rmd_get_options(tbl, yaml_style = FALSE)
+  
+  expect_equal(yaml_tbl_result, yaml_result)
+  expect_equal(norm_tbl_result, norm_result)
+})
+
+test_that("rmd_get_options yaml_style works with complex option names", {
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(fig.cap.location = "bottom", out.extra.css = "color: red", eval = TRUE),
+    code = "plot(cars)"
+  )
+  
+  # Test all options with yaml_style = TRUE
+  yaml_all = rmd_get_options(chunk, yaml_style = TRUE)
+  expected_yaml_all = list(`fig-cap-location` = "bottom", `out-extra-css` = "color: red", eval = TRUE)
+  expect_equal(yaml_all, expected_yaml_all)
+  
+  # Test all options with yaml_style = FALSE
+  norm_all = rmd_get_options(chunk, yaml_style = FALSE)
+  expected_norm_all = list(fig.cap.location = "bottom", out.extra.css = "color: red", eval = TRUE)
+  expect_equal(norm_all, expected_norm_all)
+  
+  # Test specific options
+  yaml_specific = rmd_get_options(chunk, "fig-cap-location", yaml_style = TRUE)
+  norm_specific = rmd_get_options(chunk, "fig-cap-location", yaml_style = FALSE)
+  
+  expect_equal(yaml_specific, list(`fig-cap-location` = "bottom"))
+  expect_equal(norm_specific, list(fig.cap.location = "bottom"))
+})
+
+test_that("rmd_chunk constructor normalizes option names automatically", {
+  # Test that constructor normalizes hyphenated option names to dots
+  chunk = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(`fig-width` = 8, `fig-height` = 6, `out-width` = "100%"),
+    code = "plot(cars)"
+  )
+  
+  # Internal storage should use dots
+  expect_equal(names(chunk@options), c("fig.width", "fig.height", "out.width"))
+  expect_equal(chunk@options, list(fig.width = 8, fig.height = 6, out.width = "100%"))
+  
+  # But rmd_node_options should return YAML style by default
+  yaml_options = rmd_node_options(chunk, yaml_style = TRUE)
+  expect_equal(names(yaml_options), c("fig-width", "fig-height", "out-width"))
+  
+  # And normalized style when requested
+  norm_options = rmd_node_options(chunk, yaml_style = FALSE)
+  expect_equal(names(norm_options), c("fig.width", "fig.height", "out.width"))
+})
+
+test_that("rmd_chunk validator prevents manual creation with hyphenated option names", {
+  # Test that directly setting hyphenated options fails validation
+  # We use structure() to bypass the setter that would normalize names
+  expect_snapshot_error({
+    chunk_with_hyphens = structure(
+      list(
+        engine = "r",
+        name = "test", 
+        options = list(`fig-width` = 8, `out-height` = 6),  # These should be invalid
+        code = character(),
+        indent = "",
+        n_ticks = 3L
+      ),
+      class = c("rmd_chunk", "rmd_node", "S7_object")
+    )
+    # This should trigger validation and fail
+    S7::validate(chunk_with_hyphens)
+  })
+})

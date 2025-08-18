@@ -158,14 +158,22 @@ rmd_chunk = S7::new_class(
   ),
   validator = function(self) {
     if (length(self@engine) != 1) {
-      "@engine must be a single character string"
+      return("@engine must be a single character string")
     } else if (length(self@name) != 1) {
-      "@name must be a single character string"
+      return("@name must be a single character string")
     } else if (length(self@indent) != 1) {
-      "@indent must be a single character string"
+      return("@indent must be a single character string")
     } else if (length(self@n_ticks) != 1 || self@n_ticks < 3) {
-      "@n_ticks must be a single integer >= 3"
+      return("@n_ticks must be a single integer >= 3")
+    } else if (length(self@options) > 0 && !is.null(names(self@options))) {
+      # Check that option names don't contain hyphens (should be normalized to dots)
+      option_names = names(self@options)
+      if (any(grepl("-", option_names, fixed = TRUE))) {
+        hyphenated_options = option_names[grepl("-", option_names, fixed = TRUE)]
+        return(cli::format_inline("Option names must not contain hyphens: {.val {hyphenated_options}}. Use dots instead or let the constructor normalize them automatically."))
+      }
     }
+    NULL
   },
   package = NULL
 )
