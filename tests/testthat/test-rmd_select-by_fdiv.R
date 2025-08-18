@@ -219,6 +219,31 @@ test_that("by_fdiv works with complex attribute combinations", {
   expect_equal(complex_subset, expected_subset)
 })
 
+test_that("by_fdiv works with no arguments (selects all fenced div pairs)", {
+  # Create test AST with multiple fenced divs and other content
+  test_ast = rmd_ast(
+    nodes = list(
+      rmd_markdown(lines = "Regular content"),
+      rmd_fenced_div_open(classes = ".note"),
+      rmd_markdown(lines = "Note content"),
+      rmd_fenced_div_close(),
+      rmd_heading(name = "Section", level = 2L),
+      rmd_fenced_div_open(classes = ".warning"),
+      rmd_markdown(lines = "Warning content"),
+      rmd_fenced_div_close(),
+      rmd_markdown(lines = "Final content")
+    )
+  )
+  
+  # Test selecting all fenced div pairs with no arguments
+  all_fdivs = rmd_select(test_ast, by_fenced_div())
+  
+  # Expected result: positions 2-4 (first fenced div pair) and 6-8 (second fenced div pair)
+  expected_subset = test_ast[c(2, 3, 4, 6, 7, 8)]
+  
+  expect_equal(all_fdivs, expected_subset)
+})
+
 test_that("by_fdiv validates input correctly", {
   # Create a simple test AST for validation testing
   test_ast = rmd_ast(
@@ -234,7 +259,6 @@ test_that("by_fdiv validates input correctly", {
   expect_snapshot_error(rmd_select(test_ast, by_fenced_div(id = c("a", "b"))))  # length > 1
   expect_snapshot_error(rmd_select(test_ast, by_fenced_div(class = 123)))  # invalid type
   expect_snapshot_error(rmd_select(test_ast, by_fenced_div(attr = 123)))  # invalid type
-  expect_snapshot_error(rmd_select(test_ast, by_fenced_div()))  # no arguments
 })
 
 test_that("by_fdiv works with empty AST", {

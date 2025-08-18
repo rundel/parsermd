@@ -37,6 +37,7 @@
 #'
 #' fdiv = parse_rmd(system.file("examples/fenced-divs.qmd", package="parsermd"))
 #'
+#' rmd_select(fdiv, by_fenced_div())  # Select all fenced div pairs
 #' rmd_select(fdiv, by_fenced_div(class = "note"))
 #' rmd_select(fdiv, by_fenced_div(id = "special-section"))
 #' rmd_select(fdiv, by_fenced_div(class = c("warning", "important")))
@@ -257,10 +258,6 @@ by_fenced_div = function(id = NULL, class = NULL, attr = NULL) {
   # Input validation
   checkmate::assert_character(id, len = 1, null.ok = TRUE)
   checkmate::assert_character(class, min.len = 1, null.ok = TRUE)
-  
-  if (is.null(id) && is.null(class) && is.null(attr)) {
-    cli::cli_abort("At least one of {.arg id}, {.arg class}, or {.arg attr} must be provided")
-  }
   
   # Process ID - add # prefix if missing and warn
   if (!is.null(id)) {

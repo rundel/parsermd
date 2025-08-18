@@ -26,6 +26,9 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
   min_level = 6
   max_level = 1
 
+  # Pre-process fenced div pairs to ensure they get consistent section assignment
+  fdiv_pairs = find_fenced_div_pairs(x@nodes)
+  
   for(j in seq_along(x@nodes)) {
     node = x@nodes[[j]]
     if (inherits(node, "rmd_heading")) {
@@ -38,6 +41,9 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
 
     sections[[length(sections)+1]] = labels
   }
+  
+  # Post-process to fix fenced div pair section assignments
+  sections = fix_fenced_div_sections(sections, x@nodes, fdiv_pairs)
 
   # Handle the case where there are no headings
   if (min_level == max(levels) & max_level == min(levels))
@@ -50,5 +56,89 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
   if (drop_na)
     sections = purrr::map(sections, ~ .x[!is.na(.x)])
 
+  sections
+}
+
+#' Find fenced div open/close pairs
+#' @param nodes List of rmd nodes
+#' @return List of pairs with open_pos and close_pos indices
+#' @noRd
+find_fenced_div_pairs = function(nodes) {
+  if (length(nodes) == 0) return(list())
+  
+  pairs = list()
+  stack = integer(0)  # Stack to track open positions
+  
+  for (i in seq_along(nodes)) {
+    node = nodes[[i]]
+    
+    if (S7::S7_inherits(node, rmd_fenced_div_open)) {
+      stack = c(stack, i)  # Push open position onto stack
+    } else if (S7::S7_inherits(node, rmd_fenced_div_close)) {
+      if (length(stack) > 0) {
+        # Pop the most recent open position
+        open_pos = stack[length(stack)]
+        stack = stack[-length(stack)]
+        
+        # Record the pair
+        pairs[[length(pairs) + 1]] = list(
+          open_pos = open_pos,
+          close_pos = i
+        )
+      }
+    }
+  }
+  
+  pairs
+}
+
+#' Fix section assignments for fenced div pairs
+#' @param sections List of section assignments (one per node)
+#' @param nodes List of rmd nodes
+#' @param fdiv_pairs List of fenced div pairs from find_fenced_div_pairs()
+#' @return Modified sections list with balanced fenced div assignments
+#' @noRd
+fix_fenced_div_sections = function(sections, nodes, fdiv_pairs) {
+  if (length(fdiv_pairs) == 0) return(sections)
+  
+  for (pair in fdiv_pairs) {
+    open_pos = pair$open_pos
+    close_pos = pair$close_pos
+    
+    # Find the dominant section among the wrapped content
+    # (excluding the open/close tags themselves)
+    if (close_pos > open_pos + 1) {
+      # There is content between open and close
+      content_indices = (open_pos + 1):(close_pos - 1)
+      content_sections = sections[content_indices]
+      
+      # Find the most common section assignment among content nodes
+      # This handles cases where content spans multiple sections
+      section_counts = table(sapply(content_sections, function(s) {
+        # Convert section list to string for counting
+        paste(s[!is.na(s)], collapse = " > ")
+      }))
+      
+      if (length(section_counts) > 0) {
+        dominant_section_str = names(section_counts)[which.max(section_counts)]
+        
+        # Find a content node with this section assignment to copy from
+        for (i in content_indices) {
+          current_section_str = paste(sections[[i]][!is.na(sections[[i]])], collapse = " > ")
+          if (current_section_str == dominant_section_str) {
+            # Assign this section to both open and close
+            sections[[open_pos]] = sections[[i]]
+            sections[[close_pos]] = sections[[i]]
+            break
+          }
+        }
+      }
+    } else {
+      # No content between open and close (empty fenced div)
+      # Assign the close tag's current section to the open tag
+      sections[[open_pos]] = sections[[close_pos]]
+    }
+  }
+  
   sections
 }

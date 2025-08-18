@@ -354,3 +354,181 @@ test_that("rmd_fenced_div_wrap works with complex selections", {
   expect_true(S7::S7_inherits(wrapped@nodes[[7]], rmd_fenced_div_open))
   expect_true(S7::S7_inherits(wrapped@nodes[[9]], rmd_fenced_div_close))
 })
+
+# Edge case tests for section-based wrapping and tree printing
+test_that("rmd_fenced_div_wrap preserves section selection balance after wrapping", {
+  hw = system.file("examples/hw01.Rmd", package = "parsermd")
+  rmd = parse_rmd(hw)
+  
+  # Wrap Exercise 1 section
+  rmd_wrap = rmd |>
+    rmd_fenced_div_wrap(
+      by_section("Exercise 1"),
+      open = rmd_fenced_div_open(classes = ".callout-warning", id = "#test-callout")
+    )
+  
+  # Should be able to select the same section after wrapping without errors
+  expect_no_error({
+    result = rmd_wrap |> rmd_select(by_section("Exercise 1"))
+  })
+  
+  # The result should include both fenced div tags
+  result = rmd_wrap |> rmd_select(by_section("Exercise 1"))
+  result_types = rmd_node_type(result)
+  
+  expect_true("rmd_fenced_div_open" %in% result_types)
+  expect_true("rmd_fenced_div_close" %in% result_types)
+  
+  # Should be balanced
+  open_count = sum(result_types == "rmd_fenced_div_open")
+  close_count = sum(result_types == "rmd_fenced_div_close")
+  expect_equal(open_count, close_count)
+})
+
+test_that("rmd_fenced_div_wrap handles multiple non-overlapping sections", {
+  hw = system.file("examples/hw01.Rmd", package = "parsermd")
+  rmd = parse_rmd(hw)
+  
+  # Wrap multiple sections
+  rmd_wrap = rmd |>
+    rmd_fenced_div_wrap(
+      by_section("Exercise 1"),
+      open = rmd_fenced_div_open(classes = ".callout-warning")
+    ) |>
+    rmd_fenced_div_wrap(
+      by_section("Exercise 2"),
+      open = rmd_fenced_div_open(classes = ".callout-note")
+    )
+  
+  # Both sections should be selectable
+  expect_no_error({
+    ex1_result = rmd_wrap |> rmd_select(by_section("Exercise 1"))
+    ex2_result = rmd_wrap |> rmd_select(by_section("Exercise 2"))
+  })
+  
+  ex1_result = rmd_wrap |> rmd_select(by_section("Exercise 1"))
+  ex2_result = rmd_wrap |> rmd_select(by_section("Exercise 2"))
+  
+  # Each should have balanced fenced divs
+  ex1_types = rmd_node_type(ex1_result)
+  ex2_types = rmd_node_type(ex2_result)
+  
+  expect_equal(sum(ex1_types == "rmd_fenced_div_open"), 
+               sum(ex1_types == "rmd_fenced_div_close"))
+  expect_equal(sum(ex2_types == "rmd_fenced_div_open"), 
+               sum(ex2_types == "rmd_fenced_div_close"))
+  
+  # Check that different classes were used
+  expect_true(any(grepl("callout-warning", capture.output(print(ex1_result)))))
+  expect_true(any(grepl("callout-note", capture.output(print(ex2_result)))))
+})
+
+test_that("rmd_fenced_div_wrap section assignments are consistent", {
+  hw = system.file("examples/hw01.Rmd", package = "parsermd")
+  rmd = parse_rmd(hw)
+  
+  rmd_wrap = rmd |>
+    rmd_fenced_div_wrap(
+      by_section("Exercise 1"),
+      open = rmd_fenced_div_open(classes = ".test")
+    )
+  
+  # Get section assignments
+  sections = rmd_node_sections(rmd_wrap, drop_na = TRUE)
+  types = rmd_node_type(rmd_wrap)
+  
+  # Find the open and close div positions
+  open_idx = which(types == "rmd_fenced_div_open")
+  close_idx = which(types == "rmd_fenced_div_close")
+  
+  expect_length(open_idx, 1)
+  expect_length(close_idx, 1)
+  
+  # Both should be assigned to Exercise 1 section
+  open_section = paste(sections[[open_idx]], collapse = " > ")
+  close_section = paste(sections[[close_idx]], collapse = " > ")
+  
+  expect_true(grepl("Exercise 1", open_section))
+  expect_true(grepl("Exercise 1", close_section))
+  
+  # They should have the same section assignment
+  expect_equal(sections[[open_idx]], sections[[close_idx]])
+})
+
+test_that("rmd_fenced_div_wrap handles nested fenced divs correctly", {
+  # Create a custom AST with content to wrap
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Section 1", level = 1L),
+      rmd_markdown(lines = "Section 1 content"),
+      rmd_heading(name = "Section 2", level = 1L),
+      rmd_markdown(lines = "Section 2 content")
+    )
+  )
+  
+  # First wrap Section 1
+  wrapped_once = original_ast |>
+    rmd_fenced_div_wrap(
+      by_section("Section 1"),
+      open = rmd_fenced_div_open(classes = ".outer")
+    )
+  
+  # Then wrap the markdown content specifically (creating nested divs)
+  wrapped_nested = wrapped_once |>
+    rmd_fenced_div_wrap(
+      has_type("rmd_markdown") & by_section("Section 1"),
+      open = rmd_fenced_div_open(classes = ".inner")
+    )
+  
+  types = rmd_node_type(wrapped_nested)
+  
+  # Should have 2 opens and 2 closes
+  expect_equal(sum(types == "rmd_fenced_div_open"), 2)
+  expect_equal(sum(types == "rmd_fenced_div_close"), 2)
+  
+  # Tree should show proper nesting
+  tree_output = capture.output(print(wrapped_nested))
+  
+  # Should have nested structure visible in tree
+  expect_true(any(grepl("Fenced div \\(open\\).*outer", tree_output)))
+  expect_true(any(grepl("Fenced div \\(open\\).*inner", tree_output)))
+})
+
+test_that("rmd_fenced_div_wrap handles empty sections gracefully", {
+  # Create AST with empty section (no content between headings)
+  original_ast = rmd_ast(
+    nodes = list(
+      rmd_yaml(yaml = list(title = "Test")),
+      rmd_heading(name = "Empty Section", level = 1L),
+      rmd_heading(name = "Next Section", level = 1L),
+      rmd_markdown(lines = "Content")
+    )
+  )
+  
+  # Wrap empty section
+  wrapped = original_ast |>
+    rmd_fenced_div_wrap(
+      by_section("Empty Section"),
+      open = rmd_fenced_div_open(classes = ".empty-wrap")
+    )
+  
+  types = rmd_node_type(wrapped)
+  
+  # Should have balanced fenced divs even for empty section
+  expect_equal(sum(types == "rmd_fenced_div_open"), 1)
+  expect_equal(sum(types == "rmd_fenced_div_close"), 1)
+  
+  # Should be able to select the wrapped empty section
+  expect_no_error({
+    result = wrapped |> rmd_select(by_section("Empty Section"))
+  })
+  
+  # Result should include the heading and both fenced div tags
+  result = wrapped |> rmd_select(by_section("Empty Section"))
+  result_types = rmd_node_type(result)
+  
+  expect_true("rmd_heading" %in% result_types)
+  expect_true("rmd_fenced_div_open" %in% result_types)
+  expect_true("rmd_fenced_div_close" %in% result_types)
+})
