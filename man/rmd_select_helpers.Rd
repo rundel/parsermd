@@ -119,6 +119,7 @@ rmd_select(rmd, has_shortcode("video"))
 
 fdiv = parse_rmd(system.file("examples/fenced-divs.qmd", package="parsermd"))
 
+rmd_select(fdiv, by_fenced_div())  # Select all fenced div pairs
 rmd_select(fdiv, by_fenced_div(class = "note"))
 rmd_select(fdiv, by_fenced_div(id = "special-section"))
 rmd_select(fdiv, by_fenced_div(class = c("warning", "important")))
