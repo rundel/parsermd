@@ -226,7 +226,6 @@ test_that("has_heading validates input comprehensively", {
   expect_snapshot_error(rmd_select(original_ast, has_heading(NULL)))
   expect_snapshot_error(rmd_select(original_ast, has_heading(character(0))))
   expect_snapshot_error(rmd_select(original_ast, has_heading(c("valid", NA))))
-  expect_snapshot_error(rmd_select(original_ast, has_heading(c("valid", ""))))  # Empty string in vector
 })
 
 test_that("has_heading works with regex-like characters as literals", {

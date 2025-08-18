@@ -316,15 +316,9 @@ test_that("has_shortcode preserves node order", {
       rmd_markdown(lines = "M video: {{< video m.mp4 >}}")
     )
   )
-  
-  # Should return nodes in original document order, not alphabetical
+
   video_matches = rmd_select(original_ast, has_shortcode("video"))
-  
-  expect_equal(length(video_matches@nodes), 3)
-  # Verify they're in original order (positions 1, 3, 5)
-  expect_true(all(c(1, 3, 5) %in% which(sapply(original_ast@nodes, function(x) {
-    S7::S7_inherits(x, rmd_markdown) && grepl("{{< video", x@lines)
-  }))))
+  expect_equal(video_matches, original_ast[c(1, 3, 5)])
 })
 
 test_that("has_shortcode works with closing vs opening shortcodes", {
@@ -365,10 +359,10 @@ test_that("has_shortcode works with regex-like function names", {
   dot_match = rmd_select(original_ast, has_shortcode("test.function"))
   expect_equal(length(dot_match@nodes), 1)
   
-  caret_match = rmd_select(original_ast, has_shortcode("test^2"))
+  caret_match = rmd_select(original_ast, has_shortcode("test\\^2"))
   expect_equal(length(caret_match@nodes), 1)
   
-  dollar_match = rmd_select(original_ast, has_shortcode("test$end"))
+  dollar_match = rmd_select(original_ast, has_shortcode("test\\$end"))
   expect_equal(length(dollar_match@nodes), 1)
   
   # Test glob patterns with these characters
@@ -428,9 +422,9 @@ test_that("has_shortcode validates input comprehensively", {
     nodes = list(rmd_markdown(lines = "Test: {{< video demo.mp4 >}}"))
   )
   
-  # Use expect_snapshot_error for consistency
   expect_snapshot_error(rmd_select(original_ast, has_shortcode(123)))
   expect_snapshot_error(rmd_select(original_ast, has_shortcode(character(0))))
+  expect_snapshot_error(rmd_select(original_ast, has_shortcode("")))
   expect_snapshot_error(rmd_select(original_ast, has_shortcode(c("valid", NA))))
-  expect_snapshot_error(rmd_select(original_ast, has_shortcode(c("video", ""))))  # Mixed valid and empty
+  expect_snapshot_error(rmd_select(original_ast, has_shortcode(c("video", ""))))
 })

@@ -219,6 +219,10 @@ has_option = function(...) {
 #' @export
 has_shortcode = function(func_name = NULL) {
   checkmate::assert_character(func_name, any.missing = FALSE, min.len = 1, null.ok = TRUE)
+  
+  if (!is.null(func_name) && any(func_name == "")) {
+    cli::cli_abort("Function names cannot be empty strings")
+  }
 
   x = tidyselect::peek_data(fn = "has_shortcode") |>
     rmd_ast()
@@ -236,6 +240,10 @@ has_shortcode = function(func_name = NULL) {
 #' @export
 has_inline_code = function(engine = NULL) {
   checkmate::assert_character(engine, any.missing = FALSE, min.len = 1, null.ok = TRUE)
+  
+  if (!is.null(engine) && any(engine == "")) {
+    cli::cli_abort("Engine names cannot be empty strings")
+  }
 
   x = tidyselect::peek_data(fn = "has_inline_code") |>
     rmd_ast()

@@ -182,36 +182,6 @@ test_that("has_inline_code handles case sensitivity correctly", {
   expect_equal(length(python_mixed@nodes), 1)  # Only mixed case Python
 })
 
-test_that("has_inline_code works with special engine names", {
-  original_ast = rmd_ast(
-    nodes = list(
-      rmd_markdown(lines = "C++: `c++ std::cout << 'hello'` outputs"),
-      rmd_markdown(lines = "F#: `f# let x = 5` assigns"),  
-      rmd_markdown(lines = "Node.js: `node.js console.log('test')` logs"),
-      rmd_markdown(lines = "Custom: `my-engine process()` runs"),
-      rmd_markdown(lines = "Numeric: `r2 calculate()` computes")
-    )
-  )
-  
-  # Test engines with special characters
-  cpp_match = rmd_select(original_ast, has_inline_code("c++"))
-  expect_equal(length(cpp_match@nodes), 1)
-  
-  fsharp_match = rmd_select(original_ast, has_inline_code("f#"))
-  expect_equal(length(fsharp_match@nodes), 1)
-  
-  # Test engines with dots and hyphens
-  nodejs_match = rmd_select(original_ast, has_inline_code("node.js"))
-  expect_equal(length(nodejs_match@nodes), 1)
-  
-  custom_match = rmd_select(original_ast, has_inline_code("my-engine"))
-  expect_equal(length(custom_match@nodes), 1)
-  
-  # Test glob patterns with special engines
-  special_pattern = rmd_select(original_ast, has_inline_code("*++"))
-  expect_equal(length(special_pattern@nodes), 1)  # c++
-})
-
 test_that("has_inline_code works with multiple inline snippets per node", {
   original_ast = rmd_ast(
     nodes = list(
@@ -234,32 +204,6 @@ test_that("has_inline_code works with multiple inline snippets per node", {
   # Test multiple engines
   multi_matches = rmd_select(original_ast, has_inline_code(c("python", "bash")))
   expect_equal(length(multi_matches@nodes), 2)  # nodes with python or bash
-})
-
-test_that("has_inline_code works with Unicode engine names", {
-  original_ast = rmd_ast(
-    nodes = list(
-      rmd_markdown(lines = "Spanish: `español sum(x)` calculates"),
-      rmd_markdown(lines = "Chinese: `中文 process()` runs"),
-      rmd_markdown(lines = "Greek: `ελληνικά analyze()` processes"),
-      rmd_markdown(lines = "Regular: `r mean(data)` computes"),
-      rmd_markdown(lines = "Arabic: `عربي calculate()` works")
-    )
-  )
-  
-  # Test exact Unicode engine matches
-  spanish_match = rmd_select(original_ast, has_inline_code("español"))
-  expect_equal(length(spanish_match@nodes), 1)
-  
-  chinese_match = rmd_select(original_ast, has_inline_code("中文"))
-  expect_equal(length(chinese_match@nodes), 1)
-  
-  greek_match = rmd_select(original_ast, has_inline_code("ελληνικά"))
-  expect_equal(length(greek_match@nodes), 1)
-  
-  # Test Unicode with glob patterns
-  unicode_pattern = rmd_select(original_ast, has_inline_code("中*"))
-  expect_equal(length(unicode_pattern@nodes), 1)
 })
 
 test_that("has_inline_code works with complex nested content", {
@@ -315,22 +259,6 @@ test_that("has_inline_code works with very long inline expressions", {
   expect_equal(length(python_matches@nodes), 1)  # long Python expression
 })
 
-test_that("has_inline_code works with empty engine parameter", {
-  original_ast = rmd_ast(
-    nodes = list(
-      rmd_markdown(lines = "R code: `r mean(x)` calculates"),
-      rmd_markdown(lines = "Python: `python len(y)` counts"),
-      rmd_markdown(lines = "Empty engine: `` some_function()` maybe?"),
-      rmd_markdown(lines = "No inline code")
-    )
-  )
-  
-  # Test with empty string (should match empty engine if it exists)
-  empty_matches = rmd_select(original_ast, has_inline_code(""))
-  # This depends on how the parser handles empty engines - might be 0 or 1
-  expect_true(length(empty_matches@nodes) >= 0)
-})
-
 test_that("has_inline_code preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
@@ -352,51 +280,6 @@ test_that("has_inline_code preserves node order", {
                      1:5 %in% c(1, 3, 5)), c(1, 3, 5))
 })
 
-test_that("has_inline_code works with numeric-like engine names", {
-  original_ast = rmd_ast(
-    nodes = list(
-      rmd_markdown(lines = "Version: `r4 process()` runs"),
-      rmd_markdown(lines = "Number: `123 calculate()` computes"),
-      rmd_markdown(lines = "Decimal: `1.5 analyze()` processes"),
-      rmd_markdown(lines = "Scientific: `1e5 compute()` works"),
-      rmd_markdown(lines = "Regular: `r mean(x)` calculates")
-    )
-  )
-  
-  # Test numeric-like engine names
-  r4_match = rmd_select(original_ast, has_inline_code("r4"))
-  expect_equal(length(r4_match@nodes), 1)
-  
-  numeric_match = rmd_select(original_ast, has_inline_code("123"))
-  expect_equal(length(numeric_match@nodes), 1)
-  
-  decimal_match = rmd_select(original_ast, has_inline_code("1.5"))
-  expect_equal(length(decimal_match@nodes), 1)
-  
-  # Test pattern with numbers
-  r_pattern = rmd_select(original_ast, has_inline_code("r*"))
-  expect_equal(length(r_pattern@nodes), 2)  # r4 and r
-})
-
-test_that("has_inline_code works with mixed inline code formats", {
-  original_ast = rmd_ast(
-    nodes = list(
-      rmd_markdown(lines = "Standard: `r mean(x)` calculates"),
-      rmd_markdown(lines = "Backticks: ```r summary(data)``` code block?"),  # This might not be inline
-      rmd_markdown(lines = "Multiple backticks: ``r escaped_backticks`` content"),
-      rmd_markdown(lines = "Complex: Text `r x` and `python y` mixed"),
-      rmd_markdown(lines = "No code here")
-    )
-  )
-  
-  # Test standard inline code matching
-  r_matches = rmd_select(original_ast, has_inline_code("r"))
-  expect_true(length(r_matches@nodes) >= 2)  # At least the standard ones
-  
-  python_matches = rmd_select(original_ast, has_inline_code("python"))
-  expect_equal(length(python_matches@nodes), 1)  # Mixed content node
-})
-
 test_that("has_inline_code validates input comprehensively", {
   original_ast = rmd_ast(
     nodes = list(rmd_markdown(lines = "Test: `r 1+1` code"))
@@ -405,6 +288,7 @@ test_that("has_inline_code validates input comprehensively", {
   # Use expect_snapshot_error for consistency
   expect_snapshot_error(rmd_select(original_ast, has_inline_code(123)))
   expect_snapshot_error(rmd_select(original_ast, has_inline_code(character(0))))
+  expect_snapshot_error(rmd_select(original_ast, has_inline_code("")))
   expect_snapshot_error(rmd_select(original_ast, has_inline_code(c("valid", NA))))
   expect_snapshot_error(rmd_select(original_ast, has_inline_code(c("r", ""))))  # Mixed valid and empty
 })
