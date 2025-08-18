@@ -192,13 +192,13 @@ has_option = function(...) {
       if (name == "") {
         # Normalize option name for lookup (replace - with .)
         normalized_opt = normalize_option_names(opt)
-        rmd_get_options(x, normalized_opt) |>
+        rmd_get_options(x, normalized_opt, yaml_style = FALSE) |>
           purrr::map_lgl(~!is.null(.x[[normalized_opt]]))
       } else {
         # Normalize option name for comparison (replace - with .)
         normalized_name = normalize_option_names(name)
-        rmd_get_options(x, normalized_name) |>
-          purrr::map_lgl(~identical(.x[[normalized_name]], as.character(opt)))
+        rmd_get_options(x, normalized_name, yaml_style = FALSE) |>
+          purrr::map_lgl(~identical(.x[[normalized_name]], opt))
       }
     }
   ) |>
