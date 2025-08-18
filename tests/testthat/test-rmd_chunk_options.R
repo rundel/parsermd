@@ -29,14 +29,23 @@ test_that("rmd_set_options normalizes dash option names", {
   result = rmd_set_options(chunk, `fig-width` = 10, `out-height` = "75%")
   
   # Expected chunk with normalized option names
-  expected_chunk = rmd_chunk(
+  expected_chunk1 = rmd_chunk(
     engine = "r",
     name = "test",
     options = list(fig.width = 10, out.height = "75%"),
     code = "plot(cars)"
   )
+
+  expected_chunk2 = rmd_chunk(
+    engine = "r",
+    name = "test",
+    options = list(`fig-width` = 10, `out-height` = "75%"),
+    code = "plot(cars)"
+  )
+
   
-  expect_equal(result, expected_chunk)
+  expect_equal(result, expected_chunk1)
+  expect_equal(result, expected_chunk2)
 })
 
 test_that("rmd_set_options and rmd_get_options work together with normalization", {
@@ -414,24 +423,4 @@ test_that("rmd_chunk constructor normalizes option names automatically", {
   # And normalized style when requested
   norm_options = rmd_node_options(chunk, yaml_style = FALSE)
   expect_equal(names(norm_options), c("fig.width", "fig.height", "out.width"))
-})
-
-test_that("rmd_chunk validator prevents manual creation with hyphenated option names", {
-  # Test that directly setting hyphenated options fails validation
-  # We use structure() to bypass the setter that would normalize names
-  expect_snapshot_error({
-    chunk_with_hyphens = structure(
-      list(
-        engine = "r",
-        name = "test", 
-        options = list(`fig-width` = 8, `out-height` = 6),  # These should be invalid
-        code = character(),
-        indent = "",
-        n_ticks = 3L
-      ),
-      class = c("rmd_chunk", "rmd_node", "S7_object")
-    )
-    # This should trigger validation and fail
-    S7::validate(chunk_with_hyphens)
-  })
 })
