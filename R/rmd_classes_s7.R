@@ -44,6 +44,8 @@
 #' 
 #' * `rmd_fenced_div_close()` - Closing tags for fenced divs (:::).
 #'
+#' @param nodes List of rmd_node objects for the AST container
+#' @param yaml List containing YAML frontmatter content
 #' @seealso [rmd_node_utilities] for utility functions that work with these S7 objects
 #' @name rmd_classes_s7
 NULL

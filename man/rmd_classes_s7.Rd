@@ -13,6 +13,11 @@ rmd_ast(nodes = list())
 
 rmd_yaml(yaml = list())
 }
+\arguments{
+\item{nodes}{List of rmd_node objects for the AST container}
+
+\item{yaml}{List containing YAML frontmatter content}
+}
 \description{
 S7 classes for representing R Markdown AST nodes with automatic validation.
 All classes inherit from the base \code{rmd_node} class and provide type-safe object creation
