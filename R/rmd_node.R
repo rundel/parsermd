@@ -112,7 +112,7 @@ rmd_node_label.default = function(x) {
 
 #' @exportS3Method
 rmd_node_label.rmd_chunk = function(x) {
-  name = x@name
+  name = x@label
 
   if (name == "") {
     if (!is.null(x@options[["label"]]))
@@ -143,7 +143,7 @@ rmd_node_label.rmd_chunk = function(x) {
 #' @export
 `rmd_node_label<-.rmd_chunk` = function(x, value) {
   checkmate::assert_string(value, na.ok = FALSE)
-  x@name = value
+  x@label = value
   x
 }
 

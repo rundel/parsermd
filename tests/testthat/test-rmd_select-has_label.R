@@ -3,9 +3,9 @@ test_that("has_label works with single label", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
-      rmd_chunk(engine = "r", name = "setup", code = "library(ggplot2)"),
+      rmd_chunk(engine = "r", label = "setup", code = "library(ggplot2)"),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "analysis", code = "plot(cars)"),
+      rmd_chunk(engine = "r", label = "analysis", code = "plot(cars)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -23,9 +23,9 @@ test_that("has_label works with glob patterns", {
   # Create test AST with pattern-matching labels
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "plot-cars", code = "plot(cars)"),
-      rmd_chunk(engine = "r", name = "plot-iris", code = "plot(iris)"),
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(cars)"),
+      rmd_chunk(engine = "r", label = "plot-cars", code = "plot(cars)"),
+      rmd_chunk(engine = "r", label = "plot-iris", code = "plot(iris)"),
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(cars)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -43,9 +43,9 @@ test_that("has_label works with multiple labels", {
   # Create test AST with various labels
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "library(ggplot2)"),
-      rmd_chunk(engine = "r", name = "load-data", code = "data(mtcars)"),
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(mtcars)"),
+      rmd_chunk(engine = "r", label = "setup", code = "library(ggplot2)"),
+      rmd_chunk(engine = "r", label = "load-data", code = "data(mtcars)"),
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(mtcars)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -63,7 +63,7 @@ test_that("has_label returns empty when no matches", {
   # Create test AST
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "library(ggplot2)"),
+      rmd_chunk(engine = "r", label = "setup", code = "library(ggplot2)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -81,10 +81,10 @@ test_that("has_label works with unlabeled nodes", {
   # Create test AST with mix of labeled and unlabeled chunks
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "library(ggplot2)"),
-      rmd_chunk(engine = "r", name = "", code = "plot(cars)"),  # unlabeled
+      rmd_chunk(engine = "r", label = "setup", code = "library(ggplot2)"),
+      rmd_chunk(engine = "r", label = "", code = "plot(cars)"),  # unlabeled
       rmd_heading(name = "Section", level = 1L),  # headings don't have labels in same way
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(cars)")
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(cars)")
     )
   )
   
@@ -109,10 +109,10 @@ test_that("has_label works with complex glob patterns", {
   # Create test AST with various label patterns
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "fig-scatter", code = "plot(x, y)"),
-      rmd_chunk(engine = "r", name = "fig-histogram", code = "hist(x)"),
-      rmd_chunk(engine = "r", name = "tbl-summary", code = "summary(df)"),
-      rmd_chunk(engine = "r", name = "fig-boxplot", code = "boxplot(x)")
+      rmd_chunk(engine = "r", label = "fig-scatter", code = "plot(x, y)"),
+      rmd_chunk(engine = "r", label = "fig-histogram", code = "hist(x)"),
+      rmd_chunk(engine = "r", label = "tbl-summary", code = "summary(df)"),
+      rmd_chunk(engine = "r", label = "fig-boxplot", code = "boxplot(x)")
     )
   )
   
@@ -126,7 +126,7 @@ test_that("has_label works with complex glob patterns", {
   
   # Verify the correct labels were selected
   expect_equal(
-    rmd_node_attr(fig_subset, "name"),
+    rmd_node_attr(fig_subset, "label"),
     list("fig-scatter", "fig-histogram", "fig-boxplot")
   )
 })
@@ -144,12 +144,12 @@ test_that("has_label works with empty AST", {
 test_that("has_label works with special characters in labels", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "data-prep_v1", code = "clean()"),
-      rmd_chunk(engine = "r", name = "plot.scatter", code = "plot()"),
-      rmd_chunk(engine = "r", name = "analysis#1", code = "analyze()"),
-      rmd_chunk(engine = "r", name = "model@final", code = "fit()"),
-      rmd_chunk(engine = "r", name = "output (revised)", code = "print()"),
-      rmd_chunk(engine = "r", name = "test[key]", code = "test()")
+      rmd_chunk(engine = "r", label = "data-prep_v1", code = "clean()"),
+      rmd_chunk(engine = "r", label = "plot.scatter", code = "plot()"),
+      rmd_chunk(engine = "r", label = "analysis#1", code = "analyze()"),
+      rmd_chunk(engine = "r", label = "model@final", code = "fit()"),
+      rmd_chunk(engine = "r", label = "output (revised)", code = "print()"),
+      rmd_chunk(engine = "r", label = "test[key]", code = "test()")
     )
   )
   
@@ -183,11 +183,11 @@ test_that("has_label works with special characters in labels", {
 test_that("has_label works with Unicode characters", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "análisis-datos", code = "analyze()"),
-      rmd_chunk(engine = "r", name = "测试", code = "test()"),
-      rmd_chunk(engine = "r", name = "αρχή", code = "start()"),
-      rmd_chunk(engine = "r", name = "مثال", code = "example()"),
-      rmd_chunk(engine = "r", name = "regular-label", code = "process()")
+      rmd_chunk(engine = "r", label = "análisis-datos", code = "analyze()"),
+      rmd_chunk(engine = "r", label = "测试", code = "test()"),
+      rmd_chunk(engine = "r", label = "αρχή", code = "start()"),
+      rmd_chunk(engine = "r", label = "مثال", code = "example()"),
+      rmd_chunk(engine = "r", label = "regular-label", code = "process()")
     )
   )
   
@@ -209,10 +209,10 @@ test_that("has_label works with Unicode characters", {
 test_that("has_label handles case sensitivity correctly", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "Setup", code = "setup()"),
-      rmd_chunk(engine = "r", name = "SETUP", code = "SETUP()"),
-      rmd_chunk(engine = "r", name = "setup", code = "setup()"),
-      rmd_chunk(engine = "r", name = "SetUp", code = "SetUp()")
+      rmd_chunk(engine = "r", label = "Setup", code = "setup()"),
+      rmd_chunk(engine = "r", label = "SETUP", code = "SETUP()"),
+      rmd_chunk(engine = "r", label = "setup", code = "setup()"),
+      rmd_chunk(engine = "r", label = "SetUp", code = "SetUp()")
     )
   )
   
@@ -235,9 +235,9 @@ test_that("has_label works with very long labels", {
   
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = long_label, code = "process()"),
-      rmd_chunk(engine = "r", name = "short", code = "quick()"),
-      rmd_chunk(engine = "r", name = paste(rep("another-long", 8), collapse = "-"), code = "analyze()")
+      rmd_chunk(engine = "r", label = long_label, code = "process()"),
+      rmd_chunk(engine = "r", label = "short", code = "quick()"),
+      rmd_chunk(engine = "r", label = paste(rep("another-long", 8), collapse = "-"), code = "analyze()")
     )
   )
   
@@ -253,11 +253,11 @@ test_that("has_label works with very long labels", {
 test_that("has_label works with numeric-like labels", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "123", code = "test1()"),
-      rmd_chunk(engine = "r", name = "1.5", code = "test2()"),
-      rmd_chunk(engine = "r", name = "0001", code = "test3()"),
-      rmd_chunk(engine = "r", name = "1e5", code = "test4()"),
-      rmd_chunk(engine = "r", name = "label-123", code = "test5()")
+      rmd_chunk(engine = "r", label = "123", code = "test1()"),
+      rmd_chunk(engine = "r", label = "1.5", code = "test2()"),
+      rmd_chunk(engine = "r", label = "0001", code = "test3()"),
+      rmd_chunk(engine = "r", label = "1e5", code = "test4()"),
+      rmd_chunk(engine = "r", label = "label-123", code = "test5()")
     )
   )
   
@@ -276,9 +276,9 @@ test_that("has_label works with numeric-like labels", {
 test_that("has_label works with empty string labels", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "", code = "test1()"),
-      rmd_chunk(engine = "r", name = "labeled", code = "test2()"),
-      rmd_chunk(engine = "r", name = "", code = "test3()")
+      rmd_chunk(engine = "r", label = "", code = "test1()"),
+      rmd_chunk(engine = "r", label = "labeled", code = "test2()"),
+      rmd_chunk(engine = "r", label = "", code = "test3()")
     )
   )
   
@@ -294,7 +294,7 @@ test_that("has_label works with empty string labels", {
 test_that("has_label works with different node types", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "chunk-label", code = "test()"),
+      rmd_chunk(engine = "r", label = "chunk-label", code = "test()"),
       rmd_raw_chunk(format = "html", code = "raw content"),  # raw chunks don't have labels
       rmd_heading(name = "Section", level = 1L),  # headings use name, not label
       rmd_markdown(lines = "Text")  # markdown has no labels
@@ -314,10 +314,10 @@ test_that("has_label works with different node types", {
 test_that("has_label preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "z-chunk", code = "z()"),
+      rmd_chunk(engine = "r", label = "z-chunk", code = "z()"),
       rmd_markdown(lines = "Text"),
-      rmd_chunk(engine = "r", name = "a-chunk", code = "a()"),
-      rmd_chunk(engine = "r", name = "m-chunk", code = "m()"),
+      rmd_chunk(engine = "r", label = "a-chunk", code = "a()"),
+      rmd_chunk(engine = "r", label = "m-chunk", code = "m()"),
       rmd_heading(name = "Section", level = 1L)
     )
   )
@@ -326,18 +326,18 @@ test_that("has_label preserves node order", {
   all_chunks = rmd_select(original_ast, has_label("*-chunk"))
   
   expect_equal(length(all_chunks@nodes), 3)
-  labels = rmd_node_attr(all_chunks, "name")
+  labels = rmd_node_attr(all_chunks, "label")
   expect_equal(unlist(labels), c("z-chunk", "a-chunk", "m-chunk"))
 })
 
 test_that("has_label works with regex-like characters as literals", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test.func", code = "test()"),
-      rmd_chunk(engine = "r", name = "test^2", code = "power()"),
-      rmd_chunk(engine = "r", name = "test$end", code = "final()"),
-      rmd_chunk(engine = "r", name = "test(1)", code = "call()"),
-      rmd_chunk(engine = "r", name = "test+more", code = "add()")
+      rmd_chunk(engine = "r", label = "test.func", code = "test()"),
+      rmd_chunk(engine = "r", label = "test^2", code = "power()"),
+      rmd_chunk(engine = "r", label = "test$end", code = "final()"),
+      rmd_chunk(engine = "r", label = "test(1)", code = "call()"),
+      rmd_chunk(engine = "r", label = "test+more", code = "add()")
     )
   )
   
@@ -365,12 +365,12 @@ test_that("has_label works with regex-like characters as literals", {
 test_that("has_label works with mixed pattern complexity", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "fig-scatter-plot", code = "scatter()"),
-      rmd_chunk(engine = "r", name = "fig-histogram-data", code = "hist()"),
-      rmd_chunk(engine = "r", name = "tbl-summary-stats", code = "summary()"),
-      rmd_chunk(engine = "r", name = "fig-boxplot-comparison", code = "boxplot()"),
-      rmd_chunk(engine = "r", name = "model-linear-regression", code = "lm()"),
-      rmd_chunk(engine = "r", name = "data-preprocessing", code = "clean()")
+      rmd_chunk(engine = "r", label = "fig-scatter-plot", code = "scatter()"),
+      rmd_chunk(engine = "r", label = "fig-histogram-data", code = "hist()"),
+      rmd_chunk(engine = "r", label = "tbl-summary-stats", code = "summary()"),
+      rmd_chunk(engine = "r", label = "fig-boxplot-comparison", code = "boxplot()"),
+      rmd_chunk(engine = "r", label = "model-linear-regression", code = "lm()"),
+      rmd_chunk(engine = "r", label = "data-preprocessing", code = "clean()")
     )
   )
   

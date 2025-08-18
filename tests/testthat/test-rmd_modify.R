@@ -3,7 +3,7 @@ test_that("rmd_modify works with rmd_ast", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -19,7 +19,7 @@ test_that("rmd_modify works with rmd_ast", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Modified Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -32,7 +32,7 @@ test_that("rmd_modify works with selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -48,7 +48,7 @@ test_that("rmd_modify works with selection", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test", code = "2 + 2"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -60,8 +60,8 @@ test_that("rmd_modify passes named arguments to function", {
   # Create simple test AST
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -75,8 +75,8 @@ test_that("rmd_modify passes named arguments to function", {
   
   expected_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "python", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "python", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "python", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "python", label = "test2", code = "2 + 2")
     )
   )
   
@@ -88,7 +88,7 @@ test_that("rmd_modify works with multiple selection criteria", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
       rmd_heading(name = "Another", level = 2L)
     )
@@ -107,7 +107,7 @@ test_that("rmd_modify works with multiple selection criteria", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Modified Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "modified"),
+      rmd_chunk(engine = "r", label = "test", code = "modified"),
       rmd_markdown(lines = "Some text"),
       rmd_heading(name = "Modified Another", level = 2L)
     )
@@ -141,8 +141,8 @@ test_that("rmd_modify handles label-based selection", {
   # Create simple test AST
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "analysis", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "setup", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "analysis", code = "2 + 2")
     )
   )
   
@@ -156,8 +156,8 @@ test_that("rmd_modify handles label-based selection", {
   
   expected_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "modified setup"),
-      rmd_chunk(engine = "r", name = "analysis", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "setup", code = "modified setup"),
+      rmd_chunk(engine = "r", label = "analysis", code = "2 + 2")
     )
   )
   
@@ -184,9 +184,9 @@ test_that("rmd_modify works with range selection", {
   # Create simple test AST
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "chunk1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "chunk2", code = "2 + 2"),
-      rmd_chunk(engine = "r", name = "chunk3", code = "3 + 3")
+      rmd_chunk(engine = "r", label = "chunk1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "chunk2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "chunk3", code = "3 + 3")
     )
   )
   
@@ -200,9 +200,9 @@ test_that("rmd_modify works with range selection", {
   
   expected_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "chunk1", code = "range modified"),
-      rmd_chunk(engine = "r", name = "chunk2", code = "range modified"),
-      rmd_chunk(engine = "r", name = "chunk3", code = "range modified")
+      rmd_chunk(engine = "r", label = "chunk1", code = "range modified"),
+      rmd_chunk(engine = "r", label = "chunk2", code = "range modified"),
+      rmd_chunk(engine = "r", label = "chunk3", code = "range modified")
     )
   )
   
@@ -214,7 +214,7 @@ test_that("rmd_modify preserves original object structure", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -271,7 +271,7 @@ test_that("rmd_modify validates function results", {
 test_that("rmd_modify validates chunk structure", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1")
     )
   )
   

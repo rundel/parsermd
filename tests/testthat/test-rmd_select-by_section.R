@@ -7,7 +7,7 @@ test_that("by_section works with simple section", {
       rmd_markdown(lines = "Intro text"),
       rmd_heading(name = "Methods", level = 1L),
       rmd_markdown(lines = "Methods text"),
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(data)")
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(data)")
     )
   )
   
@@ -27,9 +27,9 @@ test_that("by_section works with nested sections", {
       rmd_heading(name = "Analysis", level = 1L),
       rmd_markdown(lines = "Analysis intro"),
       rmd_heading(name = "Data Preparation", level = 2L),
-      rmd_chunk(engine = "r", name = "prep", code = "clean_data()"),
+      rmd_chunk(engine = "r", label = "prep", code = "clean_data()"),
       rmd_heading(name = "Visualization", level = 2L),
-      rmd_chunk(engine = "r", name = "plot", code = "plot(data)"),
+      rmd_chunk(engine = "r", label = "plot", code = "plot(data)"),
       rmd_heading(name = "Conclusion", level = 1L),
       rmd_markdown(lines = "Conclusion text")
     )
@@ -73,7 +73,7 @@ test_that("by_section with keep_parents = FALSE", {
       rmd_heading(name = "Main Section", level = 1L),
       rmd_markdown(lines = "Main intro"),
       rmd_heading(name = "Subsection", level = 2L),
-      rmd_chunk(engine = "r", name = "code", code = "analysis()"),
+      rmd_chunk(engine = "r", label = "code", code = "analysis()"),
       rmd_heading(name = "Other Section", level = 1L)
     )
   )
@@ -142,7 +142,7 @@ test_that("by_section works with single level sections", {
     nodes = list(
       rmd_heading(name = "First", level = 1L),
       rmd_markdown(lines = "First content"),
-      rmd_chunk(engine = "r", name = "chunk1", code = "code1()"),
+      rmd_chunk(engine = "r", label = "chunk1", code = "code1()"),
       rmd_heading(name = "Second", level = 1L),
       rmd_markdown(lines = "Second content"),
       rmd_heading(name = "Third", level = 1L)

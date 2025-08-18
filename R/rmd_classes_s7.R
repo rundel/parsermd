@@ -132,7 +132,7 @@ rmd_heading = S7::new_class(
 #' @title Code chunk node
 #' @description S7 class representing an executable code chunk
 #' @param engine Character. Language engine
-#' @param name Character. Chunk name
+#' @param label Character. Chunk label
 #' @param options List. Combined chunk options (traditional and YAML)
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
@@ -143,7 +143,7 @@ rmd_chunk = S7::new_class(
   parent = rmd_node,
   properties = list(
     engine  = S7::new_property(S7::class_character, default = quote("r")),
-    name    = S7::new_property(S7::class_character, default = quote("")),
+    label   = S7::new_property(S7::class_character, default = quote("")),
     options = S7::new_property(
       S7::class_list, 
       default = quote(list()),
@@ -161,8 +161,8 @@ rmd_chunk = S7::new_class(
   validator = function(self) {
     if (length(self@engine) != 1) {
       return("@engine must be a single character string")
-    } else if (length(self@name) != 1) {
-      return("@name must be a single character string")
+    } else if (length(self@label) != 1) {
+      return("@label must be a single character string")
     } else if (length(self@indent) != 1) {
       return("@indent must be a single character string")
     } else if (length(self@n_ticks) != 1 || self@n_ticks < 3) {

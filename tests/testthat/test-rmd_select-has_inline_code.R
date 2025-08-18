@@ -5,7 +5,7 @@ test_that("has_inline_code works with any engine", {
       rmd_markdown(lines = "The result is `r 2 + 2` which is correct."),
       rmd_markdown(lines = "Plain text without inline code"),
       rmd_markdown(lines = "Python inline: `python import numpy as np`"),
-      rmd_chunk(engine = "r", name = "code", code = "x <- 1")
+      rmd_chunk(engine = "r", label = "code", code = "x <- 1")
     )
   )
   
@@ -86,7 +86,7 @@ test_that("has_inline_code returns empty when no matches", {
     nodes = list(
       rmd_markdown(lines = "R code: `r 1+1` calculates"),
       rmd_markdown(lines = "Plain text"),
-      rmd_chunk(engine = "r", name = "code", code = "analysis()")
+      rmd_chunk(engine = "r", label = "code", code = "analysis()")
     )
   )
   
@@ -106,7 +106,7 @@ test_that("has_inline_code works across different node types", {
       rmd_markdown(lines = "Markdown with `r mean(x)` inline R"),
       rmd_heading(name = "Section", level = 1L),  # headings typically don't have inline code
       rmd_yaml(yaml = list(title = "Test")),  # yaml doesn't have inline code
-      rmd_chunk(engine = "r", name = "code", code = "x <- 1")  # regular chunk code
+      rmd_chunk(engine = "r", label = "code", code = "x <- 1")  # regular chunk code
     )
   )
   
@@ -263,7 +263,7 @@ test_that("has_inline_code preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_markdown(lines = "Z section: `r z_function()` processes"),
-      rmd_chunk(engine = "r", name = "code", code = "x <- 1"),
+      rmd_chunk(engine = "r", label = "code", code = "x <- 1"),
       rmd_markdown(lines = "A section: `r a_function()` calculates"),
       rmd_heading(name = "Section", level = 1L),
       rmd_markdown(lines = "M section: `r m_function()` computes")

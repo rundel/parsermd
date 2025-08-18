@@ -1,7 +1,7 @@
 test_that("rmd_get_options normalizes dash option names", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 8, fig.height = 6, out.width = "100%"),
     code = "plot(cars)"
   )
@@ -21,7 +21,7 @@ test_that("rmd_get_options normalizes dash option names", {
 test_that("rmd_set_options normalizes dash option names", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     code = "plot(cars)"
   )
   
@@ -31,14 +31,14 @@ test_that("rmd_set_options normalizes dash option names", {
   # Expected chunk with normalized option names
   expected_chunk1 = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 10, out.height = "75%"),
     code = "plot(cars)"
   )
 
   expected_chunk2 = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(`fig-width` = 10, `out-height` = "75%"),
     code = "plot(cars)"
   )
@@ -51,7 +51,7 @@ test_that("rmd_set_options normalizes dash option names", {
 test_that("rmd_set_options and rmd_get_options work together with normalization", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test", 
+    label = "test", 
     code = "plot(cars)"
   )
   
@@ -73,7 +73,7 @@ test_that("rmd_set_options and rmd_get_options work together with normalization"
 test_that("rmd_get_options works with defaults and normalization", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 8),
     code = "plot(cars)"
   )
@@ -96,7 +96,7 @@ test_that("rmd_get_options works with defaults and normalization", {
 test_that("normalization preserves complex option names", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     code = "plot(cars)"
   )
   
@@ -109,7 +109,7 @@ test_that("normalization preserves complex option names", {
   # Expected chunk with normalized option names
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.cap.location = "bottom", out.extra.css = "color: red"),
     code = "plot(cars)"
   )
@@ -284,7 +284,7 @@ test_that("option normalization works bidirectionally", {
 test_that("rmd_get_options yaml_style parameter works correctly", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 8, fig.height = 6, out.width = "100%", eval = TRUE),
     code = "plot(cars)"
   )
@@ -323,7 +323,7 @@ test_that("rmd_get_options yaml_style parameter works correctly", {
 test_that("rmd_get_options yaml_style works with defaults", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 8),
     code = "plot(cars)"
   )
@@ -380,7 +380,7 @@ test_that("rmd_get_options yaml_style works with AST and tibble objects", {
 test_that("rmd_get_options yaml_style works with complex option names", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.cap.location = "bottom", out.extra.css = "color: red", eval = TRUE),
     code = "plot(cars)"
   )
@@ -407,7 +407,7 @@ test_that("rmd_chunk constructor normalizes option names automatically", {
   # Test that constructor normalizes hyphenated option names to dots
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(`fig-width` = 8, `fig-height` = 6, `out-width` = "100%"),
     code = "plot(cars)"
   )

@@ -73,8 +73,8 @@ test_that("function scope", {
 
 test_that("echo", {
   ast = rmd_ast( list(
-    rmd_chunk(name = "Chunk 1", code = "x = 1"),
-    rmd_chunk(name = "Chunk 2", code = "y = 2")
+    rmd_chunk(label = "Chunk 1", code = "x = 1"),
+    rmd_chunk(label = "Chunk 2", code = "y = 2")
   ) )
 
   expect_snapshot(rmd_source(ast, local=TRUE, echo=TRUE))

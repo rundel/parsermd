@@ -4,7 +4,7 @@ test_that("has_shortcode works with any shortcode", {
     nodes = list(
       rmd_markdown(lines = "Some text with {{< video https://example.com >}} shortcode"),
       rmd_markdown(lines = "Plain text without shortcodes"),
-      rmd_chunk(engine = "r", name = "code", code = "# {{< include file.R >}}"),
+      rmd_chunk(engine = "r", label = "code", code = "# {{< include file.R >}}"),
       rmd_markdown(lines = "Text with {{< callout-note >}} content {{< /callout-note >}}")
     )
   )
@@ -86,7 +86,7 @@ test_that("has_shortcode returns empty when no matches", {
     nodes = list(
       rmd_markdown(lines = "{{< video demo.mp4 >}}"),
       rmd_markdown(lines = "Plain text"),
-      rmd_chunk(engine = "r", name = "code", code = "analysis()")
+      rmd_chunk(engine = "r", label = "code", code = "analysis()")
     )
   )
   
@@ -104,7 +104,7 @@ test_that("has_shortcode works across different node types", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_markdown(lines = "Markdown with {{< include data.R >}}"),
-      rmd_chunk(engine = "r", name = "code", code = "# Code with {{< video demo.mp4 >}} comment"),
+      rmd_chunk(engine = "r", label = "code", code = "# Code with {{< video demo.mp4 >}} comment"),
       rmd_heading(name = "Section", level = 1L),  # headings typically don't have shortcodes
       rmd_yaml(yaml = list(title = "Test"))  # yaml doesn't have shortcodes
     )
@@ -310,7 +310,7 @@ test_that("has_shortcode preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_markdown(lines = "Z video: {{< video z.mp4 >}}"),
-      rmd_chunk(engine = "r", name = "code", code = "x <- 1"),
+      rmd_chunk(engine = "r", label = "code", code = "x <- 1"),
       rmd_markdown(lines = "A video: {{< video a.mp4 >}}"),
       rmd_heading(name = "Section", level = 1L),
       rmd_markdown(lines = "M video: {{< video m.mp4 >}}")

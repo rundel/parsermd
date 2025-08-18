@@ -64,7 +64,7 @@ x = 1
   # Check that YAML option takes precedence
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "test", 
+    label = "test", 
     options = list(eval = FALSE),
     code = "x = 1"
   )
@@ -86,7 +86,7 @@ x = 1
   # Check that YAML options take precedence for conflicts
   expected_chunk2 = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(eval = FALSE, echo = TRUE, message = FALSE),
     code = "x = 1"
   )
@@ -106,7 +106,7 @@ x = 1
   # Check that all options are preserved
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(eval = TRUE, echo = FALSE, message = FALSE),
     code = "x = 1"
   )
@@ -148,7 +148,7 @@ x = 1
   
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(fig.width = 7, fig.height = 3, fig.dpi = 300),
     code = "x = 1"
   )
@@ -166,7 +166,7 @@ x = 1
   
   expected_chunk2 = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(eval = FALSE),
     code = "x = 1"
   )
@@ -282,7 +282,7 @@ test_that("YAML option names with dashes are normalized to dots for conflict det
   # YAML option should win and be stored with dot notation
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(fig.width = 7),
     code = "x = 1"
   )
@@ -296,7 +296,7 @@ test_that("Multiple YAML options with dashes are normalized correctly", {
   
   expected_chunk = rmd_chunk(
     engine = "r", 
-    name = "",
+    label = "",
     options = list(fig.width = 7, fig.height = 4),
     code = "x = 1"
   )
@@ -310,7 +310,7 @@ test_that("YAML options with dashes that don't conflict are preserved as dots", 
   
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(eval = TRUE, fig.width = 7, out.height = 100),
     code = "x = 1"
   )
@@ -324,7 +324,7 @@ test_that("Options with multiple dashes are normalized correctly", {
   
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(fig.cap.location = "bottom", out.extra.css = "color: red"),
     code = "x = 1"
   )
@@ -339,7 +339,7 @@ test_that("Mixed options with equivalent names normalize correctly", {
   
   expected_chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(echo = FALSE, fig.width = 7, message = FALSE),
     code = "x = 1"
   )

@@ -3,8 +3,8 @@ test_that("rmd_fenced_div_wrap basic functionality works", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -16,8 +16,8 @@ test_that("rmd_fenced_div_wrap basic functionality works", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Some text")
     )
@@ -30,9 +30,9 @@ test_that("rmd_fenced_div_wrap works with type selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -46,9 +46,9 @@ test_that("rmd_fenced_div_wrap allows multiple discontinuous ranges", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -59,11 +59,11 @@ test_that("rmd_fenced_div_wrap allows multiple discontinuous ranges", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Some text"),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_fenced_div_close()
     )
   )
@@ -74,7 +74,7 @@ test_that("rmd_fenced_div_wrap allows multiple discontinuous ranges", {
 test_that("rmd_fenced_div_wrap works with custom fenced div", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -89,7 +89,7 @@ test_that("rmd_fenced_div_wrap works with custom fenced div", {
   expected_ast = rmd_ast(
     nodes = list(
       custom_open,
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Some text")
     )
@@ -117,7 +117,7 @@ test_that("rmd_fenced_div_wrap handles single node selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -128,7 +128,7 @@ test_that("rmd_fenced_div_wrap handles single node selection", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Some text")
     )
@@ -141,7 +141,7 @@ test_that("rmd_fenced_div_wrap wraps entire AST", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -153,7 +153,7 @@ test_that("rmd_fenced_div_wrap wraps entire AST", {
     nodes = list(
       rmd_fenced_div_open(),
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
       rmd_fenced_div_close()
     )
@@ -166,7 +166,7 @@ test_that("rmd_fenced_div_wrap wraps first nodes", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -178,7 +178,7 @@ test_that("rmd_fenced_div_wrap wraps first nodes", {
     nodes = list(
       rmd_fenced_div_open(),
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Some text")
     )
@@ -191,7 +191,7 @@ test_that("rmd_fenced_div_wrap wraps last nodes", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -203,7 +203,7 @@ test_that("rmd_fenced_div_wrap wraps last nodes", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
       rmd_fenced_div_close()
     )
@@ -216,12 +216,12 @@ test_that("rmd_fenced_div_wrap handles complex discontinuous selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),       # 1
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"), # 2
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"), # 3
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"), # 2
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"), # 3
       rmd_markdown(lines = "Text 1"),                # 4
-      rmd_chunk(engine = "r", name = "test3", code = "3 + 3"), # 5
+      rmd_chunk(engine = "r", label = "test3", code = "3 + 3"), # 5
       rmd_markdown(lines = "Text 2"),                # 6
-      rmd_chunk(engine = "r", name = "test4", code = "4 + 4")  # 7
+      rmd_chunk(engine = "r", label = "test4", code = "4 + 4")  # 7
     )
   )
   
@@ -232,16 +232,16 @@ test_that("rmd_fenced_div_wrap handles complex discontinuous selection", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Text 1"),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test3", code = "3 + 3"),
+      rmd_chunk(engine = "r", label = "test3", code = "3 + 3"),
       rmd_fenced_div_close(),
       rmd_markdown(lines = "Text 2"),
       rmd_fenced_div_open(),
-      rmd_chunk(engine = "r", name = "test4", code = "4 + 4"),
+      rmd_chunk(engine = "r", label = "test4", code = "4 + 4"),
       rmd_fenced_div_close()
     )
   )
@@ -252,9 +252,9 @@ test_that("rmd_fenced_div_wrap handles complex discontinuous selection", {
 test_that("rmd_fenced_div_wrap error handling for discontinuous ranges", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -267,7 +267,7 @@ test_that("rmd_fenced_div_wrap error handling for discontinuous ranges", {
 test_that("rmd_fenced_div_wrap validates arguments", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1")
     )
   )
   
@@ -332,11 +332,11 @@ test_that("rmd_fenced_div_wrap works with complex selections", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "setup", code = "library(ggplot2)"),
+      rmd_chunk(engine = "r", label = "setup", code = "library(ggplot2)"),
       rmd_markdown(lines = "Introduction text"),
-      rmd_chunk(engine = "r", name = "plot", code = "plot(1:10)"),
+      rmd_chunk(engine = "r", label = "plot", code = "plot(1:10)"),
       rmd_heading(name = "Section 2", level = 1L),
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(data)")
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(data)")
     )
   )
   

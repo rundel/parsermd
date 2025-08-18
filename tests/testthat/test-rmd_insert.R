@@ -3,7 +3,7 @@ test_that("rmd_insert basic functionality works", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -16,7 +16,7 @@ test_that("rmd_insert basic functionality works", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       new_node,
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -28,7 +28,7 @@ test_that("rmd_insert after functionality works", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -40,7 +40,7 @@ test_that("rmd_insert after functionality works", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       new_node,
       rmd_markdown(lines = "Some text")
     )
@@ -53,7 +53,7 @@ test_that("rmd_insert works with multiple nodes as list", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1")
     )
   )
   
@@ -67,7 +67,7 @@ test_that("rmd_insert works with multiple nodes as list", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "First comment"),
       rmd_markdown(lines = "Second comment")
     )
@@ -80,7 +80,7 @@ test_that("rmd_insert works with rmd_ast as nodes input", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1")
     )
   )
   
@@ -98,7 +98,7 @@ test_that("rmd_insert works with rmd_ast as nodes input", {
       rmd_heading(name = "Title", level = 1L),
       rmd_markdown(lines = "From AST 1"),
       rmd_markdown(lines = "From AST 2"),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1")
     )
   )
   
@@ -109,8 +109,8 @@ test_that("rmd_insert works with continuous range selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -123,8 +123,8 @@ test_that("rmd_insert works with continuous range selection", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       new_node,
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -136,8 +136,8 @@ test_that("rmd_insert after works with continuous range selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -149,8 +149,8 @@ test_that("rmd_insert after works with continuous range selection", {
   expected_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       new_node,
       rmd_markdown(lines = "Some text")
     )
@@ -178,9 +178,9 @@ test_that("rmd_insert handles empty selection", {
 test_that("rmd_insert errors on discontinuous ranges by default", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -195,9 +195,9 @@ test_that("rmd_insert errors on discontinuous ranges by default", {
 test_that("rmd_insert allows multiple discontinuous insertions", {
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -208,10 +208,10 @@ test_that("rmd_insert allows multiple discontinuous insertions", {
   expected_ast = rmd_ast(
     nodes = list(
       new_node,
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Text"),
       new_node,
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -371,11 +371,11 @@ test_that("rmd_insert works with complex discontinuous selection", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),       # 1
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"), # 2
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"), # 2
       rmd_markdown(lines = "Text 1"),                # 3
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"), # 4
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"), # 4
       rmd_markdown(lines = "Text 2"),                # 5
-      rmd_chunk(engine = "r", name = "test3", code = "3 + 3")  # 6
+      rmd_chunk(engine = "r", label = "test3", code = "3 + 3")  # 6
     )
   )
   
@@ -388,13 +388,13 @@ test_that("rmd_insert works with complex discontinuous selection", {
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
       new_node,
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Text 1"),
       new_node,
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2"),
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2"),
       rmd_markdown(lines = "Text 2"),
       new_node,
-      rmd_chunk(engine = "r", name = "test3", code = "3 + 3")
+      rmd_chunk(engine = "r", label = "test3", code = "3 + 3")
     )
   )
   
@@ -406,7 +406,7 @@ test_that("rmd_insert preserves original object structure", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Title", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )

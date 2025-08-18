@@ -6,7 +6,7 @@ test_that("has_heading selects headings by title pattern", {
       rmd_heading(name = "Introduction", level = 1L),
       rmd_heading(name = "Exercise 1", level = 2L),
       rmd_heading(name = "Exercise 2: Advanced", level = 2L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_heading(name = "Conclusion", level = 1L),
       rmd_markdown(lines = "Some text")
     )
@@ -37,7 +37,7 @@ test_that("has_heading only selects heading nodes", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Test Heading", level = 1L),
-      rmd_chunk(engine = "r", name = "Test Heading", code = "1 + 1"),  # Same name as heading but not a heading
+      rmd_chunk(engine = "r", label = "Test Heading", code = "1 + 1"),  # Same name as heading but not a heading
       rmd_markdown(lines = "Test Heading content")
     )
   )
@@ -262,7 +262,7 @@ test_that("has_heading preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Z Section", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_heading(name = "A Section", level = 2L),
       rmd_markdown(lines = "Some text"),
       rmd_heading(name = "M Section", level = 1L)

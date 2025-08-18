@@ -212,7 +212,7 @@ The `rmd_chunk` node represents executable code chunks with options and metadata
 **Properties:**
 
 - `engine`: The code engine (default: "r")
-- `name`: Optional chunk name/label
+- `label`: Optional chunk name/label
 - `options`: List of chunk options containing both traditional and YAML options
 - `code`: Character vector containing the code lines
 - `indent`: Indentation string
@@ -223,10 +223,10 @@ The `rmd_chunk` node represents executable code chunks with options and metadata
 Chunks support two option formats that can be used independently or together:
 
 1. **Traditional format**: Options specified in the chunk header after the engine and label
-   ```{{r chunk-name, eval=TRUE, echo=FALSE}}
+   ```{{r chunk-label, eval=TRUE, echo=FALSE}}
    
 2. **YAML format**: Options specified as YAML comments within the chunk
-   ```{{r chunk-name}}
+   ```{{r chunk-label}}
    #| eval: true
    #| echo: false
    ```
@@ -282,7 +282,7 @@ In this case, `eval: false` (YAML) overrides `eval=TRUE` (traditional).
 # Traditional-style options
 chunk_node_traditional = rmd_chunk(
   engine = "r",
-  name = "example",
+  label = "example",
   options = list(eval = "TRUE", echo = "FALSE"),
   code = c("x <- 1:10", "mean(x)")
 )
@@ -290,7 +290,7 @@ chunk_node_traditional = rmd_chunk(
 # YAML-style options with proper types
 chunk_node_yaml = rmd_chunk(
   engine = "r",
-  name = "example",
+  label = "example",
   options = list(eval = TRUE, echo = FALSE),
   code = c("x <- 1:10", "mean(x)")
 )

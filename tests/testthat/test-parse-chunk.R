@@ -9,7 +9,7 @@ test_that("chunk parsing - Basic", {
 
   expect_equal(
     check_chunk_parser("```{r test}\n```\n"),
-    rmd_chunk(name = "test")
+    rmd_chunk(label = "test")
   )
 
   expect_equal(
@@ -24,7 +24,7 @@ test_that("chunk parsing - Basic", {
 
   expect_equal(
     check_chunk_parser("```{r test, x=1, y=2}\n```\n"),
-    rmd_chunk(name = "test", options = list(x = 1, y = 2))
+    rmd_chunk(label = "test", options = list(x = 1, y = 2))
   )
 })
 
@@ -108,7 +108,7 @@ test_that("chunk parsing - issues", {
   # allow dashes
   expect_equal(
     check_chunk_parser("```{r load-packages, message=FALSE}\n```\n"),
-    rmd_chunk(name="load-packages", options = list(message=FALSE))
+    rmd_chunk(label="load-packages", options = list(message=FALSE))
   )
 
   # allow engine, opt1=val for a chunk
@@ -140,7 +140,7 @@ test_that("chunk parsing - indented", {
   expect_equal(
     check_chunk_parser("  ```{r test, include=FALSE}\n  1+1\n  ```\n"),
     rmd_chunk(
-      name = "test", options = list(include = FALSE),
+      label = "test", options = list(include = FALSE),
       code = "1+1", indent = "  "
     )
   )
@@ -148,7 +148,7 @@ test_that("chunk parsing - indented", {
   expect_equal(
     check_chunk_parser("    ```{r test, include=FALSE}\n    1+1\n    ```\n"),
     rmd_chunk(
-      name = "test", options = list(include = FALSE),
+      label = "test", options = list(include = FALSE),
       code = "1+1", indent = "    "
     )
   )
@@ -221,7 +221,7 @@ test_that("chunk parsing - sequential", {
 test_that("chunk parsing - comma after engine", {
   expect_equal(
     check_chunk_parser("```{r, bob}\n```\n"),
-    rmd_chunk(name = "bob")
+    rmd_chunk(label = "bob")
   )
 
   expect_equal(
@@ -231,7 +231,7 @@ test_that("chunk parsing - comma after engine", {
 
   expect_equal(
     check_chunk_parser("```{r, bob, include = FALSE}\n```\n"),
-    rmd_chunk(name = "bob", option = list(include=FALSE))
+    rmd_chunk(label = "bob", option = list(include=FALSE))
   )
 })
 
@@ -247,8 +247,8 @@ test_that("chunk parsing - variants", {
   expect_equal( parse("```{r,,}\n```\n"), rmd_chunk() )
 
   # Label, no options
-  expect_equal( parse("```{r m}\n```\n"),  rmd_chunk(name = "m") )
-  expect_equal( parse("```{r m,}\n```\n"), rmd_chunk(name = "m") )
+  expect_equal( parse("```{r m}\n```\n"),  rmd_chunk(label = "m") )
+  expect_equal( parse("```{r m,}\n```\n"), rmd_chunk(label = "m") )
 
   # No label, options
   expect_equal( parse("```{r x=1}\n```\n"),   rmd_chunk(option = list(x = 1)) )
@@ -267,13 +267,13 @@ test_that("chunk parsing - variants", {
 
   # label, options
   expect_equal( parse("```{r m, x=1}\n```\n"),
-                rmd_chunk(name = "m", option = list(x = 1)) )
+                rmd_chunk(label = "m", option = list(x = 1)) )
   expect_equal( parse("```{r m, x=1,}\n```\n"),
-                rmd_chunk(name = "m", option = list(x = 1)) )
+                rmd_chunk(label = "m", option = list(x = 1)) )
   expect_equal( parse("```{r, m, x=1}\n```\n"),
-                rmd_chunk(name = "m", option = list(x = 1)) )
+                rmd_chunk(label = "m", option = list(x = 1)) )
   expect_equal( parse("```{r, m, x=1,}\n```\n"),
-                rmd_chunk(name = "m", option = list(x = 1)) )
+                rmd_chunk(label = "m", option = list(x = 1)) )
 })
 
 test_that("chunk parsing - bad chunks", {
@@ -398,7 +398,7 @@ test_that("chunk parsing - nested ticks", {
   expect_equal(
     parse_rmd("````{r}\n````\n````\n````\n"),
     rmd_ast( list(
-      rmd_chunk(n_ticks = 4L, name = "unnamed-chunk-1"),
+      rmd_chunk(n_ticks = 4L, label = "unnamed-chunk-1"),
       rmd_code_block(n_ticks = 4L)
     ) )
   )
