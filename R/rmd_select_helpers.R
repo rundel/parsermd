@@ -12,7 +12,7 @@
 #' * `has_heading()` - selects heading nodes (only) with titles matching the given glob pattern(s).
 #' * `has_option()` - selects nodes that have the given option(s) set.
 #' * `has_shortcode()` - selects nodes containing shortcodes matching the given function name(s).
-#' * `by_fdiv()` - selects fenced div sections where all provided patterns match the div attributes.
+#' * `by_fenced_div()` - selects fenced div sections matching specified id, class, and/or attributes.
 #'
 #' @return All helper functions return an integer vector of selected indexes.
 #'
@@ -35,8 +35,12 @@
 #' rmd_select(rmd, has_shortcode())
 #' rmd_select(rmd, has_shortcode("video"))
 #'
-#' rmd_select(rmd, by_fdiv("note"))
-#' rmd_select(rmd, by_fdiv(".warning", "important"))
+#' fdiv = parse_rmd(system.file("examples/fenced-divs.qmd", package="parsermd"))
+#'
+#' rmd_select(fdiv, by_fenced_div(class = "note"))
+#' rmd_select(fdiv, by_fenced_div(id = "special-section"))
+#' rmd_select(fdiv, by_fenced_div(class = c("warning", "important")))
+#' rmd_select(fdiv, by_fenced_div(attr = "icon"))
 #'
 #'
 NULL
@@ -242,52 +246,65 @@ has_inline_code = function(engine = NULL) {
 
 #' @rdname rmd_select_helpers
 #'
-#' @param ... Character vector patterns to match against fenced div attributes.
-#' All provided patterns must match at least one attribute in the div's attr property.
-#' @param regexp Logical, use regular expressions for pattern matching instead of glob patterns.
-#' Default: FALSE (uses glob patterns).
+#' @param id Character, optional ID to match (with or without # prefix)
+#' @param class Character vector, optional class names to match (with `.` prefix). 
+#' All specified classes must be present in the fenced div (subset matching).
+#' @param attr Either a character vector of attribute names to check for existence,
+#' or a named list/vector where names are attribute names and values must match exactly.
 #'
 #' @export
-by_fdiv = function(..., regexp = FALSE) {
-  # Capture arguments before combining them
-  dots = list(...)
+by_fenced_div = function(id = NULL, class = NULL, attr = NULL) {
+  # Input validation
+  checkmate::assert_character(id, len = 1, null.ok = TRUE)
+  checkmate::assert_character(class, min.len = 1, null.ok = TRUE)
   
-  # Input validation - check each argument is length 1 character
-  for (i in seq_along(dots)) {
-    arg = dots[[i]]
-    if (!is.character(arg)) {
-      cli::cli_abort("All patterns must be character vectors, pattern {i} is {.cls {class(arg)}}")
-    }
-    if (length(arg) != 1) {
-      cli::cli_abort("All patterns must be length 1 character vectors, pattern {i} has length {length(arg)}")
-    }
-    if (is.na(arg)) {
-      cli::cli_abort("All patterns must be non-missing, pattern {i} is NA")
+  if (is.null(id) && is.null(class) && is.null(attr)) {
+    cli::cli_abort("At least one of {.arg id}, {.arg class}, or {.arg attr} must be provided")
+  }
+  
+  # Process ID - add # prefix if missing and warn
+  if (!is.null(id)) {
+    if (!startsWith(id, "#")) {
+      cli::cli_warn("ID {.val {id}} should start with '#' prefix, adding it automatically")
+      id = paste0("#", id)
     }
   }
   
-  if (length(dots) < 1) {
-    cli::cli_abort("At least one pattern must be provided")
+  # Process classes - add . prefix if missing and warn
+  if (!is.null(class)) {
+    missing_prefix = !startsWith(class, ".")
+    if (any(missing_prefix)) {
+      missing_classes = class[missing_prefix]
+      cli::cli_warn("Classes {.val {missing_classes}} should start with '.' prefix, adding it automatically")
+      class[missing_prefix] = paste0(".", class[missing_prefix])
+    }
   }
   
-  checkmate::assert_logical(regexp, len = 1)
+  # Process attr - validate structure
+  if (!is.null(attr)) {
+    if (is.list(attr)) {
+      # Convert list to named character vector
+      attr = unlist(attr)
+    }
+    if (!is.character(attr)) {
+      cli::cli_abort("{.arg attr} must be a character vector or list")
+    }
+  }
   
-  # Now combine the validated arguments
-  patterns = c(...)
-  
-  x = tidyselect::peek_data(fn = "by_fdiv") |>
+  x = tidyselect::peek_data(fn = "by_fenced_div") |>
     rmd_ast()
   
-  fdiv_find_matching_ranges(x, patterns, regexp)
+  fdiv_find_matching_ranges(x, id, class, attr)
 }
 
 #' Find matching fenced div ranges
 #' @param ast rmd_ast object
-#' @param patterns Character vector of patterns to match
-#' @param regexp Logical, use regexp instead of glob
+#' @param id Character, ID to match (with # prefix)
+#' @param class Character vector, classes to match (with . prefix)
+#' @param attr Character vector of attributes (named for value matching, unnamed for existence)
 #' @return Integer vector of matching node indices
 #' @noRd
-fdiv_find_matching_ranges = function(ast, patterns, regexp) {
+fdiv_find_matching_ranges = function(ast, id, class, attr) {
   nodes = ast@nodes
   if (length(nodes) == 0) return(integer(0))
   
@@ -297,41 +314,14 @@ fdiv_find_matching_ranges = function(ast, patterns, regexp) {
   
   if (length(fdiv_open_positions) == 0) return(integer(0))
   
-  # Check which open nodes match all patterns
+  # Check which open nodes match all criteria
   matching_positions = c()
   
   for (pos in fdiv_open_positions) {
     node = nodes[[pos]]
     
-    # Combine all attributes from the three properties
-    attrs = character(0)
-    
-    # Add ID (already has # prefix) and also bare ID for matching
-    if (length(node@id) > 0) {
-      bare_id = node@id
-      if (startsWith(bare_id, "#")) {
-        bare_id = substr(bare_id, 2, nchar(bare_id))
-      }
-      attrs = c(attrs, node@id, bare_id)
-    }
-    
-    # Add classes (already have . prefix) and also bare class names for matching
-    if (length(node@classes) > 0) {
-      bare_classes = node@classes
-      bare_classes = ifelse(startsWith(bare_classes, "."), 
-                           substr(bare_classes, 2, nchar(bare_classes)), 
-                           bare_classes)
-      attrs = c(attrs, node@classes, bare_classes)
-    }
-    
-    # Add key=value pairs
-    if (length(node@attr) > 0) {
-      kv_pairs = paste0(names(node@attr), "=", node@attr)
-      attrs = c(attrs, kv_pairs)
-    }
-    
-    # Check if all patterns match at least one attribute
-    if (fdiv_all_patterns_match(attrs, patterns, regexp)) {
+    # Check if this node matches all criteria
+    if (fdiv_node_matches(node, id, class, attr)) {
       # Find the corresponding close position for this open
       close_pos = fdiv_find_matching_close(nodes, pos)
       if (!is.na(close_pos)) {
@@ -345,26 +335,67 @@ fdiv_find_matching_ranges = function(ast, patterns, regexp) {
   sort(unique(matching_positions))
 }
 
-#' Check if all patterns match at least one attribute
-#' @param attrs Character vector of attributes
-#' @param patterns Character vector of patterns
-#' @param regexp Logical, use regexp instead of glob
-#' @return Logical, TRUE if all patterns match
+#' Check if a fenced div node matches the specified criteria
+#' @param node rmd_fenced_div_open node
+#' @param id Character, ID to match (with # prefix, or NULL)
+#' @param class Character vector, classes to match (with . prefix, or NULL)
+#' @param attr Character vector of attributes (or NULL)
+#' @return Logical, TRUE if node matches all criteria
 #' @noRd
-fdiv_all_patterns_match = function(attrs, patterns, regexp) {
-  if (length(attrs) == 0) return(FALSE)
-  
-  # Convert patterns to regex
-  if (regexp) {
-    regex_patterns = patterns
-  } else {
-    regex_patterns = utils::glob2rx(patterns)
+fdiv_node_matches = function(node, id, class, attr) {
+  # Check ID match
+  if (!is.null(id)) {
+    if (length(node@id) == 0 || node@id != id) {
+      return(FALSE)
+    }
   }
   
-  # Check that every pattern matches at least one attribute
-  purrr::every(regex_patterns, function(pattern) {
-    any(grepl(pattern, attrs))
-  })
+  # Check classes match (subset matching - all specified classes must be present)
+  if (!is.null(class)) {
+    if (length(node@classes) == 0) {
+      return(FALSE)
+    }
+    # Check if all specified classes are present in the node's classes
+    if (!all(class %in% node@classes)) {
+      return(FALSE)
+    }
+  }
+  
+  # Check attributes match
+  if (!is.null(attr)) {
+    if (is.null(names(attr)) || all(names(attr) == "")) {
+      # Unnamed attributes - check for existence
+      if (length(node@attr) == 0) {
+        return(FALSE)
+      }
+      # Check if all specified attribute names exist
+      if (!all(attr %in% names(node@attr))) {
+        return(FALSE)
+      }
+    } else {
+      # Named attributes - check for exact value matches
+      node_attr_names = names(node@attr)
+      for (i in seq_along(attr)) {
+        attr_name = names(attr)[i]
+        attr_value = attr[i]
+        
+        if (attr_name == "") {
+          # Unnamed - check for existence
+          if (!attr_value %in% node_attr_names) {
+            return(FALSE)
+          }
+        } else {
+          # Named - check for exact match
+          if (!(attr_name %in% node_attr_names) || 
+              node@attr[[attr_name]] != attr_value) {
+            return(FALSE)
+          }
+        }
+      }
+    }
+  }
+  
+  TRUE
 }
 
 #' Find the matching close position for an open fenced div
