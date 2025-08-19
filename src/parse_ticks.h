@@ -40,12 +40,16 @@ namespace client { namespace parser {
       *(x3::char_ - x3::eol)
     ][check_indent];
 
+  auto const blank_line = x3::rule<struct _, std::string, true> {"blank line"}
+  = x3::raw[
+      *indent_pat
+    ][check_indent_blank];
+
   auto const code_lines = x3::rule<struct _, std::vector<std::string>> {"lines of code"}
   = x3::lexeme[ *(
-      x3::eol >> x3::attr(std::string()) // Handles the case of a blank line w/in indented code block / chunk
-      | code_line >> x3::eol)
-  ];
-
+      !( *indent_pat >> close_ticks(3) ) >>
+      ( blank_line >> x3::eol | code_line >> x3::eol )    
+    ) ];
 
 } }
 

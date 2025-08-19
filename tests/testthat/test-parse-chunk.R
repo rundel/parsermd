@@ -404,3 +404,50 @@ test_that("chunk parsing - nested ticks", {
   )
 })
 
+test_that("chunk parsing - indented chunks with blank lines", {
+  # The following chunk can cause problems depending on how the blank line is formatted
+
+  input_spaces = c("", " ", "  ", "   ", "    ", "     ", "      ")
+  code_spaces = c("", "", "", " ", "  ", "   ", "    ")
+
+  rmd = paste0("  ```{r}\n  foo <- function() {\n    1 + 1\n", input_spaces, "\n    # comment following an empty line\n  }\n  ```\n")
+  code = paste0("foo <- function() {\n  1 + 1\n", code_spaces, "\n  # comment following an empty line\n}") |>
+    strsplit(split="\n")
+
+  expect_equal(
+    check_chunk_parser(rmd[1]),
+    rmd_chunk(code = code[[1]], indent = "  ")
+  )
+    
+    expect_equal(
+    check_chunk_parser(rmd[2]),
+    rmd_chunk(code = code[[2]], indent = "  ")
+  )
+
+    expect_equal(
+    check_chunk_parser(rmd[3]),
+    rmd_chunk(code = code[[3]], indent = "  ")
+  )
+
+    expect_equal(
+    check_chunk_parser(rmd[4]),
+    rmd_chunk(code = code[[4]], indent = "  ")
+  )
+
+    expect_equal(
+    check_chunk_parser(rmd[5]),
+    rmd_chunk(code = code[[5]], indent = "  ")
+  )
+
+  expect_equal(
+    check_chunk_parser(rmd[6]),
+    rmd_chunk(code = code[[6]], indent = "  ")
+  )
+
+  expect_equal(
+    check_chunk_parser(rmd[7]),
+    rmd_chunk(code = code[[7]], indent = "  ")
+  )
+
+
+})
