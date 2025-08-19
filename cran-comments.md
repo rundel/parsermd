@@ -1,23 +1,11 @@
 ## Description
 
-Small clean up release to resolve CRAN warnings from the latest version of BH. 
+Significant revision to the package to add support for quarto documents and their related features. 
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-* checking installed package size ... NOTE
-  installed size is  9.1Mb
-  sub-directories of 1Mb or more:
-    libs   8.6Mb
-
-  This is a result of using the Boost library and cannot be avoided.
+0 errors | 0 warnings | 0 notes
 
 ## revdepcheck results
 
-We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
-
-
+There are not current reverse dependencies for this package.
