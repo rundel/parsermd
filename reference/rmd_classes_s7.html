@@ -24,7 +24,8 @@ with built-in validation of properties."></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/editing-documents.html">Modifying Rmd and Quarto Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul></li>
@@ -51,9 +52,72 @@ All classes inherit from the base <code>rmd_node</code> class and provide type-s
 with built-in validation of properties.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rmd_node</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rmd_ast</span><span class="op">(</span>nodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rmd_yaml</span><span class="op">(</span>yaml <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    </div>
+
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-  </main></div>
+<dl><dt id="arg-nodes">nodes<a class="anchor" aria-label="anchor" href="#arg-nodes"></a></dt>
+<dd><p>List of rmd_node objects for the AST container</p></dd>
+
+
+<dt id="arg-yaml">yaml<a class="anchor" aria-label="anchor" href="#arg-yaml"></a></dt>
+<dd><p>List containing YAML frontmatter content</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The following S7 classes are available for creating R Markdown AST nodes:</p><div class="section">
+<h3 id="core-classes">Core Classes<a class="anchor" aria-label="anchor" href="#core-classes"></a></h3>
+
+<ul><li><p><code>rmd_node()</code> - Abstract base class for all R Markdown AST nodes. This is the parent class
+for all specific node types and should not be instantiated directly.</p></li>
+<li><p><code>rmd_ast()</code> - Container for multiple nodes representing a complete document AST.</p></li>
+</ul></div>
+
+<div class="section">
+<h3 id="content-nodes">Content Nodes<a class="anchor" aria-label="anchor" href="#content-nodes"></a></h3>
+
+<ul><li><p><code>rmd_yaml()</code> - YAML frontmatter header containing document metadata.</p></li>
+<li><p><code><a href="rmd_chunk.html">rmd_chunk()</a></code> - Code chunks with executable code in various engines (R, Python, etc.).</p></li>
+<li><p><code><a href="rmd_raw_chunk.html">rmd_raw_chunk()</a></code> - Raw code chunks that are not executed.</p></li>
+<li><p><code><a href="rmd_markdown.html">rmd_markdown()</a></code> - Plain markdown text content.</p></li>
+<li><p><code><a href="rmd_heading.html">rmd_heading()</a></code> - Section headings at various levels (1-6).</p></li>
+</ul></div>
+
+<div class="section">
+<h3 id="code-and-inline-elements">Code and Inline Elements<a class="anchor" aria-label="anchor" href="#code-and-inline-elements"></a></h3>
+
+<ul><li><p><code><a href="rmd_code_block.html">rmd_code_block()</a></code> - Fenced code blocks without execution.</p></li>
+<li><p><code><a href="rmd_code_block_literal.html">rmd_code_block_literal()</a></code> - Code blocks with literal {{...}} attributes.</p></li>
+<li><p><code><a href="rmd_inline_code.html">rmd_inline_code()</a></code> - Inline code spans within markdown text.</p></li>
+<li><p><code><a href="rmd_shortcode.html">rmd_shortcode()</a></code> - Quarto/Pandoc shortcodes for special functionality.</p></li>
+<li><p><code><a href="rmd_span.html">rmd_span()</a></code> - Generic inline spans with attributes.</p></li>
+</ul></div>
+
+<div class="section">
+<h3 id="structural-elements">Structural Elements<a class="anchor" aria-label="anchor" href="#structural-elements"></a></h3>
+
+<ul><li><p><code><a href="rmd_fenced_div_open.html">rmd_fenced_div_open()</a></code> - Opening tags for fenced divs (:::).</p></li>
+<li><p><code><a href="rmd_fenced_div_close.html">rmd_fenced_div_close()</a></code> - Closing tags for fenced divs (:::).</p></li>
+</ul></div>
+
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="rmd_node_utilities.html">rmd_node_utilities</a> for utility functions that work with these S7 objects</p></div>
+    </div>
+
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

@@ -7,7 +7,7 @@ has_label() - selects nodes with labels matching the given glob.
 has_heading() - selects heading nodes (only) with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
 has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
-by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
+by_fenced_div() - selects fenced div sections matching specified id, class, and/or attributes.
 
 "><meta property="og:description" content="These functions are used in conjunction with rmd_select() to
 select nodes from an Rmd ast.
@@ -17,7 +17,7 @@ has_label() - selects nodes with labels matching the given glob.
 has_heading() - selects heading nodes (only) with titles matching the given glob pattern(s).
 has_option() - selects nodes that have the given option(s) set.
 has_shortcode() - selects nodes containing shortcodes matching the given function name(s).
-by_fdiv() - selects fenced div sections where all provided patterns match the div attributes.
+by_fenced_div() - selects fenced div sections matching specified id, class, and/or attributes.
 
 "></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -40,7 +40,8 @@ by_fdiv() - selects fenced div sections where all provided patterns match the di
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/editing-documents.html">Modifying Rmd and Quarto Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul></li>
@@ -69,7 +70,7 @@ select nodes from an Rmd ast.</p><ul><li><p><code>by_section()</code> - uses sec
 <li><p><code>has_heading()</code> - selects heading nodes (only) with titles matching the given glob pattern(s).</p></li>
 <li><p><code>has_option()</code> - selects nodes that have the given option(s) set.</p></li>
 <li><p><code>has_shortcode()</code> - selects nodes containing shortcodes matching the given function name(s).</p></li>
-<li><p><code>by_fdiv()</code> - selects fenced div sections where all provided patterns match the div attributes.</p></li>
+<li><p><code>by_fenced_div()</code> - selects fenced div sections matching specified id, class, and/or attributes.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -90,7 +91,7 @@ select nodes from an Rmd ast.</p><ul><li><p><code>by_section()</code> - uses sec
 <span></span>
 <span><span class="fu">has_inline_code</span><span class="op">(</span>engine <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">by_fdiv</span><span class="op">(</span><span class="va">...</span>, regexp <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">by_fenced_div</span><span class="op">(</span>id <span class="op">=</span> <span class="cn">NULL</span>, class <span class="op">=</span> <span class="cn">NULL</span>, attr <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -124,8 +125,9 @@ Default: <code>TRUE</code></p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Character vector patterns to match against fenced div attributes.
-All provided patterns must match at least one attribute in the div's attr property.</p></dd>
+<dd><p>Either option names represented by a scalar string or a named argument with the form
+<code>opt = value</code> where <code>opt</code> is the option name and <code>value</code> is the value to be checked. For example
+<code>eval = TRUE</code> would check for the option <code>eval</code> being set to <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-func-name">func_name<a class="anchor" aria-label="anchor" href="#arg-func-name"></a></dt>
@@ -138,9 +140,18 @@ If NULL (default), matches any shortcode.</p></dd>
 If NULL (default), matches any inline code.</p></dd>
 
 
-<dt id="arg-regexp">regexp<a class="anchor" aria-label="anchor" href="#arg-regexp"></a></dt>
-<dd><p>Logical, use regular expressions for pattern matching instead of glob patterns.
-Default: FALSE (uses glob patterns).</p></dd>
+<dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
+<dd><p>Character, optional ID to match (with or without # prefix)</p></dd>
+
+
+<dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
+<dd><p>Character vector, optional class names to match (with <code>.</code> prefix).
+All specified classes must be present in the fenced div (subset matching).</p></dd>
+
+
+<dt id="arg-attr">attr<a class="anchor" aria-label="anchor" href="#arg-attr"></a></dt>
+<dd><p>Either a character vector of attribute names to check for existence,
+or a named list/vector where names are attribute names and values must match exactly.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -203,7 +214,8 @@ for more details on the syntax for these patterns.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_option</span><span class="op">(</span>message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_option</span><span class="op">(</span>message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-in"><span></span></span>
@@ -212,10 +224,68 @@ for more details on the syntax for these patterns.</p>
 <span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">has_shortcode</span><span class="op">(</span><span class="st">"video"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">by_fdiv</span><span class="op">(</span><span class="st">"note"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
-<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">rmd</span>, <span class="fu">by_fdiv</span><span class="op">(</span><span class="st">".warning"</span>, <span class="st">"important"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-in"><span><span class="va">fdiv</span> <span class="op">=</span> <span class="fu"><a href="parse_rmd.html">parse_rmd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/fenced-divs.qmd"</span>, package<span class="op">=</span><span class="st">"parsermd"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">fdiv</span>, <span class="fu">by_fenced_div</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Select all fenced div pairs</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.warning, .important]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[2 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.info]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[#special-section, .sidebar]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[2 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.callout-note, icon="true"]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.callout-warning, collapse="true"]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[3 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.outer]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.inner]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[#example-complex, .demo, .interactive, data-toggle="collapse", aria-expanded="false"]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[4 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Fenced div (close) </span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">fdiv</span>, <span class="fu">by_fenced_div</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"note"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Classes <span style="color: #0000BB;">"note"</span> should start with '.' prefix, adding it automatically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (close) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Fenced div (close) </span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">fdiv</span>, <span class="fu">by_fenced_div</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"special-section"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>ID <span style="color: #0000BB;">"special-section"</span> should start with '#' prefix, adding it automatically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[#special-section, .sidebar]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[2 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Fenced div (close) </span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">fdiv</span>, <span class="fu">by_fenced_div</span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"warning"</span>, <span class="st">"important"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Classes <span style="color: #0000BB;">"warning"</span> and <span style="color: #0000BB;">"important"</span> should start with '.' prefix, adding it</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> automatically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.warning, .important]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[2 lines]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Fenced div (close) </span>
+<span class="r-in"><span><span class="fu"><a href="rmd_select.html">rmd_select</a></span><span class="op">(</span><span class="va">fdiv</span>, <span class="fu">by_fenced_div</span><span class="op">(</span>attr <span class="op">=</span> <span class="st">"icon"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ├── Fenced div (open) <span style="color: #555555;">[.callout-note, icon="true"]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Markdown <span style="color: #555555;">[1 line]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └── Fenced div (close) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

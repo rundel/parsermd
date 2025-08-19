@@ -20,7 +20,8 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/editing-documents.html">Modifying Rmd and Quarto Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul></li>
@@ -117,7 +118,7 @@
         <dd>Select nodes of an Rmd ast</dd>
       </dl><dl><dt>
 
-          <code><a href="rmd_select_helpers.html">has_type()</a></code> <code><a href="rmd_select_helpers.html">by_section()</a></code> <code><a href="rmd_select_helpers.html">has_label()</a></code> <code><a href="rmd_select_helpers.html">has_heading()</a></code> <code><a href="rmd_select_helpers.html">has_code()</a></code> <code><a href="rmd_select_helpers.html">has_option()</a></code> <code><a href="rmd_select_helpers.html">has_shortcode()</a></code> <code><a href="rmd_select_helpers.html">has_inline_code()</a></code> <code><a href="rmd_select_helpers.html">by_fdiv()</a></code>
+          <code><a href="rmd_select_helpers.html">has_type()</a></code> <code><a href="rmd_select_helpers.html">by_section()</a></code> <code><a href="rmd_select_helpers.html">has_label()</a></code> <code><a href="rmd_select_helpers.html">has_heading()</a></code> <code><a href="rmd_select_helpers.html">has_code()</a></code> <code><a href="rmd_select_helpers.html">has_option()</a></code> <code><a href="rmd_select_helpers.html">has_shortcode()</a></code> <code><a href="rmd_select_helpers.html">has_inline_code()</a></code> <code><a href="rmd_select_helpers.html">by_fenced_div()</a></code>
 
         </dt>
         <dd>Rmd selection helper functions</dd>
@@ -134,10 +135,10 @@
 
       <dl><dt>
 
-          <code><a href="rmd_node.html">rmd_node()</a></code> <code><a href="rmd_node.html">rmd_node_label()</a></code> <code><a href="rmd_node.html">`rmd_node_label&lt;-`()</a></code> <code><a href="rmd_node.html">rmd_node_type()</a></code> <code><a href="rmd_node.html">rmd_node_length()</a></code> <code><a href="rmd_node.html">rmd_node_content()</a></code> <code><a href="rmd_node.html">rmd_node_attr()</a></code> <code><a href="rmd_node.html">rmd_node_engine()</a></code> <code><a href="rmd_node.html">rmd_node_options()</a></code> <code><a href="rmd_node.html">rmd_node_code()</a></code> <code><a href="rmd_node.html">`rmd_node_options&lt;-`()</a></code> <code><a href="rmd_node.html">`rmd_node_attr&lt;-`()</a></code> <code><a href="rmd_node.html">rmd_node_set_label()</a></code> <code><a href="rmd_node.html">rmd_node_set_options()</a></code> <code><a href="rmd_node.html">rmd_node_set_attr()</a></code>
+          <code><a href="rmd_node_utilities.html">rmd_node_label()</a></code> <code><a href="rmd_node_utilities.html">`rmd_node_label&lt;-`()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_type()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_length()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_content()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_attr()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_engine()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_options()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_code()</a></code> <code><a href="rmd_node_utilities.html">`rmd_node_options&lt;-`()</a></code> <code><a href="rmd_node_utilities.html">`rmd_node_attr&lt;-`()</a></code> <code><a href="rmd_node_utilities.html">`rmd_node_content&lt;-`()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_set_label()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_set_options()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_set_content()</a></code> <code><a href="rmd_node_utilities.html">rmd_node_set_attr()</a></code>
 
         </dt>
-        <dd>Base S7 class for all RMD nodes</dd>
+        <dd>rmd node utility functions</dd>
       </dl><dl><dt>
 
           <code><a href="rmd_node_sections.html">rmd_node_sections()</a></code>
@@ -169,10 +170,10 @@
         <dd>Code chunk node</dd>
       </dl><dl><dt>
 
-          <code><a href="rmd_yaml.html">rmd_yaml()</a></code>
+          <code><a href="rmd_classes_s7.html">rmd_node()</a></code> <code><a href="rmd_classes_s7.html">rmd_ast()</a></code> <code><a href="rmd_classes_s7.html">rmd_yaml()</a></code>
 
         </dt>
-        <dd>YAML header node</dd>
+        <dd>S7 Class Definitions for RMD Nodes</dd>
       </dl><dl><dt>
 
           <code><a href="rmd_heading.html">rmd_heading()</a></code>
@@ -269,13 +270,7 @@
 
       <dl><dt>
 
-          <code><a href="rmd_ast.html">rmd_ast()</a></code>
-
-        </dt>
-        <dd>AST container for multiple nodes</dd>
-      </dl><dl><dt>
-
-          <code><a href="rmd_classes_s7.html">rmd_classes_s7</a></code>
+          <code><a href="rmd_classes_s7.html">rmd_node()</a></code> <code><a href="rmd_classes_s7.html">rmd_ast()</a></code> <code><a href="rmd_classes_s7.html">rmd_yaml()</a></code>
 
         </dt>
         <dd>S7 Class Definitions for RMD Nodes</dd>

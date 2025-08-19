@@ -3,6 +3,7 @@
 <url><loc>https://rundel.github.io/parsermd/LICENSE-text.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/LICENSE.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/articles/assignment-with-key.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/articles/editing-documents.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/articles/index.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/articles/know-your-nodes.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/articles/parsermd.html</loc></url>
@@ -20,7 +21,6 @@
 <url><loc>https://rundel.github.io/parsermd/reference/parsermd-package.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/reexports.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/render.html</loc></url>
-<url><loc>https://rundel.github.io/parsermd/reference/rmd_ast.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_ast_append.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_check_template.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_chunk.html</loc></url>
@@ -35,8 +35,8 @@
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_insert.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_markdown.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_modify.html</loc></url>
-<url><loc>https://rundel.github.io/parsermd/reference/rmd_node.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_node_sections.html</loc></url>
+<url><loc>https://rundel.github.io/parsermd/reference/rmd_node_utilities.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_raw_chunk.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_select.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_select_helpers.html</loc></url>
@@ -44,7 +44,6 @@
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_source.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_span.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/rmd_template.html</loc></url>
-<url><loc>https://rundel.github.io/parsermd/reference/rmd_yaml.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/shortcode_utils.html</loc></url>
 <url><loc>https://rundel.github.io/parsermd/reference/span_utils.html</loc></url>
 </urlset>

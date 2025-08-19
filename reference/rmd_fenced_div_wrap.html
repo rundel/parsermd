@@ -30,7 +30,8 @@ of nodes is desired then the allow_multiple can be set to TRUE."></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/editing-documents.html">Modifying Rmd and Quarto Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul></li>
@@ -115,11 +116,11 @@ discontinuous ranges separately.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Markdown <span style="color: #555555;">[3 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   ├── Chunk <span style="color: #555555;">[r, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
@@ -131,9 +132,9 @@ discontinuous ranges separately.</p></dd>
 <span class="r-in"><span><span class="fu">rmd_fenced_div_wrap</span><span class="op">(</span><span class="va">rmd</span>, <span class="fu"><a href="rmd_select_helpers.html">has_type</a></span><span class="op">(</span><span class="st">"rmd_chunk"</span><span class="op">)</span>, allow_multiple<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Load packages</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   │   └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
@@ -142,24 +143,24 @@ discontinuous ranges separately.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Markdown <span style="color: #555555;">[3 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   └── Chunk <span style="color: #555555;">[r, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Markdown <span style="color: #555555;">[1 line]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[3 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[1 line]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Open Fenced div <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (open) <span style="color: #555555; font-style: italic;">&lt;no attrs&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         └── Fenced div (close) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">rmd_fenced_div_wrap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">rmd</span>, <span class="fu"><a href="rmd_select_helpers.html">has_type</a></span><span class="op">(</span><span class="st">"rmd_chunk"</span><span class="op">)</span>,</span></span>
@@ -168,9 +169,9 @@ discontinuous ranges separately.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── YAML <span style="color: #555555;">[2 fields]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Load packages</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Open Fenced div <span style="color: #555555;">[..note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   │   └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">load-packages</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ├── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
@@ -179,24 +180,24 @@ discontinuous ranges separately.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │   └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Markdown <span style="color: #555555;">[3 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Open Fenced div <span style="color: #555555;">[..note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   └── Chunk <span style="color: #555555;">[r, 5 lines] - </span><span style="color: #555555; font-weight: bold;">plot-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Markdown <span style="color: #555555;">[1 line]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Open Fenced div <span style="color: #555555;">[..note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> │       │   └── Chunk <span style="color: #555555;">[r, 2 lines] - </span><span style="color: #555555; font-weight: bold;">cor-dino</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> │       └── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> └── Heading <span style="color: #555555;">[h3] - </span><span style="color: #555555; font-weight: bold;">Exercise 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ├── Markdown <span style="color: #555555;">[1 line]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     └── Heading <span style="color: #555555;">[h4] - </span><span style="color: #555555; font-weight: bold;">Solution</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[3 lines]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Open Fenced div <span style="color: #555555;">[..note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">plot-star</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (close) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Markdown <span style="color: #555555;">[1 line]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Open Fenced div <span style="color: #555555;">[..note]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ├── Fenced div (open) <span style="color: #555555;">[.note]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         │   └── Chunk <span style="color: #555555;">[r, 1 line] - </span><span style="color: #555555; font-weight: bold;">cor-star</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         └── Close Fenced div </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         └── Fenced div (close) </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

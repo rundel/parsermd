@@ -37,7 +37,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
+<li><a class="dropdown-item" href="../articles/editing-documents.html">Modifying Rmd and Quarto Documents</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Rmd Templates</a></li>
     <li><a class="dropdown-item" href="../articles/know-your-nodes.html">Know Your Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/assignment-with-key.html">Example - Assignment with Key</a></li>
   </ul>
@@ -150,17 +151,17 @@
 <div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">rmd_tmpl</span> <span class="op">=</span> <span class="fu"><a href="../reference/rmd_template.html">rmd_template</a></span><span class="op">(</span><span class="va">rmd_sols</span>, keep_content <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 9 × 5</span></span>
-<span><span class="co">#&gt;   sec_h3     sec_h4   type         label     content                            </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;                              </span></span>
-<span><span class="co">#&gt; 1 Exercise 1 Solution rmd_markdown &lt;NA&gt;      "(Type your answer to Exercise 1 h…</span></span>
-<span><span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "(The answers for this Exercise ar…</span></span>
-<span><span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino "dino_data &lt;- datasaurus_dozen %&gt;%…</span></span>
-<span><span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      "And next calculate the correlatio…</span></span>
-<span><span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  "dino_data %&gt;%\n  summarize(r = co…</span></span>
-<span><span class="co">#&gt; 6 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "(Add code and narrative as needed…</span></span>
-<span><span class="co">#&gt; 7 Exercise 3 Solution rmd_chunk    plot-star ""                                 </span></span>
-<span><span class="co">#&gt; 8 Exercise 3 Solution rmd_markdown &lt;NA&gt;      "I'm some text, you should replace…</span></span>
-<span><span class="co">#&gt; 9 Exercise 3 Solution rmd_chunk    cor-star  ""</span></span></code></pre></div>
+<span><span class="co">#&gt;   sec_h3     sec_h4   type         label     content  </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;   </span></span>
+<span><span class="co">#&gt; 1 Exercise 1 Solution rmd_markdown &lt;NA&gt;      &lt;chr [1]&gt;</span></span>
+<span><span class="co">#&gt; 2 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;chr [3]&gt;</span></span>
+<span><span class="co">#&gt; 3 Exercise 2 Solution rmd_chunk    plot-dino &lt;chr [5]&gt;</span></span>
+<span><span class="co">#&gt; 4 Exercise 2 Solution rmd_markdown &lt;NA&gt;      &lt;chr [1]&gt;</span></span>
+<span><span class="co">#&gt; 5 Exercise 2 Solution rmd_chunk    cor-dino  &lt;chr [2]&gt;</span></span>
+<span><span class="co">#&gt; 6 Exercise 3 Solution rmd_markdown &lt;NA&gt;      &lt;chr [3]&gt;</span></span>
+<span><span class="co">#&gt; 7 Exercise 3 Solution rmd_chunk    plot-star &lt;chr [1]&gt;</span></span>
+<span><span class="co">#&gt; 8 Exercise 3 Solution rmd_markdown &lt;NA&gt;      &lt;chr [1]&gt;</span></span>
+<span><span class="co">#&gt; 9 Exercise 3 Solution rmd_chunk    cor-star  &lt;chr [1]&gt;</span></span></code></pre></div>
 </div>
 </section><section class="level3"><h3 id="using-a-template">Using a template<a class="anchor" aria-label="anchor" href="#using-a-template"></a>
 </h3>
