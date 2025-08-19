@@ -1,4 +1,4 @@
-# by_fdiv validates input correctly
+# by_fenced_div validates input correctly
 
     i In argument: `by_fenced_div(id = 123)`.
     Caused by error in `by_fenced_div()`:
