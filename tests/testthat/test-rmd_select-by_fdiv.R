@@ -1,4 +1,4 @@
-test_that("by_fdiv works with single pattern matching", {
+test_that("by_fenced_div works with single pattern matching", {
   # Create test AST with fenced divs
   original_ast = rmd_ast(
     nodes = list(
@@ -21,7 +21,7 @@ test_that("by_fdiv works with single pattern matching", {
   expect_equal(note_subset, expected_subset)
 })
 
-test_that("by_fdiv works with class attribute patterns", {
+test_that("by_fenced_div works with class attribute patterns", {
   # Create test AST with class attributes
   original_ast = rmd_ast(
     nodes = list(
@@ -43,7 +43,7 @@ test_that("by_fdiv works with class attribute patterns", {
   expect_equal(warning_subset, expected_subset)
 })
 
-test_that("by_fdiv works with multiple pattern matching (ALL must match)", {
+test_that("by_fenced_div works with multiple pattern matching (ALL must match)", {
   # Create test AST with multiple attributes
   original_ast = rmd_ast(
     nodes = list(
@@ -68,7 +68,7 @@ test_that("by_fdiv works with multiple pattern matching (ALL must match)", {
   expect_equal(multi_subset, expected_subset)
 })
 
-test_that("by_fdiv handles nested fenced divs correctly", {
+test_that("by_fenced_div handles nested fenced divs correctly", {
   # Create test AST with nested divs
   original_ast = rmd_ast(
     nodes = list(
@@ -99,7 +99,7 @@ test_that("by_fdiv handles nested fenced divs correctly", {
   expect_equal(inner_subset, expected_inner)
 })
 
-test_that("by_fdiv works with glob patterns", {
+test_that("by_fenced_div works with glob patterns", {
   # Create test AST with callout-style divs
   original_ast = rmd_ast(
     nodes = list(
@@ -126,7 +126,7 @@ test_that("by_fdiv works with glob patterns", {
   expect_equal(callout_subset, expected_subset)
 })
 
-test_that("by_fdiv works with regexp patterns", {
+test_that("by_fenced_div works with regexp patterns", {
   # Create test AST with various div types
   original_ast = rmd_ast(
     nodes = list(
@@ -151,7 +151,7 @@ test_that("by_fdiv works with regexp patterns", {
   expect_equal(exact_subset, expected_subset)
 })
 
-test_that("by_fdiv returns empty when no matches", {
+test_that("by_fenced_div returns empty when no matches", {
   # Create test AST without target divs
   original_ast = rmd_ast(
     nodes = list(
@@ -171,7 +171,7 @@ test_that("by_fdiv returns empty when no matches", {
   expect_equal(result, expected_empty)
 })
 
-test_that("by_fdiv works with multiple independent divs", {
+test_that("by_fenced_div works with multiple independent divs", {
   # Create test AST with multiple separate note divs
   original_ast = rmd_ast(
     nodes = list(
@@ -197,7 +197,7 @@ test_that("by_fdiv works with multiple independent divs", {
   expect_equal(note_subset, expected_subset)
 })
 
-test_that("by_fdiv works with complex attribute combinations", {
+test_that("by_fenced_div works with complex attribute combinations", {
   # Create test AST with complex attributes
   original_ast = rmd_ast(
     nodes = list(
@@ -219,7 +219,7 @@ test_that("by_fdiv works with complex attribute combinations", {
   expect_equal(complex_subset, expected_subset)
 })
 
-test_that("by_fdiv works with no arguments (selects all fenced div pairs)", {
+test_that("by_fenced_div works with no arguments (selects all fenced div pairs)", {
   # Create test AST with multiple fenced divs and other content
   test_ast = rmd_ast(
     nodes = list(
@@ -244,7 +244,7 @@ test_that("by_fdiv works with no arguments (selects all fenced div pairs)", {
   expect_equal(all_fdivs, expected_subset)
 })
 
-test_that("by_fdiv validates input correctly", {
+test_that("by_fenced_div validates input correctly", {
   # Create a simple test AST for validation testing
   test_ast = rmd_ast(
     nodes = list(
@@ -261,7 +261,7 @@ test_that("by_fdiv validates input correctly", {
   expect_snapshot_error(rmd_select(test_ast, by_fenced_div(attr = 123)))  # invalid type
 })
 
-test_that("by_fdiv works with empty AST", {
+test_that("by_fenced_div works with empty AST", {
   # Create empty AST
   empty_ast = rmd_ast(nodes = list())
   
@@ -271,7 +271,7 @@ test_that("by_fdiv works with empty AST", {
   expect_equal(result, empty_ast)
 })
 
-test_that("by_fdiv handles edge case with no matching close", {
+test_that("by_fenced_div handles edge case with no matching close", {
   # Test the helper function directly with a scenario where
   # find_matching_close doesn't find a matching close
   
@@ -290,7 +290,7 @@ test_that("by_fdiv handles edge case with no matching close", {
   expect_true(is.na(result))
 })
 
-test_that("by_fdiv handles deeply nested divs", {
+test_that("by_fenced_div handles deeply nested divs", {
   # Create test AST with deeply nested divs
   original_ast = rmd_ast(
     nodes = list(

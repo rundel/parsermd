@@ -43,7 +43,7 @@ reference:
   contents:
   - rmd_select
   - by_section
-  - by_fdiv
+  - by_fenced_div
   - has_label
   - has_option
   - has_type

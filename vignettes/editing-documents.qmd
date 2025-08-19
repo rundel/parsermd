@@ -131,9 +131,10 @@ A common task is to add a setup chunk at the beginning of a document (right afte
 ```{r create-setup-chunk}
 # Create a new setup chunk
 setup = rmd_chunk(
+  engine = "r",
   label = "setup",
-  code = "knitr::opts_chunk$set(echo = TRUE)",
-  options = list(include = FALSE)
+  options = list(include = FALSE),
+  code = "knitr::opts_chunk$set(echo = TRUE)"
 )
 
 setup
