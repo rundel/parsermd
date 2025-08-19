@@ -128,7 +128,7 @@ test_that("parse full document with yaml options", {
     )),
     rmd_chunk(
       engine = "r",
-      name = "unnamed-chunk-1",
+      label = "unnamed-chunk-1",
       options = list(
         eval = TRUE,
         echo = FALSE,

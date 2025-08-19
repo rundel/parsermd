@@ -4,20 +4,59 @@
 #' All classes inherit from the base `rmd_node` class and provide type-safe object creation
 #' with built-in validation of properties.
 #'
+#' @details
+#' The following S7 classes are available for creating R Markdown AST nodes:
+#'
+#' ## Core Classes
+#' 
+#' * `rmd_node()` - Abstract base class for all R Markdown AST nodes. This is the parent class
+#'   for all specific node types and should not be instantiated directly.
+#' 
+#' * `rmd_ast()` - Container for multiple nodes representing a complete document AST.
+#' 
+#' ## Content Nodes
+#' 
+#' * `rmd_yaml()` - YAML frontmatter header containing document metadata.
+#' 
+#' * `rmd_chunk()` - Code chunks with executable code in various engines (R, Python, etc.).
+#' 
+#' * `rmd_raw_chunk()` - Raw code chunks that are not executed.
+#' 
+#' * `rmd_markdown()` - Plain markdown text content.
+#' 
+#' * `rmd_heading()` - Section headings at various levels (1-6).
+#' 
+#' ## Code and Inline Elements
+#' 
+#' * `rmd_code_block()` - Fenced code blocks without execution.
+#' 
+#' * `rmd_code_block_literal()` - Code blocks with literal \{\{...\}\} attributes.
+#' 
+#' * `rmd_inline_code()` - Inline code spans within markdown text.
+#' 
+#' * `rmd_shortcode()` - Quarto/Pandoc shortcodes for special functionality.
+#' 
+#' * `rmd_span()` - Generic inline spans with attributes.
+#' 
+#' ## Structural Elements
+#' 
+#' * `rmd_fenced_div_open()` - Opening tags for fenced divs (:::).
+#' 
+#' * `rmd_fenced_div_close()` - Closing tags for fenced divs (:::).
+#'
+#' @param nodes List of rmd_node objects for the AST container
+#' @param yaml List containing YAML frontmatter content
+#' @seealso [rmd_node_utilities] for utility functions that work with these S7 objects
 #' @name rmd_classes_s7
 NULL
 
-#' @title Base S7 class for all RMD nodes
-#' @description Abstract base class for all R Markdown AST nodes
-#' @export
+#' @rdname rmd_classes_s7
 rmd_node = S7::new_class(
   "rmd_node",
   package = NULL
 )
 
-#' @title AST container for multiple nodes
-#' @description S7 class representing a collection of R Markdown nodes
-#' @param nodes List of rmd node objects
+#' @rdname rmd_classes_s7
 #' @export
 rmd_ast = S7::new_class(
   "rmd_ast", 
@@ -50,9 +89,7 @@ S7::method(length, rmd_ast) = function(x) {
   length(x@nodes)
 }
 
-#' @title YAML header node
-#' @description S7 class representing YAML frontmatter
-#' @param yaml List containing YAML content
+#' @rdname rmd_classes_s7
 #' @export
 rmd_yaml = S7::new_class(
   "rmd_yaml",
@@ -95,7 +132,7 @@ rmd_heading = S7::new_class(
 #' @title Code chunk node
 #' @description S7 class representing an executable code chunk
 #' @param engine Character. Language engine
-#' @param name Character. Chunk name
+#' @param label Character. Chunk label
 #' @param options List. Combined chunk options (traditional and YAML)
 #' @param code Character vector. Code lines
 #' @param indent Character. Indentation
@@ -106,7 +143,7 @@ rmd_chunk = S7::new_class(
   parent = rmd_node,
   properties = list(
     engine  = S7::new_property(S7::class_character, default = quote("r")),
-    name    = S7::new_property(S7::class_character, default = quote("")),
+    label   = S7::new_property(S7::class_character, default = quote("")),
     options = S7::new_property(
       S7::class_list, 
       default = quote(list()),
@@ -123,14 +160,22 @@ rmd_chunk = S7::new_class(
   ),
   validator = function(self) {
     if (length(self@engine) != 1) {
-      "@engine must be a single character string"
-    } else if (length(self@name) != 1) {
-      "@name must be a single character string"
+      return("@engine must be a single character string")
+    } else if (length(self@label) != 1) {
+      return("@label must be a single character string")
     } else if (length(self@indent) != 1) {
-      "@indent must be a single character string"
+      return("@indent must be a single character string")
     } else if (length(self@n_ticks) != 1 || self@n_ticks < 3) {
-      "@n_ticks must be a single integer >= 3"
+      return("@n_ticks must be a single integer >= 3")
+    } else if (length(self@options) > 0 && !is.null(names(self@options))) {
+      # Check that option names don't contain hyphens (should be normalized to dots)
+      option_names = names(self@options)
+      if (any(grepl("-", option_names, fixed = TRUE))) {
+        hyphenated_options = option_names[grepl("-", option_names, fixed = TRUE)]
+        return(cli::format_inline("Option names must not contain hyphens: {.val {hyphenated_options}}. Use dots instead or let the constructor normalize them automatically."))
+      }
     }
+    NULL
   },
   package = NULL
 )

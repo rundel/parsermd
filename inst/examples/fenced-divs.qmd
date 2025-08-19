@@ -1,0 +1,69 @@
+---
+title: "Fenced Divs Example"
+format: html
+---
+
+## Introduction
+
+This document demonstrates various fenced div constructs for testing the `by_fenced_div()` selector.
+
+::: {.note}
+This is a simple note callout using a basic class.
+:::
+
+## Class-based Divs
+
+::: {.warning .important}
+This is a warning div that also has the important class. 
+It demonstrates multiple classes on a single fenced div.
+:::
+
+::: {.info}
+This is an informational callout with just one class.
+:::
+
+## ID-based Divs
+
+::: {#special-section .sidebar}
+This fenced div has both an ID and a class.
+You can reference this section by its ID.
+:::
+
+## Attribute-based Divs
+
+::: {.callout-note icon="true"}
+This note callout has an icon attribute set to true.
+:::
+
+::: {.callout-warning collapse="true"}
+This warning callout can be collapsed.
+
+It has some content that might be hidden by default.
+:::
+
+## Nested Divs
+
+::: {.outer}
+This is the outer container.
+
+::: {.inner}
+This is nested inside the outer container.
+:::
+
+Back to the outer container content.
+:::
+
+## Complex Example
+
+::: {#example-complex .demo .interactive data-toggle="collapse" aria-expanded="false"}
+This is a complex fenced div with:
+- An ID (#example-complex)
+- Multiple classes (.demo .interactive) 
+- Custom attributes (data-toggle, aria-expanded)
+:::
+
+Regular markdown content between divs.
+
+::: {.note}
+Another simple note to demonstrate multiple divs of the same type.
+:::

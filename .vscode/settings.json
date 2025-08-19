@@ -1,5 +1,15 @@
 {
   "cSpell.words": [
-    "parsermd"
+    "fdiv",
+    "gsub",
+    "pagebreak",
+    "parsermd",
+    "pipeable",
+    "purrr",
+    "rdname",
+    "stringr",
+    "tibble",
+    "tidyselect",
+    "yamlize"
   ]
 }

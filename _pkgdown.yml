@@ -14,6 +14,8 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
+    - text: Modifying Rmd and Quarto Documents
+      href: articles/editing-documents.html
     - text: Rmd Templates
       href: articles/templates.html
     - text: Know Your Nodes
@@ -41,7 +43,7 @@ reference:
   contents:
   - rmd_select
   - by_section
-  - by_fdiv
+  - by_fenced_div
   - has_label
   - has_option
   - has_type

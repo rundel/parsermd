@@ -10,7 +10,7 @@
 \alias{has_option}
 \alias{has_shortcode}
 \alias{has_inline_code}
-\alias{by_fdiv}
+\alias{by_fenced_div}
 \title{Rmd selection helper functions}
 \usage{
 has_type(types)
@@ -29,7 +29,7 @@ has_shortcode(func_name = NULL)
 
 has_inline_code(engine = NULL)
 
-by_fdiv(..., regexp = FALSE)
+by_fenced_div(id = NULL, class = NULL, attr = NULL)
 }
 \arguments{
 \item{types}{Vector of character type names, e.g. \code{rmd_chunk}, \code{rmd_heading}, etc.}
@@ -46,8 +46,9 @@ Default: \code{TRUE}}
 
 \item{code}{character vector, regex patterns for matching chunk code line(s)}
 
-\item{...}{Character vector patterns to match against fenced div attributes.
-All provided patterns must match at least one attribute in the div's attr property.}
+\item{...}{Either option names represented by a scalar string or a named argument with the form
+\code{opt = value} where \code{opt} is the option name and \code{value} is the value to be checked. For example
+\code{eval = TRUE} would check for the option \code{eval} being set to \code{TRUE}.}
 
 \item{func_name}{character vector, optional glob patterns for matching shortcode function names.
 If NULL (default), matches any shortcode.}
@@ -55,8 +56,13 @@ If NULL (default), matches any shortcode.}
 \item{engine}{character vector, optional glob patterns for matching inline code engine names.
 If NULL (default), matches any inline code.}
 
-\item{regexp}{Logical, use regular expressions for pattern matching instead of glob patterns.
-Default: FALSE (uses glob patterns).}
+\item{id}{Character, optional ID to match (with or without # prefix)}
+
+\item{class}{Character vector, optional class names to match (with \code{.} prefix).
+All specified classes must be present in the fenced div (subset matching).}
+
+\item{attr}{Either a character vector of attribute names to check for existence,
+or a named list/vector where names are attribute names and values must match exactly.}
 }
 \value{
 All helper functions return an integer vector of selected indexes.
@@ -71,7 +77,7 @@ select nodes from an Rmd ast.
 \item \code{has_heading()} - selects heading nodes (only) with titles matching the given glob pattern(s).
 \item \code{has_option()} - selects nodes that have the given option(s) set.
 \item \code{has_shortcode()} - selects nodes containing shortcodes matching the given function name(s).
-\item \code{by_fdiv()} - selects fenced div sections where all provided patterns match the div attributes.
+\item \code{by_fenced_div()} - selects fenced div sections matching specified id, class, and/or attributes.
 }
 }
 \details{
@@ -111,8 +117,13 @@ rmd_select(rmd, has_option(message = TRUE))
 rmd_select(rmd, has_shortcode())
 rmd_select(rmd, has_shortcode("video"))
 
-rmd_select(rmd, by_fdiv("note"))
-rmd_select(rmd, by_fdiv(".warning", "important"))
+fdiv = parse_rmd(system.file("examples/fenced-divs.qmd", package="parsermd"))
+
+rmd_select(fdiv, by_fenced_div())  # Select all fenced div pairs
+rmd_select(fdiv, by_fenced_div(class = "note"))
+rmd_select(fdiv, by_fenced_div(id = "special-section"))
+rmd_select(fdiv, by_fenced_div(class = c("warning", "important")))
+rmd_select(fdiv, by_fenced_div(attr = "icon"))
 
 
 }

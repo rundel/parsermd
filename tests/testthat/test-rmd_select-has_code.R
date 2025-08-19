@@ -2,9 +2,9 @@ test_that("has_code works with simple pattern", {
   # Create test AST with chunks containing different code
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "library(dplyr)"),
-      rmd_chunk(engine = "r", name = "plot", code = "plot(cars)"),
-      rmd_chunk(engine = "r", name = "analysis", code = "summary(data)"),
+      rmd_chunk(engine = "r", label = "setup", code = "library(dplyr)"),
+      rmd_chunk(engine = "r", label = "plot", code = "plot(cars)"),
+      rmd_chunk(engine = "r", label = "analysis", code = "summary(data)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -22,10 +22,10 @@ test_that("has_code works with regex patterns", {
   # Create test AST with various code patterns
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "data", code = "data = read.csv('file.csv')"),
-      rmd_chunk(engine = "r", name = "analysis", code = "result = analyze(data)"),
-      rmd_chunk(engine = "r", name = "plot", code = "ggplot(data, aes(x, y)) + geom_point()"),
-      rmd_chunk(engine = "r", name = "summary", code = "summary(result)")
+      rmd_chunk(engine = "r", label = "data", code = "data = read.csv('file.csv')"),
+      rmd_chunk(engine = "r", label = "analysis", code = "result = analyze(data)"),
+      rmd_chunk(engine = "r", label = "plot", code = "ggplot(data, aes(x, y)) + geom_point()"),
+      rmd_chunk(engine = "r", label = "summary", code = "summary(result)")
     )
   )
   
@@ -42,10 +42,10 @@ test_that("has_code works with multiple patterns", {
   # Create test AST with different code types
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "setup", code = "library(dplyr)"),
-      rmd_chunk(engine = "r", name = "data", code = "data = read_csv('file.csv')"),
-      rmd_chunk(engine = "r", name = "plot", code = "ggplot(data) + geom_histogram()"),
-      rmd_chunk(engine = "r", name = "test", code = "summary(data)")
+      rmd_chunk(engine = "r", label = "setup", code = "library(dplyr)"),
+      rmd_chunk(engine = "r", label = "data", code = "data = read_csv('file.csv')"),
+      rmd_chunk(engine = "r", label = "plot", code = "ggplot(data) + geom_histogram()"),
+      rmd_chunk(engine = "r", label = "test", code = "summary(data)")
     )
   )
   
@@ -62,9 +62,9 @@ test_that("has_code works with function calls", {
   # Create test AST with different function calls
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "stats", code = "mean(values)\nsd(values)"),
-      rmd_chunk(engine = "r", name = "plots", code = "hist(data)\nboxplot(data)"),
-      rmd_chunk(engine = "r", name = "models", code = "lm(y ~ x, data)"),
+      rmd_chunk(engine = "r", label = "stats", code = "mean(values)\nsd(values)"),
+      rmd_chunk(engine = "r", label = "plots", code = "hist(data)\nboxplot(data)"),
+      rmd_chunk(engine = "r", label = "models", code = "lm(y ~ x, data)"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -82,9 +82,9 @@ test_that("has_code returns empty when no matches", {
   # Create test AST without target code
   original_ast = rmd_ast(
     nodes = list(
-      rmd_chunk(engine = "r", name = "simple", code = "print('hello')"),
+      rmd_chunk(engine = "r", label = "simple", code = "print('hello')"),
       rmd_markdown(lines = "Text content"),
-      rmd_chunk(engine = "r", name = "basic", code = "x = 1")
+      rmd_chunk(engine = "r", label = "basic", code = "x = 1")
     )
   )
   
@@ -104,7 +104,7 @@ test_that("has_code only matches code chunks", {
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Analysis", level = 1L),
       rmd_markdown(lines = "Text mentioning plot() function"),
-      rmd_chunk(engine = "r", name = "code", code = "plot(cars)"),
+      rmd_chunk(engine = "r", label = "code", code = "plot(cars)"),
       rmd_code_block(classes = ".r", code = "plot(data)")  # code block, not chunk
     )
   )
@@ -132,7 +132,7 @@ test_that("has_code works with multiline code", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "complex", 
+        label = "complex", 
         code = c(
           "library(ggplot2)",
           "data = read.csv('file.csv')",
@@ -143,12 +143,12 @@ test_that("has_code works with multiline code", {
       ),
       rmd_chunk(
         engine = "r", 
-        name = "simple", 
+        label = "simple", 
         code = "summary(data)"
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = c(
           "model = lm(y ~ x, data)",
           "summary(model)"

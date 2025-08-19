@@ -4,19 +4,19 @@ test_that("has_option works with option names", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(message = FALSE, warning = FALSE)
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = TRUE, fig.width = 8)
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = "summary(cars)"
         # no options
       ),
@@ -39,19 +39,19 @@ test_that("has_option works with option values", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(echo = "FALSE", warning = "FALSE")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = "TRUE", message = "FALSE")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "hidden", 
+        label = "hidden", 
         code = "secret_calculation()",
         options = list(echo = "FALSE", include = "FALSE")
       )
@@ -73,19 +73,19 @@ test_that("has_option works with multiple options", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(message = FALSE, warning = FALSE, echo = FALSE)
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(fig.width = 8, fig.height = 6)
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = "summary(cars)",
         options = list(warning = FALSE)
       )
@@ -107,19 +107,19 @@ test_that("has_option works with mixed option types", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(echo = "FALSE", warning = "FALSE")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = "TRUE", warning = "FALSE")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "quiet", 
+        label = "quiet", 
         code = "analysis()",
         options = list(message = "FALSE")
       )
@@ -141,7 +141,7 @@ test_that("has_option returns empty when no matches", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = TRUE)
       ),
@@ -166,7 +166,7 @@ test_that("has_option ignores non-chunk nodes", {
       rmd_heading(name = "Section", level = 1L),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = FALSE)
       ),
@@ -189,19 +189,19 @@ test_that("has_option works with character option values", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "plot1", 
+        label = "plot1", 
         code = "plot(cars)",
         options = list(fig.cap = "Car plot", engine = "r")
       ),
       rmd_chunk(
         engine = "python", 
-        name = "plot2", 
+        label = "plot2", 
         code = "plt.plot(x, y)",
         options = list(fig.cap = "Python plot", engine = "python")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = "summary(cars)"
       )
     )
@@ -234,13 +234,13 @@ test_that("has_option normalizes dash option names to dots", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "plot1", 
+        label = "plot1", 
         code = "plot(cars)",
         options = list(fig.width = 8, fig.height = 6, out.width = "100%")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot2", 
+        label = "plot2", 
         code = "plot(mtcars)",
         options = list(echo = TRUE, message = FALSE)
       )
@@ -259,13 +259,13 @@ test_that("has_option normalizes dash option names with values", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "plot1", 
+        label = "plot1", 
         code = "plot(cars)",
         options = list(fig.width = "8", out.width = "100%")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot2", 
+        label = "plot2", 
         code = "plot(mtcars)",
         options = list(fig.width = "10", out.width = "50%")
       )
@@ -284,19 +284,19 @@ test_that("has_option works with multiple dash options", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(fig.width = 8, fig.height = 6, out.width = "100%")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(echo = TRUE, out.height = "50%")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = "summary(cars)",
         options = list(message = FALSE)
       )
@@ -315,13 +315,13 @@ test_that("has_option works with mixed dot and dash option names", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "plot", 
+        label = "plot", 
         code = "plot(cars)",
         options = list(fig.width = 8, echo = TRUE, out.width = "100%")
       ),
       rmd_chunk(
         engine = "r", 
-        name = "analysis", 
+        label = "analysis", 
         code = "summary(cars)",
         options = list(message = FALSE, warning = TRUE)
       )

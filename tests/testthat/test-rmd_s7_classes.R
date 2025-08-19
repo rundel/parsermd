@@ -62,7 +62,7 @@ test_that("rmd_chunk S7 class works", {
   # Valid chunk
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(),
     code = c("x = 1", "y = 2"),
     indent = "",
@@ -70,13 +70,13 @@ test_that("rmd_chunk S7 class works", {
   )
   expect_s3_class(chunk, "rmd_chunk")
   expect_equal(chunk@engine, "r")
-  expect_equal(chunk@name, "test")
+  expect_equal(chunk@label, "test")
   
   # Invalid engine (wrong length)
   expect_snapshot_error(
     rmd_chunk(
       engine = c("r", "python"),
-      name = "test",
+      label = "test",
       options = list(),
       code = character(),
       indent = "",
@@ -88,7 +88,7 @@ test_that("rmd_chunk S7 class works", {
   expect_snapshot_error(
     rmd_chunk(
       engine = "r",
-      name = "test",
+      label = "test",
       options = list(),
       code = character(),
       indent = "",
@@ -494,7 +494,7 @@ test_that("S7 inheritance works", {
   expect_true(S7::S7_inherits(rmd_yaml(yaml = list()), rmd_node))
   expect_true(S7::S7_inherits(rmd_heading(name = "Test", level = 1L), rmd_node))
   expect_true(S7::S7_inherits(rmd_chunk(
-    engine = "r", name = "", options = list(),
+    engine = "r", label = "", options = list(),
     code = character(), indent = "", n_ticks = 3L
   ), rmd_node))
   expect_true(S7::S7_inherits(rmd_raw_chunk(format = "html", code = character()), rmd_node))

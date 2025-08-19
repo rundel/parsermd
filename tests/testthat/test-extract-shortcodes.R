@@ -335,3 +335,101 @@ test_that("Shortcode extraction functionality", {
   expect_true(rmd_has_shortcode("{{< video https://example.com >}}"))
   expect_true(rmd_has_shortcode("{{< pagebreak >}}"))
 })
+
+test_that("rmd_extract_shortcodes works across all node types", {
+  
+  # Test rmd_ast extraction
+  test_ast = parse_rmd(c(
+    "---",
+    "title: \"{{< var title >}}\"",
+    "---",
+    "",
+    "# Heading with {{< shortcode >}}",
+    "",
+    "Markdown with {{< video url >}}",
+    "",
+    "```{r}",
+    "# Comment with {{< include file >}}",
+    "```"
+  ))
+  
+  ast_result = rmd_extract_shortcodes(test_ast, flatten = TRUE)
+  expect_length(ast_result, 4)
+  expect_equal(ast_result[[1]]@func, "var")
+  expect_equal(ast_result[[2]]@func, "shortcode")
+  expect_equal(ast_result[[3]]@func, "video")
+  expect_equal(ast_result[[4]]@func, "include")
+  
+  # Test individual node types
+  yaml_node = rmd_yaml(yaml = list(title = "Test {{< var value >}}"))
+  yaml_result = rmd_extract_shortcodes(yaml_node, flatten = TRUE)
+  expect_length(yaml_result, 1)
+  expect_equal(yaml_result[[1]]@func, "var")
+  
+  markdown_node = rmd_markdown(lines = c("Text with {{< video test.mp4 >}} shortcode"))
+  markdown_result = rmd_extract_shortcodes(markdown_node, flatten = TRUE)
+  expect_length(markdown_result, 1)
+  expect_equal(markdown_result[[1]]@func, "video")
+  
+  chunk_node = rmd_chunk(engine = "r", code = c("# {{< include script.R >}}"))
+  chunk_result = rmd_extract_shortcodes(chunk_node, flatten = TRUE)
+  expect_length(chunk_result, 1)
+  expect_equal(chunk_result[[1]]@func, "include")
+  
+  raw_chunk_node = rmd_raw_chunk(format = "html", code = c("<p>{{< var content >}}</p>"))
+  raw_result = rmd_extract_shortcodes(raw_chunk_node, flatten = TRUE)
+  expect_length(raw_result, 1)
+  expect_equal(raw_result[[1]]@func, "var")
+  
+  code_block_node = rmd_code_block(code = c("function() { /* {{< comment >}} */ }"))
+  code_result = rmd_extract_shortcodes(code_block_node, flatten = TRUE)
+  expect_length(code_result, 1)
+  expect_equal(code_result[[1]]@func, "comment")
+  
+  code_literal_node = rmd_code_block_literal(code = c("{{< literal >}}"))
+  literal_result = rmd_extract_shortcodes(code_literal_node, flatten = TRUE)
+  expect_length(literal_result, 1)
+  expect_equal(literal_result[[1]]@func, "literal")
+  
+  heading_node = rmd_heading(name = "Title with {{< var heading >}}", level = 1L)
+  heading_result = rmd_extract_shortcodes(heading_node, flatten = TRUE)
+  expect_length(heading_result, 1)
+  expect_equal(heading_result[[1]]@func, "var")
+  
+  span_node = rmd_span(text = "Span with {{< shortcode >}} content")
+  span_result = rmd_extract_shortcodes(span_node, flatten = TRUE)
+  expect_length(span_result, 1)
+  expect_equal(span_result[[1]]@func, "shortcode")
+  
+  shortcode_node = rmd_shortcode(func = "test", args = c("arg1", "{{< nested >}}"))
+  shortcode_result = rmd_extract_shortcodes(shortcode_node, flatten = TRUE)
+  expect_length(shortcode_result, 1)
+  expect_equal(shortcode_result[[1]]@func, "nested")
+  
+  # Test nodes that should return empty
+  inline_code_node = rmd_inline_code(engine = "r", code = "test")
+  expect_length(rmd_extract_shortcodes(inline_code_node, flatten = TRUE), 0)
+  
+  fdiv_open_node = rmd_fenced_div_open()
+  expect_length(rmd_extract_shortcodes(fdiv_open_node, flatten = TRUE), 0)
+  
+  fdiv_close_node = rmd_fenced_div_close()
+  expect_length(rmd_extract_shortcodes(fdiv_close_node, flatten = TRUE), 0)
+})
+
+test_that("rmd_extract_shortcodes flatten parameter works correctly", {
+  
+  # Test nested structure (flatten = FALSE)
+  markdown_node = rmd_markdown(lines = c("Line 1 {{< first >}}", "Line 2 {{< second >}}"))
+  nested_result = rmd_extract_shortcodes(markdown_node, flatten = FALSE)
+  expect_equal(names(nested_result), "lines")
+  expect_length(nested_result$lines, 2)
+  expect_length(nested_result$lines[[1]], 1)
+  expect_length(nested_result$lines[[2]], 1)
+  
+  # Test flattened structure (flatten = TRUE)
+  flat_result = rmd_extract_shortcodes(markdown_node, flatten = TRUE)
+  expect_length(flat_result, 2)
+  expect_equal(flat_result[[1]]@func, "first")
+  expect_equal(flat_result[[2]]@func, "second")
+})

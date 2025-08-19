@@ -1,7 +1,7 @@
 test_that("as_document with use_yaml_opts = TRUE renders options in YAML format", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test", 
+    label = "test", 
     options = list(echo = FALSE),
     code = "x = 1"
   )
@@ -21,7 +21,7 @@ test_that("as_document with use_yaml_opts = TRUE renders options in YAML format"
 test_that("as_document with use_yaml_opts = FALSE renders options in traditional format", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(echo = FALSE),
     code = "x = 1"
   )
@@ -40,7 +40,7 @@ test_that("as_document with use_yaml_opts = FALSE renders options in traditional
 test_that("as_document formats differ between use_yaml_opts TRUE and FALSE", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "analysis",
+    label = "analysis",
     options = list(echo = TRUE, eval = FALSE),
     code = "x = 1"
   )
@@ -72,7 +72,7 @@ test_that("as_document formats differ between use_yaml_opts TRUE and FALSE", {
 test_that("as_document handles chunks with no options correctly", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "simple",
+    label = "simple",
     options = list(),
     code = "print('hello')"
   )
@@ -95,7 +95,7 @@ test_that("as_document handles chunks with no options correctly", {
 test_that("as_document handles chunks with no name correctly", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "",
+    label = "",
     options = list(echo = FALSE),
     code = "x = 1"
   )
@@ -123,7 +123,7 @@ test_that("as_document handles chunks with no name correctly", {
 test_that("as_document default behavior uses YAML format", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(echo = FALSE),
     code = "x = 1"
   )
@@ -190,8 +190,8 @@ test_that("as_document preserves different engine types with both formats", {
 })
 
 test_that("as_document parameter propagates through AST with multiple chunks", {
-  chunk1 = rmd_chunk(engine = "r", name = "chunk1", options = list(echo = FALSE), code = "x = 1")
-  chunk2 = rmd_chunk(engine = "r", name = "chunk2", options = list(eval = FALSE), code = "y = 2")
+  chunk1 = rmd_chunk(engine = "r", label = "chunk1", options = list(echo = FALSE), code = "x = 1")
+  chunk2 = rmd_chunk(engine = "r", label = "chunk2", options = list(eval = FALSE), code = "y = 2")
   ast = rmd_ast(nodes = list(chunk1, chunk2))
   
   yaml_result = as_document(ast, use_yaml_opts = TRUE)
@@ -230,7 +230,7 @@ test_that("as_document parameter propagates through AST with multiple chunks", {
 test_that("as_document converts dot notation to dash notation for YAML output", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test",
+    label = "test",
     options = list(fig.width = 5, fig.height = 3, out.width = "100%"),
     code = "x = 1"
   )
@@ -252,7 +252,7 @@ test_that("as_document converts dot notation to dash notation for YAML output", 
 test_that("as_document preserves dot notation for traditional output", {
   chunk = rmd_chunk(
     engine = "r", 
-    name = "test",
+    label = "test",
     options = list(fig.width = 5, fig.height = 3, out.width = "100%"),
     code = "x = 1"
   )
@@ -271,7 +271,7 @@ test_that("as_document preserves dot notation for traditional output", {
 test_that("as_document handles options with multiple dots correctly", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "test", 
+    label = "test", 
     options = list(fig.cap.location = "bottom", out.extra.css = "color: red"),
     code = "x = 1"
   )
@@ -300,7 +300,7 @@ test_that("as_document handles options with multiple dots correctly", {
 test_that("as_document name conversion works with mixed option types", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "analysis",
+    label = "analysis",
     options = list(echo = TRUE, fig.width = 7, eval = FALSE, out.height = "50%"),
     code = c("plot(1:10)", "summary(data)")
   )
@@ -324,7 +324,7 @@ test_that("as_document name conversion works with mixed option types", {
 test_that("as_document handles options without dots unchanged", {
   chunk = rmd_chunk(
     engine = "r",
-    name = "simple",
+    label = "simple",
     options = list(echo = TRUE, eval = FALSE, message = TRUE),
     code = "x = 1"
   )

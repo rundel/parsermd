@@ -27,7 +27,7 @@ test_that("Inline code detection in AST nodes", {
   expect_equal(rmd_select(rmd1, has_inline_code("r")), rmd1[1])
   expect_equal(rmd_select(rmd1, has_inline_code("python")), rmd_ast(list()))
   
-  # Test inline code detection in chunk code
+  # Test inline code detection in chunk code (chunks cannot contain executable inline code)
   rmd2 = parse_rmd(c("```{r}", "# Comment with `r inline_code`", "x = 1", "```"))
   expect_equal(rmd_select(rmd2, has_inline_code()), rmd_ast(list()))
   expect_equal(rmd_select(rmd2, has_inline_code("r")), rmd_ast(list()))
@@ -58,7 +58,7 @@ test_that("rmd_has_inline_code() with different rmd classes", {
   expect_true(rmd_has_inline_code(rmd_markdown_with_inline, "r"))
   expect_false(rmd_has_inline_code(rmd_markdown_with_inline, "python"))
   
-  # Test rmd_chunk objects
+  # Test rmd_chunk objects (chunks cannot contain executable inline code)
   rmd_chunk_with_inline = parse_rmd(c("```{r}", "# Comment with `r length(x)`", "x = 1", "```"))[[1]]
   rmd_chunk_without_inline = parse_rmd(c("```{r}", "x = 1", "```"))[[1]]
   
@@ -121,7 +121,7 @@ test_that("has_inline_code() selection helper with different rmd classes", {
   
   # Test selecting all nodes with inline codes
   inline_nodes = rmd_select(test_rmd, has_inline_code())
-  expect_equal(inline_nodes, test_rmd[c(1,3,8)])  # YAML, markdown, chunk, and final markdown
+  expect_equal(inline_nodes, test_rmd[c(1,3,8)])  # YAML, markdown, and final markdown (no chunk)
   
   # Test selecting nodes with specific inline code engines
   r_nodes = rmd_select(test_rmd, has_inline_code("r"))
@@ -263,4 +263,111 @@ test_that("Inline code extraction functionality", {
   # Test complex inline code patterns
   expect_true(rmd_has_inline_code("`r paste('hello', 'world')`"))
   expect_true(rmd_has_inline_code("`{python} print('test')`"))
+})
+
+test_that("rmd_extract_inline_code works across all node types", {
+  
+  # Test rmd_ast extraction
+  test_ast = parse_rmd(c(
+    "---",
+    "title: \"Version `r R.version.string`\"",
+    "---",
+    "",
+    "# Heading with `r version`",
+    "",
+    "Markdown with `r mean(x)` inline code",
+    "",
+    "```{r}",
+    "# Comment with `r length(data)`",
+    "```"
+  ))
+  
+  ast_result = rmd_extract_inline_code(test_ast, flatten = TRUE)
+  expect_length(ast_result, 3)  # No inline code from chunk
+  expect_equal(ast_result[[1]]@engine, "r")
+  expect_equal(ast_result[[1]]@code, "R.version.string")
+  expect_equal(ast_result[[2]]@code, "version")
+  expect_equal(ast_result[[3]]@code, "mean(x)")
+  
+  # Test individual node types that should contain inline code
+  yaml_node = rmd_yaml(yaml = list(title = "Test `r version`"))
+  yaml_result = rmd_extract_inline_code(yaml_node, flatten = TRUE)
+  expect_length(yaml_result, 1)
+  expect_equal(yaml_result[[1]]@engine, "r")
+  expect_equal(yaml_result[[1]]@code, "version")
+  
+  markdown_node = rmd_markdown(lines = c("Text with `python print('hello')` inline code"))
+  markdown_result = rmd_extract_inline_code(markdown_node, flatten = TRUE)
+  expect_length(markdown_result, 1)
+  expect_equal(markdown_result[[1]]@engine, "python")
+  expect_equal(markdown_result[[1]]@code, "print('hello')")
+  
+  chunk_node = rmd_chunk(engine = "r", code = c("# `r comment()`"))
+  chunk_result = rmd_extract_inline_code(chunk_node, flatten = TRUE)
+  expect_length(chunk_result, 0)  # Chunks cannot contain executable inline code
+  
+  raw_chunk_node = rmd_raw_chunk(format = "html", code = c("<p>Version: `r version`</p>"))
+  raw_result = rmd_extract_inline_code(raw_chunk_node, flatten = TRUE)
+  expect_length(raw_result, 1)
+  expect_equal(raw_result[[1]]@engine, "r")
+  expect_equal(raw_result[[1]]@code, "version")
+  
+  code_block_node = rmd_code_block(code = c("/* inline `r code` here */"))
+  code_result = rmd_extract_inline_code(code_block_node, flatten = TRUE)
+  expect_length(code_result, 1)
+  expect_equal(code_result[[1]]@engine, "r")
+  expect_equal(code_result[[1]]@code, "code")
+  
+  code_literal_node = rmd_code_block_literal(code = c("Some `{sql} SELECT *` code"))
+  literal_result = rmd_extract_inline_code(code_literal_node, flatten = TRUE)
+  expect_length(literal_result, 1)
+  expect_equal(literal_result[[1]]@engine, "sql")
+  expect_equal(literal_result[[1]]@code, "SELECT *")
+  
+  heading_node = rmd_heading(name = "Results: `r nrow(data)` rows", level = 1L)
+  heading_result = rmd_extract_inline_code(heading_node, flatten = TRUE)
+  expect_length(heading_result, 1)
+  expect_equal(heading_result[[1]]@engine, "r")
+  expect_equal(heading_result[[1]]@code, "nrow(data)")
+  
+  span_node = rmd_span(text = "Count: `r length(x)` items")
+  span_result = rmd_extract_inline_code(span_node, flatten = TRUE)
+  expect_length(span_result, 1)
+  expect_equal(span_result[[1]]@engine, "r")
+  expect_equal(span_result[[1]]@code, "length(x)")
+  
+  shortcode_node = rmd_shortcode(func = "test", args = c("arg1", "`r value`"))
+  shortcode_result = rmd_extract_inline_code(shortcode_node, flatten = TRUE)
+  expect_length(shortcode_result, 1)
+  expect_equal(shortcode_result[[1]]@engine, "r")
+  expect_equal(shortcode_result[[1]]@code, "value")
+  
+  # Test nodes that should return empty
+  inline_code_node = rmd_inline_code(engine = "r", code = "test")
+  expect_length(rmd_extract_inline_code(inline_code_node, flatten = TRUE), 0)
+  
+  fdiv_open_node = rmd_fenced_div_open()
+  expect_length(rmd_extract_inline_code(fdiv_open_node, flatten = TRUE), 0)
+  
+  fdiv_close_node = rmd_fenced_div_close()
+  expect_length(rmd_extract_inline_code(fdiv_close_node, flatten = TRUE), 0)
+})
+
+test_that("rmd_extract_inline_code flatten parameter works correctly", {
+  
+  # Test nested structure (flatten = FALSE)
+  markdown_node = rmd_markdown(lines = c("Line 1 `r first`", "Line 2 `python second`"))
+  nested_result = rmd_extract_inline_code(markdown_node, flatten = FALSE)
+  expect_equal(names(nested_result), "lines")
+  expect_length(nested_result$lines, 2)
+  expect_length(nested_result$lines[[1]], 1)
+  expect_length(nested_result$lines[[2]], 1)
+  
+  # Test flattened structure (flatten = TRUE)
+  flat_result = rmd_extract_inline_code(markdown_node, flatten = TRUE)
+  expect_length(flat_result, 2)
+  expect_equal(flat_result[[1]]@engine, "r")
+  expect_equal(flat_result[[1]]@code, "first")
+  expect_equal(flat_result[[2]]@engine, "python")
+  expect_equal(flat_result[[2]]@code, "second")
 })

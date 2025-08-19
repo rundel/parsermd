@@ -113,28 +113,81 @@ rmd_extract_inline_code.default = function(x, flatten = FALSE) {
   }
 }
 
-#' @export
-rmd_extract_inline_code.rmd_chunk = function(x, flatten = FALSE) {
-  props = S7::prop_names(x)
-
-  res = purrr::map(props, ~list()) 
+#' @exportS3Method
+rmd_extract_inline_code.rmd_ast = function(x, flatten = FALSE) {
+  res = purrr::map(x@nodes, rmd_extract_inline_code, flatten = flatten)
   
   if (flatten) {
-    res |> purrr::flatten() 
+    res |> purrr::flatten()
   } else {
-    stats::setNames(res, props)
+    res
   }
 }
 
-#' @export
-rmd_extract_inline_code.S7_object = function(x, flatten = FALSE) {
-  props = S7::prop_names(x)
+#' @exportS3Method
+rmd_extract_inline_code.rmd_yaml = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@yaml, flatten = flatten)
+  if (flatten) res else list(yaml = res)
+}
 
-  res = purrr::map(props, ~rmd_extract_inline_code(S7::prop(x, .x), flatten = flatten)) 
-  
-  if (flatten) {
-    res |> purrr::flatten() 
-  } else {
-    stats::setNames(res, props)
-  }
+#' @exportS3Method
+rmd_extract_inline_code.rmd_markdown = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@lines, flatten = flatten)
+  if (flatten) res else list(lines = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_chunk = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_raw_chunk = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@code, flatten = flatten)
+  if (flatten) res else list(code = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_code_block = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@code, flatten = flatten)
+  if (flatten) res else list(code = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_code_block_literal = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@code, flatten = flatten)
+  if (flatten) res else list(code = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_heading = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@name, flatten = flatten)
+  if (flatten) res else list(name = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_span = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@text, flatten = flatten)
+  if (flatten) res else list(text = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_shortcode = function(x, flatten = FALSE) {
+  res = rmd_extract_inline_code(x@args, flatten = flatten)
+  if (flatten) res else list(args = res)
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_inline_code = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_fenced_div_open = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
+}
+
+#' @exportS3Method
+rmd_extract_inline_code.rmd_fenced_div_close = function(x, flatten = FALSE) {
+  if (flatten) list() else list()
 }

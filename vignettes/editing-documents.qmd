@@ -1,0 +1,276 @@
+---
+title: "Modifying Rmd and Quarto Documents"
+format: html
+vignette: >
+  %\VignetteIndexEntry{Modifying Rmd and Quarto Documents}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(parsermd)
+```
+
+# Introduction
+
+While parsing and selecting content from R Markdown and Quarto documents is powerful, the true potential of `parsermd` is realized when you start programmatically modifying those documents. This vignette covers the core functions for editing `rmd_ast` objects: `rmd_modify`, `rmd_insert`, and `rmd_fenced_div_wrap`.
+
+These tools allow you to perform a wide range of tasks, such as:
+
+-   Updating chunk options across an entire document.
+-   Inserting boilerplate content into specific sections.
+-   Wrapping existing content with new structural elements, like callout blocks.
+-   Refactoring and reorganizing documents automatically.
+
+Let's start with a sample document that we'll modify throughout this vignette. We start by parsing it into an `rmd_ast` object.
+
+```{r parse-document}
+hw = system.file("examples/hw01.Rmd", package = "parsermd")
+(rmd = parse_rmd(hw))
+```
+
+---
+
+# Modifying Nodes with `rmd_modify()`
+
+The `rmd_modify()` function is your primary tool for changing the properties of existing nodes in the AST. It works by applying a function to all nodes that match a specific selector.
+
+The syntax is `rmd_modify(x, .f, ...)`, where:
+
+-   `x` is the `rmd_ast` object.
+-   `.f` is a function that takes a node as input and returns the modified node.
+-   `...` are selection arguments using tidyselect syntax, usually one or more of the `rmd_select()` helper functions.
+
+## Example: Changing Chunk Options
+
+Let's say you want to standardize the figure dimensions for all plot chunks in your document. You can use `rmd_modify()` to update the `fig.width` and `fig.height` options.
+
+```{r modify-chunk-options}
+rmd_figs = rmd |>
+  rmd_modify(
+    # The function to apply to each selected node
+    .f = function(node) {
+      rmd_node_set_options(node, fig.width = 8, fig.height = 5)
+    },
+    # The selection criteria - chunks that already have figure options
+    has_type("rmd_chunk")
+  )
+
+# Let's inspect the options of the original plot-dino chunk before modification
+rmd_select(rmd, has_label("plot-dino"), keep_yaml = FALSE) |>
+  rmd_node_options() |>
+  str()
+
+# and after modification
+rmd_select(rmd_figs, has_label("plot-dino"), keep_yaml = FALSE) |>
+  rmd_node_options() |>
+  str()
+```
+
+Notice how the figure dimensions changed from `fig.width = 6, fig.height = 3` to the new standardized `fig.width = 8, fig.height = 5`.
+
+## Example: Modifying Text Content
+
+Beyond changing metadata like chunk options, `rmd_modify()` can also be used to alter the content of nodes. For example, you could perform a search-and-replace operation on all markdown text in a specific section.
+
+Let's replace the word "correlation" with "covariance" in the "Exercise 2" section of our document.
+
+```{r modify-text-content}
+# Create a function to replace text in markdown nodes
+replace_content = function(node) {
+  rmd_node_set_content(
+    node,
+    stringr::str_replace(
+      rmd_node_content(node),
+      "correlation",
+      "covariance"
+    )
+  )
+}
+
+# Apply this function to the "Exercise 2" section markdown nodes
+rmd_text = rmd |>
+  rmd_modify(
+    .f = replace_content,
+    by_section("Exercise 2") & has_type("rmd_markdown")
+  )
+
+# Let's see the modified text
+rmd_text |>
+  rmd_select(by_section("Exercise 2")) |>
+  as_document() |>
+  cat(sep = "\n")
+```
+
+This example shows how you can define a function that operates on markdown content to programmatically change the document's text. 
+
+---
+
+# Inserting Nodes with `rmd_insert()`
+
+To add new content to a document, you can use `rmd_insert()`. This function allows you to insert one or more `rmd_node` objects before or after a selected location.
+
+The syntax is `rmd_insert(x, ..., nodes, location = c("before", "after"), allow_multiple = FALSE)`, where:
+
+-   `x` is the `rmd_ast` object.
+-   `...` are selection arguments for specifying the insertion point.
+-   `nodes` are the `rmd_node` objects to insert.
+-   `location` specifies whether to insert "before" or "after" the selected nodes.
+
+## Example: Adding a Setup Chunk
+
+A common task is to add a setup chunk at the beginning of a document (right after the YAML front matter). Let's create a setup chunk and insert it.
+
+```{r create-setup-chunk}
+# Create a new setup chunk
+setup = rmd_chunk(
+  engine = "r",
+  label = "setup",
+  options = list(include = FALSE),
+  code = "knitr::opts_chunk$set(echo = TRUE)"
+)
+
+setup
+```
+
+Now, let's insert it after the YAML header.
+
+```{r insert-setup-chunk}
+# Insert the new chunk after the YAML node
+rmd_setup = rmd |>
+  rmd_insert(
+    has_type("rmd_yaml"),
+    nodes = setup,
+    location = "after"
+  )
+
+# Print the top of the document to see the new chunk
+print(rmd_setup)
+```
+
+The `setup` chunk has been successfully added to the AST.
+
+---
+
+# Working with Structural Elements
+
+Tools like Quarto have introduced powerful structural elements like Fenced Divs (`:::`) and Shortcodes (`{{< ... >}}`) for creating complex layouts and embedding content. `parsermd` provides functions to both create and interact with these elements.
+
+## Wrapping Nodes in Fenced Divs
+
+The `rmd_fenced_div_wrap()` function makes it easy to wrap existing nodes in a new fenced div, which is useful for creating things like callout blocks or columns.
+
+Let's wrap the "Exercise 1" section of our document in a "warning" callout block to make it more prominent.
+
+```{r wrap-in-callout}
+# Wrap the selected section in a warning callout
+rmd_wrap = rmd |>
+  rmd_fenced_div_wrap(
+    by_section("Exercise 1"),
+    open = rmd_fenced_div_open(classes = ".callout-warning", id = "#note-callout")
+  )
+
+# Let's view the new structure as a document
+rmd_wrap |>
+  rmd_select(by_section("Exercise 1"))
+```
+
+## Selecting Content Inside Fenced Divs
+
+Once you have fenced divs in your document, you might want to select the content *inside* them. You can do this with the `by_fdiv()` selection helper.
+
+Let's use the document we just created and select the content inside the callout.
+
+```{r}
+rmd_select(
+  rmd_wrap,
+  by_fenced_div(class=".callout-warning"),
+  keep_yaml = FALSE
+)
+```
+
+The `by_fenced_div()` helper is very powerful. It takes another selection expression as its argument, allowing you to find divs based on their ID, classes, or attributes, and then selects all the nodes contained within that div.
+
+## Working with Shortcodes
+
+Shortcodes (`{{< ... >}}`) are another powerful way to embed complex or dynamic content in Quarto documents. `parsermd` allows you to find and even modify these shortcodes.
+
+### Extracting Shortcodes
+
+Let's imagine we have a document that uses shortcodes to embed videos.
+
+```{r}
+doc = c(
+  "---",
+  "title: My Video Collection",
+  "---",
+  "",
+  "# Introduction",
+  "",
+  "Here is my first video:",
+  "{{< video https://example.com/video1.mp4 >}}",
+  "",
+  "And here is another one with more options:",
+  "{{< video https://example.com/video2.mp4 title=\"Second Video\" >}}",
+  "",
+  "{{< pagebreak >}}",
+  "",
+  "That's all for now!"
+)
+
+# Parse the text
+qmd = parse_qmd(doc)
+```
+
+Shortcodes are part of `rmd_markdown` nodes. To find them, we can use the `rmd_extract_shortcodes()` function on the content of a markdown node.
+
+```{r}
+# Select the markdown node containing the first shortcode
+md = rmd_select(qmd, has_type("rmd_markdown") & has_shortcode(), keep_yaml = FALSE) 
+
+# Extract shortcodes from that node
+(shortcodes = rmd_extract_shortcodes(md, flatten = TRUE))
+```
+
+The function returns a list of `rmd_shortcode` objects, giving you access to the function name and arguments.
+
+### Modifying Shortcodes
+
+Since shortcodes are part of the markdown text, modifying them involves changing the `lines` property of the containing `rmd_markdown` node.
+
+Let's say we want to replace all `video` shortcodes with a placeholder message but leave the pagebreak intact.
+
+```{r}
+replace_videos = function(node) {
+  # Check if the node contains a video shortcode
+  if (rmd_has_shortcode(node, "video")) {
+    rmd_node_set_content(
+      node,
+      stringr::str_replace_all(
+        rmd_node_content(node),
+        "\\{\\{< video .* >\\}\\}",
+        "[VIDEO PLACEHOLDER]"
+      )
+    )
+  } else {
+    # If not a video shortcode, return the node unchanged
+    node
+  }
+}
+
+# Apply the modification to the whole document
+qmd_modified = rmd_modify(qmd, replace_videos)
+
+# See the result
+as_document(qmd_modified) |>
+  cat(sep="\n")
+```
+
+This demonstrates how you can use `rmd_modify` in combination with text manipulation functions to alter shortcodes.

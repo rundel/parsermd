@@ -61,7 +61,7 @@ as_document.rmd_chunk = function(x, ..., use_yaml_opts = TRUE) {
   
   if (use_yaml_opts && length(x@options) > 0) {
     # Use YAML format for options
-    details = if (x@name != "") x@name else ""
+    details = if (x@label != "") x@label else ""
     if (details != "") details = paste0(" ", details)
     
     # Convert option names from . to - for YAML format
@@ -80,8 +80,8 @@ as_document.rmd_chunk = function(x, ..., use_yaml_opts = TRUE) {
     )
   } else {
     # Use traditional R format for options
-    if (x@name != "") {
-      details = x@name
+    if (x@label != "") {
+      details = x@label
       if (length(x@options) > 0)
         details = paste0(details, ", ")
     } else {

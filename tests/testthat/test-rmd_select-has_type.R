@@ -4,9 +4,9 @@ test_that("has_type works with single type", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test1", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test1", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
-      rmd_chunk(engine = "r", name = "test2", code = "2 + 2")
+      rmd_chunk(engine = "r", label = "test2", code = "2 + 2")
     )
   )
   
@@ -25,7 +25,7 @@ test_that("has_type works with multiple types", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
       rmd_heading(name = "Section 2", level = 2L)
     )
@@ -64,7 +64,7 @@ test_that("has_type works with specific node types", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test", output = "html_document")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text"),
       rmd_heading(name = "Section 2", level = 2L),
       rmd_markdown(lines = "More text")
@@ -97,11 +97,11 @@ test_that("has_type preserves node order", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "First", level = 1L),
-      rmd_chunk(engine = "r", name = "chunk1", code = "x = 1"),
+      rmd_chunk(engine = "r", label = "chunk1", code = "x = 1"),
       rmd_markdown(lines = "Text 1"),
-      rmd_chunk(engine = "r", name = "chunk2", code = "y = 2"),
+      rmd_chunk(engine = "r", label = "chunk2", code = "y = 2"),
       rmd_heading(name = "Second", level = 2L),
-      rmd_chunk(engine = "python", name = "chunk3", code = "z = 3")
+      rmd_chunk(engine = "python", label = "chunk3", code = "z = 3")
     )
   )
   
@@ -112,7 +112,7 @@ test_that("has_type preserves node order", {
   
   # Verify order by checking chunk names
   expect_equal(
-    rmd_node_attr(chunk_subset, "name"),
+    rmd_node_attr(chunk_subset, "label"),
     list("chunk1", "chunk2", "chunk3")
   )
 })
@@ -123,14 +123,14 @@ test_that("has_type works with complex node properties", {
     nodes = list(
       rmd_chunk(
         engine = "r", 
-        name = "setup", 
+        label = "setup", 
         code = "library(ggplot2)",
         options = list(include = FALSE)
       ),
       rmd_markdown(lines = "Introduction text"),
       rmd_chunk(
         engine = "python", 
-        name = "analysis", 
+        label = "analysis", 
         code = "import pandas as pd",
         options = list(eval = TRUE)
       ),
@@ -166,7 +166,7 @@ test_that("keep_yaml defaults to TRUE", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -186,7 +186,7 @@ test_that("keep_yaml = TRUE includes YAML nodes", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -206,7 +206,7 @@ test_that("keep_yaml = FALSE excludes YAML nodes", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -227,7 +227,7 @@ test_that("keep_yaml works with multiple YAML nodes", {
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
       rmd_yaml(yaml = list(output = "html_document")),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -246,7 +246,7 @@ test_that("keep_yaml works when no YAML nodes exist", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1"),
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1"),
       rmd_markdown(lines = "Some text")
     )
   )
@@ -266,7 +266,7 @@ test_that("keep_yaml removes duplicates when YAML explicitly selected", {
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
       rmd_heading(name = "Section 1", level = 1L),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1")
     )
   )
   
@@ -284,7 +284,7 @@ test_that("keep_yaml validates input", {
   original_ast = rmd_ast(
     nodes = list(
       rmd_yaml(yaml = list(title = "Test")),
-      rmd_chunk(engine = "r", name = "test", code = "1 + 1")
+      rmd_chunk(engine = "r", label = "test", code = "1 + 1")
     )
   )
   

@@ -2,9 +2,64 @@
 % Please edit documentation in R/rmd_classes_s7.R
 \name{rmd_classes_s7}
 \alias{rmd_classes_s7}
+\alias{rmd_node}
+\alias{rmd_ast}
+\alias{rmd_yaml}
 \title{S7 Class Definitions for RMD Nodes}
+\usage{
+rmd_node()
+
+rmd_ast(nodes = list())
+
+rmd_yaml(yaml = list())
+}
+\arguments{
+\item{nodes}{List of rmd_node objects for the AST container}
+
+\item{yaml}{List containing YAML frontmatter content}
+}
 \description{
 S7 classes for representing R Markdown AST nodes with automatic validation.
 All classes inherit from the base \code{rmd_node} class and provide type-safe object creation
 with built-in validation of properties.
+}
+\details{
+The following S7 classes are available for creating R Markdown AST nodes:
+\subsection{Core Classes}{
+\itemize{
+\item \code{rmd_node()} - Abstract base class for all R Markdown AST nodes. This is the parent class
+for all specific node types and should not be instantiated directly.
+\item \code{rmd_ast()} - Container for multiple nodes representing a complete document AST.
+}
+}
+
+\subsection{Content Nodes}{
+\itemize{
+\item \code{rmd_yaml()} - YAML frontmatter header containing document metadata.
+\item \code{rmd_chunk()} - Code chunks with executable code in various engines (R, Python, etc.).
+\item \code{rmd_raw_chunk()} - Raw code chunks that are not executed.
+\item \code{rmd_markdown()} - Plain markdown text content.
+\item \code{rmd_heading()} - Section headings at various levels (1-6).
+}
+}
+
+\subsection{Code and Inline Elements}{
+\itemize{
+\item \code{rmd_code_block()} - Fenced code blocks without execution.
+\item \code{rmd_code_block_literal()} - Code blocks with literal \{\{...\}\} attributes.
+\item \code{rmd_inline_code()} - Inline code spans within markdown text.
+\item \code{rmd_shortcode()} - Quarto/Pandoc shortcodes for special functionality.
+\item \code{rmd_span()} - Generic inline spans with attributes.
+}
+}
+
+\subsection{Structural Elements}{
+\itemize{
+\item \code{rmd_fenced_div_open()} - Opening tags for fenced divs (:::).
+\item \code{rmd_fenced_div_close()} - Closing tags for fenced divs (:::).
+}
+}
+}
+\seealso{
+\link{rmd_node_utilities} for utility functions that work with these S7 objects
 }

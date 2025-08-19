@@ -113,14 +113,14 @@ tree_node.rmd_fenced_div_open = function(x) {
   # Build display components
   components = character(0)
   
-  # Add ID with # prefix
+  # Add ID (already has # prefix)
   if (length(x@id) > 0) {
-    components = c(components, paste0("#", x@id))
+    components = c(components, x@id)
   }
   
-  # Add classes with . prefix
+  # Add classes (already have . prefix)
   if (length(x@classes) > 0) {
-    components = c(components, paste0(".", x@classes))
+    components = c(components, x@classes)
   }
   
   # Add key=value pairs
@@ -136,7 +136,7 @@ tree_node.rmd_fenced_div_open = function(x) {
   }
   
   list(
-    text = "Open Fenced div",
+    text = "Fenced div (open)" ,
     label = label
   )
 }
@@ -144,7 +144,7 @@ tree_node.rmd_fenced_div_open = function(x) {
 #' @exportS3Method
 tree_node.rmd_fenced_div_close = function(x) {
   list(
-    text = "Close Fenced div",
+    text = "Fenced div (close)",
     label = ""
   )
 }
@@ -179,27 +179,77 @@ scale_levels = function(x) {
 }
 
 get_nesting_levels = function(ast) {
+  # First, find all fenced div pairs to understand the structure
+  fdiv_pairs = find_fenced_div_pairs(ast@nodes)
+  
   levels = 0
   node_levels = integer()
   fdiv_depth = 0
 
-  for(node in ast@nodes) {
+  for(i in seq_along(ast@nodes)) {
+    node = ast@nodes[[i]]
+    
     if (is_heading(node)) {
       levels = levels[levels < node@level]
     }
 
-    if (inherits(node, "rmd_fenced_div_close")) {
-      fdiv_depth = fdiv_depth - 1
-    }
-
-    node_levels = append(node_levels, max(levels) + fdiv_depth)
-
-    if (is_heading(node)) {
-      levels = append(levels, node@level)
+    # Check if this is a fenced div and find its pair
+    fdiv_pair = NULL
+    if (inherits(node, "rmd_fenced_div_open") || inherits(node, "rmd_fenced_div_close")) {
+      for (pair in fdiv_pairs) {
+        if (pair$open_pos == i || pair$close_pos == i) {
+          fdiv_pair = pair
+          break
+        }
+      }
     }
 
     if (inherits(node, "rmd_fenced_div_open")) {
+      # For open fenced div, it should be at the same level as the first content it wraps
+      if (!is.null(fdiv_pair) && fdiv_pair$close_pos > fdiv_pair$open_pos + 1) {
+        # Look at the first wrapped node to determine the appropriate level
+        first_content_pos = fdiv_pair$open_pos + 1
+        first_content_node = ast@nodes[[first_content_pos]]
+        
+        if (is_heading(first_content_node)) {
+          # If first content is a heading, the fenced div should be at the level
+          # that would make the heading a child (one level up from where the heading would naturally be)
+          # Since headings at the same level are siblings, we want the fenced div to be their parent
+          
+          # Temporarily calculate what level the heading would be at without the fenced div
+          temp_levels = levels
+          if (is_heading(first_content_node)) {
+            temp_levels = temp_levels[temp_levels < first_content_node@level]
+          }
+          heading_level = max(temp_levels)
+          # Fenced div should be at the same level as other headings of this level
+          node_levels = append(node_levels, heading_level)
+        } else {
+          # For non-heading first content, use current context
+          node_levels = append(node_levels, max(levels))
+        }
+      } else {
+        # Empty fenced div - use current level
+        node_levels = append(node_levels, max(levels))
+      }
       fdiv_depth = fdiv_depth + 1
+    } else if (inherits(node, "rmd_fenced_div_close")) {
+      fdiv_depth = fdiv_depth - 1
+      # Close div should be at the same level as its matching open div
+      if (!is.null(fdiv_pair)) {
+        open_level = node_levels[fdiv_pair$open_pos]
+        node_levels = append(node_levels, open_level)
+      } else {
+        node_levels = append(node_levels, max(levels))
+      }
+    } else {
+      # Regular content - include fdiv_depth for proper nesting inside fenced divs
+      node_levels = append(node_levels, max(levels) + fdiv_depth)
+    }
+
+    # Update state AFTER calculating the current node's level
+    if (is_heading(node)) {
+      levels = append(levels, node@level)
     }
   }
 
@@ -234,8 +284,10 @@ print_tree = function(ast, flat = FALSE) {
   else
     nesting_levels = rep(0, length(ast))
 
-  prev_level = 0
-  indent = ""
+  # Build indentation mapping for each level
+  level_indents = list()
+  current_indent = ""
+  current_level = 0
   prev_sibs = FALSE
 
   for(j in seq_along(ast@nodes)) {
@@ -245,29 +297,46 @@ print_tree = function(ast, flat = FALSE) {
     details = tree_node(cur_node)
 
     sibs = has_sibling(nesting_levels[j], nesting_levels[-(1:j)])
-
+    level = nesting_levels[j]
 
     if (!sibs)
       prefix = end_leaf
     else
       prefix = mid_leaf
 
-    if (nesting_levels[j] > prev_level) {
+    # Calculate correct indentation for this level
+    if (level > current_level) {
+      # Going deeper
       if (prev_sibs)
-        indent = paste0(indent, child_space)
+        current_indent = paste0(current_indent, child_space)
       else
-        indent = paste0(indent, empty_space)
-    } else if (nesting_levels[j] < prev_level) {
-      indent = substr(indent, 1, indent_width*nesting_levels[j])
+        current_indent = paste0(current_indent, empty_space)
+      level_indents[[as.character(level)]] = current_indent
+    } else if (level < current_level) {
+      # Going shallower - use previously stored indentation for this level
+      if (!is.null(level_indents[[as.character(level)]])) {
+        current_indent = level_indents[[as.character(level)]]
+      } else {
+        # Fallback: calculate based on level depth
+        current_indent = substr(current_indent, 1, indent_width * level)
+      }
+    } else {
+      # Same level - use stored indentation if available
+      if (!is.null(level_indents[[as.character(level)]])) {
+        current_indent = level_indents[[as.character(level)]]
+      }
     }
 
+    # Store indentation for this level for future use
+    level_indents[[as.character(level)]] = current_indent
+
     cli::cat_line(
-      indent,
+      current_indent,
       prefix,
       details$text, " ", cli::col_grey(details$label)
     )
 
-    prev_level = nesting_levels[j]
+    current_level = level
     prev_sibs = sibs
   }
 

@@ -393,7 +393,7 @@ template <> SEXP wrap(client::ast::chunk const& chunk) {
   Rcpp::Function rmd_chunk = pkg["rmd_chunk"];
   return rmd_chunk(
     Rcpp::Named("engine") = chunk.args.engine,
-    Rcpp::Named("name") = chunk.args.name,
+    Rcpp::Named("label") = chunk.args.name,
     Rcpp::Named("options") = options,
     Rcpp::Named("code") = chunk.code,
     Rcpp::Named("indent") = chunk.args.indent,

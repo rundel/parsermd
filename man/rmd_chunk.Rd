@@ -6,7 +6,7 @@
 \usage{
 rmd_chunk(
   engine = "r",
-  name = "",
+  label = "",
   options = list(),
   code = character(),
   indent = "",
@@ -16,7 +16,7 @@ rmd_chunk(
 \arguments{
 \item{engine}{Character. Language engine}
 
-\item{name}{Character. Chunk name}
+\item{label}{Character. Chunk label}
 
 \item{options}{List. Combined chunk options (traditional and YAML)}
 
