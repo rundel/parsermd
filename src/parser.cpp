@@ -429,9 +429,42 @@ template <> SEXP wrap(client::ast::heading const& h) {
   Rcpp::Environment pkg = Rcpp::Environment::namespace_env("parsermd");
   Rcpp::Function rmd_heading = pkg["rmd_heading"];
   
+  // Trim trailing spaces from name
+  std::string trimmed_name = h.name;
+  trimmed_name.erase(trimmed_name.find_last_not_of(' ') + 1);
+  
+  // Extract ID (keep # prefix)
+  std::string id_str = h.attr.id;
+  Rcpp::CharacterVector id_vec;
+  if (!id_str.empty()) {
+    id_vec = Rcpp::CharacterVector::create(id_str);
+  }
+
+  // Extract classes (keep . prefix)
+  Rcpp::CharacterVector classes_vec;
+  for (const auto& cls : h.attr.classes) {
+    classes_vec.push_back(cls);
+  }
+
+  // Extract key-value attributes
+  Rcpp::CharacterVector attr_vec;
+  for (const auto& kv : h.attr.kvs) {
+    attr_vec.push_back(kv.value);
+  }
+  if (attr_vec.size() > 0) {
+    Rcpp::CharacterVector attr_names;
+    for (const auto& kv : h.attr.kvs) {
+      attr_names.push_back(kv.key);
+    }
+    attr_vec.names() = attr_names;
+  }
+  
   return rmd_heading(
-    Rcpp::Named("name") = h.name,
-    Rcpp::Named("level") = h.level
+    Rcpp::Named("name") = trimmed_name,
+    Rcpp::Named("level") = h.level,
+    Rcpp::Named("id") = id_vec,
+    Rcpp::Named("classes") = classes_vec,
+    Rcpp::Named("attr") = attr_vec
   );
 };
 

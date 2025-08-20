@@ -109,13 +109,19 @@ S7::method(length, rmd_yaml) = function(x) {
 #' @description S7 class representing a markdown heading
 #' @param name Character. Heading text
 #' @param level Integer. Heading level (1-6)
+#' @param id Character vector. HTML ID (length 0 or 1)
+#' @param classes Character vector. CSS classes
+#' @param attr Named character vector. Key-value attributes (keys as names)
 #' @export
 rmd_heading = S7::new_class(
   "rmd_heading",
   parent = rmd_node,
   properties = list(
     name = S7::class_character,
-    level = S7::class_integer
+    level = S7::class_integer,
+    id = S7::new_property(S7::class_character, default = quote(character())),
+    classes = S7::new_property(S7::class_character, default = quote(character())),
+    attr = S7::new_property(S7::class_character, default = quote(character()))
   ),
   validator = function(self) {
     if (length(self@name) != 1) {
@@ -123,6 +129,18 @@ rmd_heading = S7::new_class(
     }
     if (length(self@level) != 1 || self@level < 1 || self@level > 6) {
       return("level must be a single integer between 1 and 6")
+    }
+    if (length(self@id) > 1) {
+      return("id must be a character vector of length 0 or 1")
+    }
+    if (length(self@id) == 1 && !grepl("^#", self@id)) {
+      return("id must start with '#' when present")
+    }
+    if (any(!grepl("^\\.", self@classes))) {
+      return("all classes must start with '.' when present")
+    }
+    if (length(self@attr) > 0 && is.null(names(self@attr))) {
+      return("attr must be a named character vector when not empty")
     }
     NULL
   },

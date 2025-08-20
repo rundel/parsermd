@@ -126,7 +126,7 @@
       check_fdiv_open_parser("::: {.}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {.}
                ^~
 
@@ -136,7 +136,7 @@
       check_fdiv_open_parser("::: {#}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {#}
                ^~
 
@@ -146,7 +146,7 @@
       check_fdiv_open_parser("::: {key=}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {key=}
                ^~~~~
 
@@ -156,7 +156,7 @@
       check_fdiv_open_parser("::: {.class\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {.class
                      ^
 
@@ -166,7 +166,7 @@
       check_fdiv_open_parser("::: {.myclass #myid}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {.myclass #myid}
                         ^~~~~~
 
@@ -176,7 +176,7 @@
       check_fdiv_open_parser("::: {.my-class_name #my-id_value}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {.my-class_name #my-id_value}
                               ^~~~~~~~~~~~~
 
@@ -186,7 +186,7 @@
       check_fdiv_open_parser("::: {.class1 #id2 data-level=3}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {.class1 #id2 data-level=3}
                        ^~~~~~~~~~~~~~~~~~
 
@@ -196,7 +196,7 @@
       check_fdiv_open_parser("::: {data-value=test .highlight}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {data-value=test .highlight}
                                ^~~~~~~~~~~
 
@@ -207,7 +207,7 @@
         "::: {title=\"Main Section\" data-id=section1 .highlighted}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {title="Main Section" data-id=section1 .highlighted}
                                                      ^~~~~~~~~~~~~
 
@@ -217,7 +217,7 @@
       check_fdiv_open_parser("::: {data-role=button #submit}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {data-role=button #submit}
                                 ^~~~~~~~
 
@@ -227,7 +227,7 @@
       check_fdiv_open_parser("::: {warning}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {warning}
                ^~~~~~~~
 
@@ -237,7 +237,7 @@
       check_fdiv_open_parser("::: {test}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {test}
                ^~~~~
 
@@ -247,7 +247,7 @@
       check_fdiv_open_parser("::: {#id1 #id2}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected "}"
+      ! Failed to parse line 1
       1 | ::: {#id1 #id2}
                     ^~~~~
 

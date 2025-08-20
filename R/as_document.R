@@ -203,10 +203,40 @@ as_document.rmd_code_block_literal = function(x, ...) {
 
 #' @exportS3Method
 as_document.rmd_heading = function(x, ...) {
-  paste(
+  heading_text = paste(
     paste(rep("#", x@level), collapse=""),
     x@name
   )
+  
+  # Add pandoc attributes if present
+  has_id = length(x@id) > 0
+  has_attr = length(x@attr) > 0  
+  has_classes = length(x@classes) > 0
+  
+  if (has_id || has_attr || has_classes) {
+    components = character(0)
+    
+    # Add ID (already has # prefix)
+    if (has_id) {
+      components = c(components, x@id)
+    }
+    
+    # Add classes (already have . prefix)
+    if (has_classes) {
+      components = c(components, x@classes)
+    }
+    
+    # Add key=value pairs
+    if (has_attr) {
+      kv_pairs = paste0(names(x@attr), "=", x@attr)
+      components = c(components, kv_pairs)
+    }
+    
+    attr_str = paste0(" {", paste(components, collapse=" "), "}")
+    heading_text = paste0(heading_text, attr_str)
+  }
+  
+  heading_text
 }
 
 

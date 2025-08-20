@@ -23,9 +23,26 @@ tree_node.rmd_yaml = function(x) {
 
 #' @exportS3Method
 tree_node.rmd_heading = function(x) {
+  # Format attributes for display
+  has_id = length(x@id) > 0
+  has_attr = length(x@attr) > 0  
+  has_classes = length(x@classes) > 0
+  
+  attr_display = ""
+  if (has_id || has_attr || has_classes) {
+    components = character(0)
+    if (has_id) components = c(components, x@id)
+    if (has_classes) components = c(components, x@classes)
+    if (has_attr) {
+      kv_pairs = paste0(names(x@attr), "=", x@attr)
+      components = c(components, kv_pairs)
+    }
+    attr_display = paste0(" {", paste(components, collapse=" "), "}")
+  }
+  
   list(
     text = "Heading",
-    label = paste0("[h", x@level, "] - ",  cli::style_bold(x@name))
+    label = paste0("[h", x@level, "] - ",  cli::style_bold(x@name), cli::style_italic(attr_display))
   )
 }
 

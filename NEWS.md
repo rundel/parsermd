@@ -4,6 +4,7 @@
 
 * Revised the algorithm for determining node depth in the AST to better work with fenced divs
 
+* Add support for pandoc fenced attributes for headings
 
 # parsermd 0.2.0 (development version)
 
