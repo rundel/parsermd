@@ -1,5 +1,10 @@
 # parsermd (development version)
 
+* Fixed a bug in parsing indented chunks with blank lines ([#33](https://github.com/rundel/parsermd/issues/33))
+
+* Revised the algorithm for determining node depth in the AST to better work with fenced divs
+
+
 # parsermd 0.2.0 (development version)
 
 * **Breaking Change**: Migrated from S3/S4 classes to S7 classes for all AST node types (`rmd_ast`, `rmd_chunk`, `rmd_heading`, etc.)
