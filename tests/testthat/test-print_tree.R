@@ -22,23 +22,46 @@ test_that("tree printing", {
 
 test_that("tree printing with fenced divs", {
   
-  rmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
+  qmd = parse_rmd(system.file("examples/hw01.Rmd", package = "parsermd"))
 
-  rmd_wrap = rmd |>
+  qmd_wrap = qmd |>
     rmd_fenced_div_wrap(
       by_section("Exercise 1"),
       open = rmd_fenced_div_open(classes = ".callout-warning", id = "#note-callout")
     )
 
-  expect_snapshot_output(print(rmd_wrap))
-  expect_snapshot_output(print(rmd_wrap |> rmd_select(by_section("Exercise 1"))))
+  expect_snapshot_output(print(qmd_wrap))
+  expect_snapshot_output(print(qmd_wrap |> rmd_select(by_section("Exercise 1"))))
 
-  rmd_wrap = rmd |>
+  qmd_wrap = qmd |>
     rmd_fenced_div_wrap(
       by_section(c("Exercise 1", "Solution"), keep_parents = FALSE),
       open = rmd_fenced_div_open(classes = ".callout-warning", id = "#note-callout")
     )
 
-  expect_snapshot_output(print(rmd_wrap))
-  expect_snapshot_output(print(rmd_wrap |> rmd_select(by_section(c("Exercise 1", "Solution")))))
+  expect_snapshot_output(print(qmd_wrap))
+  expect_snapshot_output(print(qmd_wrap |> rmd_select(by_section(c("Exercise 1", "Solution")))))
+
+  qmd = "### Section 1
+
+::: {.callout-note}
+## Test
+More text
+:::
+
+### Section 2
+
+Stuff
+  
+## Section 3
+  
+Blah
+  
+### Sub Section 1
+  
+Fizzbuzz
+"
+  
+  expect_snapshot_output(print(parse_qmd(qmd)))
+
 })

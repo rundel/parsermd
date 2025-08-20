@@ -178,6 +178,7 @@ scale_levels = function(x) {
   res - 1
 }
 
+
 get_nesting_levels = function(ast) {
   # First, find all fenced div pairs to understand the structure
   fdiv_pairs = find_fenced_div_pairs(ast@nodes)
@@ -280,9 +281,9 @@ print_tree = function(ast, flat = FALSE) {
   end_leaf = pc(ch$l, ch$h, ch$h, " ")
 
   if (!flat)
-    nesting_levels = get_nesting_levels(ast)
+    nesting_levels = rmd_node_depth(ast)
   else
-    nesting_levels = rep(0, length(ast))
+    nesting_levels = rep(0, length(ast@nodes))
 
   # Build indentation mapping for each level
   level_indents = list()
