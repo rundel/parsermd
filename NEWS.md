@@ -6,7 +6,7 @@
 
 * Add support for pandoc fenced attributes for headings
 
-# parsermd 0.2.0 (development version)
+# parsermd 0.2.0
 
 * **Breaking Change**: Migrated from S3/S4 classes to S7 classes for all AST node types (`rmd_ast`, `rmd_chunk`, `rmd_heading`, etc.)
 
