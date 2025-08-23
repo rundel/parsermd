@@ -48,8 +48,13 @@ find_depth = function(x, start_depth = 0) {
       stopifnot(i < length(x))
       j = find_fdiv_close(x, i+1)
       
+      if (i+1 == j) {
+        res = integer()
+      } else {
       res = find_depth(x[(i+1):(j-1)], start_depth = cur_depth+1)
+      }
       node_depth[i:j] = c(cur_depth, res, cur_depth)
+      
       i = j + 1
     } else {
       node_depth[i] = cur_depth
