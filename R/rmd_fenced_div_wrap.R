@@ -19,6 +19,8 @@
 #' @param allow_multiple Logical. If `FALSE` (default), throws an error when 
 #'   selected indices are discontinuous. If `TRUE`, allows wrapping multiple 
 #'   discontinuous ranges separately.
+#' @param wrap_children Logical. If `TRUE`, wraps all child nodes of the selected node(s). 
+#' If `FALSE`, wraps the selected node(s). Defaults to `FALSE`.
 #'
 #' @return Returns the modified Rmd object with selected nodes wrapped in the fenced div(s).
 #'
@@ -37,12 +39,12 @@
 #'
 #' @export
 #'
-rmd_fenced_div_wrap = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE) {
+rmd_fenced_div_wrap = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE, wrap_children = FALSE) {
   UseMethod("rmd_fenced_div_wrap")
 }
 
 #' @exportS3Method
-rmd_fenced_div_wrap.default = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE) {
+rmd_fenced_div_wrap.default = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE, wrap_children = FALSE) {
   classes = paste(class(x), collapse = ", ")
   cli::cli_abort("This function does not support class: {classes}")
 }
@@ -115,7 +117,7 @@ insert_nodes_at_positions = function(nodes, insertions) {
 
 
 #' @exportS3Method
-rmd_fenced_div_wrap.rmd_ast = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE) {
+rmd_fenced_div_wrap.rmd_ast = function(x, ..., open = rmd_fenced_div_open(), allow_multiple = FALSE, wrap_children = FALSE) {
   checkmate::assert_class(x, "rmd_ast")
   if (!S7::S7_inherits(open, rmd_fenced_div_open)) {
     cli::cli_abort("{.arg open} must be an {.cls rmd_fenced_div_open} object")
@@ -153,8 +155,15 @@ rmd_fenced_div_wrap.rmd_ast = function(x, ..., open = rmd_fenced_div_open(), all
   # Process ranges in reverse order to avoid index shifting
   for (i in rev(seq_along(ranges))) {
     range = ranges[[i]]
-    start_pos = range[1]
-    end_pos = range[2]
+    
+    if (wrap_children) {
+      start_pos = range[1]+1
+      end_pos = range[2]
+    } else {
+      start_pos = range[1]
+      end_pos = range[2]
+    }
+
     
     # Create closing div that matches the opening div structure
     close = rmd_fenced_div_close()
