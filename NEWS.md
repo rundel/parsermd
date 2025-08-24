@@ -4,7 +4,13 @@
 
 * Revised the algorithm for determining node depth in the AST to better work with fenced divs
 
+  * As a consequnce of these changes `by_section()` may yield slighly different results in some cases.
+
+  * The `rmd_node_depth()` function was added to expose these depth calculations.
+
 * Add support for pandoc fenced attributes for headings
+
+* Added `wrap_children` argument to `rmd_fenced_div_wrap()` to control whether the selected nodes or their children are wrapped.
 
 # parsermd 0.2.0
 
