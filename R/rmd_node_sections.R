@@ -29,14 +29,20 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
   # Pre-process fenced div pairs to ensure they get consistent section assignment
   fdiv_pairs = find_fenced_div_pairs(x@nodes)
   
+  # Create a set of positions that are inside fenced divs
+  positions_inside_fdivs = create_fdiv_inside_positions(fdiv_pairs)
+  
   for(j in seq_along(x@nodes)) {
     node = x@nodes[[j]]
     if (inherits(node, "rmd_heading")) {
-      labels[node@level:6] = NA_character_
-      labels[node@level] = node@name
+      # Only update section hierarchy for headings NOT inside fenced divs
+      if (!j %in% positions_inside_fdivs) {
+        labels[node@level:6] = NA_character_
+        labels[node@level] = node@name
 
-      max_level = max(max_level, node@level)
-      min_level = min(min_level, node@level)
+        max_level = max(max_level, node@level)
+        min_level = min(min_level, node@level)
+      }
     }
 
     sections[[length(sections)+1]] = labels
@@ -59,18 +65,44 @@ rmd_node_sections = function(x, levels = 1:6, drop_na = FALSE) {
   sections
 }
 
-#' Find fenced div open/close pairs
-#' @param nodes List of rmd nodes
-#' @return List of pairs with open_pos and close_pos indices
+#' Create set of positions inside fenced divs
+#' @param fdiv_pairs Numeric vector of fenced div pairs from find_fenced_div_pairs()
+#' @return Set of position indices that are inside fenced divs
 #' @noRd
-find_fenced_div_pairs = function(nodes) {
-  if (length(nodes) == 0) return(list())
+create_fdiv_inside_positions = function(fdiv_pairs) {
+  positions = integer(0)
   
-  pairs = list()
+  # fdiv_pairs is a numeric vector where index is open position, value is close position
+  open_positions = which(!is.na(fdiv_pairs))
+  
+  for (open_pos in open_positions) {
+    close_pos = fdiv_pairs[open_pos]
+    # Include all positions between open and close (exclusive of open/close themselves)
+    if (close_pos > open_pos + 1) {
+      inside_positions = (open_pos + 1):(close_pos - 1)
+      positions = c(positions, inside_positions)
+    }
+  }
+  
+  unique(positions)
+}
+
+#' Find fenced div open/close pairs
+#' @param x List of rmd nodes or rmd_ast object
+#' @return Numeric vector of positions, index is the open position value is the close position
+#' @noRd
+find_fenced_div_pairs = function(x) {
+  if (S7::S7_inherits(x, rmd_ast)) {
+    x = x@nodes
+  }
+
+  if (length(x) == 0) return(list())
+  
+  pairs = rep(NA, length(x))  # To store pairs of positions
   stack = integer(0)  # Stack to track open positions
   
-  for (i in seq_along(nodes)) {
-    node = nodes[[i]]
+  for (i in seq_along(x)) {
+    node = x[[i]]
     
     if (S7::S7_inherits(node, rmd_fenced_div_open)) {
       stack = c(stack, i)  # Push open position onto stack
@@ -81,10 +113,7 @@ find_fenced_div_pairs = function(nodes) {
         stack = stack[-length(stack)]
         
         # Record the pair
-        pairs[[length(pairs) + 1]] = list(
-          open_pos = open_pos,
-          close_pos = i
-        )
+        pairs[open_pos] = i
       }
     }
   }
@@ -95,15 +124,17 @@ find_fenced_div_pairs = function(nodes) {
 #' Fix section assignments for fenced div pairs
 #' @param sections List of section assignments (one per node)
 #' @param nodes List of rmd nodes
-#' @param fdiv_pairs List of fenced div pairs from find_fenced_div_pairs()
+#' @param fdiv_pairs Numeric vector of fenced div pairs from find_fenced_div_pairs()
 #' @return Modified sections list with balanced fenced div assignments
 #' @noRd
 fix_fenced_div_sections = function(sections, nodes, fdiv_pairs) {
   if (length(fdiv_pairs) == 0) return(sections)
   
-  for (pair in fdiv_pairs) {
-    open_pos = pair$open_pos
-    close_pos = pair$close_pos
+  # fdiv_pairs is a numeric vector where index is open position, value is close position
+  open_positions = which(!is.na(fdiv_pairs))
+  
+  for (open_pos in open_positions) {
+    close_pos = fdiv_pairs[open_pos]
     
     # Find the dominant section among the wrapped content
     # (excluding the open/close tags themselves)
