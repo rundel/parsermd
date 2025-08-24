@@ -364,7 +364,8 @@ test_that("rmd_fenced_div_wrap preserves section selection balance after wrappin
   rmd_wrap = rmd |>
     rmd_fenced_div_wrap(
       by_section("Exercise 1"),
-      open = rmd_fenced_div_open(classes = ".callout-warning", id = "#test-callout")
+      open = rmd_fenced_div_open(classes = ".callout-warning", id = "#test-callout"),
+      wrap_children = TRUE
     )
   
   # Should be able to select the same section after wrapping without errors
@@ -393,11 +394,13 @@ test_that("rmd_fenced_div_wrap handles multiple non-overlapping sections", {
   rmd_wrap = rmd |>
     rmd_fenced_div_wrap(
       by_section("Exercise 1"),
-      open = rmd_fenced_div_open(classes = ".callout-warning")
+      open = rmd_fenced_div_open(classes = ".callout-warning"),
+      wrap_children = TRUE
     ) |>
     rmd_fenced_div_wrap(
       by_section("Exercise 2"),
-      open = rmd_fenced_div_open(classes = ".callout-note")
+      open = rmd_fenced_div_open(classes = ".callout-note"),
+      wrap_children = TRUE
     )
   
   # Both sections should be selectable
@@ -430,7 +433,8 @@ test_that("rmd_fenced_div_wrap section assignments are consistent", {
   rmd_wrap = rmd |>
     rmd_fenced_div_wrap(
       by_section("Exercise 1"),
-      open = rmd_fenced_div_open(classes = ".test")
+      open = rmd_fenced_div_open(classes = ".test"),
+      wrap_children = TRUE
     )
   
   # Get section assignments
@@ -510,7 +514,8 @@ test_that("rmd_fenced_div_wrap handles empty sections gracefully", {
   wrapped = original_ast |>
     rmd_fenced_div_wrap(
       by_section("Empty Section"),
-      open = rmd_fenced_div_open(classes = ".empty-wrap")
+      open = rmd_fenced_div_open(classes = ".empty-wrap"),
+      wrap_children = TRUE
     )
   
   types = rmd_node_type(wrapped)

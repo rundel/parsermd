@@ -77,8 +77,8 @@ has_type = function(types) {
 #' They consist of a character vector of heading names where each subsequent value
 #' is assumed to be nested within the preceding value. For example, the section
 #' selector `c("Sec 1", "Sec 2")` would select all nodes that are contained within
-#' a section named `Sec 2` that is in turn contained within a section named `Sec 1`
-#' (or a section contained within a section named `Sec 1`, and so on).
+#' a heading named `Sec 2` that is in turn contained within a heading named `Sec 1`
+#' (or a heading contained within a heading named `Sec 1`, and so on).
 #'
 #' The individual section names can be specified using wildcards (aka globbing
 #' patterns), which may match one or more sections within the document, e.g.
@@ -95,18 +95,53 @@ by_section = function(sec_ref, keep_parents = TRUE) {
     rmd_ast()
 
   types = rmd_node_type(x)
-  secs = rmd_node_sections(x, drop_na = TRUE)
-
+  depths = rmd_node_depth(x)
+  fdiv_pairs = find_fenced_div_pairs(x@nodes)
+  
+  heading_positions = which(types == "rmd_heading")
+  if (length(heading_positions) == 0) return(integer(0))
+  
+  heading_names = purrr::map_chr(x@nodes, "name", .default=NA_character_)
+  
   regex = utils::glob2rx(sec_ref)
-  matching = purrr::map_lgl(secs, subset_match, regex = regex)
+  heading_matches = purrr::map(regex, ~which(grepl(.x, heading_names))) |>
+    expand.grid() |>
+    purrr::pmap(~c(...))
 
-  if (any(matching) & keep_parents) {
-    parents = (parent_match(secs, regex) & types == "rmd_heading")
-    matching = matching | parents
+  if (length(sec_ref) > 1) {
+    heading_matches = purrr::keep(
+      heading_matches,
+      function(pos) {
+        # Check if each pair includes only children
+        all(purrr::map2_lgl(
+          pos[-length(pos)], pos[-1],
+          ~ are_children_by_depth(.x, .y, depths)
+        ))
+      }
+    )
   }
-  #
-  which(matching)
+  
+  purrr::map(
+    heading_matches,
+    function(pos) {
+      children = find_children_by_depth(pos[length(pos)], depths) 
+    
+      if (keep_parents) {
+        parents = find_parents_by_depth(pos[length(pos)], end=1, depths=depths) 
+        
+        # Parents captures open fdivs but not the closes, so add those in too
+        open_fdivs = parents[parents %in% which(types == "rmd_fenced_div_open")]
+        c(parents, fdiv_pairs[open_fdivs], children)
+      } else {
+        children
+      }
+    }
+  ) |>
+    unlist() |>
+    unique() |>
+    sort()
 }
+
 
 #' @rdname rmd_select_helpers
 #'
