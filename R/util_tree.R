@@ -51,7 +51,7 @@ find_depth = function(x, start_depth = 0) {
       if (i+1 == j) {
         res = integer()
       } else {
-      res = find_depth(x[(i+1):(j-1)], start_depth = cur_depth+1)
+        res = find_depth(x[(i+1):(j-1)], start_depth = cur_depth+1)
       }
       node_depth[i:j] = c(cur_depth, res, cur_depth)
       
@@ -78,3 +78,60 @@ rmd_node_depth = function(x) {
   find_depth(x@nodes)
 }
 
+are_children_by_depth = function(i, j, depths) {
+  checkmate::assert_numeric(depths, lower=0, any.missing = FALSE)
+  checkmate::assert_numeric(i, len=1, lower=1, upper=length(depths))
+  checkmate::assert_numeric(j, len=1, lower=i, upper=length(depths))
+
+  if (i == j) {
+    return(TRUE)
+  }
+
+  all(depths[seq(i+1, j)] > depths[i])
+}
+
+find_children_by_depth = function(i, depths) {
+  checkmate::assert_numeric(depths, lower=0, any.missing = FALSE)
+  checkmate::assert_numeric(i, len=1, lower=1, upper=length(depths))
+
+  if (i == length(depths)) {
+    # Last node has no children
+    return(i)
+  }
+
+  # Find where depth stops increasing after i, step back to get last child
+  last_child = which(!(depths > depths[i]) & seq_along(depths) > i) - 1
+
+  if (length(last_child) == 0) {
+    # This can happen if all the remaining nodes are children
+    if (depths[i] < depths[i+1]) {
+      seq(i, length(depths))
+    } else { # or if there are no children
+      i
+    }
+  } else {
+    seq(i, min(last_child))
+  }
+}
+
+find_parents_by_depth = function(i, end=1, depths) {
+  checkmate::assert_numeric(depths, lower=0, any.missing = FALSE)
+  checkmate::assert_numeric(i, len=1, lower=1, upper=length(depths))
+  checkmate::assert_numeric(end, len=1, lower=1, upper=i)
+
+  if (i == end) {
+    # First node has no parents
+    return(i)
+  }
+
+  cur_depth = depths[i]
+  parents = c()
+  for (j in seq(i-1, end)) {
+    if (depths[j] < cur_depth) {
+      parents = c(j, parents)
+      cur_depth = depths[j]
+    }
+  }
+
+  parents
+}
