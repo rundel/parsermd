@@ -80,7 +80,7 @@ rmd_select.rmd_tibble = function(x, ..., keep_yaml = TRUE) {
   x = x[loc,]
 
   x = dplyr::bind_cols(
-    dplyr::bind_rows(rmd_node_sections(x_ast)),  # add new sec_h* columns
+    dplyr::bind_rows(rmd_node_sections(as_ast(x))),  # add new sec_h* columns
     dplyr::select(x, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
   class(x) = c("rmd_tibble", class(x))

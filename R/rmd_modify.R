@@ -112,11 +112,12 @@ rmd_modify.rmd_tibble = function(x, .f, ...) {
   if (length(bad_cols) != 0)
     stop("The following columns must be renamed: ", bad_cols, call. = FALSE)
 
-  x$ast = rmd_modify(x$ast, .f, ...)
+  ast = rmd_modify(as_ast(x), .f, ...)
+  x$ast = ast@nodes
 
   # Recalculate section hierarchy
   x = dplyr::bind_cols(
-    dplyr::bind_rows(rmd_node_sections(x$ast)),  # add new sec_h* columns
+    dplyr::bind_rows(rmd_node_sections(ast)),  # add new sec_h* columns
     dplyr::select(x, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
   class(x) = c("rmd_tibble", class(x))

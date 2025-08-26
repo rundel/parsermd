@@ -146,11 +146,11 @@ rmd_insert.rmd_tibble = function(x, ..., nodes, location = c("before", "after"),
     cli::cli_abort("The following columns must be renamed: {bad_cols}")
   }
 
-  x_ast = as_ast(x)
-  x_ast = rmd_insert(x_ast, ..., nodes = nodes, location = location, allow_multiple = allow_multiple)
-
+  ast = rmd_insert(as_ast(x), ..., nodes = nodes, location = location, allow_multiple = allow_multiple)
+  x$ast = ast@nodes
+  
   x = dplyr::bind_cols(
-    dplyr::bind_rows(rmd_node_sections(x_ast)),
+    dplyr::bind_rows(rmd_node_sections(ast)),
     dplyr::select(x, -dplyr::starts_with("sec_h"))
   )
   class(x) = c("rmd_tibble", class(x))

@@ -57,3 +57,10 @@ test_that("raw chunk", {
 })
 
 ## TODO - add checks for other nodes
+
+test_that("as_document.rmd_tibble", {
+  rmd <- parse_rmd(system.file("examples/minimal.Rmd", package = "parsermd"))
+  rmd_tibble <- as_tibble(rmd)
+
+  expect_type(as_document(rmd_tibble), "character")
+})

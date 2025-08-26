@@ -51,7 +51,7 @@ as_document.qmd_collection = function(x, padding = "", collapse = NULL, use_yaml
 
 #' @exportS3Method
 as_document.rmd_tibble = function(x, padding = "", collapse = NULL, use_yaml_opts = TRUE, ...) {
-  as_document(x$ast, padding, collapse, use_yaml_opts = use_yaml_opts, ...)
+  as_document(as_ast(x), padding, collapse, use_yaml_opts = use_yaml_opts, ...)
 }
 
 
@@ -338,5 +338,3 @@ as_document.rmd_inline_code = function(x, ...) {
     "`"
   )
 }
-
-
