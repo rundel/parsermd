@@ -196,12 +196,12 @@ rmd_fenced_div_wrap.rmd_tibble = function(x, ..., open = rmd_fenced_div_open(), 
     cli::cli_abort("The following columns must be renamed: {bad_cols}")
   }
 
-  x_ast = as_ast(x)
-  x_ast = rmd_fenced_div_wrap(x_ast, ..., open = open, allow_multiple = allow_multiple)
-
+  ast = rmd_fenced_div_wrap(as_ast(x), ..., open = open, allow_multiple = allow_multiple)
+  x$ast = ast@nodes
+  
   # Recalculate section hierarchy
   x = dplyr::bind_cols(
-    dplyr::bind_rows(rmd_node_sections(x_ast)),  # add new sec_h* columns
+    dplyr::bind_rows(rmd_node_sections(ast)),  # add new sec_h* columns
     dplyr::select(x, -dplyr::starts_with("sec_h")) # drop old sec_h* columns
   )
   class(x) = c("rmd_tibble", class(x))
