@@ -106,7 +106,8 @@ by_section = function(sec_ref, keep_parents = TRUE) {
   regex = utils::glob2rx(sec_ref)
   heading_matches = purrr::map(regex, ~which(grepl(.x, heading_names))) |>
     expand.grid() |>
-    purrr::pmap(~c(...))
+    purrr::pmap(~c(...)) |>
+    purrr::keep(~all(diff(.x) >= 0)) # Remove cases where not increasing
 
   if (length(sec_ref) > 1) {
     heading_matches = purrr::keep(
