@@ -12,6 +12,8 @@
 
 * Added `wrap_children` argument to `rmd_fenced_div_wrap()` to control whether the selected nodes or their children are wrapped.
 
+* Fixed a several bugs around handling of `rmd_tibble` methods (@ateucher)
+
 # parsermd 0.2.0
 
 * **Breaking Change**: Migrated from S3/S4 classes to S7 classes for all AST node types (`rmd_ast`, `rmd_chunk`, `rmd_heading`, etc.)
