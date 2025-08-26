@@ -8,7 +8,8 @@ rmd_fenced_div_wrap(
   x,
   ...,
   open = rmd_fenced_div_open(),
-  allow_multiple = FALSE
+  allow_multiple = FALSE,
+  wrap_children = FALSE
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ Defaults to \code{rmd_fenced_div_open()}.}
 \item{allow_multiple}{Logical. If \code{FALSE} (default), throws an error when
 selected indices are discontinuous. If \code{TRUE}, allows wrapping multiple
 discontinuous ranges separately.}
+
+\item{wrap_children}{Logical. If \code{TRUE}, wraps all child nodes of the selected node(s).
+If \code{FALSE}, wraps the selected node(s). Defaults to \code{FALSE}.}
 }
 \value{
 Returns the modified Rmd object with selected nodes wrapped in the fenced div(s).

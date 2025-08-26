@@ -4,12 +4,24 @@
 \alias{rmd_heading}
 \title{Heading node}
 \usage{
-rmd_heading(name = character(0), level = integer(0))
+rmd_heading(
+  name = character(0),
+  level = integer(0),
+  id = character(),
+  classes = character(),
+  attr = character()
+)
 }
 \arguments{
 \item{name}{Character. Heading text}
 
 \item{level}{Integer. Heading level (1-6)}
+
+\item{id}{Character vector. HTML ID (length 0 or 1)}
+
+\item{classes}{Character vector. CSS classes}
+
+\item{attr}{Named character vector. Key-value attributes (keys as names)}
 }
 \description{
 S7 class representing a markdown heading

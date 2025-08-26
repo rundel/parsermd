@@ -90,8 +90,8 @@ hierarchy of a document's section headings.
 They consist of a character vector of heading names where each subsequent value
 is assumed to be nested within the preceding value. For example, the section
 selector \code{c("Sec 1", "Sec 2")} would select all nodes that are contained within
-a section named \verb{Sec 2} that is in turn contained within a section named \verb{Sec 1}
-(or a section contained within a section named \verb{Sec 1}, and so on).
+a heading named \verb{Sec 2} that is in turn contained within a heading named \verb{Sec 1}
+(or a heading contained within a heading named \verb{Sec 1}, and so on).
 
 The individual section names can be specified using wildcards (aka globbing
 patterns), which may match one or more sections within the document, e.g.
