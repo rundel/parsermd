@@ -40,13 +40,21 @@ namespace client { namespace parser {
         +(x3::char_ - x3::char_(" }"))  // unquoted value
     )];
 
+  auto const misplaced_class = x3::rule<struct _, std::string>{"misplaced class attribute"}
+  = class_attr[sa_throw_error("class attributes to appear before any key=value attributes")];
+
+  auto const misplaced_id = x3::rule<struct _, std::string>{"misplaced id attribute"}
+  = id_attr[sa_throw_error("id attributes to appear before any .class or key=value attributes")];
+
   auto cbrace_attrs = x3::rule<struct _, client::ast::pandoc_attr > ("braced attribute(s)")
-  = (x3::lit("{") >> *x3::lit(" ")) > 
+  = (x3::lit("{") >> *x3::lit(" ")) >
     x3::lexeme[
       (id_attr | x3::attr(std::string())) >> *x3::lit(" ") >
       (class_attr % +x3::lit(" ") | x3::attr(std::vector<std::string>())) >> *x3::lit(" ") >
-      (key_value_attr % +x3::lit(" ") | x3::attr(std::vector<client::ast::key_value>())) > *x3::lit(" ")
-    ] > 
+      -x3::omit[misplaced_id] >
+      (key_value_attr % +x3::lit(" ") | x3::attr(std::vector<client::ast::key_value>())) > *x3::lit(" ") >
+      -x3::omit[misplaced_class | misplaced_id]
+    ] >
     (*x3::lit(" ") >> x3::lit("}"));
     
 } }

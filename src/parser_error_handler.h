@@ -272,6 +272,20 @@ namespace client { namespace parser {
   }
 
 
+  // Factory for semantic actions that throw a parse error positioned at the matched text.
+  // x3::_where gives [end_of_match, end_of_input], so we subtract the matched
+  // attribute's size to recover the start of the match.
+  auto sa_throw_error = [](std::string msg) {
+    return [msg = std::move(msg)](auto& ctx) {
+      auto& error_handler = x3::get<x3::error_handler_tag>(ctx).get();
+      auto doc_start = error_handler.get_position_cache().first();
+      auto doc_end   = error_handler.get_position_cache().last();
+      auto end   = x3::_where(ctx).begin();
+      auto start = end - x3::_attr(ctx).size();
+      throw_parser_error(start, doc_start, doc_end, start, end, msg);
+    };
+  };
+
   struct error_handler {
     template <typename iter, typename error, typename context>
     x3::error_handler_result on_error(
