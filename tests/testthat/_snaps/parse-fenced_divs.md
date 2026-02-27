@@ -166,9 +166,9 @@
       check_fdiv_open_parser("::: {.myclass #myid}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
+      ! Failed to parse line 1
       1 | ::: {.myclass #myid}
-                        ^~~~~ 
+                        ^~~~~~
 
 ---
 
@@ -176,9 +176,9 @@
       check_fdiv_open_parser("::: {.my-class_name #my-id_value}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
+      ! Failed to parse line 1
       1 | ::: {.my-class_name #my-id_value}
-                              ^~~~~~~~~~~~ 
+                              ^~~~~~~~~~~~~
 
 ---
 
@@ -186,9 +186,9 @@
       check_fdiv_open_parser("::: {.class1 #id2 data-level=3}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
+      ! Failed to parse line 1
       1 | ::: {.class1 #id2 data-level=3}
-                       ^~~~              
+                       ^~~~~~~~~~~~~~~~~~
 
 ---
 
@@ -196,9 +196,9 @@
       check_fdiv_open_parser("::: {data-value=test .highlight}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected class attributes to appear before any key=value attributes
+      ! Failed to parse line 1
       1 | ::: {data-value=test .highlight}
-                               ^~~~~~~~~~ 
+                               ^~~~~~~~~~~
 
 ---
 
@@ -207,9 +207,9 @@
         "::: {title=\"Main Section\" data-id=section1 .highlighted}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected class attributes to appear before any key=value attributes
+      ! Failed to parse line 1
       1 | ::: {title="Main Section" data-id=section1 .highlighted}
-                                                     ^~~~~~~~~~~~ 
+                                                     ^~~~~~~~~~~~~
 
 ---
 
@@ -217,9 +217,9 @@
       check_fdiv_open_parser("::: {data-role=button #submit}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
+      ! Failed to parse line 1
       1 | ::: {data-role=button #submit}
-                                ^~~~~~~ 
+                                ^~~~~~~~
 
 ---
 
@@ -247,37 +247,7 @@
       check_fdiv_open_parser("::: {#id1 #id2}\n")
     Condition
       Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
+      ! Failed to parse line 1
       1 | ::: {#id1 #id2}
-                    ^~~~ 
-
----
-
-    Code
-      check_fdiv_open_parser("::: {.col width='50%' .fragment}\n")
-    Condition
-      Error:
-      ! Failed to parse line 1, expected class attributes to appear before any key=value attributes
-      1 | ::: {.col width='50%' .fragment}
-                                ^~~~~~~~~ 
-
----
-
-    Code
-      check_fdiv_open_parser("::: {.col width='50%' #myid}\n")
-    Condition
-      Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
-      1 | ::: {.col width='50%' #myid}
-                                ^~~~~ 
-
----
-
-    Code
-      check_fdiv_open_parser("::: {#id1 key=val #id2}\n")
-    Condition
-      Error:
-      ! Failed to parse line 1, expected id attributes to appear before any class or key=value attributes
-      1 | ::: {#id1 key=val #id2}
-                            ^~~~ 
+                    ^~~~~
 

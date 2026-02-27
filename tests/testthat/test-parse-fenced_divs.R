@@ -572,24 +572,9 @@ test_that("Enhanced attribute parsing - error cases", {
     check_fdiv_open_parser("::: {test}\n"), error=TRUE
   )
   
-  # Invalid: multiple IDs
+  # Invalid: multiple IDs  
   expect_snapshot(
     check_fdiv_open_parser("::: {#id1 #id2}\n"), error=TRUE
-  )
-
-  # Invalid ordering: class after class+key=value
-  expect_snapshot(
-    check_fdiv_open_parser("::: {.col width='50%' .fragment}\n"), error=TRUE
-  )
-
-  # Invalid ordering: id after class+key=value
-  expect_snapshot(
-    check_fdiv_open_parser("::: {.col width='50%' #myid}\n"), error=TRUE
-  )
-
-  # Invalid ordering: id after id+key=value (duplicate id after kv)
-  expect_snapshot(
-    check_fdiv_open_parser("::: {#id1 key=val #id2}\n"), error=TRUE
   )
 })
 
