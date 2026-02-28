@@ -92,6 +92,62 @@ auto const not_bare_word = x3::rule<struct _>{"#id, .class, or key=value attribu
 
 This catches bare words like `{warning}` that lack the `#`/`.` prefix or `=` for key=value.
 
+### Pattern 4: BOOST_SPIRIT_DEFINE rules for `>` targets (from Group 2)
+
+When a named rule is the target of `>` (i.e., `> my_rule`), it must be defined using the two-phase `BOOST_SPIRIT_DEFINE` pattern — NOT the inline `auto const` pattern:
+
+```cpp
+// CORRECT — name appears in expectation failure's which():
+x3::rule<struct fdiv_attr_tag, client::ast::pandoc_attr> const fdiv_attr = "div attribute (unbraced name or {attrs})";
+auto const fdiv_attr_def = cbrace_attrs | unbraced_attr;
+BOOST_SPIRIT_DEFINE(fdiv_attr);
+
+// WRONG — which() returns mangled C++ type name, filtered out by error handler:
+auto const fdiv_attr = x3::rule<struct _, client::ast::pandoc_attr>{"div attribute (unbraced name or {attrs})"}
+= cbrace_attrs | unbraced_attr;
+```
+
+The inline pattern creates a `rule_definition` object, and `what(rule_definition)` returns the mangled type name rather than the rule's string name. The `BOOST_SPIRIT_DEFINE` pattern stores a proper `rule` object whose `what()` returns the name.
+
+**Note:** The inline `auto const` pattern works fine when `>` is INSIDE the rule (Pattern 1), because the inner `>` target is a sub-rule like `id_name`. It only fails when the rule itself is the direct target of an EXTERNAL `>`.
+
+### C++ operator precedence: `>>` vs `>`
+
+**Critical:** In C++, `>>` (shift) has HIGHER precedence than `>` (comparison). This means:
+
+```cpp
+A >> B > C >> D    // parsed as: (A >> B) > (C >> D)
+```
+
+So `> fdiv_attr >> skip[...]` wraps `fdiv_attr >> skip[...]` as a single expression — NOT just `fdiv_attr`. When this combined expression fails, `which()` returns the mangled type of the whole sequence.
+
+**Fix:** Use explicit parentheses to isolate the `>` target:
+
+```cpp
+// WRONG — > wraps fdiv_attr >> skip[...] >> *blank as one expression:
+lexeme >> *blank > fdiv_attr >> skip[...] >> *blank > fdiv_eol
+
+// CORRECT — > wraps only fdiv_attr:
+(lexeme >> *blank > fdiv_attr) >> skip[...] >> (*blank > fdiv_eol)
+```
+
+### Negative lookahead (`!`) and expectation failures
+
+When a rule containing `>` is used in a negative lookahead (`!rule`), expectation failures from the inner `>` propagate THROUGH the `!` — they are not caught. This means `!fdiv_open` can throw if `fdiv_open` internally commits with `>` and then fails.
+
+**Fix:** In `parse_markdown.h`, `md_line` used `!fdiv_open` to detect fenced div lines. After adding `>` to `fdiv_open_def`, this was replaced with a simpler prefix check:
+
+```cpp
+auto const partial_fdiv_start = x3::lexeme[
+    x3::repeat(3, x3::inf)[x3::char_(':')]
+  ];
+
+// In md_line: use partial_fdiv_start instead of fdiv_open | fdiv_close
+= !(x3::lit("#") | partial_chunk_start | block_start | partial_fdiv_start | yaml_start) >> ...
+```
+
+This pattern (simple prefix check for negative lookahead, full rule for actual parsing) should be applied whenever adding `>` to a rule that's used in `!` contexts.
+
 ### Key principles
 
 1. **Prefer integrating detection into existing rules** over adding standalone detection rules. E.g., add `>` inside `id_attr` rather than creating a separate `bare_hash` detection rule.
@@ -99,6 +155,9 @@ This catches bare words like `{warning}` that lack the `#`/`.` prefix or `=` for
 3. **Use `!` (negative lookahead) for constraint checks** (ordering, catch-all). Name the rule with the constraint that SHOULD hold.
 4. **Negative lookahead rules have no attribute type** — use `x3::rule<struct _>{}`, not `x3::rule<struct _, std::string>{}`.
 5. **`sa_throw_error` is no longer the preferred approach** — the `>` + named rule pattern is cleaner and integrates better with Spirit's error handling.
+6. **Use `BOOST_SPIRIT_DEFINE` for `>` targets** — rules that appear as the direct RHS of `>` must use the two-phase definition pattern.
+7. **Parenthesize `>` expressions** — due to C++ `>>` having higher precedence than `>`, always wrap `>` and its target in parentheses when mixed with `>>`.
+8. **Replace full rules with prefix checks in `!` contexts** — if adding `>` to a rule used in `!` lookaheads, create a simple prefix-only check for the lookahead.
 
 ---
 
@@ -117,19 +176,21 @@ Additionally, the old `sa_throw_error`-based `misplaced_class` / `misplaced_id` 
 
 ---
 
-## Group 2 — `parse_fenced_div.h`: use `>` to surface existing rule names
+## Group 2 — `parse_fenced_div.h` ✅ COMPLETE
 
-`fdiv_open_def` uses `>>` throughout so failures are silent. Switching specific `>>` to `>` after the colons section would let named rules provide context.
+Two error cases now produce specific messages:
 
-| Input | Error currently | Root cause | Suggested fix |
-|---|---|---|---|
-| `:::\n` (no attribute) | `Failed to parse line 1` | `cbrace_attrs \| unbraced_attr` fails silently | Change `>>` to `>` after `:::` so `cbrace_attrs \| unbraced_attr` is expected; rename the alternative to something like `"div attribute (unbraced name or {attrs})"` |
-| `::: a x\n` (two unbraced words) | `Failed to parse line 1` | After `unbraced_attr` matches `a`, `eol` fails on ` x` | After the attribute, the `>> x3::eol` should become `> x3::eol` with a named parser |
-| `:: {}\n` `:: \n` (only 2 colons) | `Failed to parse line 1` | `repeat(3, inf)` fails silently | Harder — no easy `>` hook; lower priority |
+| Input | Error message |
+|---|---|
+| `:::\n` (no attribute) | `expected div attribute (unbraced name or {attrs})` |
+| `::: a x\n` (two unbraced words) | `expected end of line after div attribute` |
+| `:: {}\n` `:: \n` (only 2 colons) | Generic (deferred — no easy `>` hook) |
 
-**Approach:** Apply Pattern 1 — create named rules for the attribute section and end-of-line, then use `>` to commit after `:::`.
+**Changes made:**
+- `src/parse_fenced_div.h`: Added `fdiv_attr` and `fdiv_eol` as `BOOST_SPIRIT_DEFINE` rules (Pattern 4). Restructured `fdiv_open_def` to use `>` with parentheses for correct precedence.
+- `src/parse_markdown.h`: Replaced `!fdiv_open | !fdiv_close` in `md_line` lookahead with simpler `!partial_fdiv_start` to avoid expectation failures propagating through `!`.
 
-**Files:** `src/parse_fenced_div.h`
+**Lessons learned:** Pattern 4 (BOOST_SPIRIT_DEFINE for `>` targets), operator precedence (`>>` > `>`), and `!`/expectation interaction — all documented in Patterns section above.
 
 ---
 
@@ -171,14 +232,15 @@ Chunk fence mismatches are the hardest: the opening tick count must be threaded 
 ## Execution Order
 
 1. **Group 1** ✅ COMPLETE
-2. **Group 2** (fdiv open) — next
-3. **Group 4** (chunk header) — after Group 2
+2. **Group 2** ✅ COMPLETE
+3. **Group 4** (chunk header) — next
 4. **Group 3** (YAML) — deferred
 
 ## Key Files
 
 - `src/parse_pandoc_attr.h` — Group 1 ✅
-- `src/parse_fenced_div.h` — Group 2
+- `src/parse_fenced_div.h` — Group 2 ✅
+- `src/parse_markdown.h` — Group 2 (partial_fdiv_start for lookahead) ✅
 - `src/parse_yaml.h` — Group 3 (deferred)
 - `src/parse_chunk.h` — Group 4
 - `src/parser_error_handler.h` — error handler infrastructure (read-only reference)

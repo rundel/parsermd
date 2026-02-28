@@ -4,9 +4,9 @@
       check_fdiv_open_parser(":::\n")
     Condition
       Error:
-      ! Failed to parse line 1
+      ! Failed to parse line 1, expected div attribute (unbraced name or {attrs})
       1 | :::
-          ^~~
+             ^
 
 ---
 
@@ -14,9 +14,9 @@
       check_fdiv_open_parser("::: a x\n")
     Condition
       Error:
-      ! Failed to parse line 1
+      ! Failed to parse line 1, expected end of line after div attribute
       1 | ::: a x
-          ^~~~~~~
+                ^
 
 ---
 
@@ -94,9 +94,9 @@
       parse_rmd(":::\n")
     Condition
       Error:
-      ! Failed to parse line 1
+      ! Failed to parse line 1, expected div attribute (unbraced name or {attrs})
       1 | :::
-          ^~~
+             ^
 
 ---
 
@@ -114,11 +114,9 @@
       parse_rmd("::: test1\n:::\n:::\n")
     Condition
       Error:
-      ! Failed to parse lines 1-3
-      1 | ::: test1
-      2 | :::
+      ! Failed to parse line 3, expected div attribute (unbraced name or {attrs})
       3 | :::
-          ^~~
+             ^
 
 # Enhanced attribute parsing - error cases
 

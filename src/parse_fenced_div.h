@@ -75,16 +75,25 @@ namespace client { namespace parser {
   // Also indenting is not supported so we ignore that as well
   // - See https://github.com/jgm/pandoc/issues/7936
 
+  x3::rule<struct fdiv_attr_tag, client::ast::pandoc_attr> const fdiv_attr = "div attribute (unbraced name or {attrs})";
+  auto const fdiv_attr_def = cbrace_attrs | unbraced_attr;
+  BOOST_SPIRIT_DEFINE(fdiv_attr);
+
+  x3::rule<struct fdiv_eol_tag> const fdiv_eol = "end of line after div attribute";
+  auto const fdiv_eol_def = x3::eol;
+  BOOST_SPIRIT_DEFINE(fdiv_eol);
+
   struct fdiv_open_class : error_handler {};
   x3::rule<fdiv_open_class, client::ast::fdiv_open> const fdiv_open = "fdiv_open";
 
   auto const fdiv_open_def
-  = x3::lexeme[x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ]] >>
+  = (x3::lexeme[x3::omit[ x3::repeat(3, x3::inf)[x3::char_(':')] ]] >>
+     x3::omit[*x3::blank] >
+     fdiv_attr) >>
     x3::skip(x3::blank)[
-      (cbrace_attrs | unbraced_attr) >>
       x3::omit[ *x3::char_(':') ]   // ignore any trailing :s on the opening line
     ] >>
-    x3::omit[*x3::blank] >> x3::eol;
+    (x3::omit[*x3::blank] > fdiv_eol);
 
   BOOST_SPIRIT_DEFINE(fdiv_open);
 

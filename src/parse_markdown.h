@@ -23,8 +23,12 @@ namespace client { namespace parser {
       x3::lit("{")
     ];
 
+  auto const partial_fdiv_start = x3::lexeme[
+      x3::repeat(3, x3::inf)[x3::char_(':')]
+    ];
+
   auto const md_line = x3::rule<struct _, std::string>{"markdown line"}
-  = !(x3::lit("#") | partial_chunk_start | block_start | fdiv_open | fdiv_close | yaml_start) >> // skip invalid starts
+  = !(x3::lit("#") | partial_chunk_start | block_start | partial_fdiv_start | yaml_start) >> // skip invalid starts
     x3::lexeme[ +(x3::char_ - x3::eol) ];
 
   auto const md_lines = x3::rule<struct _, std::vector<std::string>>{"markdown lines"}
